@@ -1,0 +1,4 @@
+083185BC  # tail of GAX2_init
+08318542  # tail of GAX2_init
+0831873E  # middle of GAX_irq
+08318802  # middle of GAX_irq

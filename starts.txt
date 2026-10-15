@@ -1,0 +1,6 @@
+08319078
+0831A100 arm  # GAX output_asm.o: ARM mixer routines copied to RAM by GAX_code2ram
+0831A220 arm  # GAX output_asm.o
+0831A2EC arm  # GAX output_asm.o
+0831A3E8 arm  # GAX tracker_asm.o
+0831A3FC arm  # GAX tracker_asm.o (pingpong)

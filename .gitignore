@@ -1,0 +1,17 @@
+# never commit the ROM or game-derived binaries
+*.gba
+*.sav
+*.zip
+*.elf
+*.o
+build/
+decomp/*
+!decomp/functions.csv
+ghidra_proj/
+tools/agbcc
+tools/agbcc/
+tools/decomp-permuter/
+__pycache__/
+*.pyc
+.decomp.lock
+.one.json

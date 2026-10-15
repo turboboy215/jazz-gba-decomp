@@ -1,0 +1,126 @@
+# Function names: ADDR NAME [# comment]. split.py emits NAME as an alias label next to sub_ADDR.
+# Confidence tags in comments: [sure] string/structural proof, [likely] call-graph/order evidence.
+
+# --- game entry / runtime -------------------------------------------------------------
+08312BF8 AgbMain                         # [sure] crt0 jumps here; calls __main, inits, then endless main loop
+# --- newlib / libgcc / BIOS (region B tail, linked after game objects) -------------------
+0831A528 CpuFastSet                      # [sure] svc 0x0C
+0831A52C CpuSet                          # [sure] svc 0x0B
+0831A530 Div                             # [sure] svc 0x06
+0831A534 IntrWait                        # [sure] svc 0x04 (r2=0)
+0831A53C LZ77UnCompWram                  # [sure] svc 0x11
+0831A540 MultiBoot                       # [sure] svc 0x25 (r1=1)
+0831A548 Sqrt                            # [sure] svc 0x08
+0831A54C VBlankIntrWait                  # [sure] svc 0x05
+0831A554 SoftResetRom                    # [likely] clears flags, RegisterRamReset(svc 1) + SoftReset(svc 0)
+0831A570 memcpy                          # [sure] newlib word/byte copy
+0831A5D4 memset                          # [sure] newlib
+0831A62C strcmp                          # [sure] newlib (word compare with 0x01010101 trick)
+0831A68C strlen                          # [sure] newlib
+0831A6D8 strncpy                         # [sure] newlib
+0831A754 __do_global_dtors               # [likely] libgcc: walks __DTOR_LIST__
+0831A780 __do_global_ctors               # [likely] libgcc: walks __CTOR_LIST__ backwards
+0831A7C8 __main                          # [sure] libgcc: run ctors once (first call in AgbMain)
+0831A7E4 _call_via_r0                    # [sure] libgcc interworking thunks r0..lr follow, 4 bytes apart
+0831A820 __divsi3                        # [sure] libgcc (non-interwork: returns with mov pc, lr)
+0831A8B4 __div0                          # [sure]
+0831A8B8 __muldi3                        # [likely]
+0831A92C __udivdi3                       # [likely] 64-bit division helper (976 bytes)
+0831AD00 __udivsi3                       # [sure]
+0831AD78 __umodsi3                       # [sure]
+# --- GAX Sound Engine 3.01 (Sep 13 2002), live copy ----------------------------------------
+08317518 GAX_code2ram                    # [sure] "GAX2_INIT"/"OUT OF MEMORY" + CpuSet copy
+083175A8 GAX2_estimate                   # [likely] name from gaxtapper; unused by Jazz
+083177CC GAX2_new                        # [sure] "GAX2_NEW"/"PARAMS ARG IS NULL"
+08317874 GAX2_init_volboost              # [likely] called from init_song and GAX_play song-end path
+08317970 GAX2_init_song                  # [likely] OOM asserts, calls init_volboost
+08317B40 GAX2_init_soundhw               # [sure] SOUNDCNT_X/H, SOUNDBIAS, FIFO, DMA1/2 setup
+08317C3C GAX_open                        # [sure] calls GAXSync_open, GAXOutput_open, GAXTracker_open
+08317CD8 GAX2_init                       # [sure] "WHEN USING DIFFERENT FX_MIXING_RATE..." (incl. tail up to 0x083185D0)
+083185D0 GAX2_jingle                     # [sure] "GAX2_JINGLE"/"GAX_NO_JINGLE FLAG IS SET"
+083186FC GAX_irq                         # [sure] 'GAX3' signature check, "GAX_PLAY HAS NOT FINISHED BEFORE GAX_IRQ"
+0831881C GAX_play                        # [sure] CpuFastSet clear, GAXSync_render, GAXOutput_stream
+083189D0 GAX_fx                          # [sure] "GAX_FX"/"YOU TRIED TO PLAY A SPEECH FX..."
+08318AB0 GAX_fx_ex                       # [likely] callee of GAX2_fx
+08318BB4 GAX2_fx                         # [sure] "GAX2_FX"/"FXPARAMS ARG IS NULL"
+08318C5C GAX_fx_status                   # [likely] returns per-channel status byte (+0x88)
+08318CA4 GAX_set_music_volume            # [likely] AgbMain calls (-1, vol)
+08318D38 GAX_ASSERT_PRINT                # [likely] font blitter used by GAX_ASSERT
+08318DE8 GAX_ASSERT                      # [sure] "FUNCTION NAME:" screen
+08318F50 GAX_clear_mem                   # [likely] CpuFastSet based clear
+08318FB4 GAX2_new_fx                     # [sure] "GAX2_NEW_FX"/"FXPARAMS ARG IS NULL"
+08318FF8 GAX_pause                       # [likely] SOUNDCNT_H off, DMA1/2 stop with mov r3,r3;nop x3 delays
+08319078 GAX_resume                      # [likely] FIFO A/B clear x8, SOUNDCNT_H on (missed by Ghidra)
+083190E0 GAX_pause_music                 # [likely]
+083190F0 GAX_resume_music                # [likely]
+08319100 GAX_fx_note                     # [likely] (fxch, note) unused by Jazz
+08319148 GAX_stop_fx                     # [likely] (fxch; -1 = all)
+083191AC GAX_set_fx_volume               # [likely] AgbMain calls (-1, vol)
+08319214 GAX_stop                        # [sure] matches 3.05A GAX_stop structure exactly
+0831928C GAXSync_open                    # [sure] sync.o signature
+083192C0 GAXSync_render                  # [likely]
+0831938C GAXOutput_render                # [likely] 3.01 has no separate output.o signature match
+08319518 GAXOutput_open                  # [likely]
+08319520 GAXOutput_stream                # [likely] calls GAX_clear_mem, GAXOutput_render, RAM mixer via _call_via_r1
+08319584 GAXTracker_open                 # [sure] tracker.o signature
+083195E8 GAXTracker_render               # [likely]
+0831967C GAXTracker_process_step         # [likely]
+083198B4 GAXTracker_process_perflist     # [likely]
+08319A20 GAXTracker_process_envelope     # [likely] callee of process_frame
+08319AE4 GAXTracker_process_frame        # [likely]
+08319C60 GAXTracker_generate_audio       # [likely] calls RAM-resident ARM mixer
+08319F30 GAXFx_open                      # [likely]
+08319F88 GAXFx_render                    # [likely]
+0831A100 GAXOutput_asm_A                 # [sure] ARM, code2ram'd; one of render/reverb/lowpass (order TBD)
+0831A220 GAXOutput_asm_B                 # [sure] ARM, code2ram'd
+0831A2EC GAXOutput_asm_C                 # [sure] ARM, code2ram'd
+0831A3E8 GAXTracker_asm                  # [likely] ARM, code2ram'd (tracker_asm.o signature)
+0831A3FC GAXTracker_pingpong_asm         # [likely] ARM, code2ram'd
+0831A470 GAX_asm_0831A470                # ARM block copied to RAM by GAX2_init/GAX2_estimate (0x0831A470-0x0831A528)
+
+# --- Orphaned GAX 3.01 copy in the dead block (same object code, older link) -------------------
+0800F23C orphan_GAX_code2ram                     # same code as GAX_code2ram
+0800F2CC orphan_GAX2_estimate                    # same code as GAX2_estimate
+0800F4F0 orphan_GAX2_new                         # same code as GAX2_new
+0800F598 orphan_GAX2_init_volboost               # same code as GAX2_init_volboost
+0800F694 orphan_GAX2_init_song                   # same code as GAX2_init_song
+0800F864 orphan_GAX2_init_soundhw                # same code as GAX2_init_soundhw
+0800F960 orphan_GAX_open                         # same code as GAX_open
+0800F9FC orphan_GAX2_init                        # same code as GAX2_init
+080102F4 orphan_GAX2_jingle                      # same code as GAX2_jingle
+08010420 orphan_GAX_irq                          # same code as GAX_irq
+08010540 orphan_GAX_play                         # same code as GAX_play
+080106F4 orphan_GAX_fx                           # same code as GAX_fx
+080107D4 orphan_GAX_fx_ex                        # same code as GAX_fx_ex
+080108D8 orphan_GAX2_fx                          # same code as GAX2_fx
+08010980 orphan_GAX_fx_status                    # same code as GAX_fx_status
+080109C8 orphan_GAX_set_music_volume             # same code as GAX_set_music_volume
+08010A5C orphan_GAX_ASSERT_PRINT                 # same code as GAX_ASSERT_PRINT
+08010B0C orphan_GAX_ASSERT                       # same code as GAX_ASSERT
+08010C74 orphan_GAX_clear_mem                    # same code as GAX_clear_mem
+08010CD8 orphan_GAX2_new_fx                      # same code as GAX2_new_fx
+08010D1C orphan_GAX_pause                        # same code as GAX_pause
+08010D9C orphan_GAX_resume                       # same code as GAX_resume
+08010E24 orphan_GAX_fx_note                      # same code as GAX_fx_note
+08010E6C orphan_GAX_stop_fx                      # same code as GAX_stop_fx
+08010ED0 orphan_GAX_set_fx_volume                # same code as GAX_set_fx_volume
+08010F38 orphan_GAX_stop                         # same code as GAX_stop
+08010FB0 orphan_GAXSync_open                     # same code as GAXSync_open
+08010FE4 orphan_GAXSync_render                   # same code as GAXSync_render
+080110B0 orphan_GAXOutput_render                 # same code as GAXOutput_render
+0801123C orphan_GAXOutput_open                   # same code as GAXOutput_open
+08011244 orphan_GAXOutput_stream                 # same code as GAXOutput_stream
+080112A8 orphan_GAXTracker_open                  # same code as GAXTracker_open
+0801130C orphan_GAXTracker_render                # same code as GAXTracker_render
+080113A0 orphan_GAXTracker_process_step          # same code as GAXTracker_process_step
+080115D8 orphan_GAXTracker_process_perflist      # same code as GAXTracker_process_perflist
+08011744 orphan_GAXTracker_process_envelope      # same code as GAXTracker_process_envelope
+08011808 orphan_GAXTracker_process_frame         # same code as GAXTracker_process_frame
+08011984 orphan_GAXTracker_generate_audio        # same code as GAXTracker_generate_audio
+08011C54 orphan_GAXFx_open                       # same code as GAXFx_open
+08011CAC orphan_GAXFx_render                     # same code as GAXFx_render
+# --- interrupt support (region A) ----------------------------------------------------------
+08001FC8 SetIntrHandler                  # [sure] IntrTable[idx] = fn (IntrTable = 0x0300585C)
+08001FD8 ClearIntrHandler                # [sure] IntrTable[idx] = DummyIntrHandler
+08001FEC DummyIntrHandler                # [sure] bx lr
+08001FF0 DefaultVBlankHandler            # [likely] writes 1 to 0x03007FF8 (BIOS IntrCheck)

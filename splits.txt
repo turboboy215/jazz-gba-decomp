@@ -1,0 +1,10 @@
+# start    end        kind name      [flavour]
+# kind: asm = named asm file (handwritten/kept), c = src/<name>.c
+# flavour (5th col): old = old_agbcc (default compiler for this game, see docs), o1, noiw, bugfix
+08000000 080000C0 asm header
+080000C0 080002E0 asm crt0
+0831AEB4 083E085C asm rodata          # .rodata after .text (GAX tables, strings, pointer tables)
+083E085C 083E1140 asm iwram_image     # .iwram load image -> 0x03000000-0x030008E4 (code: ARM/Thumb fast routines, VBlank IRQ)
+083E1140 083E1348 asm data_image      # .data load image  -> 0x03005858-0x03005A60 (IntrTable at 0x0300585C)
+083E1348 083E9978 asm ewram_image     # .ewram load image -> 0x02000000-0x02008630
+083E9978 08400000 asm rom_padding     # 0xFF fill to 4 MiB

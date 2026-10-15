@@ -1,0 +1,838 @@
+# ASCII strings in .rodata (0x0831AEB4-0x083E085C). addr<TAB>len<TAB>text (\n escaped). Auto-extracted by tools/extract_strings.py
+083294B5	6	g8Wwe&
+0835CCBF	5	cp(B:
+0835CCFE	5	al<LC
+0835CD13	5	_m>NJ
+0835CD28	5	[nFJU
+0835CD3D	5	WqGMT
+0835CD66	6	©`hTM\
+0835E695	5	zx[]S
+0835EC43	28	"credits" © Martin Schioeler
+0835F81C	30	"mainmusic" © Martin Schioeler
+083603DA	31	"industrial" © Martin Schioeler
+08360A2A	25	"cave" © Martin Schioeler
+08360F22	25	"snow" © Martin Schioeler
+08361281	26	"boss1" © Martin Schioeler
+083619A1	26	"boss2" © Martin Schioeler
+08365A53	5	fwQL-
+08365BF9	4	JgR;
+08365E3E	4	_ZKX
+0836658E	4	dI75
+08366805	4	O0;g
+08366F87	6	ysj}Y"
+08367638	4	jU?7
+0836BC2A	4	`:Un
+0836C039	4	hYk;
+0836C0BC	8	\AUZ>(n6
+083A1BFD	18	d=7gjEUQTOPMNKKG@$
+083A1D9C	5	yuKo^
+083A1F17	17	`vqqomjhdc_^TH6H{
+083CF8E0	7	Eggroc©
+083CF99E	5	aKG1w
+083D2FBF	11	ppPgwpppppp
+083D3104	4	AGBJ
+083D312C	30	PLEASE DO NOT POWER OFF SYSTEM
+083D31C0	29	 PLEASE TURN OFF ALL SYSTEMS 
+083D3200	20	PRESS START TO BEGIN
+083D3218	10	LINK ERROR
+083D3224	27	PLEASE TURN OFF ALL SYSTEMS
+083D3240	13	AND TRY AGAIN
+083D3270	30	PLEASE DO NOT POWER OFF SYSTEM
+083D3290	22	Waiting for players...
+083D32C8	29	      To Begin Transfer      
+083D32E8	28	MultiSioSync4Sio32Load010918
+083D3308	20	Sio32MultiLoad010214
+083D3334	36	0123456789abcdefghijklmnopqrstuvwxyz
+083D335C	36	0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+083D3384	6	<NULL>
+083D6768	59	Looks like I've taken\ncare of all the mech\nturtles finally.
+083D67A4	26	Although I could be\nwrong!
+083D67C0	35	There goes the last\nof the Mechs...
+083D67E4	33	But where are Dark\nShell and Zoe?
+083D6808	41	Strange...I wonder\nwhat that lever did...
+083D6834	58	Geez, you'd think I'd\nbe able to make it\nthrough a mission
+083D6870	52	at least once without\nhaving to deal with\nhot magma!
+083D68A8	14	But noooooo...
+083D68B8	12	Dark Shell!\n
+083D68C8	52	Ah, so we finally\nmeet face to face,\nMr. Jackrabbit.
+083D6900	37	You've managed to\nthwart me thus far,
+083D6928	52	but I assure you that\nyour streak of luck\nends here!
+083D6960	37	Your ultimate doom is\nguaranteed now.
+083D6988	55	I am the greatest\nwarrior this universe\nhas ever known,
+083D69C0	36	and I am without\na single weakness!\n
+083D69E8	16	Engarde, rabbit!
+083D69FC	16	You did it Jazz!
+083D6A10	16	Wait a minute...
+083D6A24	22	I recognize that cage!
+083D6A3C	49	Didn't you notice\nthat it doesn't\nhave any locks?
+083D6A70	12	Of course...
+083D6A80	72	But I wouldn't be\nmuch of a damsel in\ndistress if I escaped\nnow would I?
+083D6ACC	33	This is another fine\nmess I'm in.
+083D6AF0	75	I can't believe I've\nbeen captured by the\nchameleon hordes on\nthis mission.
+083D6B3C	47	I'm going to be King\nChameleon food for\nsure...
+083D6BA8	55	Hey!\nThere's my blaster\nbehind that lazy\nchameleon.....
+083D6BE0	40	What!?\nThese chameleons are\nso low tech,
+083D6C0C	40	they don't even have\nlocks on this cage!
+083D6C38	48	Now is my chance to\ntake care of King\nChameleon,
+083D6C6C	31	before he has me for\nbreakfast!
+083D6C8C	26	snore..snort...\ngrumble...
+083D6CA8	56	You not told to be\nthere! You King food!\nNow I mash you!
+083D6CE4	13	Bring it on!!
+083D6CF4	46	Hmmm......\nHow can I make it\nacross the chasm?
+083D6D24	57	I'll have to use my\nhelicopter ears by\njumping once, then
+083D6D60	60	pressing and holding\nthe jump button again\nwhile in the air.
+083D6DA0	54	The carrot gate means\nI must be on the\nthe right path.
+083D6DD8	43	That chameleon up\nthere is right\nin my way!
+083D6E04	47	I could take him\nout by jumping\nand shooting...
+083D6E34	70	Or I could get\nhim even easier by\nholding ^ and < \nthen pressing Fire.
+083D6E7C	51	If I remember my\nmission directives\nfrom Margsly...
+083D6EB0	49	Something about a\nlarge chameleon, and\na lever...
+083D6EE4	54	Halt there! Grumble...\nYou must be mushed\ninto soup...
+083D6F1C	62	Blast the infidel who\nis supposed to be\nmade into sandwiches!\n
+083D6F5C	26	These guys are\nravenous...
+083D6F78	46	Must shred rabbit.\nRabbit must be\ndeep fried!!
+083D6FA8	57	Talk about out of the\nfrying pan and into\nthe deep fryer!
+083D6FE4	53	There must be some\nway to open that\nmouth above me...
+083D701C	41	You not getting any\nfurther!\nMe stop you!
+083D7048	24	Yeah?\nYou and what army?
+083D7064	20	Oh.\nRight.\nThat one.
+083D70B4	23	Finally, dinner here!!\n
+083D70CC	46	Yikes!\nThis guy thinks I'm\njust a tasty snack!
+083D70FC	48	Good and fresh,\n               \nmakes more fun!\n
+083D7130	62	I don't think I'm\ngoing to win this one\nwith firepower alone.\n
+083D7170	58	I'll have to use my\nspeed and smarts to\nbeat this maniac,\n
+083D71AC	69	because there's no\nway this bunny is\ngoing to end up as\nan appetizer!
+083D71F4	18	It clubbin' time!\n
+083D7208	7	Whew...
+083D7210	23	Well I guess\nthat's it.
+083D7228	51	That mission was\na lot different than\nmy past ones.
+083D725C	45	Kinda nice not to\nhave to collect\nanything...
+083D728C	39	Makes me almost wish\nI wasn't retiring.
+083D72B4	19	Here we go again...
+083D72C8	51	Ok sir, I'll keep\nan eye out for him.\nOver and out.
+083D72FC	51	The hare has landed!\nI repeat,\nthe hare has landed!
+083D7330	39	Hmm...\nI'm starting to\nthink that maybe
+083D7358	63	"expect some\n heavy resistance"\nwas a bit of an\nunderstatement.
+083D7398	15	We need backup!
+083D73A8	57	We're under heavy\nattack. There must be\nfour, maybe five\n
+083D73E4	18	thousand of them!\n
+083D73F8	18	Enemy spotted sir!
+083D740C	31	Charge!!!!\nEvery turtle fights!
+083D742C	50	Sir, I'm receiving\nword that Jazz has\nmade it past
+083D749C	18	Secure all doors!\n
+083D74B0	49	This fort is now\nin a state of\ncomplete lockdown!
+083D74E4	29	He may have made\nit this far,
+083D7504	37	but he won't make it\nan inch farther!
+083D752C	16	This is weird...
+083D7540	72	According to my\nscanners, my ship is\nnow on the other side\nof that gate.
+083D758C	42	But how could the\nturtles have moved\nit...
+083D75B8	53	unless they had known\nfor a while that I'd\nbe here?!?
+083D75F0	24	There's my ship\nalright.
+083D760C	48	They seem to have\nconnected it to\na few levers..
+083D7640	36	and what in the\nworld is THAT thing?
+083D7668	83	That monster looks\na little too big to\ntake much damage from\neven my flamethrower!\n
+083D76BC	48	There has to be some\nother way to take him\ndown,
+083D76F0	47	and get my ship out of\nhere at the same\ntime...
+083D7720	52	I love the smell of\nroasted turtle in\nthe morning...
+083D7758	14	Smells like...
+083D7768	8	victory.
+083D7774	33	Thank goodness you're\nhere Jazz!\n
+083D7798	54	The evil Saurian\nmercenaries have\ntaken over the city!
+083D77D0	55	Saurians?!? I've\ntangled with those\nguys in the past...
+083D7808	62	They've taken all the\nkeys to the city and\nare wrecking havoc!
+083D7848	47	Help us Jazz\nJackrabbit, you're\nour only hope!\n
+083D7878	42	Why would Saurians\nbe terrorizing a\ncity?\n
+083D78A4	53	They usually only\ncause trouble if\nsomeone is paying\n
+083D78DC	15	them to do it.\n
+083D78EC	56	My rabbit instincts\nare telling me that\nsomething smells
+083D7928	22	funny around here....\n
+083D7940	29	Besides the Saurians\nthat is!
+083D7960	26	Thanks for saving us\nJazz!
+083D797C	42	I saw a bunch of\nthem run into the\nsewers.
+083D79A8	32	A thousand thanks\ngo out to you.
+083D79CC	28	Well what do we\nhave here...
+083D79EC	37	You've held up your\npart of the deal.
+083D7A14	53	The money is all\nthere, you can count\nit if you want.
+083D7A4C	71	We're headed back\nto ICEBOX3 now. Your\ngeneral had better\ntake him out!
+083D7A94	39	Remember, this meeting\nnever happened.\n
+083D7ABC	33	Hate to crash your\nparty boys...\n
+083D7AE0	11	It's Jazz!\n
+083D7AEC	34	You handle him,\nwe're out of here!
+083D7B10	15	Easy big fella!
+083D7B20	42	The bigger they\nare, the harder\nthey fall.
+083D7B4C	37	Well if it isn't Miss\nZoe Cottontail.
+083D7B74	57	Hey Jazz. Margsly\ntold me to meet you\nhere at the weapons
+083D7BB0	49	depot to explain the\nnew R.A.B.T. weapons\npolicy.
+083D7BE4	14	How you doin'?
+083D7BF4	57	The higher-ups have\ndecided to cut costs\nby having field\n
+083D7C30	44	agents purchase their\nown weapons and ammo.\n
+083D7C60	7	Uh huh.
+083D7C68	59	You'll find that they\nleft a little money\nto get you going.
+083D7CA4	60	After this you'll be\non your own though,\nso spend it wisely.
+083D7CE4	43	I left about 15\nmessages on your\nmachine...
+083D7D10	28	Just grab whatever\nyou want,
+083D7D30	62	and the money will be\nautomatically taken\nout of your account.
+083D7D70	15	Any questions?\n
+083D7D80	32	Just one.\nYou busy Friday\nnight?
+083D7DA4	70	Oh Jazz.......\n              \nYes, I'll be busy.\nNow go buy something.
+083D7DEC	19	Jazz! You made it!\n
+083D7E00	34	I have a great new\nweapon for you!
+083D7E24	29	I call it the\n"flamethrower"!
+083D7E44	77	With one fiery blast,\nyou'll be able to\ntake out anyone who\ngets in your way!
+083D7E94	77	I've left you a free\none over there, but\nyou'll have to pay\nfor the next one!
+083D7EE4	60	You know, I've saved\nthe galaxy more times\nthan I can count.
+083D7F24	56	Shouldn't I qualify\nfor some kind of\nsuperhero discount?
+083D7F60	57	Hey, someone has to\npay for the Research\nand Development!
+083D7F9C	32	Looks like that\nsomeone is you!\n
+083D7FC0	35	Spaz! What are you\ndoing here bro?\n
+083D7FE4	36	Enjoying retirement,\nhow about you?\n
+083D800C	50	Come on, you know\nI've been called\nback into duty!
+083D8040	17	Ohhh yeeeaaah...\n
+083D8054	54	I just heard that\nZoe has been captured\nby Dark Shell!
+083D808C	39	Let's go grab some\nammo and get going!\n
+083D80B4	54	Well I would....\nBut you know....\nI'm retired and all.
+083D80EC	37	Otherwise I'd be\nright behind you...\n
+083D8114	21	You're so lazy Spaz!\n
+083D812C	38	I mean, you're not\neven wearing pants!
+083D8154	24	Well,\nI've got shoes on.
+083D8170	57	Whatever Spaz,\nI'm going to save Zoe\nand stop Dark Shell!
+083D81AC	21	You do what you want.
+083D81C4	43	Okay.\nI'll be at the arcade\nif you need me.
+083D81F0	73	Oh, by the way.\nThat science guy left\na rockety thingy over\nthere for ya.
+083D823C	15	Thanks, Spaz...
+083D824C	37	Ah ha, just the hare\nI wanted to see!
+083D8274	36	As soon as I heard\nabout Dark Shell,
+083D829C	53	I went to work to\ncreate the ultimate\nweapon for you!
+083D82D4	69	It fires off an orb\nof fury that lays\nwaste to everything\nit touches!
+083D831C	50	I didn't have enough\ntime to make it very\ncompact,
+083D8350	58	So let's just say,\nit's not named the\nbig gun for nothing!
+083D838C	48	You'll find it right\nover there. Good\nluck Jazz!
+083D83E0	30	     Jaleco Entertainment     
+083D84C0	30	  Quality Assurance Manager   
+083D8500	30	   Quality Assurance Lead     
+083D8540	30	  Quality Assurance Testers   
+083D8580	30	     Larry Eggleston, Jr.     
+083D85C0	30	      Project Director        
+083D8600	30	      Design Direction        
+083D8620	30	      Cliff Bleszinski        
+083D8640	30	      GAME DEVELOPED BY       
+083D8680	30	  MUSIC AND SFX COMPOSED FOR  
+083D86A0	30	     GAME TITAN BY SHIN'EN    
+083D86C0	30	    AUDIO ENGINE: GAX v3.0    
+083D8700	30	    GAME TITAN DEVELOPERS:    
+083D8780	30	     Donald "Chip" Etgeton,   
+083D87C0	30	       Mikael Andersson,      
+083D8880	30	       Tool Development       
+083D88A0	30	     GAME TITAN TESTERS:      
+083D8940	30	     GAME DESIGN BY ALL       
+083D8960	30	    OF US AT GAME TITAN,      
+083D8980	30	 THE WAY THAT IT SHOULD BE!   
+083D8A00	30	    GAME TITAN AGENTING:      
+083D8A20	30	   J. MOON, MOON CONSULTING   
+083D8A60	30	     WOULD LIKE TO THANK:     
+083D8A80	30	  CLIFF "CLIFFY-B" BLESZINSKI 
+083D8AA0	30	    OF EPIC GAMES, FOR YOUR   
+083D8AC0	30	 AWESOME DESIGN DIRECTION AND 
+083D8B00	30	   JAY WILBUR OF EPIC GAMES,  
+083D8B20	30	  FOR YOUR STRAIGHT FORWARD   
+083D8BA0	30	 THE WIZARD BEHIND THE CURTAIN
+083D8BC0	30	 ALL THE HOT CHICKS THAT WORK 
+083D8BE0	30	 AT STARBUCKS DOWN THE STREET,
+083D8C00	30	    CHRIS RIPPY OF ENSEMBLE   
+083D8C80	30	  BLUE (THE STUDIO CHIHUAHUA) 
+083D8CA0	30	  JOHN ROOT AND JOHN MUELLER  
+083D8CC0	30	  OF OUTLAW STUDIOS (WE HAD   
+083D8CE0	30	  NOTHING TO DO WITH THAT)    
+083D8D20	30	 EGADS OF UNIVERSITY OF TEXAS 
+083D8D40	30	   RUSH, TOOL, SPARTA, ENON,  
+083D8D80	30	 ...ALL OF OUR FAMILY AND     
+083D8DA0	30	 FRIENDS, FOR PUTTING UP WITH 
+083D8DC0	30	     OUR RIDICULOUS WORK      
+083D8E00	30	 ...AND OF COURSE, ALL OF YOU 
+083D8E20	30	  WHO BOUGHT AND PLAYED THIS  
+083D8E60	30	  YOU HAVE MAD THUMBABILITY!  
+083D9198	25	--INCOMING TRANSMISSION--
+083D91D0	24	"Jazz, I've got bad news
+083D91EC	24	for you. Looks like your
+083D9208	22	retirement is going to
+083D9220	24	have to be short lived."
+083D923C	22	"Ah, come on Margsly!"
+083D9254	25	"I'm through with running
+083D9270	25	around collecting pellets
+083D928C	18	for minimum wage."
+083D92A0	23	"I'm going to spend the
+083D92B8	24	rest of my days relaxing
+083D92D4	23	on some tropical planet
+083D92EC	22	sipping carrot juice."
+083D9304	21	"But Jazz, we've just
+083D931C	23	received a message from
+083D9334	25	the mayor of Carrotopolis
+083D9350	23	requesting urgent help,
+083D9368	19	and you're the only
+083D937C	20	agent we have in the
+083D9394	6	area!"
+083D939C	18	"I tell you what."
+083D93B0	23	"You take this mission,
+083D93C8	22	and I'll make sure you
+083D93E0	23	get enough money to BUY
+083D93F8	22	that tropical planet."
+083D941C	24	and there's not going to
+083D9438	24	be any coins or stars to
+083D9454	19	collect this time?"
+083D9468	10	"No coins.
+083D9474	10	No stars."
+083D9480	20	"And I won't have to
+083D9498	20	find fifty bananas?"
+083D94B0	18	"No bananas, Jazz.
+083D94C4	21	The only thing you'll
+083D94DC	22	be collecting is cold,
+083D94F4	11	hard cash."
+083D9500	22	"I'm thinking about it
+083D9518	21	Margsly. What are the
+083D9530	12	objectives?"
+083D9540	21	"Your mission, if you
+083D9558	20	choose to accept it,
+083D9570	22	is to dock at the city
+083D9588	16	of Carrotopolis,
+083D959C	19	And investigate the
+083D95B0	17	the nature of the
+083D95C4	19	disturbance there."
+083D95D8	22	"We're getting reports
+083D95F0	23	of Saurian ships in the
+083D9608	25	area, so the use of force
+083D9624	18	may be necessary."
+083D9638	23	"You'll need some extra
+083D9650	24	firepower, which you can
+083D966C	23	get from Zoe Cottontail
+083D9684	22	at the Weapons Depot."
+083D969C	22	"Zoe Cottontail, huh?"
+083D96B4	21	"Alright Margsly, you
+083D96CC	19	talked me into it."
+083D96E0	18	"Good to hear that
+083D96F4	23	Jazz. Report back to me
+083D970C	24	when you find out what's
+083D9728	20	going on out there."
+083D9740	21	"Margsly, you there?"
+083D9758	22	"Did you find anything
+083D9770	10	out Jazz?"
+083D977C	16	"You were right.
+083D9790	23	There were Saurians all
+083D97A8	15	over the city!"
+083D97B8	21	"I caught some turtle
+083D97D0	23	troops making a payment
+083D97E8	17	to the Saurians."
+083D97FC	25	"Then it's as I feared.."
+083D9818	24	"What? What's going on?"
+083D9834	13	"Oh. Nothing.
+083D9844	20	Did you get any info
+083D985C	13	out of them?"
+083D986C	25	"They ran off into a gate
+083D9888	23	before I could question
+083D98A0	6	them."
+083D98A8	19	"They did mention a
+083D98BC	24	planet though, ICEBOX3."
+083D98D8	21	"I secured the entire
+083D98F0	25	city and took the Saurian
+083D990C	25	General out of commision,
+083D9928	17	so where's my fat
+083D993C	25	paycheck? I'll take it in
+083D9958	24	cash or carrots please."
+083D9974	19	"Hang on Jazz, this
+083D9988	24	mission isn't over yet."
+083D99A4	20	"Get your cottontail
+083D99BC	19	to ICEBOX3 pronto!"
+083D99D0	22	"Figure out what those
+083D99E8	20	sneaky turtle troops
+083D9A00	11	are up to."
+083D9A0C	21	"You're authorized to
+083D9A24	24	take out as many of them
+083D9A40	21	as you need to in the
+083D9A58	9	process."
+083D9A64	20	"They may not be the
+083D9A7C	21	bravest troops in the
+083D9A94	7	galaxy,
+083D9A9C	23	but they are well armed
+083D9AB4	24	and fortified, so expect
+083D9AD0	23	some heavy resistance."
+083D9AE8	20	"Professor Lapin has
+083D9B00	22	cooked up a new weapon
+083D9B18	19	that should be able
+083D9B2C	17	to help you out."
+083D9B40	20	"Stop by the weapons
+083D9B58	20	depot on your way to
+083D9B70	23	ICEBOX3, talk to Lapin,
+083D9B88	22	and stock up on ammo."
+083D9BAC	16	"But this is it!
+083D9BC0	25	I expect to be sitting on
+083D9BDC	20	a beach by this time
+083D9BF4	10	tomorrow!"
+083D9C00	18	"Jazz, good to see
+083D9C14	11	you're ok!"
+083D9C20	16	"What's going on
+083D9C34	13	around here?"
+083D9C44	20	"That planet was one
+083D9C5C	16	huge deathtrap!"
+083D9C70	25	"It's as if they had been
+083D9C8C	19	planning my arrival
+083D9CA0	15	for a while..."
+083D9CB0	17	"They were Jazz."
+083D9CD0	14	"We received a
+083D9CE0	22	transmission from your
+083D9CF8	23	nemesis, Dark Shell, as
+083D9D10	26	you were leaving ICEBOX3."
+083D9D2C	20	"That's impossible!"
+083D9D44	23	"I destroyed his entire
+083D9D5C	24	mothership two years ago
+083D9D78	21	when he tried to take
+083D9D90	14	over Carrotus,
+083D9DA0	24	and Dark Shell went down
+083D9DBC	9	with it!"
+083D9DC8	15	"I remember..."
+083D9DD8	13	"I think this
+083D9DE8	16	recording speaks
+083D9DFC	19	for itself though."
+083D9E10	21	"So jazz, you made it
+083D9E28	24	past not only my Saurian
+083D9E44	5	trap,
+083D9E4C	19	but my army of snow
+083D9E60	17	turtles as well!"
+083D9E74	23	"Didn't think you'd see
+083D9E8C	25	this face again did you?"
+083D9EA8	25	"You devastated my entire
+083D9EC4	17	fleet, and nearly
+083D9ED8	22	squashed the greatness
+083D9EF0	12	that is me."
+083D9F00	24	"Nevertheless, I escaped
+083D9F1C	10	unharmed."
+083D9F28	21	"Dark Shell lives on!
+083D9F40	15	Mwahahahahaha!"
+083D9F50	24	"I've been busy building
+083D9F6C	23	a new fleet, to extract
+083D9F84	24	my ultimate revenge upon
+083D9FA0	18	you and Carrotus."
+083D9FB4	22	"Your retirement would
+083D9FCC	21	have taken half of my
+083D9FE4	16	revenge from me,
+083D9FF8	24	so once I heard the news
+083DA014	22	I had to act quickly."
+083DA02C	24	"I tried to take you out
+083DA048	23	quietly, so that no one
+083DA060	23	would find out about my
+083DA078	11	evil plot."
+083DA084	20	"Unfortunately, your
+083DA09C	23	blasted luck has forced
+083DA0B4	22	me to switch to what I
+083DA0CC	15	call 'Plan B'."
+083DA0DC	22	" 'Plan B' consists of
+083DA0F4	19	three main points."
+083DA114	22	"Hold on, I wrote them
+083DA12C	22	down on a napkin, it's
+083DA144	25	around here somewhere..."
+083DA160	25	"Ah ha! I have found it!"
+083DA17C	23	"One - Kidnap Zoe while
+083DA194	20	Jazz is on ICEBOX3."
+083DA1AC	23	"Two - Laugh menacingly
+083DA1C4	24	while waiting for him to
+083DA1E0	18	try and save her."
+083DA1F4	25	"Three - Finish Jazz once
+083DA210	17	and for all, thus
+083DA224	23	clearing the way for me
+083DA23C	24	to take over Carrotus...
+083DA258	11	and then...
+083DA264	21	the entire universe!"
+083DA27C	16	"Mwahahahahaha!"
+083DA290	19	"Mwahahahahahaha!!"
+083DA2A4	24	"Mwahahahahahahahaha!!!"
+083DA2C0	25	"It goes on like that for
+083DA2DC	22	another five minutes."
+083DA2F4	23	"You know what you need
+083DA30C	7	to do."
+083DA314	21	"We traced the signal
+083DA32C	20	back to Dark Shell's
+083DA344	25	home planet of Pollutus."
+083DA360	24	"We also intercepted the
+083DA37C	23	designs for an advanced
+083DA394	13	Mech Turtle."
+083DA3A4	25	"It seems that Dark Shell
+083DA3C0	22	has been manufacturing
+083DA3D8	20	them on the planet."
+083DA3F0	25	"Our boys at intelligence
+083DA40C	25	have studied the designs,
+083DA428	21	and have learned that
+083DA440	22	they are equipped with
+083DA458	22	multiple weapons and a
+083DA470	11	deadly AI."
+083DA47C	25	"We've also heard reports
+083DA498	22	of a larger Mech being
+083DA4B0	20	built there as well,
+083DA4C8	15	so be careful!"
+083DA4D8	25	"You'd better make a stop
+083DA4F4	23	by the weapons depot on
+083DA50C	10	your way."
+083DA518	24	"We'll have your payment
+083DA534	25	here waiting for you when
+083DA550	14	you get back."
+083DA560	24	"I don't even care about
+083DA57C	17	the money anymore
+083DA590	9	Margsly."
+083DA59C	11	"This time,
+083DA5A8	15	it's personal."
+083DA5B8	23	"Good luck Jazz, you'll
+083DA5D0	9	need it."
+083DA5DC	25	-- FROM UNKNOWN SOURCE --
+083DA5F8	16	"Looking for me,
+083DA60C	12	old friend?"
+083DA61C	20	"Well you won't find
+083DA634	15	me on Pollutus,
+083DA644	17	that's for sure!"
+083DA658	24	"I'm through with games,
+083DA674	25	so I'll make you an offer
+083DA690	18	you can't refuse."
+083DA6A4	23	"My military base is in
+083DA6BC	24	an impenetrable fortress
+083DA6D8	25	on the deserted planet of
+083DA6F4	13	Chelonia IV."
+083DA704	21	"If you can find your
+083DA71C	22	way through the castle
+083DA734	17	and make it here,
+083DA748	25	I will give you the honor
+083DA764	23	of being obliterated by
+083DA77C	24	me, the great Dark Shell
+083DA798	9	himself!"
+083DA7A4	18	"If you defeat me,
+083DA7B8	16	which you won't,
+083DA7CC	23	you will have saved the
+083DA7E4	20	day and the girl yet
+083DA7FC	7	again."
+083DA804	23	"Hey, when I said I was
+083DA81C	23	through with games, you
+083DA834	23	know I didn't mean this
+083DA84C	11	one right?"
+083DA858	22	"Shhh! You can't break
+083DA870	22	character right in the
+083DA888	22	middle of a cutscene!"
+083DA8A0	10	"Oh yeah."
+083DA8AC	21	"I mean, no one tells
+083DA8C4	23	Dark Shell what to do!"
+083DA8DC	24	"Prepare for the hardest
+083DA8F8	24	battle of your life, the
+083DA914	23	one you don't walk away
+083DA92C	6	from!"
+083DA944	22	"I'm talking about the
+083DA95C	25	one between you and me of
+083DA978	8	course."
+083DA984	19	"Yeah, I got that."
+083DA998	12	"Excellent."
+083DA9A8	22	"Now don't tell anyone
+083DA9C0	24	the location of my super
+083DA9DC	15	secret base..."
+083DA9EC	12	"because..."
+083DAA04	9	"dangit!"
+083DAA10	21	"Look just don't tell
+083DAA28	11	anyone ok?"
+083DAA34	19	"See you soon Jazz,
+083DAA48	19	for the last time!"
+083DAA5C	20	"Mwahahahahahahaha!"
+083DAA74	22	--TRANSMISSION ENDED--
+083DAA8C	16	"Well, I guess I
+083DAAA0	18	don't have much of
+083DAAB4	15	a choice here."
+083DAAC4	21	"I've got to find and
+083DAADC	26	stop Dark Shell, save Zoe,
+083DAAF8	21	and secure the future
+083DAB10	23	peace of the universe!"
+083DAB28	24	"All in a day's work for
+083DAB44	17	Jazz Jackrabbit."
+083DAB58	20	"I've got some money
+083DAB70	14	burning a hole
+083DAB80	13	in my pocket,
+083DAB90	25	and I know just the place
+083DABAC	13	to spend it."
+083DABBC	25	We join our fearless hero
+083DABD8	23	as he is finishing what
+083DABF0	21	he believes to be his
+083DAC08	13	last mission.
+083DAC18	15	"Just my luck."
+083DAC28	21	"These chameleons are
+083DAC40	20	about as bright as a
+083DAC58	11	black hole,
+083DAC64	22	yet they still managed
+083DAC7C	19	to get me trapped."
+083DAC90	24	"Gee, I'd really hate to
+083DACAC	24	get captured right now."
+083DACC8	18	"King, we capture 
+083DACDC	8	rabbit!"
+083DACE8	12	"Rabbit!?!?"
+083DACF8	16	"King so hungry!
+083DAD0C	22	You bring king rabbit!
+083DAD24	19	King eat rabbit!!!"
+083DAD38	24	"Rabbit being guarded by
+083DAD54	15	Larry the Lazy.
+083DAD64	17	Me bring rabbit."
+083DAD78	17	"So Jazz, I guess
+083DAD8C	18	you're going to be
+083DADA0	19	retiring now, huh?"
+083DADB4	19	"Squash that idea!"
+083DADC8	16	"Jazz Jackrabbit
+083DADDC	17	is here to stay!"
+083DADF0	21	"So I guess you won't
+083DAE08	20	have time for a date
+083DAE20	8	then..."
+083DAE50	19	You've unlocked the
+083DAE64	23	Wasteland 2 Multiplayer
+083DAE7C	4	Map!
+083DAE84	23	Enter this in the pause
+083DAE9C	25	menu for a one time bonus
+083DAEB8	21	of 500 space credits:
+083DAEE8	22	of 1000 space credits:
+083DAF18	22	of 5000 space credits:
+083DAF48	20	  Player%d captured 
+083DAF78	20	    You captured    
+083DAF90	20	   Player%d's Flag  
+083DAFA8	20	   Player%d's flag  
+083DB350	11	 MAIN MENU 
+083DB35C	22	Waiting for players...
+083DB384	6	 %Back
+083DB38C	19	 SELECT DIFFICULTY 
+083DB3A0	10	 NEW GAME 
+083DB3AC	14	 LEVEL SELECT 
+083DB3BC	16	 LEVEL SETTINGS 
+083DB3D0	11	 MULTI-PAK 
+083DB3DC	12	 SINGLE-PAK 
+083DB3EC	10	 SETTINGS 
+083DB3F8	20	 MULTI-PAK SETTINGS 
+083DB410	21	 SINGLE-PAK SETTINGS 
+083DB428	20	 SELECT A SAVE FILE 
+083DB440	10	 CONTINUE 
+083DB44C	23	 SELECT A FILE TO LOAD 
+083DB478	12	 TOURNAMENT 
+083DB488	11	< Change > 
+083DB494	29	Press Start to Play A Rematch
+083DB4B4	29	Press % to Select a New Level
+083DB4F0	11	PLEASE WAIT
+083DB51C	29	 PLEASE TURN OFF ALL SYSTEMS 
+083DB55C	28	  PLEASE WAIT WHILE PLAYER 1
+083DB57C	28	     SELECTS A NEW LEVEL    
+083DB59C	26	 Level:     Stage 1-lvl 1 
+083DB5B8	26	 Level:     Stage 1-lvl 2 
+083DB5D4	26	 Level:     Stage 1-lvl 3 
+083DB5F0	26	 Level:     Stage 1 Boss  
+083DB60C	26	 Level:     Zoe Cottontail
+083DB628	26	 Level:     Stage 2-lvl 1 
+083DB644	26	 Level:     Stage 2-lvl 2 
+083DB660	26	 Level:     Stage 2-lvl 3 
+083DB67C	26	 Level:     Stage 2 Boss  
+083DB698	26	 Level:     Prof. Lapen   
+083DB6B4	26	 Level:     Stage 3-lvl 1 
+083DB6D0	26	 Level:     Stage 3-lvl 2 
+083DB6EC	26	 Level:     Stage 3-lvl 3 
+083DB708	26	 Level:     Stage 3 Boss  
+083DB740	26	 Level:     Stage 4-lvl 1 
+083DB75C	26	 Level:     Stage 4-lvl 2 
+083DB778	26	 Level:     Stage 4-lvl 3 
+083DB794	26	 Level:     Stage 4 Boss  
+083DB7B0	26	 Level:     Stage 5-lvl 1 
+083DB7CC	26	 Level:     Stage 5-lvl 2 
+083DB7E8	26	 Level:     Stage 5-lvl 3 
+083DB804	26	 Level:     Dark Shell    
+083DB8CC	17	 Stage 1 Level 2 
+083DB8E0	17	 Stage 1 Level 3 
+083DB8F4	17	 Stage 1 Boss    
+083DB908	17	 Zoe Cottontail  
+083DB91C	17	 Stage 2 Level 1 
+083DB930	17	 Stage 2 Level 2 
+083DB944	17	 Stage 2 Level 3 
+083DB958	17	 Stage 2 Boss    
+083DB96C	17	 Prof. Lapen     
+083DB980	17	 Stage 3 Level 1 
+083DB994	17	 Stage 3 Level 2 
+083DB9A8	17	 Stage 3 Level 3 
+083DB9BC	17	 Stage 3 Boss    
+083DB9E4	17	 Stage 4 Level 1 
+083DB9F8	17	 Stage 4 Level 2 
+083DBA0C	17	 Stage 4 Level 3 
+083DBA20	17	 Stage 4 Boss    
+083DBA34	17	 Stage 5 Level 1 
+083DBA48	17	 Stage 5 Level 2 
+083DBA5C	17	 Stage 5 Level 3 
+083DBA70	17	 Dark Shell      
+083DBABC	26	 OVERWRITE EXISTING GAME? 
+083DBAD8	20	 Zoe Cottontail     
+083DBC1C	27	 Level:       Cave Level 1 
+083DBC38	27	 Level:       Cave Level 2 
+083DBC54	27	 Level:       Snow Level 1 
+083DBC70	27	 Level:       Snow Level 2 
+083DBC8C	27	 Level:     Castle Level 3 
+083DBCA8	27	 Level:    Castle Level 3# 
+083DBCC4	27	 Level:        Wasteland 1 
+083DBCE0	27	 Level:       Wasteland 1# 
+083DBCFC	27	 Level:        Wasteland 2 
+083DBD18	27	 Level:       Wasteland 2# 
+083DBD34	27	 Level:       Single Pak 1 
+083DBD50	27	 Level:       Single Pak 2 
+083DBD6C	27	 Level:       Single Pak 3 
+083DBD88	27	 Level:      Single Pak 3# 
+083DBDA4	27	 Level:       Single Pak 4 
+083DBDC0	27	 Level:      Single Pak 4# 
+083DBE08	27	 Level:       Single-Pak 1 
+083DBE24	27	 Level:       Single-Pak 2 
+083DBE40	27	 Level:       Single-Pak 3 
+083DBE5C	27	 Level:      Single-Pak 3# 
+083DBE78	27	 Level:       Single-Pak 4 
+083DBE94	27	 Level:      Single-Pak 4# 
+083DBECC	27	 Play:    Capture The Flag 
+083DBF04	27	 Mode:    Capture The Flag 
+083DBF20	27	 Control Configuration:  1 
+083DBF3C	27	 Control Configuration:  2 
+083DBF58	27	 Control Configuration:  3 
+083DBF74	27	 Control Configuration:  4 
+083DC170	27	 Difficulty:      CAKEWALK 
+083DC18C	27	 Difficulty:        NORMAL 
+083DC1A8	27	 Difficulty:   PRETTY HARD 
+083DC1C4	27	 Difficulty:  WAY TOO HARD 
+083DC1E0	27	 Music Volume:         OFF 
+083DC550	27	 Ricochet Gun:         OFF 
+083DC588	27	 Flamethrower:         OFF 
+083DC5A4	27	 Flamethrower:          ON 
+083DC5C0	27	 Rocket Launcher:      OFF 
+083DC5DC	27	 Rocket Launcher:       ON 
+083DC668	27	 Carrot Grenades:      OFF 
+083DC684	27	 Carrot Grenades:       ON 
+083DC6A4	25	   ARE YOU SURE YOU WISH 
+083DC6C0	25	    TO ERASE ALL SAVED   
+083DC9DC	17	Music Vol:    OFF
+083DCACC	17	Sfx Vol:      OFF
+083DCBBC	17	Brightness:     0
+083DCBD0	17	Brightness:     1
+083DCBE4	17	Brightness:     2
+083DCBF8	17	Brightness:     3
+083DCC0C	17	Brightness:     4
+083DCC20	17	Brightness:     5
+083DCC34	17	Brightness:     6
+083DCC48	17	Brightness:     7
+083DCC5C	17	Control Type:   1
+083DCC70	17	Control Type:   2
+083DCC84	17	Control Type:   3
+083DCC98	17	Control Type:   4
+083DCCAC	6	PAUSED
+083DCCC4	17	SPACE CREDITS: %d
+083DCDD8	18	LEVEL DOES NOT FIT
+083DD00C	4	wwW1
+083DD021	15	SUU0uwwswwwuwww
+083DD044	12	wsw5wWwWwuww
+083DE83E	18	vwAcww1fwwSfwwSfww
+083DE867	9	`wgSvwgSv
+083DE8FC	20	www6www6www6vww6vww6
+083DEA30	28	    YOU HAVE UNLOCKED THE   
+083DEA50	28	SINGLE PAK 3 MULTIPLAYER MAP
+083DEA70	28	SINGLE PAK 4 MULTIPLAYER MAP
+083DEA90	28	  CASTLE 3 MULTIPLAYER MAP  
+083DEAB0	28	WASTELAND 1 MULTIPLAYER MAP 
+083DEAD0	26	     Whilst thou save     
+083DEAEC	26	     thy noble quest?     
+083DEB5C	26	   your game or what?     
+083DEBCC	26	    to save and stuff?    
+083DED64	29	 "Deep in the Chameleon Lair"
+083DEDA4	29	   "King of the Chameleons"  
+083DEDE4	31	   SPACE CITY - CARROTOPOLIS   
+083DEEE4	29	    "Things are heating up"  
+083DEF24	29	 "The Abominable Snow Turtle"
+083DEF44	31	    Industrial Wastelands      
+083DEF84	29	      "They're all wasted"   
+083DEFC4	29	     "Giant Mech Turtle"     
+083DF044	29	 "Boy, I Could Use A Carrot" 
+083DF104	28	Epic|, Epic Games|, and Jazz
+083DF124	26	Jackrabbit| are Registered
+083DF140	30	trademarks of Epic Games, Inc.
+083DF180	20	All rights reserved.
+083DF198	27	*2002 Jaleco Entertainment.
+083DF1B4	28	Jaleco Entertainment and the
+083DF1D4	25	Jaleco Entertainment logo
+083DF1F0	28	are trademarks or Registered
+083DF210	20	trademarks of Jaleco
+083DF228	27	Entertainment in the United
+083DF244	27	States and other countries.
+083DF260	20	Licensed by Nintendo
+083DF290	20	    Machine Gun     
+083DF2A8	20	    Ricochet Gun    
+083DF2C0	20	    Flamethrower    
+083DF2D8	20	  Rocket Launcher   
+083DF31C	20	Fragged by Player %d
+083DF334	18	   FRIENDLY FIRE  
+083DF348	21	Press Fire to respawn
+083DF360	29	Player1:  Flags %d  Deaths %d
+083DF380	29	Player2:  Flags %d  Deaths %d
+083DF3A0	29	Player3:  Flags %d  Deaths %d
+083DF3C0	29	Player4:  Flags %d  Deaths %d
+083DF3E0	29	Player1:  Frags %d  Deaths %d
+083DF400	29	Player2:  Frags %d  Deaths %d
+083DF420	29	Player3:  Frags %d  Deaths %d
+083DF440	29	Player4:  Frags %d  Deaths %d
+083DF460	20	   Player%d blasted 
+083DF490	20	    Player%d made   
+083DF4A8	20	  Player%d eat lead 
+083DF4C0	20	  Player%d smashed  
+083DF4F0	20	Player%d got roasted
+083DF520	20	   Player%d caught  
+083DF538	20	  Player%d's rocket 
+083DF550	20	   Player%d wasted  
+083DF568	20	You fragged Player%d
+083DF580	20	   Player%d made    
+083DF598	20	  himself extinct   
+083DF5C8	10	LINK ERROR
+083DF5D4	27	PLEASE TURN OFF ALL SYSTEMS
+083DF5F0	13	AND TRY AGAIN
+083DF600	18	Player 1: %d Flags
+083DF614	18	Player 2: %d Flags
+083DF628	18	Player 3: %d Flags
+083DF63C	18	Player 4: %d Flags
+083DF650	18	Player 1: %d Frags
+083DF664	18	Player 2: %d Frags
+083DF678	18	Player 3: %d Frags
+083DF68C	18	Player 4: %d Frags
+083DF6A0	9	PLAYER %d
+083DF73C	51	Ah, the machine gun.\nFires fast with\nlittle recoil.
+083DF770	32	Better keep an eye\non my ammo...
+083DF794	26	Heheh, now we're\ncooking!!
+083DF7B0	52	The Flamethrower is\na bit heavier than my\nblaster...
+083DF7E8	21	better watch my step.
+083DF800	68	The ricochet gun\nwill be able to hit\nthings in hard to\nreach places.
+083DF848	34	Let's just hope it\ndoesn't hit me.
+083DF86C	38	Now this is some\nheavy duty firepower!
+083DF894	48	This rocket launcher\nmay slow me down a \nlittle,
+083DF8C8	31	but it packs a\npowerful punch.\n
+083DF8E8	37	Ah, the big gun.\nSlow, but effective.
+083DF910	28	Dark Shell, I have\nyou now!!
+083DF930	67	I can toss these\ncarrot grenades with\nease by hitting the\n[ Button.
+083DF974	71	They do heavy damage\nbut can be a little\nhard to connect with\na target.
+083DF9BC	7	turtles
+083DF9C4	27	Camera script test \nTake 1.
+083DF9E0	7	Action!
+083DF9E8	19	Testing Dialog Box.
+083DF9FC	25	Testing Dialog Box\nagain.
+083DFA18	19	Moving camera back.
+083DFA2C	30	Press START \nto play the game.
+083DFA4C	8	Go away.
+083DFA5C	15	My name is Jazz
+083DFA6C	17	My name is Chammy
+083DFA80	16	Nice to meet you
+083DFA94	7	Bye bye
+083DFAEC	11	EEPROM_V120
+083DFB70	71	GAX Sound Engine 3.01 (Sep 13 2002) © Shin'en Multimedia. Code: B.Wodok
+083DFCB8	9	GAX2_INIT
+083DFCC4	13	OUT OF MEMORY
+083DFCD4	8	GAX2_NEW
+083DFCE0	18	PARAMS ARG IS NULL
+083DFCF4	11	GAX2_NEW_FX
+083DFD00	20	FXPARAMS ARG IS NULL
+083DFD18	92	WHEN USING DIFFERENT FX_MIXING_RATE, FLAG GAX_FX_REVERB AND GAX_HALFRATE_FX ARE NOT ALLOWED.
+083DFD78	11	GAX2_JINGLE
+083DFD84	25	GAX_NO_JINGLE FLAG IS SET
+083DFDA0	7	GAX_IRQ
+083DFDA8	114	GAX_PLAY HAS NOT FINISHED BEFORE GAX_IRQ. USE LOWER MIXING RATE OR LESS FX CHANNELS OR PUT GAX_PLAY IN VBLANK IRQ.
+083DFE1C	6	GAX_FX
+083DFE24	83	YOU TRIED TO PLAY A SPEECH FX BUT HAVE NOT USED THE GAX_SPEECH FLAG WITH GAX2_INIT.
+083DFE78	7	GAX2_FX
+083DFE80	29	FXPARAMS->FXID IS GAX_DEFAULT
+083DFFBC	54	GAX ENGINE V3.01 Sep 13 2002\n\nEXCEPTION. PROGRAM HALT.
+083DFFF8	14	FUNCTION NAME:
