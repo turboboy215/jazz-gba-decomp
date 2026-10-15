@@ -26391,7 +26391,7 @@ sub_082FC918:
 	negs r0, r0
 	bl GAX_stop_fx
 	bl sub_08315278
-	bl GAX_resume_music
+	bl sub_083190F0
 .L082FC964:
 	bl sub_0830693C
 	bl sub_08302170

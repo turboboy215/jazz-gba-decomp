@@ -47,3 +47,10 @@ void sub_083190E0(void)
 {
     GAX_ram->playback_state = GAX_PAUSED;
 }
+
+
+/* GAX_resume_music */
+void sub_083190F0(void)
+{
+    GAX_ram->playback_state = GAX_RESUMED;
+}

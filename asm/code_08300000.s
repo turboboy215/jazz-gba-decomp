@@ -23653,7 +23653,7 @@ sub_0830BFAC:
 	bl strcmp
 	cmp r0, #0
 	bne .L0830BFD2
-	bl GAX_resume_music
+	bl sub_083190F0
 .L0830BFD2:
 	ldr r1, [pc, #28]
 	ldr r0, [pc, #28]
@@ -30434,7 +30434,7 @@ sub_0830F464:
 	adds r4, #1
 	cmp r4, #44
 	bls .L0830F5A6
-	bl GAX_resume_music
+	bl sub_083190F0
 	bl sub_08004A1C
 .L0830F5B8:
 	pop {r4}

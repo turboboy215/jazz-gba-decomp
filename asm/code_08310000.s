@@ -1195,7 +1195,7 @@ sub_08310154:
 	bne .L08310A0C
 	b .L083103E0
 .L08310A0C:
-	bl GAX_resume_music
+	bl sub_083190F0
 	ldr r1, [pc, #104]
 	movs r0, #1
 	strb r0, [r1, #0]

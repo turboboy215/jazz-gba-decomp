@@ -5,3 +5,4 @@
 - 2026-10-15: GAX_pause (08318FF8). code decompiled to C: 224 / 228980 bytes (0.10%); rate 2916 bytes/hour; ETA 2026-10-18 23:06
 - 2026-10-15: GAX_resume (08319078). code decompiled to C: 328 / 228980 bytes (0.14%); rate 4314 bytes/hour; ETA 2026-10-17 21:40
 - 2026-10-15: GAX_pause_music (083190E0). code decompiled to C: 344 / 228980 bytes (0.15%); rate 3200 bytes/hour; ETA 2026-10-18 16:09
+- 2026-10-15: GAX_resume_music (083190F0). code decompiled to C: 360 / 228980 bytes (0.16%); rate 3271 bytes/hour; ETA 2026-10-18 14:36

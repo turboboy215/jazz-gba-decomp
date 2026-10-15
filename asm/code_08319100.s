@@ -2,22 +2,6 @@
 	.syntax unified
 	.text
 
-@ GAX_resume_music: [likely]
-	.thumb
-	.align 1, 0
-	.global sub_083190F0
-	.thumb_func
-sub_083190F0:
-	.global GAX_resume_music
-	.thumb_set GAX_resume_music, sub_083190F0
-	ldr r0, [pc, #8]
-	ldr r0, [r0, #0]
-	adds r0, #90
-	movs r1, #0
-	strb r1, [r0, #0]
-	bx lr
-	.4byte 0x03000B0C
-
 @ GAX_fx_note: [likely] (fxch, note) unused by Jazz
 	.thumb
 	.align 1, 0
