@@ -4707,7 +4707,7 @@ sub_08312398:
 	bne .L08312676
 	b .L083123E8
 .L08312676:
-	bl GAX_stop
+	bl sub_08319214
 	bl sub_08001F34
 	ldr r0, [pc, #56]
 	ldr r1, [r0, #56]
@@ -13178,7 +13178,7 @@ sub_08316824:
 	ldr r1, [pc, #16]
 	movs r0, #0
 	bl SetIntrHandler
-	bl GAX_stop
+	bl sub_08319214
 	pop {r0}
 	bx r0
 	.2byte 0x0000

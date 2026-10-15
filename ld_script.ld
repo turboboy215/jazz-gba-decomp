@@ -20,6 +20,8 @@ SECTIONS
         build/asm/code_08310000.o(.text .rodata .data);
         build/src/code_08318FF8.o(.text .rodata .data);
         build/asm/code_08319100.o(.text .rodata .data);
+        build/src/code_08319214.o(.text .rodata .data);
+        build/asm/code_0831928C.o(.text .rodata .data);
         build/asm/rodata.o(.text .rodata .data);
         build/asm/iwram_image.o(.text .rodata .data);
         build/asm/data_image.o(.text .rodata .data);
