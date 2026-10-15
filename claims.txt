@@ -1,2 +1,7 @@
 0800068C done
 080006C4 done
+08318FF8 done
+08319078 claimed
+083190E0 claimed
+083190F0 claimed
+08319214 claimed
