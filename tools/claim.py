@@ -5,7 +5,7 @@ Skips functions already in src/ or splits.txt asm ranges, ARM / non-4-aligned on
 anything in claims.txt (claimed or given up)."""
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from split import load_funcs, load_splits
+from split import load_funcs, load_splits, ORPHAN
 
 CLAIMS = "claims.txt"
 taken = set()
@@ -13,6 +13,8 @@ if os.path.exists(CLAIMS):
     taken = {l.split()[0] for l in open(CLAIMS) if l.strip()}
 covered = [(s, e) for s, e, _, _ in load_splits()]
 for s, e, t, _ in load_funcs():
+    if ORPHAN[0] <= s < ORPHAN[1] and not os.environ.get("ORPHAN"):
+        continue  # dead code: only on request (ORPHAN=1)
     if t != 1 or s % 4 or "%08X" % s in taken or any(a <= s < b for a, b in covered):
         continue
     open(CLAIMS, "a").write("%08X claimed\n" % s)

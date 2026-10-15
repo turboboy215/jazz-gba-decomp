@@ -7,3 +7,10 @@
 - 2026-10-15: GAX_pause_music (083190E0). code decompiled to C: 344 / 228980 bytes (0.15%); rate 3200 bytes/hour; ETA 2026-10-18 16:09
 - 2026-10-15: GAX_resume_music (083190F0). code decompiled to C: 360 / 228980 bytes (0.16%); rate 3271 bytes/hour; ETA 2026-10-18 14:36
 - 2026-10-15: GAX_stop (08319214). code decompiled to C: 480 / 228980 bytes (0.21%); rate 4347 bytes/hour; ETA 2026-10-17 21:16
+
+## Asm exceptions (kept as asm on purpose)
+- `asm/header.s`: cartridge header (logo incbin)
+- `asm/crt0.s`: Frohwein crt0 + ARM IRQ dispatcher (to be disassembled by hand)
+- GAX ARM blocks `0831A100-0831A528` (hand-written ARM in the original library)
+- BIOS SWI stubs `0831A528-0831A554`, ld veneers `0831AE38-0831AEB4`, libgcc
+- `asm/orphan_*.s`: orphaned dead code (excluded from progress)

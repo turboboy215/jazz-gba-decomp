@@ -90,7 +90,8 @@ def main(cfile, addr):
     want = rom[start - BASE:end - BASE]
     with tempfile.TemporaryDirectory() as d:
         vdef = ["-DVERSION_%s" % (VERSION or "metabee").upper()]
-        pp = run(["arm-none-eabi-cpp"] + vdef + ["-nostdinc", "-I", os.path.join(ROOT, "include"),
+        extra = sum((["-I", x] for x in os.environ.get("EXTRA_INC", "").split(":") if x), [])
+        pp = run(["arm-none-eabi-cpp"] + vdef + extra + ["-nostdinc", "-I", os.path.join(ROOT, "include"),
                   "-I", os.path.join(ROOT, "tools/agbcc/include"), cfile])
         s, o, elf, b = (os.path.join(d, x) for x in ("f.s", "f.o", "f.elf", "f.bin"))
         run([CC1] + CFLAGS + os.environ.get("OPT", "").split() + ["-o", s], input=pp)

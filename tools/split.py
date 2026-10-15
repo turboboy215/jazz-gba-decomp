@@ -220,6 +220,14 @@ def load_names():
 
 
 NAMES = load_names()
+_C_RANGES = None
+
+
+def in_c(a):
+    global _C_RANGES
+    if _C_RANGES is None:
+        _C_RANGES = [(s, e) for s, e, k, _ in load_splits() if k == "c"]
+    return any(s <= a < e for s, e in _C_RANGES)
 
 
 def emit_func(s, e, thumb, segs, starts, ins, force_raw):
@@ -258,7 +266,8 @@ def emit_func(s, e, thumb, segs, starts, ins, force_raw):
                 if s <= t < e and t != s and base != "bl":
                     labels.add(t); line = "\t%s .L%08X" % (base, t)
                 elif base == "bl" and t in starts and starts[t] == thumb == 1:
-                    line = "\tbl %s" % (NAMES[t][0] if t in NAMES else "sub_%08X" % t)
+                    # alias names exist only while the callee is still asm (C defines sub_ only)
+                    line = "\tbl %s" % (NAMES[t][0] if t in NAMES and not in_c(t) else "sub_%08X" % t)
             elif not bm:
                 line = "\t" + text  # mismatches get demoted to raw by --verify
         body.append((a, line or raw(a, n, thumb, text), raw(a, n, thumb, text)))

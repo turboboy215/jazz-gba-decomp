@@ -15,7 +15,7 @@ TRACKED = ["splits.txt", "ld_script.ld", "objects.mk"]
 
 
 def check(code, addr, end=None):
-    if re.search(r"\basm\b|__asm|naked", code):
+    if re.search(r"\basm\b|__asm|naked", code) and not os.environ.get("ALLOW_ASM"):  # ALLOW_ASM=1: original source had inline asm (GAX DMA delays)
         return False
     with tempfile.NamedTemporaryFile("w", suffix=".c", delete=False) as f:
         f.write(code)
