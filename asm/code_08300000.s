@@ -22413,7 +22413,7 @@ sub_0830B318:
 	movs r0, #1
 	negs r0, r0
 	bl GAX_set_fx_volume
-	bl GAX_pause_music
+	bl sub_083190E0
 	mov r1, r8
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -22795,7 +22795,7 @@ sub_0830B898:
 	beq .L0830B8B0
 	bl sub_0830A274
 .L0830B8B0:
-	bl GAX_pause_music
+	bl sub_083190E0
 	bl sub_0830A4AC
 	ldr r1, [pc, #24]
 	ldr r0, [pc, #28]
@@ -23073,7 +23073,7 @@ sub_0830BAAC:
 	adds r1, r0, #0
 	adds r0, r4, #0
 	bl GAX_set_fx_volume
-	bl GAX_pause_music
+	bl sub_083190E0
 	ldr r0, [pc, #60]
 	ldrb r0, [r0, #0]
 	cmp r0, #0
@@ -30412,7 +30412,7 @@ sub_0830F464:
 	movs r0, #1
 	negs r0, r0
 	bl GAX_stop_fx
-	bl GAX_pause_music
+	bl sub_083190E0
 	bl sub_0831522C
 	ldr r2, [pc, #56]
 	movs r0, #0

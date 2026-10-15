@@ -401,7 +401,7 @@ sub_08310154:
 	ldrh r1, [r4, #0]
 	ands r0, r1
 	strh r0, [r4, #0]
-	bl GAX_pause_music
+	bl sub_083190E0
 	movs r0, #15
 	ldrh r4, [r4, #0]
 	ands r0, r4

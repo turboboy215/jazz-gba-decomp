@@ -26386,7 +26386,7 @@ sub_082FC918:
 	bne .L082FC964
 	movs r0, #1
 	strb r0, [r1, #3]
-	bl GAX_pause_music
+	bl sub_083190E0
 	movs r0, #1
 	negs r0, r0
 	bl GAX_stop_fx

@@ -40,3 +40,10 @@ void sub_08319078(void)
         }
     }
 }
+
+
+/* GAX_pause_music: freeze the music tracker; sound effects keep playing. */
+void sub_083190E0(void)
+{
+    GAX_ram->playback_state = GAX_PAUSED;
+}
