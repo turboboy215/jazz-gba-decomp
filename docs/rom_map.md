@@ -110,3 +110,22 @@ The game stores its text as plain NUL-terminated ASCII in `.rodata`. This covers
 breaks), menus, multiplayer strings with `printf` formats (`"Player%d got roasted"`), debug strings
 (`"Testing Dialog Box."`), and the credits as fixed 30-column lines around `083D86A0`.
 `tools/extract_strings.py` regenerates `docs/strings.tsv` (837 strings).
+
+## Multiplayer ("Tournament")
+
+The main menu's **TOURNAMENT** option is link-cable multiplayer for 2–4 players:
+
+* Modes **Battle** (Max Frags 5–25) and **Capture The Flag**. Strings include "Player%d captured your flag",
+  "Fragged by Player %d", "Player1: Frags %d Deaths %d", "Player%d got roasted", "LINK ERROR",
+  "Waiting for players...", "PLEASE WAIT WHILE PLAYER 1…".
+* Maps include "SINGLE PAK 3/4 MULTIPLAYER MAP", "CASTLE 3 MULTIPLAYER MAP" and "WASTELAND 1/2". *Single Pak*
+  maps go with the BIOS `MultiBoot` stub (`0831A540`): player 1 sends a program to cartridge-less units.
+  The multiboot image's location in the ROM is still to be found (look for the MultiBoot parameter block
+  passed to `0831A540`).
+* For the PC port this means: the SIO (serial) registers must be emulated, or the
+  multiplayer layer replaced with local split-screen or netplay (`docs/PC_PORT.md`).
+
+## Level table and graphics
+
+See `docs/songs.md`: 25 level records at `083D39D8`, 0x4C bytes each (song, tileset, palette,
+level data). Tilesets are raw 8bpp: `u16 count, u16 bpp=8`, then tiles. BG palettes are 256 colours.

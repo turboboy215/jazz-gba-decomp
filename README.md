@@ -40,11 +40,13 @@ make -j$(nproc) compare
 | `data/` | `.incbin` of the graphics/level data between the code regions |
 | `names.txt` | function names and comments → alias labels in the asm |
 | `splits.txt` | C/asm ranges and link order |
+| `docs/HANDOFF.md` | **start here** in a new session: setup, verified facts, next tasks |
+| `docs/songs.md` | songs, internal vs actual names, level table with level names |
 | `docs/rom_map.md` | memory map, sections, crt0, interrupts, veneers, libraries, **the orphaned code block** |
 | `docs/gax.md` | the GAX 3.01 sound engine: both copies, function map, how the game uses it |
 | `docs/strings.tsv` | all ASCII text (dialogue, menus, credits) |
 | `docs/STRATEGY.md` | project log: compiler evidence, tool changes, work order |
-| `docs/PC_PORT.md` | native port plan |
+| `docs/PC_PORT.md` | native port plan (PC first, then PlayStation) |
 | `docs/reference/` | the generic `gba-matching-decomp` playbook (strategy log + agbcc matching tips) |
 
 ## Workflow (per function)

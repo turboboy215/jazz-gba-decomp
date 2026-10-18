@@ -24,7 +24,8 @@ This file records what is **specific to Jazz Jackrabbit**.
 | `08319078` `GAX_resume` | 3.05A decomp C | **MATCH** | differs (108 vs 104 bytes) |
 | `08318FF8` `GAX_pause`, `08319214` `GAX_stop`, `083190E0/F0` | 3.05A decomp C | MATCH | MATCH |
 
-So Game Titan's code and Shin'en's GAX library were built with the same GCC 2.9-era Thumb compiler.
+So Game Titan's code was built with old_agbcc. GAX functions also match with `agbcc -fprologue-bugfix`,
+which gives the same output as old_agbcc there. The region A accessor `0800068C` rules out every agbcc variant for the game code.
 The Makefile, `check_func.py`, `add_funcs.py`, `use_headers.py` and `permuter_compile.sh` all default to
 `old_agbcc`. Tell-tale signs: leaf functions return with a bare `bx lr`; `pop {rX}; bx rX` returns;
 narrow parameters are **not** re-truncated in the callee (Game Titan's prototypes take `int`, and
@@ -95,6 +96,10 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-10-17: song/level tables (`docs/songs.md`, `tools/gax_songs.py`), cleaned `strings.tsv`
+  (game text only, junk filtered, song titles moved out), 8bpp tileset header format, GAX manual
+  version history and `GAXParams` offsets, Crash XS (GAX 2.01D) referenced, PS1 port notes,
+  `docs/HANDOFF.md` for multi-session work.
 - 2026-10-15: project start. ROM identified, compiler = old_agbcc, ROM map and orphan block found,
   splitter ported to multi-region, byte-identical all-asm build, GAX 3.01 mapped (41 functions
   named), text catalogue, 7 functions in C (2 region A, 5 GAX).

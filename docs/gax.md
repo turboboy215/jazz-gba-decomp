@@ -9,9 +9,42 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
   why gaxtapper/foobar2000 play silence
   ([gaxtapper#17](https://github.com/loveemu/gaxtapper/issues/17)): its workaround patches ROM
   0xF2CC (`orphan_GAX2_estimate`) so the scanner skips to the live copy.
-* Reference material used: `shinen-gax-decomp` (WIP C decomp of **3.05A**, Aug 2004) and
-  `shinen-gax-python` (format/replayer docs, `find_gax.py` signatures). Names follow the 3.05A decomp
-  wherever a function's identity is established.
+* Reference material:
+  * `shinen-gax-decomp`: WIP C decomp of **3.05A** (Aug 2004). Names follow it wherever a function's
+    identity is established.
+  * `shinen-gax-python`: format and replayer docs, `find_gax.py` signatures, song scanner.
+  * **`GAX v3.chm`**: Shin'en's official GAX v3 manual, from the *SpongeBob SquarePants Movie* source
+    (kept locally in the JazzGBARE folder, not in the repo). It has the API reference, `GAXParams`, and
+    the version history below.
+  * **[CrashBandicootXS-decomp](https://github.com/Almamu/CrashBandicootXS-decomp)**: a complete matching
+    decomp with GAX **2.01D** (the generation before 3.x), plus a PC port with a C version of the ARM
+    mixer (`platform/pc/src/gax_dsp.c`) and an mGBA GAX trace tool for checking audio. It is
+    **GPLv3**: use it as reference, don't copy code into this repo.
+
+## Version history (from the official manual)
+
+| Version | Date | Change relevant to Jazz (3.01) |
+|---|---|---|
+| 3.0 | 16 Jul 2002 | engine overhaul: "fast mixer" removed, `gax0_objects` → `gax0_package`; `GAX_HALFRATE_FX` disabled |
+| **3.01**, 3.02, 3.02a/b | 2002 | speech-decompression fix, NULL-pointer writes removed, reverb fixes. **Jazz = 3.01 (13 Sep 2002)** |
+| 3.03 | 27 Feb 2003 | `GAX_backup_fx` / `GAX_restore_fx` added. This explains why Jazz has neither |
+| 3.03a | 5 Mar 2003 | reverb bugfix |
+| 3.04 | 30 Jun 2003 | sample banks > 1 MB |
+| 3.05 | 13 Aug 2003 | `GAXParams.speed_adjust` added. **Struct layout differs from 3.01** |
+
+## GAXParams as used by Jazz (`AgbMain`, params at IWRAM `030046E0`)
+
+| Off | Field | Jazz value |
+|---|---|---|
+| 0x00 | `u8 *workmem` | `0300471C` (IWRAM) |
+| 0x04 | `u32 workmem_size` | 0x1000 |
+| 0x08 | `u16 mixing_rate` | 21025 |
+| 0x0A–0x13 | `fx_mixing_rate, filter_depth, flags, fx_channels, volume` (3.05 order) | left at `GAX2_new` defaults |
+| 0x14–0x2B | `reverb[3]` (3.01 has no `speed_adjust`, so 3 × 8 bytes, *inferred*) | |
+| 0x2C | `const void *fx_data` | `083D1C5C` (FX bank) |
+| 0x30 | `const void *song_data` | `0835F2E4` ("spacelevel") |
+| 0x34 | `GAXChannelInfo *channel_info` | |
+| 0x38 | `b8 debug` | 0 (assert screen disabled) |
 
 ## Object layout of the live copy
 
@@ -88,10 +121,11 @@ and the speech decoder.
 
 ## Plan for the GAX part of the decomp
 
-1. GAX is a separate, precompiled library. **Check its compiler flavour separately**: Shin'en may have
-   used different flags than Game Titan. Start with the 100%-matching 3.05A functions
-   (`GAX_pause`, `GAX_resume`, `GAX_stop`, `GAX_pause_music`, `GAX_resume_music`, `GAX_code2ram`)
-   as probes under `old_agbcc`, `agbcc` and `-O1`/`-O2`.
+1. Compiler: `GAX_resume` matches with `old_agbcc` **or** `agbcc -fprologue-bugfix` (not plain
+   `agbcc`). The Crash XS project reports the latter for GAX 2.01D and 3.05A. The game code
+   (`0800068C`) matches **only** with `old_agbcc`, so `old_agbcc` stays the default. Switch a GAX file
+   to `agbcc -fprologue-bugfix` (splits.txt flavour `bugfix`) only if a GAX function turns up that needs it.
+   Done: `GAX_pause`, `GAX_resume`, `GAX_pause_music`, `GAX_resume_music`, `GAX_stop` are in `src/`.
 2. Keep the GAX ARM blocks (`output_asm`, `tracker_asm`) as asm. They are hand-written ARM in the
    original library too.
 3. Port matched 3.01 functions back to the 3.05A decomp project as documentation of the older revision.

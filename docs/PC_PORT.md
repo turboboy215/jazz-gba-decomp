@@ -57,3 +57,32 @@ src/*.c (game, decompiled)  ──►  agbcc  ──► jazz.gba   (make compare
   `tools/` can later list what the platform layer must cover.
 * Keep pointer-sized fields typed as pointers. On 64-bit hosts any `u32` that holds a pointer breaks,
   so keep a list in `docs/PC_PORT.md` of structs with packed pointer fields.
+
+---
+
+# Other targets: PlayStation (PS1)
+
+A PS1 build is a second consumer of the same decompiled C. It needs the same groundwork as the PC
+port (named structs, no raw addresses, a platform layer), so **design `port/` as a platform API
+(gfx / audio / input / storage / link) with one backend per target**: `port/sdl/` for PC and `port/psx/` for PS1.
+
+| Area | GBA original | PS1 approach | Effort |
+|---|---|---|---|
+| CPU / compiler | ARM7TDMI, Thumb, old_agbcc | R3000A 33 MHz, PSY-Q `ccpsx` (GCC 2.x) or the open PSn00bSDK. Both CPUs are little-endian. **MIPS faults on unaligned loads**, so audit any `u8 *` → `u16/u32` casts the matching C needs (ARM rotates instead) | medium |
+| Memory | 4 MB ROM, memory-mapped | 2 MB RAM, 1 MB VRAM, data on CD. The ROM can't stay resident: load per scene/level from CD (the level table at `083D39D8` gives natural load units). ROM pointers go through a `ROM_PTR()` relocation table built by an extractor tool | **high** |
+| Background layers | text BGs, 8bpp (256-colour) tiles, 256-colour palettes, scroll registers | upload each tileset to VRAM as an 8-bit CLUT texture page, then draw visible map cells as `SPRT_8` / 16×16 textured sprites per frame (ordering table per layer). Palettes become CLUTs. 240×160 fits a 320×240 (or 256×240) screen centred, or shows more of the level | medium |
+| Sprites (OAM) | up to 128 OBJ, 4/8bpp, flips | GPU textured quads; flips via UV/negative size | low–medium |
+| Effects | windows, alpha blending, mosaic, HBlank scroll tricks | GPU semi-transparency modes cover the common blends; HBlank per-line effects need per-strip draws; find out what Jazz actually uses first | depends |
+| Audio (GAX) | software mixer, ~21 kHz PCM through DMA FIFOs | **(a) bring-up:** run the decompiled GAX C mixer on the R3000 and stream PCM to an SPU voice (or the CD-XA/SPU streaming buffer). Simple and accurate, but CPU-heavy. **(b) final:** convert GAX instruments to **VAG (ADPCM)** in SPU RAM (512 KB) and write a small GAX sequencer that drives SPU voices: note on/off, pitch register for portamento/vibrato, volume envelope and ADSR for GAX volume envelopes, perf lists on the tick. Much cheaper at runtime; needs a converter tool (`tools/gax2psx.py`) built on `tools/gax_songs.py` | **high** |
+| Input | 10 buttons | digital pad (D-pad, ×○□△, L1/R1, Start/Select) | low |
+| Save | SRAM/EEPROM | memory card (one block) | low |
+| Tournament (link cable) | SIO, 2–4 GBAs, Single Pak multiboot | split-screen (2 players, or 4 with a multitap) is the natural PS1 replacement; a serial-cable link is possible but niche | medium |
+
+PS1 notes:
+
+* **SDK legality:** the PSY-Q SDK can't be redistributed. Keep it out of the repo and point the build at a
+  local install (`PSYQ_DIR`). Supporting PSn00bSDK as well gives other people a free toolchain.
+* **Order:** finish the PC port first. It shakes out every hardware dependency with fast iteration and a
+  debugger. PS1 then mostly means writing `port/psx/` and the asset/CD packer.
+* The GAX → SPU converter is the most PS1-specific piece of work. Crash Bandicoot XS's PC port (GAX 2.01D,
+  GPLv3) shows how a host-side GAX mixer can be structured; use it as reference only.
