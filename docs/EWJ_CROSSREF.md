@@ -6,7 +6,8 @@
 EWJ is meant to become **its own decomp project later**. Until then, Jazz is the reference: whatever
 code they share can be named from Jazz and carried over.
 
-This is a plan; nothing has been compared yet (no EWJ ROM in the repo or the session).
+First comparison done 2026-10-20 (see "Results"). The ROM is kept outside git, next to the Jazz ROM:
+`Earthworm Jim (U).gba`, header `EWJ` / `AEJE`, 8 MiB, SHA1 `8c3148c1c863a1e31b6f4c380c9390dc12fae9ac`.
 
 ## What is likely to be shared
 
@@ -46,3 +47,23 @@ python3 tools/xref_rom.py "Earthworm Jim (U).gba" --json ewj_hits.json > ewj_hit
   out to be identical can be copied from this repo's `src/` with its names.
 * The user's own observations about EWJ (e.g. which mechanics or sounds feel shared) are ground truth;
   add them here as they come.
+
+## Results (2026-10-20)
+
+* **EWJ's sound engine is `GAX Sound Engine v1.99d (Mar 30 2001)`** (string at `083C9BF0`). That is the
+  generation just before Crash XS's 2.01D, so Crash XS (not Jazz's 3.01) is the reference for EWJ's GAX.
+* **Exact match** (`tools/xref_rom.py`, masked bl/literal pools): only libgcc —
+  `__divsi3` → `0807CBF4`, `__udivsi3` → `0807D1A4`, `__umodsi3` → `0807D21C`, `_call_via` thunk
+  `0831A7F8` → `0807CBCC`. With `--orphan`, the orphaned block's own libgcc copy matches the same
+  addresses and nothing else does, so the orphaned block is **not** EWJ code.
+* **Loose match** (instruction classes only, registers and immediates ignored, ≥24 instructions): again
+  only libgcc/newlib (`memcpy` → `0807D2DC`, `__muldi3` → `0807CD5C`).
+* **Strings**: apart from padding runs and Shin'en's credit, the two ROMs share only part of a sine
+  table. No shared engine text.
+* Code style differs too: EWJ has no ARM-mode functions with `stmfd`, Jazz has a few.
+
+**Conclusion:** at the binary level Jazz shares no engine code with EWJ; the matching mechanics were
+re-implemented, not carried over. For the future EWJ project, the useful carry-overs are the toolchain
+setup, the libgcc addresses above, and Crash XS's GAX 2.01D decomp for its sound engine. Shared
+*structure* (e.g. how the blaster or the glide works) can still be compared by hand once both games'
+player code is named.

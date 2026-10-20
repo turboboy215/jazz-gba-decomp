@@ -85,7 +85,7 @@ Next, in order:
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay.
 4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
 5. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
-6. When an Earthworm Jim (GBA) ROM is provided: run `tools/xref_rom.py` on it and record the hits
+6. Earthworm Jim (GBA): compared on 2026-10-20, only libgcc is shared; EWJ uses GAX v1.99d
    (`docs/EWJ_CROSSREF.md`). EWJ itself is a separate, later project.
 
 **Tooling notes from this session:** GAX C files use the splits.txt 5th column `bugfix` (now sets

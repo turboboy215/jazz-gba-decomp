@@ -58,12 +58,13 @@ def main():
     ap.add_argument("--min", type=int, default=24)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--json")
+    ap.add_argument("--orphan", action="store_true", help="also try the orphaned block 08005710-08012974")
     args = ap.parse_args()
     other = open(args.other, "rb").read()
     hits = []
     for f in load_funcs():
         start, end, thumb = f[0], f[1], f[2]
-        if not thumb or ORPHAN[0] <= start < ORPHAN[1]:
+        if not thumb or (ORPHAN[0] <= start < ORPHAN[1] and not args.orphan):
             continue
         if end - start < args.min and not args.all:
             continue
