@@ -123,7 +123,7 @@ sub_083000A4:
 sub_083000F4:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -164,7 +164,7 @@ sub_083000F4:
 sub_08300148:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -1249,7 +1249,7 @@ sub_083009F0:
 sub_08300A64:
 	push {lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -4110,7 +4110,7 @@ sub_08302170:
 	movs r7, #0
 	ldr r4, [pc, #136]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r4, #0
 	adds r0, #56
 	strb r5, [r0, #0]
@@ -8107,7 +8107,7 @@ sub_083043E4:
 	bl sub_08302B5C
 	ldr r4, [pc, #80]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r1, r4, #0
 	adds r1, #56
 	movs r0, #0
@@ -8132,7 +8132,7 @@ sub_083043E4:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #40]
 	movs r0, #0
 	bl SetIntrHandler
@@ -8940,7 +8940,7 @@ sub_08304AAC:
 	bne .L08304AC4
 	ldr r4, [pc, #76]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r4, #0
 	adds r0, #56
 	strb r5, [r0, #0]
@@ -8964,7 +8964,7 @@ sub_08304AAC:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
 	bl SetIntrHandler
@@ -9717,7 +9717,7 @@ sub_08305110:
 	bne .L08305128
 	ldr r4, [pc, #76]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r4, #0
 	adds r0, #56
 	strb r5, [r0, #0]
@@ -9741,7 +9741,7 @@ sub_08305110:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
 	bl SetIntrHandler
@@ -11328,7 +11328,7 @@ sub_08305E54:
 	bne .L08305E6C
 	ldr r4, [pc, #76]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r4, #0
 	adds r0, #56
 	strb r5, [r0, #0]
@@ -11352,7 +11352,7 @@ sub_08305E54:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
 	bl SetIntrHandler
@@ -12314,7 +12314,7 @@ sub_08306670:
 	bl sub_08302798
 	ldr r4, [pc, #92]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r1, r4, #0
 	adds r1, #56
 	movs r0, #0
@@ -12339,13 +12339,13 @@ sub_08306670:
 	bl sub_083167F8
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_music_volume
+	bl sub_08318CA4
 	ldr r0, [pc, #52]
 	ldr r0, [r0, #0]
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #40]
 	movs r0, #0
 	bl SetIntrHandler
@@ -12668,7 +12668,7 @@ sub_0830693C:
 	bne .L08306954
 	ldr r4, [pc, #76]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r4, #0
 	adds r0, #56
 	strb r5, [r0, #0]
@@ -12692,7 +12692,7 @@ sub_0830693C:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
 	bl SetIntrHandler
@@ -13085,7 +13085,7 @@ sub_0830693C:
 	beq .L08306CB8
 .L08306CD8:
 	movs r0, #17
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r4, [pc, #56]
 	ldr r1, [pc, #56]
 	ldr r2, [pc, #60]
@@ -13505,7 +13505,7 @@ sub_08306F40:
 	b .L083070E8
 .L08306FE8:
 	movs r0, #32
-	bl GAX_fx
+	bl sub_083189D0
 	b .L083070E8
 	movs r5, #12
 	lsls r0, r0, #12
@@ -13610,7 +13610,7 @@ sub_08306F40:
 	cmp r2, r0
 	bne .L083070CC
 	movs r0, #7
-	bl GAX_fx
+	bl sub_083189D0
 .L083070CC:
 	movs r0, #0
 	strh r0, [r5, #24]
@@ -14219,7 +14219,7 @@ sub_083074E0:
 	bne .L08307574
 .L08307522:
 	movs r0, #32
-	bl GAX_fx
+	bl sub_083189D0
 	ldrb r0, [r5, #0]
 	bl sub_08001DF4
 	ldrb r0, [r5, #0]
@@ -14883,7 +14883,7 @@ sub_0830792C:
 	adds r0, #10
 	strh r0, [r1, #0]
 	movs r0, #16
-	bl GAX_fx
+	bl sub_083189D0
 	b .L08307AAE
 	ldrb r5, [r6, #10]
 	lsrs r0, r6, #32
@@ -14919,7 +14919,7 @@ sub_0830792C:
 	adds r0, #5
 	strh r0, [r1, #0]
 	movs r0, #18
-	bl GAX_fx
+	bl sub_083189D0
 	b .L08307AAE
 	movs r0, r0
 	ldrb r5, [r6, #10]
@@ -14934,7 +14934,7 @@ sub_0830792C:
 	adds r0, #1
 	strh r0, [r1, #0]
 	movs r0, #30
-	bl GAX_fx
+	bl sub_083189D0
 	b .L08307AAE
 	movs r0, r0
 	ldr r0, [r6, r3]
@@ -15975,7 +15975,7 @@ sub_08308228:
 	cmp r0, #0
 	bne .L08308264
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 	b .L08308264
 .L0830824C:
 	movs r0, #1
@@ -17271,7 +17271,7 @@ sub_08308C5C:
 	cmp r0, #0
 	beq .L08308C94
 	movs r0, #31
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r0, [pc, #64]
 	adds r1, r4, #0
 	adds r1, #226
@@ -17590,7 +17590,7 @@ sub_08308E50:
 	ldr r0, [pc, #20]
 	str r0, [r1, #0]
 	movs r0, #28
-	bl GAX_fx
+	bl sub_083189D0
 	b .L08308F2C
 	movs r0, r0
 	cmp r0, #240
@@ -17630,7 +17630,7 @@ sub_08308E50:
 	ldr r0, [pc, #48]
 	str r0, [r1, #0]
 	movs r0, #28
-	bl GAX_fx
+	bl sub_083189D0
 .L08308F2C:
 	ldr r0, [r5, #52]
 	asrs r0, r0, #8
@@ -17971,7 +17971,7 @@ sub_0830919C:
 	adds r0, #100
 	bl sub_080006AC
 	movs r0, #8
-	bl GAX_fx
+	bl sub_083189D0
 	strh r0, [r4, #40]
 .L083091D4:
 	movs r0, #2
@@ -18062,7 +18062,7 @@ sub_083091EC:
 	str r1, [r0, #0]
 	movs r1, #40
 	ldrsh r0, [r5, r1]
-	bl GAX_stop_fx
+	bl sub_08319148
 .L08309286:
 	movs r0, #1
 	ldrh r2, [r5, #28]
@@ -18752,7 +18752,7 @@ sub_083097C0:
 	ldrb r0, [r0, #0]
 	bl sub_08001DF4
 	movs r0, #5
-	bl GAX_fx
+	bl sub_083189D0
 	adds r1, r5, #0
 	adds r1, #228
 	ldrb r2, [r1, #0]
@@ -19842,7 +19842,7 @@ sub_08309F28:
 	cmp r5, #0
 	beq .L08309FD4
 	movs r0, #7
-	bl GAX_fx
+	bl sub_083189D0
 	cmp r4, #0
 	bne .L08309FC4
 	ldr r4, [pc, #68]
@@ -20352,7 +20352,7 @@ sub_0830A3B4:
 	cmp r0, #0
 	bne .L0830A3C6
 	movs r0, #28
-	bl GAX_fx
+	bl sub_083189D0
 .L0830A3C6:
 	ldr r4, [pc, #196]
 	adds r0, r4, #0
@@ -20465,7 +20465,7 @@ sub_0830A4AC:
 	cmp r0, #0
 	bne .L0830A4C2
 	movs r0, #29
-	bl GAX_fx
+	bl sub_083189D0
 .L0830A4C2:
 	ldr r4, [pc, #252]
 	adds r0, r4, #0
@@ -21158,7 +21158,7 @@ sub_0830AAA8:
 	cmp r0, #0
 	beq .L0830AB62
 	movs r0, #5
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r4, [pc, #212]
 	ldr r0, [r4, #0]
 	adds r0, #1
@@ -21217,7 +21217,7 @@ sub_0830AAA8:
 	cmp r0, #0
 	beq .L0830AC04
 	movs r0, #5
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r4, [pc, #84]
 	ldr r0, [r4, #0]
 	adds r0, #1
@@ -21667,7 +21667,7 @@ sub_0830AF0C:
 	cmp r0, #0
 	bne .L0830AF56
 	movs r0, #6
-	bl GAX_fx
+	bl sub_083189D0
 	b .L0830B2F2
 .L0830AF56:
 	bl sub_08002058
@@ -22162,7 +22162,7 @@ sub_0830B318:
 	cmp r0, #0
 	bne .L0830B34A
 	movs r0, #6
-	bl GAX_fx
+	bl sub_083189D0
 	b .L0830B612
 .L0830B34A:
 	movs r0, #1
@@ -22390,7 +22390,7 @@ sub_0830B318:
 	mov r2, r8
 	strb r4, [r2, #0]
 	adds r0, r7, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r0, r7, #0
 	adds r0, #56
 	strb r4, [r0, #0]
@@ -22412,7 +22412,7 @@ sub_0830B318:
 	adds r1, r0, #0
 	movs r0, #1
 	negs r0, r0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	bl sub_083190E0
 	mov r1, r8
 	ldrb r0, [r1, #0]
@@ -23049,7 +23049,7 @@ sub_0830BAAC:
 .L0830BADC:
 	ldr r4, [pc, #104]
 	adds r0, r4, #0
-	bl GAX2_new
+	bl sub_083177CC
 	adds r1, r4, #0
 	adds r1, #56
 	movs r0, #0
@@ -23072,7 +23072,7 @@ sub_0830BAAC:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	bl sub_083190E0
 	ldr r0, [pc, #60]
 	ldrb r0, [r0, #0]
@@ -26098,7 +26098,7 @@ sub_0830D378:
 	cmp r0, #0
 	beq .L0830D398
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #104]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -26113,7 +26113,7 @@ sub_0830D378:
 	cmp r0, #0
 	beq .L0830D3B6
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #76]
 	ldrb r0, [r1, #0]
 	cmp r0, #9
@@ -26484,7 +26484,7 @@ sub_0830D668:
 	cmp r0, #0
 	beq .L0830D688
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #100]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -26499,7 +26499,7 @@ sub_0830D668:
 	cmp r0, #0
 	beq .L0830D6A6
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #72]
 	ldrb r0, [r1, #0]
 	cmp r0, #2
@@ -26668,7 +26668,7 @@ sub_0830D7C0:
 	cmp r0, #0
 	beq .L0830D7E0
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #92]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -26683,7 +26683,7 @@ sub_0830D7C0:
 	cmp r0, #0
 	beq .L0830D7FE
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #64]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -26774,7 +26774,7 @@ sub_0830D884:
 	cmp r0, #0
 	beq .L0830D8A4
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #92]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -26789,7 +26789,7 @@ sub_0830D884:
 	cmp r0, #0
 	beq .L0830D8C2
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #64]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -27224,7 +27224,7 @@ sub_0830DBFC:
 	cmp r0, #0
 	beq .L0830DC52
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #204]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -27262,7 +27262,7 @@ sub_0830DBFC:
 	cmp r0, #0
 	beq .L0830DCA6
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #120]
 	ldrb r0, [r1, #0]
 	cmp r0, #6
@@ -27502,7 +27502,7 @@ sub_0830DE2C:
 	cmp r0, #0
 	beq .L0830DE4C
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #96]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -27517,7 +27517,7 @@ sub_0830DE2C:
 	cmp r0, #0
 	beq .L0830DE6A
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #68]
 	ldrb r0, [r1, #0]
 	cmp r0, #2
@@ -27647,7 +27647,7 @@ sub_0830DF38:
 	cmp r0, #0
 	beq .L0830DF58
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #116]
 	ldr r0, [r1, #0]
 	cmp r0, #0
@@ -27662,7 +27662,7 @@ sub_0830DF38:
 	cmp r0, #0
 	beq .L0830DF76
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #88]
 	ldr r0, [r1, #0]
 	cmp r0, #10
@@ -27693,7 +27693,7 @@ sub_0830DF38:
 	bl sub_083167F8
 	adds r1, r0, #0
 	adds r0, r5, #0
-	bl GAX_set_music_volume
+	bl sub_08318CA4
 	ldr r0, [r4, #0]
 	cmp r0, #11
 	bls .L0830DFB4
@@ -27951,7 +27951,7 @@ sub_0830E190:
 	cmp r0, #0
 	beq .L0830E1B0
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #116]
 	ldr r0, [r1, #0]
 	cmp r0, #0
@@ -27966,7 +27966,7 @@ sub_0830E190:
 	cmp r0, #0
 	beq .L0830E1CE
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #88]
 	ldr r0, [r1, #0]
 	cmp r0, #10
@@ -27997,7 +27997,7 @@ sub_0830E190:
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r5, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	ldr r0, [r4, #0]
 	cmp r0, #11
 	bls .L0830E20C
@@ -28253,7 +28253,7 @@ sub_0830E3E8:
 	cmp r0, #0
 	beq .L0830E424
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #0
 	strb r0, [r4, #0]
 	ldr r0, [pc, #28]
@@ -28278,7 +28278,7 @@ sub_0830E3E8:
 	lsrs r5, r7, #32
 .L0830E424:
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	strb r0, [r4, #0]
 	ldr r0, [pc, #40]
@@ -28313,7 +28313,7 @@ sub_0830E3E8:
 sub_0830E460:
 	push {r4, r5, r6, r7, lr}
 	movs r0, #43
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r2, [pc, #348]
 	movs r0, #0
 	strb r0, [r2, #0]
@@ -28472,12 +28472,12 @@ sub_0830E460:
 	bl sub_083167F8
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_music_volume
+	bl sub_08318CA4
 	ldr r0, [r7, #0]
 	bl sub_08316810
 	adds r1, r0, #0
 	adds r0, r4, #0
-	bl GAX_set_fx_volume
+	bl sub_083191AC
 	pop {r4, r5, r6, r7}
 	pop {r0}
 	bx r0
@@ -28507,7 +28507,7 @@ sub_0830E460:
 sub_0830E610:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #0]
 	cmp r0, #0
@@ -28570,7 +28570,7 @@ sub_0830E610:
 sub_0830E684:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #1]
 	cmp r0, #0
@@ -28633,7 +28633,7 @@ sub_0830E684:
 sub_0830E6F8:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #2]
 	cmp r0, #0
@@ -28696,7 +28696,7 @@ sub_0830E6F8:
 sub_0830E76C:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #3]
 	cmp r0, #0
@@ -28759,7 +28759,7 @@ sub_0830E76C:
 sub_0830E7E0:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #4]
 	cmp r0, #0
@@ -28822,7 +28822,7 @@ sub_0830E7E0:
 sub_0830E854:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #5]
 	cmp r0, #0
@@ -28885,7 +28885,7 @@ sub_0830E854:
 sub_0830E8C8:
 	push {r4, lr}
 	movs r0, #4
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r1, [pc, #36]
 	ldrb r0, [r1, #6]
 	cmp r0, #0
@@ -28954,7 +28954,7 @@ sub_0830E93C:
 	sub sp, #224
 	movs r0, #1
 	negs r0, r0
-	bl GAX_stop_fx
+	bl sub_08319148
 	ldr r0, [pc, #272]
 	ldrh r0, [r0, #0]
 	movs r1, #5
@@ -29402,7 +29402,7 @@ sub_0830ECF4:
 	sub sp, #336
 	movs r0, #1
 	negs r0, r0
-	bl GAX_stop_fx
+	bl sub_08319148
 	ldr r0, [pc, #268]
 	ldrh r0, [r0, #0]
 	movs r1, #5
@@ -29848,7 +29848,7 @@ sub_0830F0AC:
 	sub sp, #444
 	movs r0, #1
 	negs r0, r0
-	bl GAX_stop_fx
+	bl sub_08319148
 	ldr r0, [pc, #268]
 	ldrh r0, [r0, #0]
 	movs r1, #5
@@ -30369,7 +30369,7 @@ sub_0830F464:
 	cmp r0, #0
 	beq .L0830F53A
 	movs r0, #5
-	bl GAX_fx
+	bl sub_083189D0
 	cmp r4, #1
 	bne .L0830F538
 	movs r4, #0
@@ -30411,7 +30411,7 @@ sub_0830F464:
 .L0830F574:
 	movs r0, #1
 	negs r0, r0
-	bl GAX_stop_fx
+	bl sub_08319148
 	bl sub_083190E0
 	bl sub_0831522C
 	ldr r2, [pc, #56]
@@ -30625,7 +30625,7 @@ sub_0830F5C8:
 	strh r0, [r1, #0]
 .L0830F71E:
 	movs r0, #17
-	bl GAX_fx
+	bl sub_083189D0
 	b .L0830F75A
 	movs r0, r0
 	strb r4, [r3, #21]
@@ -30650,7 +30650,7 @@ sub_0830F5C8:
 	adds r0, r2, r3
 	strh r0, [r1, #0]
 	movs r0, #17
-	bl GAX_fx
+	bl sub_083189D0
 .L0830F75A:
 	movs r1, #0
 	movs r2, #0

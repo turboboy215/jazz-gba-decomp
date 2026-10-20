@@ -23,7 +23,7 @@ if not f:
 s0, e0 = f[0], f[1]
 cc = os.path.abspath("tools/agbcc/bin/" + ("old_agbcc" if old else "agbcc"))
 bo = os.path.join(d, "base_probe.o")
-subprocess.run(["sh", "-c", 'CC1=%s tools/permuter_compile.sh "$0" -o "$1"' % cc, cfile, bo], check=True)
+subprocess.run(["sh", "-c", 'CC1=%s tools/permuter_compile.sh "$0" -o "$1"' % cc, cfile, bo], check=True, env=dict(os.environ))
 relocs = {}
 for line in subprocess.run(["arm-none-eabi-objdump", "-r", bo], capture_output=True, text=True).stdout.splitlines():
     m = re.match(r"([0-9a-f]{8}) R_ARM_ABS32\s+(\S+)", line)
@@ -53,7 +53,7 @@ open(os.path.join(d, "base.c"), "w").write(subprocess.run(
     ["arm-none-eabi-cpp", "-P", "-nostdinc", "-I", "include", "-I", "tools/agbcc/include", cfile],
     capture_output=True, text=True, check=True).stdout)
 open(os.path.join(d, "compile.sh"), "w").write(
-    "#!/bin/sh\nCC1=%s exec %s \"$@\"\n" % (cc, os.path.abspath("tools/permuter_compile.sh")))
+    "#!/bin/sh\nOPT='%s' CC1=%s exec %s \"$@\"\n" % (os.environ.get("OPT", ""), cc, os.path.abspath("tools/permuter_compile.sh")))
 os.chmod(os.path.join(d, "compile.sh"), 0o755)
 open(os.path.join(d, "settings.toml"), "w").write('func_name = "sub_%s"\ncompiler_type = "gcc"\n' % addr)
 py = os.path.abspath("tools/permuter-venv/bin/python")

@@ -15,3 +15,5 @@ __pycache__/
 *.pyc
 .decomp.lock
 .one.json
+tools/permuter-venv/
+permuter/

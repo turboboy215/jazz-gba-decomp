@@ -6327,8 +6327,8 @@ sub_080033CC:
 	movs r1, #14
 	bl sub_08004914
 .L080033F8:
-	bl GAX_irq
-	bl GAX_play
+	bl sub_083186FC
+	bl sub_0831881C
 	ldr r1, [pc, #24]
 	movs r0, #1
 	strh r0, [r1, #0]

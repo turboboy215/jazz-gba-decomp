@@ -1100,7 +1100,7 @@ sub_082F066C:
 	cmp r0, #0
 	bne .L082F0860
 	movs r0, #53
-	bl GAX_fx
+	bl sub_083189D0
 .L082F0860:
 	movs r0, #1
 	b .L082F0866
@@ -1816,7 +1816,7 @@ sub_082F0D30:
 	cmp r0, #0
 	bne .L082F0D9A
 	movs r0, #51
-	bl GAX_fx
+	bl sub_083189D0
 .L082F0D9A:
 	movs r2, #0
 	adds r5, r4, #0
@@ -2230,7 +2230,7 @@ sub_082F1088:
 	cmp r0, #0
 	bne .L082F10C6
 	movs r0, #52
-	bl GAX_fx
+	bl sub_083189D0
 .L082F10C6:
 	ldr r0, [pc, #20]
 	ldr r0, [r0, #0]
@@ -2659,7 +2659,7 @@ sub_082F13BC:
 	cmp r0, #0
 	bne .L082F1404
 	movs r0, #54
-	bl GAX_fx
+	bl sub_083189D0
 .L082F1404:
 	adds r0, r4, #0
 	adds r0, #100
@@ -5162,7 +5162,7 @@ sub_082F234C:
 	beq .L082F2748
 	movs r0, #14
 	bl sub_08316874
-	bl GAX_stop_fx
+	bl sub_08319148
 .L082F2748:
 	add sp, #16
 	pop {r3, r4, r5}
@@ -6950,7 +6950,7 @@ sub_082F34A8:
 	cmp r1, r0
 	bne .L082F34DE
 	movs r0, #15
-	bl GAX_fx
+	bl sub_083189D0
 .L082F34DE:
 	adds r0, r7, #0
 	bl sub_082F2860
@@ -7900,7 +7900,7 @@ sub_082F387C:
 	cmp r0, #0
 	beq .L082F3CE8
 	movs r0, #45
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F3CE8
 	lsls r3, r5, #4
 	movs r0, r0
@@ -7932,7 +7932,7 @@ sub_082F387C:
 	cmp r0, #0
 	beq .L082F3CA0
 	movs r0, #45
-	bl GAX_fx
+	bl sub_083189D0
 .L082F3CA0:
 	movs r0, #0
 	str r0, [sp, #0]
@@ -8474,7 +8474,7 @@ sub_082F40A0:
 	cmp r1, r0
 	bne .L082F40D2
 	movs r0, #14
-	bl GAX_fx
+	bl sub_083189D0
 	strh r0, [r7, #40]
 .L082F40D2:
 	ldr r0, [pc, #152]
@@ -8792,7 +8792,7 @@ sub_082F40A0:
 	bne .L082F4362
 	movs r1, #40
 	ldrsh r0, [r7, r1]
-	bl GAX_stop_fx
+	bl sub_08319148
 .L082F4362:
 	add sp, #12
 	pop {r3}
@@ -9171,7 +9171,7 @@ sub_082F44E8:
 	cmp r0, #0
 	beq .L082F4658
 	movs r0, #57
-	bl GAX_fx
+	bl sub_083189D0
 .L082F4658:
 	adds r0, r4, #0
 	bl sub_080006AC
@@ -9487,7 +9487,7 @@ sub_082F483C:
 	movs r0, #1
 	strh r0, [r5, #38]
 	movs r0, #57
-	bl GAX_fx
+	bl sub_083189D0
 	adds r4, r5, #0
 	adds r4, #92
 	ldrb r0, [r4, #0]
@@ -10100,7 +10100,7 @@ sub_082F4C68:
 	cmp r0, #0
 	beq .L082F4D30
 	movs r0, #35
-	bl GAX_fx
+	bl sub_083189D0
 .L082F4D30:
 	add sp, #4
 	pop {r4}
@@ -10141,7 +10141,7 @@ sub_082F4D44:
 	cmp r0, #0
 	bne .L082F4D80
 	movs r0, #45
-	bl GAX_fx
+	bl sub_083189D0
 .L082F4D80:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -10240,7 +10240,7 @@ sub_082F4D44:
 	cmp r0, #0
 	beq .L082F4E6C
 	movs r0, #45
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F4E6C
 	movs r5, #12
 	lsls r0, r0, #12
@@ -10401,7 +10401,7 @@ sub_082F4ED0:
 	cmp r0, #0
 	beq .L082F4F74
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F4F74:
 	add sp, #12
 	pop {r4, r5, r6}
@@ -10439,7 +10439,7 @@ sub_082F4F88:
 	movs r0, #25
 	strh r0, [r1, #6]
 	movs r0, #3
-	bl GAX_fx
+	bl sub_083189D0
 .L082F4FBC:
 	add sp, #4
 	pop {r4}
@@ -10621,7 +10621,7 @@ sub_082F5064:
 	bl sub_080002E0
 .L082F5106:
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F510C:
 	add sp, #4
 	pop {r4}
@@ -10675,7 +10675,7 @@ sub_082F5120:
 	cmp r0, #0
 	beq .L082F517A
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082F517A:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -10776,7 +10776,7 @@ sub_082F5120:
 	cmp r0, #0
 	beq .L082F5270
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F5270
 	movs r5, #12
 	lsls r0, r0, #12
@@ -10962,7 +10962,7 @@ sub_082F5358:
 	cmp r0, #0
 	beq .L082F53B2
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082F53B2:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -11007,7 +11007,7 @@ sub_082F5358:
 	cmp r0, #0
 	beq .L082F5412
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5412:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -11115,7 +11115,7 @@ sub_082F5358:
 	cmp r0, #0
 	beq .L082F5514
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F5514
 	movs r5, #12
 	lsls r0, r0, #12
@@ -11242,7 +11242,7 @@ sub_082F5538:
 	cmp r0, #0
 	bne .L082F55DA
 	movs r0, #20
-	bl GAX_fx
+	bl sub_083189D0
 .L082F55DA:
 	add sp, #4
 	pop {r4}
@@ -11641,7 +11641,7 @@ sub_082F57A4:
 	cmp r0, #0
 	bne .L082F58CE
 	movs r0, #22
-	bl GAX_fx
+	bl sub_083189D0
 .L082F58CE:
 	add sp, #4
 	pop {r4}
@@ -11904,7 +11904,7 @@ sub_082F5A1C:
 	cmp r0, #0
 	bne .L082F5AD0
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5AD0:
 	add sp, #4
 	pop {r4}
@@ -11950,7 +11950,7 @@ sub_082F5AE4:
 	cmp r0, #0
 	bne .L082F5B2C
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5B2C:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -12042,7 +12042,7 @@ sub_082F5AE4:
 	cmp r0, #0
 	bne .L082F5C10
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F5C10
 	movs r0, r0
 	movs r5, #12
@@ -12178,7 +12178,7 @@ sub_082F5C34:
 	cmp r0, #0
 	bne .L082F5CF0
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5CF0:
 	add sp, #4
 	pop {r4}
@@ -12221,7 +12221,7 @@ sub_082F5D04:
 	cmp r0, #0
 	bne .L082F5D44
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5D44:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -12319,7 +12319,7 @@ sub_082F5D04:
 	cmp r0, #0
 	bne .L082F5E34
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F5E34
 	movs r0, r0
 	movs r5, #12
@@ -12378,7 +12378,7 @@ sub_082F5E3C:
 	cmp r0, #0
 	bne .L082F5E84
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F5E84:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -12470,7 +12470,7 @@ sub_082F5E3C:
 	cmp r0, #0
 	bne .L082F5F68
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F5F68
 	movs r0, r0
 	movs r5, #12
@@ -12611,7 +12611,7 @@ sub_082F5F8C:
 	cmp r0, #0
 	bne .L082F6050
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F6050:
 	ldr r0, [sp, #0]
 	movs r1, #0
@@ -13031,7 +13031,7 @@ sub_082F62D0:
 	cmp r0, #0
 	bne .L082F6366
 	movs r0, #21
-	bl GAX_fx
+	bl sub_083189D0
 .L082F6366:
 	add sp, #4
 	pop {r4}
@@ -13244,7 +13244,7 @@ sub_082F64C8:
 	movs r0, #24
 	strh r0, [r1, #6]
 	movs r0, #44
-	bl GAX_fx
+	bl sub_083189D0
 .L082F6500:
 	add sp, #4
 	pop {r4}
@@ -13489,7 +13489,7 @@ sub_082F6680:
 	cmp r0, #0
 	bne .L082F66C8
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F66C8:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -13581,7 +13581,7 @@ sub_082F6680:
 	cmp r0, #0
 	bne .L082F67AC
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F67AC
 	movs r0, r0
 	movs r5, #12
@@ -13719,7 +13719,7 @@ sub_082F67D0:
 	cmp r0, #0
 	bne .L082F688C
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F688C:
 	ldr r0, [sp, #0]
 	movs r1, #0
@@ -14150,7 +14150,7 @@ sub_082F6B24:
 	cmp r0, #0
 	bne .L082F6BB6
 	movs r0, #20
-	bl GAX_fx
+	bl sub_083189D0
 .L082F6BB6:
 	add sp, #4
 	pop {r4}
@@ -15008,7 +15008,7 @@ sub_082F70F0:
 	cmp r0, #0
 	bne .L082F7212
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F7212:
 	add sp, #4
 	pop {r4}
@@ -15056,7 +15056,7 @@ sub_082F7228:
 	cmp r0, #0
 	bne .L082F7272
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F7272:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -15179,7 +15179,7 @@ sub_082F7228:
 	cmp r0, #0
 	bne .L082F7390
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F7390
 	movs r0, r0
 	movs r5, #12
@@ -15308,7 +15308,7 @@ sub_082F73B4:
 	bl sub_080002E0
 .L082F7456:
 	movs r0, #34
-	bl GAX_fx
+	bl sub_083189D0
 .L082F745C:
 	add sp, #4
 	pop {r4}
@@ -15548,7 +15548,7 @@ sub_082F75DC:
 	b .L082F771A
 .L082F761A:
 	movs r0, #34
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r0, [r6, #0]
 	ldr r0, [r0, #16]
 	ldr r1, [r7, #52]
@@ -16707,7 +16707,7 @@ sub_082F7E20:
 	cmp r0, #0
 	bne .L082F7EDC
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F7EDC:
 	ldr r0, [sp, #0]
 	movs r1, #0
@@ -17154,7 +17154,7 @@ sub_082F8174:
 	cmp r0, #0
 	bne .L082F8228
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F8228:
 	add sp, #4
 	pop {r4}
@@ -17200,7 +17200,7 @@ sub_082F823C:
 	cmp r0, #0
 	bne .L082F8284
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F8284:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -17292,7 +17292,7 @@ sub_082F823C:
 	cmp r0, #0
 	bne .L082F8368
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F8368
 	movs r0, r0
 	movs r5, #12
@@ -17434,7 +17434,7 @@ sub_082F838C:
 	cmp r0, #0
 	bne .L082F844C
 	movs r0, #20
-	bl GAX_fx
+	bl sub_083189D0
 .L082F844C:
 	add sp, #4
 	pop {r4}
@@ -17697,7 +17697,7 @@ sub_082F8590:
 	cmp r0, #0
 	bne .L082F864C
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082F864C:
 	ldr r0, [sp, #0]
 	movs r1, #0
@@ -17934,7 +17934,7 @@ sub_082F866C:
 	cmp r0, #0
 	bne .L082F8802
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082F8802:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -18027,7 +18027,7 @@ sub_082F866C:
 	cmp r0, #0
 	bne .L082F88E6
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082F88E6
 	movs r0, r0
 	movs r5, #12
@@ -19089,7 +19089,7 @@ sub_082F90F4:
 	movs r0, #1
 	strh r0, [r5, #12]
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082F9110:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -19507,7 +19507,7 @@ sub_082F9214:
 	cmp r0, #0
 	beq .L082F9436
 	movs r0, #1
-	bl GAX_fx
+	bl sub_083189D0
 .L082F9436:
 	add sp, #4
 	pop {r4}
@@ -20092,7 +20092,7 @@ sub_082F9698:
 	cmp r0, #0
 	beq .L082F988A
 	movs r0, #22
-	bl GAX_fx
+	bl sub_083189D0
 .L082F988A:
 	add sp, #4
 	pop {r4}
@@ -20774,7 +20774,7 @@ sub_082F9AE0:
 	cmp r0, #0
 	beq .L082F9D9A
 	movs r0, #9
-	bl GAX_fx
+	bl sub_083189D0
 .L082F9D9A:
 	ldr r1, [sp, #0]
 	movs r0, #6
@@ -21197,7 +21197,7 @@ sub_082FA0A4:
 	b .L082FA346
 .L082FA0BA:
 	movs r0, #35
-	bl GAX_fx
+	bl sub_083189D0
 	ldr r0, [sp, #12]
 	adds r0, #144
 	str r5, [r0, #0]
@@ -21521,7 +21521,7 @@ sub_082FA0A4:
 	cmp r0, #0
 	beq .L082FA346
 	movs r0, #35
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082FA346
 	.2byte 0xe2d0 @ b.n 0x82fa8d8
 	lsrs r7, r1, #32
@@ -21531,7 +21531,7 @@ sub_082FA0A4:
 	lsrs r7, r2, #32
 .L082FA340:
 	movs r0, #35
-	bl GAX_fx
+	bl sub_083189D0
 .L082FA346:
 	add sp, #16
 	pop {r4, r5}
@@ -21831,11 +21831,11 @@ sub_082FA37C:
 	cmp r0, #0
 	beq .L082FA582
 	movs r0, #36
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082FA582
 .L082FA57C:
 	movs r0, #36
-	bl GAX_fx
+	bl sub_083189D0
 .L082FA582:
 	movs r0, #1
 	ldrb r2, [r5, #14]
@@ -22089,7 +22089,7 @@ sub_082FA770:
 	movs r0, #1
 	strh r0, [r5, #12]
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082FA78E:
 	bl sub_08003490
 	lsls r0, r0, #24
@@ -22114,7 +22114,7 @@ sub_082FA770:
 	movs r0, #1
 	strh r0, [r5, #12]
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082FA7DE
 .L082FA7C6:
 	movs r1, #12
@@ -22127,7 +22127,7 @@ sub_082FA770:
 	movs r0, #1
 	strh r0, [r5, #12]
 	movs r0, #33
-	bl GAX_fx
+	bl sub_083189D0
 .L082FA7DE:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -22548,7 +22548,7 @@ sub_082FA8EC:
 	cmp r0, #0
 	beq .L082FAB0A
 	movs r0, #40
-	bl GAX_fx
+	bl sub_083189D0
 .L082FAB0A:
 	ldr r1, [sp, #0]
 	movs r0, #240
@@ -22840,7 +22840,7 @@ sub_082FAD1C:
 	movs r0, #1
 	strh r0, [r5, #10]
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 	b .L082FAD6E
 .L082FAD58:
 	movs r1, #10
@@ -22852,7 +22852,7 @@ sub_082FAD1C:
 	movs r0, #1
 	strh r0, [r5, #10]
 	movs r0, #41
-	bl GAX_fx
+	bl sub_083189D0
 .L082FAD6E:
 	ldrb r0, [r5, #14]
 	cmp r0, #0
@@ -23267,7 +23267,7 @@ sub_082FAE68:
 	cmp r0, #0
 	bne .L082FB088
 	movs r0, #34
-	bl GAX_fx
+	bl sub_083189D0
 .L082FB088:
 	add sp, #4
 	pop {r4}
@@ -24208,7 +24208,7 @@ sub_082FB73C:
 	cmp r4, r0
 	bne .L082FB802
 	movs r0, #6
-	bl GAX_fx
+	bl sub_083189D0
 .L082FB802:
 	movs r0, #0
 .L082FB804:
@@ -24611,7 +24611,7 @@ sub_082FBA80:
 sub_082FBA94:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -24696,7 +24696,7 @@ sub_082FBB1C:
 sub_082FBB38:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -24737,7 +24737,7 @@ sub_082FBB38:
 sub_082FBB8C:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -25264,7 +25264,7 @@ sub_082FBFD8:
 sub_082FBFF4:
 	push {lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -25456,7 +25456,7 @@ sub_082FC134:
 sub_082FC180:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -25497,7 +25497,7 @@ sub_082FC180:
 sub_082FC1D4:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -26389,7 +26389,7 @@ sub_082FC918:
 	bl sub_083190E0
 	movs r0, #1
 	negs r0, r0
-	bl GAX_stop_fx
+	bl sub_08319148
 	bl sub_08315278
 	bl sub_083190F0
 .L082FC964:
@@ -27546,7 +27546,7 @@ sub_082FD2C0:
 sub_082FD314:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -27859,7 +27859,7 @@ sub_082FD5B8:
 	cmp r0, #1
 	bne .L082FD61E
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -29083,7 +29083,7 @@ sub_082FDFC8:
 sub_082FE014:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -30872,7 +30872,7 @@ sub_082FEE90:
 sub_082FEF2C:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -31431,7 +31431,7 @@ sub_082FF3C4:
 sub_082FF3D0:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -31660,7 +31660,7 @@ sub_082FF568:
 sub_082FF5C4:
 	push {r4, lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
@@ -32291,7 +32291,7 @@ sub_082FFAC0:
 sub_082FFB38:
 	push {lr}
 	movs r0, #49
-	bl GAX_fx
+	bl sub_083189D0
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60

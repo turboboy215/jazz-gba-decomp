@@ -408,7 +408,8 @@ def main(verify):
         "$(BUILD)/src/%s.o: CC1 := tools/agbcc/bin/old_agbcc\n" % n for n in old_cc) + "".join(
         "$(BUILD)/src/%s.o: CFLAGS += -O1\n" % n for n in o1) + "".join(
         "$(BUILD)/src/%s.o: CFLAGS += -mno-thumb-interwork\n" % n for n in [r[3] for r in rows5 if r[4] == "noiw"]) + "".join(
-        "$(BUILD)/src/%s.o: CFLAGS += -fprologue-bugfix\n" % n for n in [r[3] for r in rows5 if r[4] == "bugfix"]))
+        "$(BUILD)/src/%s.o: CC1 := tools/agbcc/bin/agbcc\n$(BUILD)/src/%s.o: CFLAGS += -fprologue-bugfix\n" % (n, n)
+        for n in [r[3] for r in rows5 if r[4] == "bugfix"]))  # GAX library: agbcc -fprologue-bugfix
     if verify:
         return do_verify(funcs, force)
 

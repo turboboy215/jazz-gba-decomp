@@ -30,7 +30,7 @@
 0831AD78 __umodsi3                       # [sure]
 # --- GAX Sound Engine 3.01 (Sep 13 2002), live copy ----------------------------------------
 08317518 GAX_code2ram                    # [sure] "GAX2_INIT"/"OUT OF MEMORY" + CpuSet copy
-083175A8 GAX2_estimate                   # [likely] name from gaxtapper; unused by Jazz
+083175A8 GAX2_calc_mem                   # [sure] official name (GAX v3 manual; gaxtapper: GAX2_estimate); matches 3.05A layout; unused by Jazz
 083177CC GAX2_new                        # [sure] "GAX2_NEW"/"PARAMS ARG IS NULL"
 08317874 GAX2_init_volboost              # [likely] called from init_song and GAX_play song-end path
 08317970 GAX2_init_song                  # [likely] OOM asserts, calls init_volboost
@@ -49,6 +49,7 @@
 08318DE8 GAX_ASSERT                      # [sure] "FUNCTION NAME:" screen
 08318F50 GAX_clear_mem                   # [likely] CpuFastSet based clear
 08318FB4 GAX2_new_fx                     # [sure] "GAX2_NEW_FX"/"FXPARAMS ARG IS NULL"
+08318FE8 GAX_get_free_mem                # [sure] 3.05A GAX_get_free_mem: returns GAX_ram->free_mem (+0x84); missed by Ghidra
 08318FF8 GAX_pause                       # [likely] SOUNDCNT_H off, DMA1/2 stop with mov r3,r3;nop x3 delays
 08319078 GAX_resume                      # [likely] FIFO A/B clear x8, SOUNDCNT_H on (missed by Ghidra)
 083190E0 GAX_pause_music                 # [likely]

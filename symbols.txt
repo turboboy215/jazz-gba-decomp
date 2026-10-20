@@ -1,0 +1,25 @@
+# Renamed data symbols: name address  (tools/syms.py, tools/check_func.py)
+# GAX 3.01 rodata (strings referenced by the live library)
+GAX_str_GAX2_INIT          0x083DFCB8
+GAX_str_OUT_OF_MEMORY      0x083DFCC4
+GAX_str_GAX2_NEW           0x083DFCD4
+GAX_str_PARAMS_NULL        0x083DFCE0
+GAX_str_GAX2_NEW_FX        0x083DFCF4
+GAX_str_FXPARAMS_NULL      0x083DFD00
+GAX_str_FX_MIXING_RATE     0x083DFD18
+GAX_str_GAX2_JINGLE        0x083DFD78
+GAX_str_NO_JINGLE          0x083DFD84
+GAX_str_GAX_IRQ            0x083DFDA0
+GAX_str_PLAY_NOT_FINISHED  0x083DFDA8
+GAX_str_GAX_FX             0x083DFE1C
+GAX_str_SPEECH_FX          0x083DFE24
+GAX_str_GAX2_FX            0x083DFE78
+GAX_str_FXID_DEFAULT       0x083DFE80
+GAX_str_FUNCTION_NAME      0x083DFFF8
+GAX_font                   0x083DFEA0
+GAX_version_banner         0x083DFFF4
+GAX_default_song           0x083DFBF0
+GAX_table                  0x083DFBBC
+GAX_copyright              0x083DFBB8
+GAX_vibtable               0x083E0608
+GAX_freqtable              0x083E0008
