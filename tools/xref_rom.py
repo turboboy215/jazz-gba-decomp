@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Find Jazz Jackrabbit functions inside another GBA ROM (e.g. Earthworm Jim, Game Titan 2001).
+"""Find Jazz Jackrabbit functions inside another GBA ROM (or inside Jazz itself, e.g. the orphaned block).
 
 Usage: tools/xref_rom.py OTHER.gba [--min 24] [--all] [--json out.json]
 

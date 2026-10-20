@@ -71,7 +71,6 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 `agbcc -fprologue-bugfix`); the other 5 are written as equivalent C in `src/gax/nonmatching.c` (not
 linked; `make nonmatching` compiles it) while the ROM keeps their asm. 3.14% of live code is in C.
 `make compare` passes. Details, 3.01-vs-3.05A findings and matching notes: `docs/gax.md`.
-Earthworm Jim cross-reference plan + tool (`tools/xref_rom.py`): `docs/EWJ_CROSSREF.md`.
 
 Next, in order:
 1. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render` 083192C0,
@@ -85,8 +84,6 @@ Next, in order:
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay.
 4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
 5. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
-6. Earthworm Jim (GBA): compared on 2026-10-20, only libgcc is shared; EWJ uses GAX v1.99d
-   (`docs/EWJ_CROSSREF.md`). EWJ itself is a separate, later project.
 
 **Tooling notes from this session:** GAX C files use the splits.txt 5th column `bugfix` (now sets
 `CC1 := agbcc` too). Library names the compiler emits (`_call_via_rN`) are in `lib/aliases.s`. Data
