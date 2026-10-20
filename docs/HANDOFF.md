@@ -94,4 +94,5 @@ symbols with readable names go in `symbols.txt` (`name 0xADDR`); unnamed ones us
 * Commit messages end with the Co-Authored-By / Claude-Session trailers the session gives.
 * No ROM bytes or assets in git (the logo and data come in through `.incbin`).
 * Name confidence tags: `[sure]` (string or structural proof) / `[likely]` (call graph or order).
+* Character names for graphics labelling: `docs/characters.md`.
 * Treat the user's own observations (e.g. song usage from GSF rips) as ground truth and record them in the docs.
