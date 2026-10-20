@@ -208,13 +208,13 @@ sub_08319F88:
 	.4byte 0x00FF00FF
 	.4byte 0x00FF00FF
 
-@ GAXOutput_asm_A: [sure] ARM, code2ram'd; one of render/reverb/lowpass (order TBD)
+@ GAXOutput_render_asm: [sure] ARM mixer (s16 mix buffer -> s8 output); GAX2_init stores its RAM copy at GAX_ram+0x68
 	.arm
 	.align 2, 0
 	.global sub_0831A100
 sub_0831A100:
-	.global GAXOutput_asm_A
-	.set GAXOutput_asm_A, sub_0831A100
+	.global GAXOutput_render_asm
+	.set GAXOutput_render_asm, sub_0831A100
 	push {r4, r5, r6, r7, r8, r9, sl, fp, ip}
 	ldm r0!, {r0, r1, r2, r3}
 	lsl r3, r3, #4
@@ -289,13 +289,13 @@ sub_0831A100:
 	pop {r4, r5, r6, r7, r8, r9, sl, fp, ip}
 	bx lr
 
-@ GAXOutput_asm_B: [sure] ARM, code2ram'd
+@ GAXOutput_lowpass_asm: [sure] ARM; copied only with GAX_LOWPASS_FILTER (GAX_ram+0x70)
 	.arm
 	.align 2, 0
 	.global sub_0831A220
 sub_0831A220:
-	.global GAXOutput_asm_B
-	.set GAXOutput_asm_B, sub_0831A220
+	.global GAXOutput_lowpass_asm
+	.set GAXOutput_lowpass_asm, sub_0831A220
 	push {r4, r5, r6, r7, r8, r9, sl, fp}
 	ldr r1, [r0, #12]
 	ldr r7, [r0, #8]
@@ -349,13 +349,13 @@ sub_0831A220:
 	.4byte 0x00000000 @ ?
 	strbpl r4, [ip], #-2374
 
-@ GAXOutput_asm_C: [sure] ARM, code2ram'd
+@ GAXOutput_reverb_asm: [sure] ARM; copied when the song has reverb (GAX_ram+0x6C), called by GAXOutput_render
 	.arm
 	.align 2, 0
 	.global sub_0831A2EC
 sub_0831A2EC:
-	.global GAXOutput_asm_C
-	.set GAXOutput_asm_C, sub_0831A2EC
+	.global GAXOutput_reverb_asm
+	.set GAXOutput_reverb_asm, sub_0831A2EC
 	push {r4, r5, r6, r7, r8, r9, sl}
 	ldr r5, [pc, #232]
 	ldr r4, [r0]
@@ -422,26 +422,26 @@ sub_0831A2EC:
 	.4byte 0x00000000 @ ?
 	ldrbpl r4, [r2], #-322
 
-@ GAXTracker_asm: [likely] ARM, code2ram'd (tracker_asm.o signature)
+@ GAX_umulhi: [sure] ARM umull helper (returns hi word); called in place by GAXTracker_generate_audio
 	.arm
 	.align 2, 0
 	.global sub_0831A3E8
 sub_0831A3E8:
-	.global GAXTracker_asm
-	.set GAXTracker_asm, sub_0831A3E8
+	.global GAX_umulhi
+	.set GAX_umulhi, sub_0831A3E8
 	push {r3, r4}
 	umull r3, r4, r0, r1
 	mov r0, r4
 	pop {r3, r4}
 	bx lr
 
-@ GAXTracker_pingpong_asm: [likely] ARM, code2ram'd
+@ GAXTracker_asm: [sure] ARM sample resampler (GAX_ram+0x60); patched by GAX2_init_volboost
 	.arm
 	.align 2, 0
 	.global sub_0831A3FC
 sub_0831A3FC:
-	.global GAXTracker_pingpong_asm
-	.set GAXTracker_pingpong_asm, sub_0831A3FC
+	.global GAXTracker_asm
+	.set GAXTracker_asm, sub_0831A3FC
 	push {r4, r5, r6, r7, r8, r9, sl, fp}
 	ldm r0, {r1, r2, r3, r4, r5, r6, r7}
 .L0831A404:
@@ -473,13 +473,13 @@ sub_0831A3FC:
 	pop {r4, r5, r6, r7, r8, r9, sl, fp}
 	bx lr
 
-@ GAX_asm_0831A470: ARM block copied to RAM by GAX2_init/GAX2_estimate (0x0831A470-0x0831A528)
+@ GAXTracker_pingpong_asm: [sure] ARM ping-pong loop resampler (GAX_ram+0x64), ends at 0831A528
 	.arm
 	.align 2, 0
 	.global sub_0831A470
 sub_0831A470:
-	.global GAX_asm_0831A470
-	.set GAX_asm_0831A470, sub_0831A470
+	.global GAXTracker_pingpong_asm
+	.set GAXTracker_pingpong_asm, sub_0831A470
 	push {r4, r5, r6, r7, r8, r9, sl, fp, lr}
 	ldm r0, {r1, r2, r3, r4, r5, r6, r7}
 	cmp r7, #0

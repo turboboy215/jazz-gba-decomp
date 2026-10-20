@@ -31,15 +31,16 @@ with `git bundle create jazz-decomp.bundle --all`.
 ## 2. Key facts (verified, don't redo)
 
 * ROM `AJJE`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0`, 4 MiB.
-* **Compiler: `old_agbcc -O2 -mthumb-interwork`** (the default in Makefile and all tools). GAX also matches
-  `agbcc -fprologue-bugfix`; game code doesn't.
+* **Compiler: `old_agbcc -O2 -mthumb-interwork`** for game code (the default in Makefile and all tools).
+  **GAX needs `agbcc -fprologue-bugfix`** (splits.txt flavour `bugfix`); several GAX functions don't match
+  with `old_agbcc`.
 * Code regions: A `080002E0-08012974` (live library `…-08005710`, then **orphaned dead block**
   `08005710-08012974` with a stale GAX copy: never decompile it unless asked); B `082E8470-0831AEB4`.
   Details: `docs/rom_map.md`.
 * `AgbMain` `08312BF8` → `0830AAA8` (likely main loop). `IntrTable` `0300585C`; VBlank handler in IWRAM
   `0300087C`.
-* GAX 3.01 live at `08317518-0831A528`, 41 functions named in `names.txt`, `GAX_ram` pointer at
-  `03000B0C`. Docs: `docs/gax.md`.
+* GAX 3.01 live at `08317518-0831A528`, 43 functions + 6 ARM routines named in `names.txt`, `GAX_ram`
+  pointer at `03000B0C`. Docs: `docs/gax.md`.
 * libs: memcpy `0831A570`, memset `0831A5D4`, `__divsi3` `0831A820`, `__udivsi3` `0831AD00`,
   `__umodsi3` `0831AD78`, `_call_via_r0` `0831A7E4`, BIOS stubs `0831A528…`.
 * Level table `083D39D8` (25 × 0x4C): song, tileset, palette, level data. Tilesets are raw 8bpp
@@ -58,22 +59,38 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `sh tools/integrate_one.sh ADDR file.c Name` | add to `src/`, `make compare`, commit (use `ALLOW_ASM=1` only for GAX's DMA delay asm) |
 | `python3 tools/progress.py` | % of live code in C |
 | `python3 tools/gax_songs.py` | song + level table dump → `docs/songs_generated.md` |
+| `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/check_func.py f.c ADDR` | check a GAX function |
+| `make nonmatching` | compile `src/gax/nonmatching.c` (not linked) |
+| `python3 tools/xref_rom.py OTHER.gba` | find Jazz functions in another ROM (masked patterns) |
 
 To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, then run `split.py`.
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-17):** 7 functions in C (0.21%). The all-asm build matches. Docs: rom_map, gax, songs,
-strings, STRATEGY, PC_PORT (PC + PS1).
+**State (2026-10-20):** GAX 3.01 is 38/43 functions in byte-matching C (`src/gax/`, built with
+`agbcc -fprologue-bugfix`); the other 5 are written as equivalent C in `src/gax/nonmatching.c` (not
+linked; `make nonmatching` compiles it) while the ROM keeps their asm. 3.14% of live code is in C.
+`make compare` passes. Details, 3.01-vs-3.05A findings and matching notes: `docs/gax.md`.
+Earthworm Jim cross-reference plan + tool (`tools/xref_rom.py`): `docs/EWJ_CROSSREF.md`.
 
 Next, in order:
-1. **GAX library to C** (`08317518-0831A100`, ~35 functions left). Reference: 3.05A decomp
-   (`shinen-gax-decomp-main.zip` in the user's folder), the GAX v3 manual (`GAX v3.chm`, same folder), and
-   Crash XS (GAX 2.01D, GPLv3, reference only). Grow `include/gax.h` as fields are confirmed.
+1. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render` 083192C0,
+   `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88. Start from `nonmatching.c`; the diffs are
+   register allocation and (generate_audio) a 44-byte frame with `step` and `is_fx*4` spilled.
+   Permuter: `OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS` (needs
+   `tools/decomp-permuter` clone + `tools/permuter-venv` with pycparser/toml/Levenshtein; both gitignored).
+   After that, merge the per-range files into `gax.c`/`sync.c`/`output.c`/`tracker.c` and move GAX rodata
+   to C (names in `symbols.txt`).
 2. **Region A live library** (`080002E0-08005710`): small accessors. Name them as you go.
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay.
 4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
 5. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
+6. When an Earthworm Jim (GBA) ROM is provided: run `tools/xref_rom.py` on it and record the hits
+   (`docs/EWJ_CROSSREF.md`). EWJ itself is a separate, later project.
+
+**Tooling notes from this session:** GAX C files use the splits.txt 5th column `bugfix` (now sets
+`CC1 := agbcc` too). Library names the compiler emits (`_call_via_rN`) are in `lib/aliases.s`. Data
+symbols with readable names go in `symbols.txt` (`name 0xADDR`); unnamed ones use `name_XXXXXXXX`.
 
 ## 5. Conventions
 

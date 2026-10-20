@@ -14,3 +14,4 @@
 - GAX ARM blocks `0831A100-0831A528` (hand-written ARM in the original library)
 - BIOS SWI stubs `0831A528-0831A554`, ld veneers `0831AE38-0831AEB4`, libgcc
 - `asm/orphan_*.s`: orphaned dead code (excluded from progress)
+- 2026-10-20: GAX 3.01: 38/43 functions matching in src/gax/ (agbcc -fprologue-bugfix); 5 in src/gax/nonmatching.c. code decompiled to C: 7192 / 228980 bytes (3.14%); rate 63 b

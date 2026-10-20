@@ -85,7 +85,8 @@ The skill's multi-agent `workflows/*.js` scripts need the Workflow tool. Without
 with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools/check_func.py` →
 `tools/integrate_one.sh`. Project notes every agent needs:
 
-- Compiler: old_agbcc (default in all tools). Don't try agbcc/`-fprologue-bugfix` first.
+- Compiler: old_agbcc (default in all tools). Don't try agbcc/`-fprologue-bugfix` first, except for the
+  GAX library (`08317518-0831A100`), which is built with `agbcc -fprologue-bugfix`.
 - memcpy=0831A570, memset=0831A5D4, strcmp=0831A62C, strlen=0831A68C, strncpy=0831A6D8,
   `__divsi3`=0831A820, `__udivsi3`=0831AD00, `__umodsi3`=0831AD78, `_call_via_r0`=0831A7E4
   (there is no `__modsi3`: signed `%` should be checked when first seen).

@@ -36,7 +36,7 @@
 08317970 GAX2_init_song                  # [likely] OOM asserts, calls init_volboost
 08317B40 GAX2_init_soundhw               # [sure] SOUNDCNT_X/H, SOUNDBIAS, FIFO, DMA1/2 setup
 08317C3C GAX_open                        # [sure] calls GAXSync_open, GAXOutput_open, GAXTracker_open
-08317CD8 GAX2_init                       # [sure] "WHEN USING DIFFERENT FX_MIXING_RATE..." (incl. tail up to 0x083185D0)
+08317CD8 GAX2_init                       # [sure] "WHEN USING DIFFERENT FX_MIXING_RATE..." (2,296 bytes; the far branches to 08318542/083185BC are agbcc long jumps)
 083185D0 GAX2_jingle                     # [sure] "GAX2_JINGLE"/"GAX_NO_JINGLE FLAG IS SET"
 083186FC GAX_irq                         # [sure] 'GAX3' signature check, "GAX_PLAY HAS NOT FINISHED BEFORE GAX_IRQ"
 0831881C GAX_play                        # [sure] CpuFastSet clear, GAXSync_render, GAXOutput_stream
@@ -72,12 +72,12 @@
 08319C60 GAXTracker_generate_audio       # [likely] calls RAM-resident ARM mixer
 08319F30 GAXFx_open                      # [likely]
 08319F88 GAXFx_render                    # [likely]
-0831A100 GAXOutput_asm_A                 # [sure] ARM, code2ram'd; one of render/reverb/lowpass (order TBD)
-0831A220 GAXOutput_asm_B                 # [sure] ARM, code2ram'd
-0831A2EC GAXOutput_asm_C                 # [sure] ARM, code2ram'd
-0831A3E8 GAXTracker_asm                  # [likely] ARM, code2ram'd (tracker_asm.o signature)
-0831A3FC GAXTracker_pingpong_asm         # [likely] ARM, code2ram'd
-0831A470 GAX_asm_0831A470                # ARM block copied to RAM by GAX2_init/GAX2_estimate (0x0831A470-0x0831A528)
+0831A100 GAXOutput_render_asm            # [sure] ARM mixer (s16 mix buffer -> s8 output); GAX2_init stores its RAM copy at GAX_ram+0x68
+0831A220 GAXOutput_lowpass_asm           # [sure] ARM; copied only with GAX_LOWPASS_FILTER (GAX_ram+0x70)
+0831A2EC GAXOutput_reverb_asm            # [sure] ARM; copied when the song has reverb (GAX_ram+0x6C), called by GAXOutput_render
+0831A3E8 GAX_umulhi                      # [sure] ARM umull helper (returns hi word); called in place by GAXTracker_generate_audio
+0831A3FC GAXTracker_asm                  # [sure] ARM sample resampler (GAX_ram+0x60); patched by GAX2_init_volboost
+0831A470 GAXTracker_pingpong_asm         # [sure] ARM ping-pong loop resampler (GAX_ram+0x64), ends at 0831A528
 
 # --- Orphaned GAX 3.01 copy in the dead block (same object code, older link) -------------------
 0800F23C orphan_GAX_code2ram                     # same code as GAX_code2ram

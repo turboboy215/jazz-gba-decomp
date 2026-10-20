@@ -8,18 +8,46 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
   **orphaned** one is at `0800F23C-08012190`, part of the dead block; see `rom_map.md`. That second copy is
   why gaxtapper/foobar2000 play silence
   ([gaxtapper#17](https://github.com/loveemu/gaxtapper/issues/17)): its workaround patches ROM
-  0xF2CC (`orphan_GAX2_estimate`) so the scanner skips to the live copy.
+  0xF2CC (`orphan_GAX2_calc_mem`) so the scanner skips to the live copy. `tools/xref_rom.py baserom.gba`
+  shows that the orphaned copy has the same code as the live one, apart from addresses.
 * Reference material:
   * `shinen-gax-decomp`: WIP C decomp of **3.05A** (Aug 2004). Names follow it wherever a function's
     identity is established.
   * `shinen-gax-python`: format and replayer docs, `find_gax.py` signatures, song scanner.
   * **`GAX v3.chm`**: Shin'en's official GAX v3 manual, from the *SpongeBob SquarePants Movie* source
     (kept locally in the JazzGBARE folder, not in the repo). It has the API reference, `GAXParams`, and
-    the version history below.
+    the version history below. It names the size estimator **`GAX2_calc_mem`** (gaxtapper calls it
+    `GAX2_estimate`).
   * **[CrashBandicootXS-decomp](https://github.com/Almamu/CrashBandicootXS-decomp)**: a complete matching
     decomp with GAX **2.01D** (the generation before 3.x), plus a PC port with a C version of the ARM
     mixer (`platform/pc/src/gax_dsp.c`) and an mGBA GAX trace tool for checking audio. It is
-    **GPLv3**: use it as reference, don't copy code into this repo.
+    **GPLv3**: use it as reference, don't copy code into this repo. Its 2.x engine is structured
+    differently (handler layouts), so it helps with idioms more than with code.
+
+## Decompilation status (2026-10-20)
+
+**38 of 43 functions are in C and byte-matching**; the build is `jazz.gba: OK`.
+
+* **Compiler: `agbcc -fprologue-bugfix`** for every GAX file (splits.txt flavour `bugfix`, which now also
+  switches `CC1` to `agbcc`). `old_agbcc` gets several GAX functions wrong (e.g. `GAX2_new_fx`), so the
+  library was built separately from the game code, the same way Crash XS's GAX was.
+* C files (`src/gax/`), one per contiguous matched range:
+
+| File | Range | Contents |
+|---|---|---|
+| `gax_08317518.c` | 08317518-083175A8 | `GAX_code2ram` |
+| `gax_083177CC.c` | 083177CC-08317CD8 | `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
+| `gax_083185D0.c` | 083185D0-0831928C | `GAX2_jingle` ... `GAX_stop` (the whole public API, assert screen, `GAX_clear_mem`) |
+| `sync_0831928C.c` | 0831928C-083192C0 | `GAXSync_open` |
+| `tracker_0831938C.c` | 0831938C-08319C60 | `GAXOutput_render/open/stream`, `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
+| `fx_08319F30.c` | 08319F30-08319F88 | `GAXFx_open` |
+| `nonmatching.c` | (not linked) | the 5 functions below, as equivalent C (`make nonmatching` compiles it) |
+
+* **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
+  `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes), `GAXSync_render` (083192C0),
+  `GAXTracker_generate_audio` (08319C60), `GAXFx_render` (08319F88). The decomp-permuter setup works
+  (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`); see "Matching notes".
+* The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
 
 ## Version history (from the official manual)
 
@@ -34,17 +62,56 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 
 ## GAXParams as used by Jazz (`AgbMain`, params at IWRAM `030046E0`)
 
+3.01 has no `speed_adjust`, so everything after `volume` sits 4 bytes earlier than in 3.05 (confirmed
+by `GAX2_init`, `GAX2_calc_mem` and the assert checks of `params->debug` at +0x38).
+
 | Off | Field | Jazz value |
 |---|---|---|
 | 0x00 | `u8 *workmem` | `0300471C` (IWRAM) |
 | 0x04 | `u32 workmem_size` | 0x1000 |
 | 0x08 | `u16 mixing_rate` | 21025 |
-| 0x0A–0x13 | `fx_mixing_rate, filter_depth, flags, fx_channels, volume` (3.05 order) | left at `GAX2_new` defaults |
-| 0x14–0x2B | `reverb[3]` (3.01 has no `speed_adjust`, so 3 × 8 bytes, *inferred*) | |
+| 0x0A | `u16 fx_mixing_rate` | default |
+| 0x0C | `u16 filter_depth` | |
+| 0x0E | `u16 flags` | |
+| 0x10 | `u16 fx_channels` | |
+| 0x12 | `u16 volume` | |
+| 0x14 | `GAXReverb reverb[3]` | |
 | 0x2C | `const void *fx_data` | `083D1C5C` (FX bank) |
 | 0x30 | `const void *song_data` | `0835F2E4` ("spacelevel") |
-| 0x34 | `GAXChannelInfo *channel_info` | |
+| 0x34 | `GAXChannelInfo *channel_info` | 4 bytes per channel in 3.01 (`GAX_play` clears 64 bytes) |
 | 0x38 | `b8 debug` | 0 (assert screen disabled) |
+| 0x39 | `b8 is_songend`, 0x3A `is_jingleend`, 0x3B `mixermode` | outputs |
+
+The full set of internal structures (`struct GAX_RAM`, `GAX_player`, `GAX_channel`, `GAX_FX_channel`,
+`GAXSongData`, `GAX_instrument`, `GAX_volenv`, `GAX_perfstep`, `GAX_wave_param`) is in
+`include/gax.h`, with offsets that matching functions confirmed.
+
+## What 3.01 does differently from 3.05A (found while matching)
+
+* **Copyright tamper check.** After setting up the timers, `GAX2_init` reads the copyright string through
+  the `GAX_copyright` pointer (`083DFBB8`) and checks that it starts with `"GAX"`. If it doesn't, it
+  doubles `timer_reload_dma1`, so a ROM with the credit removed plays its music at the wrong pitch.
+* **Reverb channels.** `GAXSongData+0xA0` is the number of channels mixed *before* the reverb pass.
+  `GAXOutput_render` renders channels `[0, n)`, runs the reverb routine on the mix buffer, then
+  renders `[n, num_channels)`. With `GAX_FX_REVERB`, FX are mixed before the reverb too.
+* **Song header.** `+0x20` holds one order-list pointer per channel (up to 32); `+0xA4` three reverb
+  delays (ms, scaled by the mixing rate into samples × 2), `+0xB0` three decays, and `+0xBC/C0/C4` the
+  buffer sizes that `GAX2_calc_mem` reads.
+* **Instrument layout** (`GAX_instrument`): the vibrato bytes are at +8/+9/+10 (wait, depth, speed),
+  the envelope pointer at +0x0C, perf list speed/length at +0x10/+0x11, perf list at +0x14, wave params
+  at +0x18 (24 bytes each).
+* **Modulation window.** Wave modulation sweeps a window of `mod_size` between `min` and `max`; a wave
+  without modulation but with `min < max` is a plain loop, and `pingpong` picks the ping-pong
+  resampler (`GAXTracker_pingpong_asm`).
+* **Perf list** commands 5 (goto step) and 6 (repeat) share a counter in `GAX_channel+0x16`.
+* **No speed adjust** in `GAXSync_render`: the speed timer is just `speed - 1`.
+* **FX channels** reuse fields of `GAX_FX_channel`: `fxfreq` (+0x4B) is the note to trigger
+  (1 = note off), `fxid` (+0x4C, low byte) the instrument in the FX bank, `fxnote` (+0x49) a pitch offset,
+  `fxvol` (+0x48) the volume; `GAXFx_render` consumes them once and clears them.
+* **Mixing pitch** per output: `GAX_ram->music_pitch`/`fx_pitch` (`+0x40/+0x44`) are
+  `0x100000000 / mixrate`, computed once by `GAXTracker_open` / `GAXFx_open`.
+* Not present in 3.01, compared with 3.05A: `GAX_backup_fx`, `GAX_restore_fx` and the speech decoder
+  (its `GAX_SPEECH` branches are still there; `speech_unk` stays NULL in Jazz).
 
 ## Object layout of the live copy
 
@@ -56,60 +123,66 @@ is not linked, though its assert string is.
 
 ## Functions (live copy)
 
-Confidence: **sure** means proven by an assert string or exact structure; **likely** means call-graph/order evidence.
+Confidence: **sure** means proven by an assert string or exact structure; **likely** means call-graph/order
+evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, ROM still from asm.
 
-| Address | Name | Conf. | Evidence / notes |
-|---|---|---|---|
-| 08317518 | `GAX_code2ram` | sure | "GAX2_INIT"/"OUT OF MEMORY" + CpuSet; copies ARM blocks to RAM |
-| 083175A8 | `GAX2_estimate` | likely | gaxtapper's name; **not called by Jazz**; uses the ARM block at 0831A470 |
-| 083177CC | `GAX2_new` | sure | "GAX2_NEW"/"PARAMS ARG IS NULL" |
-| 08317874 | `GAX2_init_volboost` | likely | called by init_song and by GAX_play's song-end path |
-| 08317970 | `GAX2_init_song` | likely | two OOM asserts, as in 3.05A |
-| 08317B40 | `GAX2_init_soundhw` | sure | SOUNDCNT_X/H, SOUNDBIAS, FIFO A/B, DMA1/2 |
-| 08317C3C | `GAX_open` | sure | calls GAXSync_open, GAXOutput_open, GAXTracker_open |
-| 08317CD8 | `GAX2_init` | sure | "WHEN USING DIFFERENT FX_MIXING_RATE…"; 2,296 bytes incl. tail fragments 08318542/083185BC |
-| 083185D0 | `GAX2_jingle` | sure | "GAX2_JINGLE"/"GAX_NO_JINGLE FLAG IS SET" |
-| 083186FC | `GAX_irq` | sure | `'GAX3'` signature check, "GAX_PLAY HAS NOT FINISHED BEFORE GAX_IRQ" |
-| 0831881C | `GAX_play` | sure | CpuFastSet channel-info clear, GAXSync_render, GAXOutput_stream |
-| 083189D0 | `GAX_fx` | sure | "GAX_FX"/"YOU TRIED TO PLAY A SPEECH FX…"; **~125 call sites** in game code |
-| 08318AB0 | `GAX_fx_ex` | likely | only callee of GAX2_fx |
-| 08318BB4 | `GAX2_fx` | sure | "GAX2_FX"/"FXPARAMS ARG IS NULL"/"FXPARAMS->FXID IS GAX_DEFAULT" |
-| 08318C5C | `GAX_fx_status` | likely | returns per-channel byte at +0x88 |
-| 08318CA4 | `GAX_set_music_volume` | likely | `AgbMain` calls `(-1, vol)` |
-| 08318D38 | `GAX_ASSERT_PRINT` | likely | font blitter for the assert screen |
-| 08318DE8 | `GAX_ASSERT` | sure | "FUNCTION NAME:" screen; sets DISPCNT/BG regs |
-| 08318F50 | `GAX_clear_mem` | likely | CpuFastSet-based |
-| 08318FB4 | `GAX2_new_fx` | sure | "GAX2_NEW_FX"/"FXPARAMS ARG IS NULL" |
-| 08318FF8 | `GAX_pause` | likely | SOUNDCNT_H off, DMA stop with `mov r3,r3; nop×3` delays (exactly 3.05A) |
-| 08319078 | `GAX_resume` | likely | FIFO clears + SOUNDCNT_H on (Ghidra missed it; in `starts.txt`) |
-| 083190E0 | `GAX_pause_music` | likely | |
-| 083190F0 | `GAX_resume_music` | likely | |
-| 08319100 | `GAX_fx_note` | likely | unused by Jazz |
-| 08319148 | `GAX_stop_fx` | likely | `-1` = all channels |
-| 083191AC | `GAX_set_fx_volume` | likely | `AgbMain` calls `(-1, vol)` |
-| 08319214 | `GAX_stop` | sure | same structure as 3.05A `GAX_stop` |
-| 0831928C | `GAXSync_open` | sure | sync.o signature |
-| 083192C0 | `GAXSync_render` | likely | |
-| 0831938C | `GAXOutput_render` | likely | |
-| 08319518 | `GAXOutput_open` | likely | 8 bytes |
-| 08319520 | `GAXOutput_stream` | likely | calls clear_mem + render, then the RAM mixer through `_call_via_r1` |
-| 08319584 | `GAXTracker_open` | sure | tracker.o signature |
-| 083195E8 | `GAXTracker_render` | likely | calls step/perflist/frame/generate |
-| 0831967C | `GAXTracker_process_step` | likely | |
-| 083198B4 | `GAXTracker_process_perflist` | likely | |
-| 08319A20 | `GAXTracker_process_envelope` | likely | only called by process_frame |
-| 08319AE4 | `GAXTracker_process_frame` | likely | |
-| 08319C60 | `GAXTracker_generate_audio` | likely | calls the RAM mixer |
-| 08319F30 | `GAXFx_open` | likely | |
-| 08319F88 | `GAXFx_render` | likely | |
+| Address | Name | Conf. | Status | Evidence / notes |
+|---|---|---|---|---|
+| 08317518 | `GAX_code2ram` | sure | C | "GAX2_INIT"/"OUT OF MEMORY" + CpuSet; copies ARM blocks to RAM |
+| 083175A8 | `GAX2_calc_mem` | sure | nm | manual name; **not called by Jazz** |
+| 083177CC | `GAX2_new` | sure | C | "GAX2_NEW"/"PARAMS ARG IS NULL" |
+| 08317874 | `GAX2_init_volboost` | sure | C | patches two ARM instructions of the tracker RAM copy per volume level |
+| 08317970 | `GAX2_init_song` | sure | C | allocates player + channels, copies the reverb setup |
+| 08317B40 | `GAX2_init_soundhw` | sure | C | SOUNDCNT_X/H, SOUNDBIAS, FIFO A/B, DMA1/2 |
+| 08317C3C | `GAX_open` | sure | C | calls GAXOutput_open, GAXTracker_open, GAXSync_open |
+| 08317CD8 | `GAX2_init` | sure | nm | "WHEN USING DIFFERENT FX_MIXING_RATE…"; 2,296 bytes |
+| 083185D0 | `GAX2_jingle` | sure | C | "GAX2_JINGLE"/"GAX_NO_JINGLE FLAG IS SET" |
+| 083186FC | `GAX_irq` | sure | C | `'GAX3'` signature check, "GAX_PLAY HAS NOT FINISHED BEFORE GAX_IRQ" |
+| 0831881C | `GAX_play` | sure | C | channel-info clear, GAXSync_render, GAXOutput_stream |
+| 083189D0 | `GAX_fx` | sure | C | "GAX_FX"/"YOU TRIED TO PLAY A SPEECH FX…"; **~125 call sites** in game code |
+| 08318AB0 | `GAX_fx_ex` | sure | C | only callee of GAX2_fx |
+| 08318BB4 | `GAX2_fx` | sure | C | "GAX2_FX"/"FXPARAMS ARG IS NULL"/"FXPARAMS->FXID IS GAX_DEFAULT" |
+| 08318C5C | `GAX_fx_status` | sure | C | returns `GAX_ram->fx_indexes[fxch]` |
+| 08318CA4 | `GAX_set_music_volume` | sure | C | `AgbMain` calls `(-1, vol)` |
+| 08318D38 | `GAX_ASSERT_PRINT` | sure | C | font blitter for the assert screen |
+| 08318DE8 | `GAX_ASSERT` | sure | C | "FUNCTION NAME:" screen; inline `swi 0x13` (HuffUnComp) and `swi 0` |
+| 08318F50 | `GAX_clear_mem` | sure | C | CpuFastSet-based |
+| 08318FB4 | `GAX2_new_fx` | sure | C | "GAX2_NEW_FX"/"FXPARAMS ARG IS NULL" |
+| 08318FE8 | `GAX_get_free_mem` | sure | C | was hidden in the literal pool of GAX2_new_fx (now in `starts.txt`) |
+| 08318FF8 | `GAX_pause` | sure | C | DMA stop with `mov r3,r3; nop×3` delays |
+| 08319078 | `GAX_resume` | sure | C | FIFO clears + SOUNDCNT_H on |
+| 083190E0 | `GAX_pause_music` | sure | C | |
+| 083190F0 | `GAX_resume_music` | sure | C | |
+| 08319100 | `GAX_fx_note` | sure | C | unused by Jazz |
+| 08319148 | `GAX_stop_fx` | sure | C | `-1` = all channels |
+| 083191AC | `GAX_set_fx_volume` | sure | C | `AgbMain` calls `(-1, vol)` |
+| 08319214 | `GAX_stop` | sure | C | |
+| 0831928C | `GAXSync_open` | sure | C | sync.o signature |
+| 083192C0 | `GAXSync_render` | sure | nm | step/pattern sequencer |
+| 0831938C | `GAXOutput_render` | sure | C | channels before/after reverb, FX, reverb call |
+| 08319518 | `GAXOutput_open` | sure | C | |
+| 08319520 | `GAXOutput_stream` | sure | C | clear, render, then the ARM render routine |
+| 08319584 | `GAXTracker_open` | sure | C | tracker.o signature |
+| 083195E8 | `GAXTracker_render` | sure | C | step/perflist/frame/generate |
+| 0831967C | `GAXTracker_process_step` | sure | C | pattern data decoder and effects 1/2/3/7/A/B/C/D/F, EDx delay |
+| 083198B4 | `GAXTracker_process_perflist` | sure | C | perf list (instrument macro) commands 1/2/5/6/A/B/C/F |
+| 08319A20 | `GAXTracker_process_envelope` | sure | C | volume envelope with sustain and loop |
+| 08319AE4 | `GAXTracker_process_frame` | sure | C | envelope, vibrato, modulation, slides, tone portamento |
+| 08319C60 | `GAXTracker_generate_audio` | sure | nm | pitch → frequency, volume, calls the ARM resampler |
+| 08319F30 | `GAXFx_open` | sure | C | |
+| 08319F88 | `GAXFx_render` | sure | nm | FX trigger + same per-frame path as tracker channels |
 
-**ARM blocks** that `GAX_code2ram` copies into RAM are referenced as start/end pairs from
-`GAX2_init` and `GAX2_estimate`: `0831A100`, `0831A220`, `0831A2EC` (output_asm.o: render, reverb and
-lowpass, order still to be confirmed), `0831A3E8` (tracker_asm), `0831A3FC` (pingpong), and an
-extra block `0831A470-0831A528`.
+**ARM routines** (hand-written, kept as asm). `GAX2_init` copies them into the work memory with
+`GAX_code2ram`; `GAX2_calc_mem` sizes them from the same start/end pairs:
 
-Not present in 3.01, compared with 3.05A: `GAX_backup_fx`, `GAX_restore_fx` (no "GAX_RESTORE_FX" string)
-and the speech decoder.
+| Address | Name | RAM copy |
+|---|---|---|
+| 0831A100-0831A220 | `GAXOutput_render_asm` | `GAX_ram+0x68`, called by `GAXOutput_stream` |
+| 0831A220-0831A2EC | `GAXOutput_lowpass_asm` | `+0x70`, only with `GAX_LOWPASS_FILTER` |
+| 0831A2EC-0831A3E8 | `GAXOutput_reverb_asm` | `+0x6C`, only when the song has reverb |
+| 0831A3E8-0831A3FC | `GAX_umulhi` | not copied; called in place (`umull`, returns the high word) |
+| 0831A3FC-0831A470 | `GAXTracker_asm` | `+0x60`; `GAX2_init_volboost` patches it at +0x54/+0xD0 |
+| 0831A470-0831A528 | `GAXTracker_pingpong_asm` | `+0x64` |
 
 ## How the game uses GAX
 
@@ -119,17 +192,31 @@ and the speech decoder.
   `GAX_set_music_volume`/`GAX_set_fx_volume`, `GAX_fx_status`, `GAX_stop`.
 * RAM state: `GAX_ram` pointer lives at IWRAM `03000B0C` (every GAX function loads it).
 
+## Matching notes (things that made functions match)
+
+* `GAX_alloc` (scratch allocator) and `GAX_memclr` (byte + CpuFastSet clear) are **static inline
+  functions** in the original, not macros: the constant sizes stay in a register for the compare
+  (`movs r0,#76; cmp r0,r1`), and the parameters are copied into locals first. Both are in `gax.h`.
+  In `GAX2_init`, though, the three clears share one stack slot, so there it's a block macro with a
+  function-scope zero variable.
+* Table searches are `for (j...) if (...) { i = j; goto found; } i = 12; found:`.
+* Calls through the RAM copies are plain function-pointer casts (`_call_via_r1`). `GAX_umulhi` is called
+  through the constant address `0x0831A3E8`, with a third argument (`is_fx * 4`).
+* `GAX_ASSERT` has inline asm for HuffUnComp that saves r0/r1 into r7/r8 (and clobbers r7 without saving
+  it, as in Crash XS); `p` is a `register ... asm("r0")` variable.
+* `irq_state` is `volatile` (GAX_irq re-reads it).
+* `GAX2_fx`'s defaults need the reference decomp's temporaries; `GAX2_init_volboost` needs chained
+  assignments with `asm_base - (start - label)` offsets.
+
 ## Plan for the GAX part of the decomp
 
-1. Compiler: `GAX_resume` matches with `old_agbcc` **or** `agbcc -fprologue-bugfix` (not plain
-   `agbcc`). The Crash XS project reports the latter for GAX 2.01D and 3.05A. The game code
-   (`0800068C`) matches **only** with `old_agbcc`, so `old_agbcc` stays the default. Switch a GAX file
-   to `agbcc -fprologue-bugfix` (splits.txt flavour `bugfix`) only if a GAX function turns up that needs it.
-   Done: `GAX_pause`, `GAX_resume`, `GAX_pause_music`, `GAX_resume_music`, `GAX_stop` are in `src/`.
-2. Keep the GAX ARM blocks (`output_asm`, `tracker_asm`) as asm. They are hand-written ARM in the
-   original library too.
+1. Match the last 5 functions (permuter, or more source-shape guessing; the `nonmatching.c` versions are
+   the starting point). Then merge the per-range files into one file per original object
+   (`gax.c`, `sync.c`, `output.c`, `tracker.c`).
+2. Move the GAX rodata (strings, `GAX_table`, `GAX_freqtable`, `GAX_vibtable`, font) out of
+   `asm/rodata.s` into C. The names are already in `symbols.txt`.
 3. Port matched 3.01 functions back to the 3.05A decomp project as documentation of the older revision.
 4. For the PC port, GAX is replaced: either (a) compile the decompiled GAX C for the host plus a C
-   rewrite of the ARM mixer, or (b) feed the song/FX data to a host replayer such as
-   `shinen-gax-python`'s `gax_replayer.py` logic ported to C. (a) is accurate by construction; (b) is
-   faster to get running.
+   rewrite of the six ARM routines, or (b) feed the song/FX data to a host replayer such as
+   `shinen-gax-python`'s `gax_replayer.py` logic ported to C. (a) is now realistic: all 43 functions
+   exist in C, and only the ARM routines (about 1 KB) need rewriting.

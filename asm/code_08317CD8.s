@@ -2,7 +2,7 @@
 	.syntax unified
 	.text
 
-@ GAX2_init: [sure] "WHEN USING DIFFERENT FX_MIXING_RATE..." (incl. tail up to 0x083185D0)
+@ GAX2_init: [sure] "WHEN USING DIFFERENT FX_MIXING_RATE..." (2,296 bytes; the far branches to 08318542/083185BC are agbcc long jumps)
 	.thumb
 	.align 1, 0
 	.global sub_08317CD8
