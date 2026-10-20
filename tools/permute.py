@@ -12,7 +12,7 @@ from split import load_funcs, BASE
 addr, cfile = sys.argv[1].upper(), sys.argv[2]
 secs = int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3].isdigit() else 600
 old = "--old" in sys.argv
-d = os.path.join("permuter", addr)
+d = os.path.join("permuter", os.environ.get("PDIR", addr))  # PDIR: run several on one function
 shutil.rmtree(d, ignore_errors=True); os.makedirs(d)
 
 # target.s from ROM bytes: .inst.n per halfword, symbolic bl, and pool words as symbol

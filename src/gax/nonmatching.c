@@ -309,83 +309,81 @@ found3:
 }
 
 /* ---- GAXSync_render (083192C0) ---- */
+/* 6 instructions off: only the order of 'speed_timer = t - 1' vs the zero constant and the
+   'speed = t' copy differ. new_var is a second pointer to the player (see docs/gax.md). */
 
 u32 GAXSync_render(GAX_player *player, u32 timer)
 {
-  u16 new_var;
   GAXSongData *song;
   u16 speed;
   u8 speed_timer;
-  GAX_player *new_var2;
+  GAX_player *new_var;
   u8 speed_lo;
   if ((player->timer_backup != timer) && player->is_playing)
   {
     speed_lo = player->speed_buf;
     speed = player->speed_buf;
-    speed_timer = player->speed_timer;
-    if ((speed_lo != 0) && ((player->songend = 0, ((s32) (speed_timer << 24)) <= 0)))
+    new_var = player;
+    speed_timer = new_var->speed_timer;
+    if ((speed_lo != 0) && ((new_var->songend = 0, ((s32) (speed_timer << 24)) <= 0)))
     {
-      if (player->skip_pattern)
+      if (new_var->skip_pattern)
       {
-        player->skip_pattern = 0;
-        player->step = player->song->num_steps_per_pattern;
-        song = player->song;
+        new_var->skip_pattern = 0;
+        new_var->step = new_var->song->num_steps_per_pattern;
+        song = new_var->song;
       }
       else
       {
-        player->step++;
-        song = player->song;
+        new_var->step++;
+        song = new_var->song;
       }
+      if ((new_var->speed_buf >> 8) != 0)
       {
-        u16 sb = player->speed_buf;
-        if ((sb >> 8) != 0)
-          player->speed_buf = (sb >> 8) | ((sb & 0xFF) << 8);
+        new_var->speed_buf = (new_var->speed_buf >> 8) | ((new_var->speed_buf & 0xFF) << 8);
       }
-      speed = (new_var = player->speed_buf);
-      player->speed_timer = speed - 1;
-      if (player->step >= song->num_steps_per_pattern)
+      { u16 t = new_var->speed_buf; new_var->speed_timer = t; new_var->speed_timer--; speed = t; }
+      if (new_var->step >= song->num_steps_per_pattern)
       {
-        player->step = 0;
-        player->new_step_idx = 0;
-        player->pattern_finished = 1;
-        new_var2 = player;
-        player->pattern++;
-        if (((s16) player->pattern) >= song->num_patterns_per_channel)
+        new_var->step = 0;
+        new_var->new_step_idx = 0;
+        new_var->pattern_finished = 1;
+        new_var->pattern++;
+        if (((s16) new_var->pattern) >= song->num_patterns_per_channel)
         {
-          if (player->stop_on_songend)
+          if (new_var->stop_on_songend)
           {
-            player->is_playing = 0;
-            player->speed_buf = 0;
+            new_var->is_playing = 0;
+            new_var->speed_buf = 0;
           }
-          new_var2->songend = 1;
-          player->pattern = song->loop_point;
-          speed = player->speed_buf;
+          new_var->songend = 1;
+          new_var->pattern = song->loop_point;
+          speed = new_var->speed_buf;
         }
       }
       else
       {
-        player->pattern_finished = 0;
+        new_var->pattern_finished = 0;
       }
-      player->step_finished = 1;
+      new_var->step_finished = 1;
     }
     else
     {
-      player->speed_timer = speed_timer - 1;
-      player->step_finished = 0;
+      new_var->speed_timer = speed_timer - 1;
+      new_var->step_finished = 0;
     }
-    new_var = speed;
-    if ((new_var & 0xFF) == 0)
+    if ((speed & 0xFF) == 0)
     {
-      player->songend = 1;
+      new_var->songend = 1;
     }
-    player->timer_backup = timer;
-    if (player->first_timer == 0)
+    new_var->timer_backup = timer;
+    if (new_var->first_timer == 0)
     {
-      player->first_timer = timer;
+      new_var->first_timer = timer;
     }
-    if (player->unknown_delay)
+    if (new_var->unknown_delay)
     {
-      player->unknown_delay--;
+      new_var->unknown_delay--;
     }
   }
   return 0;

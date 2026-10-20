@@ -43,7 +43,8 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 | `fx_08319F30.c` | 08319F30-08319F88 | `GAXFx_open` |
 | `nonmatching.c` | (not linked) | the 5 functions below, as equivalent C (`make nonmatching` compiles it) |
 
-* **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
+* **Still asm** (C written, not yet matching; register allocation / stack layout differences only;
+  `GAXSync_render` is 6 instructions off):
   `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes), `GAXSync_render` (083192C0),
   `GAXTracker_generate_audio` (08319C60), `GAXFx_render` (08319F88). The decomp-permuter setup works
   (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`); see "Matching notes".
@@ -205,6 +206,10 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, 
 * `GAX_ASSERT` has inline asm for HuffUnComp that saves r0/r1 into r7/r8 (and clobbers r7 without saving
   it, as in Crash XS); `p` is a `register ... asm("r0")` variable.
 * `irq_state` is `volatile` (GAX_irq re-reads it).
+* `GAXSync_render` gets within 6 instructions once most of the body goes through a *second pointer* to
+  the player (`new_var = player` after the first two loads): CSE then treats the early and late reads
+  of `speed_buf` as different, which is what the ROM shows. Worth trying on `GAXFx_render` too, where
+  the ROM re-reads `fxfreq` after the `unknown_delay` check.
 * `GAX2_fx`'s defaults need the reference decomp's temporaries; `GAX2_init_volboost` needs chained
   assignments with `asm_base - (start - label)` offsets.
 
