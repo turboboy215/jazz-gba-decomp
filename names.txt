@@ -243,3 +243,11 @@
 08004A8C Text_Atoi                        # [sure] decimal string to int (via the reversed digits)
 08004AC8 Text_IsTag                       # [sure] "{" followed by a known tag (08004B14)
 08004AE4 Text_SkipTag                     # [sure] advances *ps past the closing '}'
+080003FC Sprite_SetBank                   # [sure] bank + rewind to anim 0
+080005D4 Sprite_FreeObjs                  # [sure] destroys all 12 layer objects
+08004B68 HexDigitValue                    # [sure]
+08004BA4 Glyph_IsShared                   # [likely] the cell's tile is owned by the glyph cache (0x02002000/0x02002800)
+08004E48 simple_strtoul                   # [sure] Linux lib/vsprintf.c
+08004ED0 simple_strtol                    # [sure] Linux lib/vsprintf.c
+08004EEC skip_atoi                        # [sure] Linux lib/vsprintf.c
+08004F18 strnlen                          # [sure] written as min(strlen(s), count)

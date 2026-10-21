@@ -81,5 +81,7 @@ void sub_0800078C(struct Sprite *s, int v); /* Sprite_SetFlag1 */
 u16 sub_08000790(struct Sprite *s); /* Sprite_GetAnimIndex */
 u16 sub_08000794(struct Sprite *s); /* Sprite_GetFrame */
 u32 sub_08000798(struct Sprite *s); /* Sprite_GetTick */
+void sub_080003FC(struct Sprite *s, struct AnimBank *bank); /* Sprite_SetBank */
+void sub_080005D4(struct Sprite *s); /* Sprite_FreeObjs */
 
 #endif
