@@ -15,3 +15,4 @@
 - BIOS SWI stubs `0831A528-0831A554`, ld veneers `0831AE38-0831AEB4`, libgcc
 - `asm/orphan_*.s`: orphaned dead code (excluded from progress)
 - 2026-10-20: GAX 3.01: 38/43 functions matching in src/gax/ (agbcc -fprologue-bugfix); 5 in src/gax/nonmatching.c. code decompiled to C: 7192 / 228980 bytes (3.14%); rate 63 b
+- 2026-10-21: region A: 132/193 functions matching (docs/region_a.md); 19 in src/nonmatching/region_a.c. code decompiled to C: 11796 / 228980 bytes (5.15%); rate 83 bytes/hour; ETA 2027-02-07 06:25
