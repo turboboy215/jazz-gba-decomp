@@ -218,3 +218,14 @@
 08003F94 VramMap_Clear                    # [sure] DMA3 32-bit fill of the 1 KiB OBJ VRAM map
 0800404C Vram_UploadTiles                 # [sure] CpuFastSet of w*h tiles (x2 for 8bpp) to OBJ tile `tile`
 08004080 VramMap_Free                     # [sure] clears the block starting at tile and its 0xFF continuation bytes
+080043B4 Obj_UpdateAll                    # [sure] Obj_Update on every used slot, then OAM flush
+08004508 Obj_Destroy                      # [sure] frees OAM entry, VRAM block and slot; *pp = NULL
+08004534 Obj_SetGfx                       # [sure] new size/depth -> sizeDirty, new pointer -> gfxDirty
+0800456C Obj_SetPalette                   # [sure]
+08004578 Obj_SetFlip                      # [sure]
+08004584 Obj_SetPos                       # [sure] also re-sorts the OAM entry by z (08003DEC)
+080045A4 Obj_Move                         # [sure]
+080045C4 Obj_Show                         # [sure]
+080045CC Obj_Hide                         # [sure]
+080045D4 Obj_AllocSlot                    # [sure]
+08004654 Obj_ShapeSizeBits                # [sure] OAM shape (attr0 bits 14-15) | size (attr1 bits 14-15 << 16) for w x h tiles

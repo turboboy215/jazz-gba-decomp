@@ -62,6 +62,12 @@ SECTIONS
         build/asm/code_08003FBC.o(.text .rodata .data);
         build/src/code_0800404C.o(.text .rodata .data);
         build/asm/code_080040C8.o(.text .rodata .data);
+        build/src/code_080043B4.o(.text .rodata .data);
+        build/asm/code_08004408.o(.text .rodata .data);
+        build/src/code_08004508.o(.text .rodata .data);
+        build/asm/code_080045FC.o(.text .rodata .data);
+        build/src/code_08004654.o(.text .rodata .data);
+        build/asm/code_080046DC.o(.text .rodata .data);
         build/asm/orphan_08005710.o(.text .rodata .data);
         build/asm/orphan_08010000.o(.text .rodata .data);
         build/data/data_08012974.o(.text .rodata .data);
