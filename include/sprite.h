@@ -82,12 +82,4 @@ u16 sub_08000790(struct Sprite *s); /* Sprite_GetAnimIndex */
 u16 sub_08000794(struct Sprite *s); /* Sprite_GetFrame */
 u32 sub_08000798(struct Sprite *s); /* Sprite_GetTick */
 
-/* level map (IWRAM 0x0300398C) */
-extern u8 gUnk_0300398C[];
-int sub_0831AEA8(void *map, u32 tx, u32 ty); /* IWRAM veneer: map tile lookup */
-u16 sub_08000850(u32 x, u32 y); /* Map_GetTileAt (pixel coordinates) */
-u32 sub_08000870(u32 x, u32 y);
-u32 sub_08000884(u32 x, u32 y);
-u8 sub_08000898(u32 x, int y);
-
 #endif

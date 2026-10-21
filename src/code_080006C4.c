@@ -1,5 +1,6 @@
 #include "global.h"
 #include "sprite.h"
+#include "map.h"
 
 u8 sub_080006C4(struct Sprite *s) /* Sprite_Tick: advance; FALSE once past the loop end */
 {
@@ -96,11 +97,8 @@ u32 sub_08000838(struct Sprite *s)
     return s->loopStart;
 }
 
-extern u8 gUnk_0300398C[];
-int sub_0831AEA8(void *map, u32 tx, u32 ty);
-u16 sub_08000850(u32 x, u32 y) { return sub_0831AEA8(gUnk_0300398C, x >> 3, y >> 3); }
+u16 sub_08000850(u32 x, u32 y) { return sub_0831AEA8(&gUnk_0300398C, x >> 3, y >> 3); }
 
-u16 sub_08000850(u32 x, u32 y);
-u32 sub_08000870(u32 x, u32 y) { return (sub_08000850(x, y) & 0x70) >> 4; }
+u16 sub_08000870(u32 x, u32 y) { return (sub_08000850(x, y) & 0x70) >> 4; }
 
-u32 sub_08000884(u32 x, u32 y) { return (sub_08000850(x, y) & 0x380) >> 7; }
+u16 sub_08000884(u32 x, u32 y) { return (sub_08000850(x, y) & 0x380) >> 7; }

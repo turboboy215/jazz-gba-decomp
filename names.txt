@@ -155,3 +155,9 @@
 08000850 Map_GetTile                      # [likely] region A sprite library: from field usage
 08000870 Map_GetTileBits4                 # [likely] region A sprite library: from field usage
 08000884 Map_GetTileBits7                 # [likely] region A sprite library: from field usage
+080008F0 Sign                             # [sure] returns -1 for negative, else 1
+08000978 Coll_IsSlope                     # [sure] collision types 1-8 are slopes
+08000B58 Distance                         # [sure] Sqrt(dx*dx + dy*dy) in pixels
+08000B80 InRadius                         # [sure] squared pixel distance <= r*r
+08000BB4 InBox                            # [sure] |x2-x1| <= r && |y2-y1| <= r
+08000BDC PointInRect                      # [sure] strict l < x < r, t < y < b
