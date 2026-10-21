@@ -229,3 +229,17 @@
 080045CC Obj_Hide                         # [sure]
 080045D4 Obj_AllocSlot                    # [sure]
 08004654 Obj_ShapeSizeBits                # [sure] OAM shape (attr0 bits 14-15) | size (attr1 bits 14-15 << 16) for w x h tiles
+0800481C Obj_Reset                        # [sure] clears an object slot (oam 0xFF, tile 0xFFFF)
+08004848 Text_Init                        # [likely] font, BG screenblock, buffer 0x030022F0
+08004868 Text_SetFont                     # [likely]
+08004874 Text_SetBg                       # [likely]
+08004880 Text_SetPalette                  # [likely]
+08004914 Text_Print                       # [sure] prints s at tile (x, y), skipping {tags}; clipped to 32x32
+08004968 Text_Printf                      # [sure] vsprintf (08005100) into the text buffer, then Text_Print
+08004994 Text_ClearChar                   # [likely]
+080049D4 Text_ClearRect                   # [sure] inclusive rectangle
+08004A1C Text_ClearAll                    # [sure]
+08004A40 Text_StrLen                      # [sure]
+08004A8C Text_Atoi                        # [sure] decimal string to int (via the reversed digits)
+08004AC8 Text_IsTag                       # [sure] "{" followed by a known tag (08004B14)
+08004AE4 Text_SkipTag                     # [sure] advances *ps past the closing '}'
