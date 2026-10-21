@@ -125,3 +125,33 @@
 08001FD8 ClearIntrHandler                # [sure] IntrTable[idx] = DummyIntrHandler
 08001FEC DummyIntrHandler                # [sure] bx lr
 08001FF0 DefaultVBlankHandler            # [likely] writes 1 to 0x03007FF8 (BIOS IntrCheck)
+08000604 Sprite_Show                      # [likely] region A sprite library: from field usage
+0800060C Sprite_Hide                      # [likely] region A sprite library: from field usage
+08000614 Sprite_GetCelGfx                 # [likely] region A sprite library: from field usage
+0800062C Sprite_GetCel                    # [likely] region A sprite library: from field usage
+08000644 Sprite_GetAnim                   # [likely] region A sprite library: from field usage
+08000654 Sprite_ResetTick                 # [likely] region A sprite library: from field usage
+0800065C Sprite_SetFrame                  # [likely] region A sprite library: from field usage
+08000680 Sprite_SetAnimIndex              # [likely] region A sprite library: from field usage
+08000684 Sprite_SetPos                    # [likely] region A sprite library: from field usage
+080006AC Sprite_Rewind                    # [likely] region A sprite library: from field usage
+08000704 Sprite_Animate                   # [likely] region A sprite library: from field usage
+08000724 Sprite_GetLastFrame              # [likely] region A sprite library: from field usage
+08000730 Sprite_SetDelay                  # [likely] region A sprite library: from field usage
+08000734 Sprite_SetLoopEnd                # [likely] region A sprite library: from field usage
+08000738 Sprite_SetLoopStart              # [likely] region A sprite library: from field usage
+0800073C Sprite_SetLayerPalette           # [likely] region A sprite library: from field usage
+0800075C Sprite_SetPalette                # [likely] region A sprite library: from field usage
+0800078C Sprite_SetFlag1                  # [likely] region A sprite library: from field usage
+08000790 Sprite_GetAnimIndex              # [likely] region A sprite library: from field usage
+08000794 Sprite_GetFrame                  # [likely] region A sprite library: from field usage
+08000798 Sprite_GetTick                   # [likely] region A sprite library: from field usage
+0800079C Anim_Get                         # [likely] region A sprite library: from field usage
+080007AC Anim_GetCel                      # [likely] region A sprite library: from field usage
+080007CC Anim_GetCelGfx                   # [likely] region A sprite library: from field usage
+080007F0 Sprite_GetFrameDelay             # [likely] region A sprite library: from field usage
+08000814 Sprite_GetLoopEnd                # [likely] region A sprite library: from field usage
+08000838 Sprite_GetLoopStart              # [likely] region A sprite library: from field usage
+08000850 Map_GetTile                      # [likely] region A sprite library: from field usage
+08000870 Map_GetTileBits4                 # [likely] region A sprite library: from field usage
+08000884 Map_GetTileBits7                 # [likely] region A sprite library: from field usage

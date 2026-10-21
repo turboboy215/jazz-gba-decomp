@@ -7,10 +7,10 @@ SECTIONS
         build/asm/header.o(.text .rodata .data);
         build/asm/crt0.o(.text .rodata .data);
         build/asm/code_08000000.o(.text .rodata .data);
+        build/src/code_08000604.o(.text .rodata .data);
         build/src/code_0800068C.o(.text .rodata .data);
-        build/asm/code_080006AC.o(.text .rodata .data);
         build/src/code_080006C4.o(.text .rodata .data);
-        build/asm/code_08000704.o(.text .rodata .data);
+        build/asm/code_08000898.o(.text .rodata .data);
         build/asm/orphan_08005710.o(.text .rodata .data);
         build/asm/orphan_08010000.o(.text .rodata .data);
         build/data/data_08012974.o(.text .rodata .data);
