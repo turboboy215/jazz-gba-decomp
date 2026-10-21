@@ -71,7 +71,8 @@ uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. List of files that use it: `src/c
 
 1. **GAX library first**: about 40 functions with a reference decomp, and four are already matched. That
    validates the GAX struct layout, which the PC port needs early.
-2. **Region A live library** (`080002E0-08005710`, ~180 functions): small, heavily used accessors.
+2. **Region A live library** (`080002E0-08005710`, 193 functions, 132 matched so far, see
+   `docs/region_a.md`): small, heavily used accessors.
    Naming them makes every caller in region B readable.
 3. **Region B game code** in address order through the claim queue. `AgbMain` (`08312BF8`) never returns:
    it initialises, then calls `0830AAA8`, which looks like the scene/main loop. Start the naming pass there.
@@ -93,10 +94,16 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 - GAX work RAM pointer: `gGAXRam_03000B0C` (`include/gax.h`).
 - Interrupt table: `IntrTable` at `0300585C`, `SetIntrHandler` = `08001FC8`.
 - Region A functions are tiny accessors on a few struct types (sprite/animation objects).
-  Prototypes take `int` for narrow arguments.
+  Prototypes take `int` for narrow arguments. Struct layouts and globals: `docs/region_a.md`
+  and `include/*.h`. For many small functions at once use `tools/batch_check.py`.
 
 ## Log
 
+- 2026-10-21: region A pass: 132/193 functions matching (sprite/anim accessors, map collision,
+  resource bank, flags/brightness, interrupts/keys, link helpers, OAM + OBJ VRAM manager,
+  hardware objects, BG text, Linux vsprintf helpers), 19 near misses in
+  `src/nonmatching/region_a.c`, all of region A named, 12 hidden function starts. New
+  `docs/region_a.md`, `tools/batch_check.py`, `tools/variants.py`.
 - 2026-10-17: song/level tables (`docs/songs.md`, `tools/gax_songs.py`), cleaned `strings.tsv`
   (game text only, junk filtered, song titles moved out), 8bpp tileset header format, GAX manual
   version history and `GAXParams` offsets, Crash XS (GAX 2.01D) referenced, PS1 port notes,

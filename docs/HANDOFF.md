@@ -67,27 +67,35 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-20):** GAX 3.01 is 38/43 functions in byte-matching C (`src/gax/`, built with
-`agbcc -fprologue-bugfix`); the other 5 are written as equivalent C in `src/gax/nonmatching.c` (not
-linked; `make nonmatching` compiles it) while the ROM keeps their asm. 3.14% of live code is in C.
-`make compare` passes. Details, 3.01-vs-3.05A findings and matching notes: `docs/gax.md`.
+**State (2026-10-21):** 5.15% of live code is in C; `make compare` passes.
+* GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
+  The other 5 are in `src/gax/nonmatching.c`. Details: `docs/gax.md`.
+* Region A: 132/193 functions in byte-matching C, 19 near misses in `src/nonmatching/region_a.c`,
+  and every function is named. Subsystems, globals, blockers and matching notes:
+  `docs/region_a.md`. Headers `include/{sprite,map,actor,resbank,system,link,oam,obj,text}.h`.
 
 Next, in order:
-1. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render` 083192C0,
-   `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88. Start from `nonmatching.c`; the diffs are
-   register allocation and (generate_audio) a 44-byte frame with `step` and `is_fx*4` spilled.
-   Permuter: `OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS` (needs
-   `tools/decomp-permuter` clone + `tools/permuter-venv` with pycparser/toml/Levenshtein; both gitignored).
-   After that, merge the per-range files into `gax.c`/`sync.c`/`output.c`/`tracker.c` and move GAX rodata
-   to C (names in `symbols.txt`).
-2. **Region A live library** (`080002E0-08005710`): small accessors. Name them as you go.
-3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay.
-4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
-5. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
+1. **Region A, the rest**: the near misses in `src/nonmatching/region_a.c`, then the big ones
+   (`080002E0` Sprite_Init, `08000408` Sprite_Draw, actor collision `08000C00-0800104C`,
+   `Bg_*` at `08001404/08001720`, the link session code, the second SIO driver
+   `08003790-0800436C`, `Oam_SetPosSorted` `08003DEC`, `Glyph_*`). Workflow: write a scratch file
+   of `//@ ADDR Name # evidence` sections, then `tools/batch_check.py work.c` and
+   `tools/batch_check.py --integrate work.c`. Use `tools/variants.py` to try alternatives.
+2. **Rodata split** so `switch` jump tables can live in C: unblocks `08000AF8`, `08001C88`,
+   `08001D0C`, vsprintf `08005100`, plus the GAX rodata move.
+3. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
+   083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
+   `src/gax/nonmatching.c`; register allocation, plus a 44-byte frame in generate_audio).
+4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
+   lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`.
+5. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
+6. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
 
-**Tooling notes from this session:** GAX C files use the splits.txt 5th column `bugfix` (now sets
-`CC1 := agbcc` too). Library names the compiler emits (`_call_via_rN`) are in `lib/aliases.s`. Data
-symbols with readable names go in `symbols.txt` (`name 0xADDR`); unnamed ones use `name_XXXXXXXX`.
+**Tooling notes:** `tools/integrate_one.sh` commit trailers point at the session that last edited
+it, so update them. decomp-permuter (`tools/permute.py ... --old` for region A) is too slow on
+the 2-core container for these functions. `src/` region A files are still split per integration
+run (`code_<addr>.c`); merge them into subsystem files (sprite.c, oam.c, ...) when a range is
+fully in C.
 
 ## 5. Conventions
 
