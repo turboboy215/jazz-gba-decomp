@@ -3804,7 +3804,7 @@ sub_08311C50:
 	bl sub_08318CA4
 	ldr r1, [pc, #52]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	pop {r3, r4}
 	mov r8, r3
 	mov r9, r4
@@ -5414,7 +5414,7 @@ sub_08312BF8:
 	bl sub_083191AC
 	ldr r1, [pc, #64]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	bl sub_08312730
 	bl sub_08312864
 	bl sub_0830A638
@@ -13177,7 +13177,7 @@ sub_08316824:
 	push {lr}
 	ldr r1, [pc, #16]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	bl sub_08319214
 	pop {r0}
 	bx r0

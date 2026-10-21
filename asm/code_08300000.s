@@ -4129,7 +4129,7 @@ sub_08302170:
 	bl GAX2_init
 	ldr r1, [pc, #108]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	bl sub_08004D70
 	bl sub_08001A6C
 	bl sub_0800436C
@@ -8135,7 +8135,7 @@ sub_083043E4:
 	bl sub_083191AC
 	ldr r1, [pc, #40]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -8967,7 +8967,7 @@ sub_08304AAC:
 	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r4, #0
 	ldr r5, [pc, #32]
 	b .L08304B42
@@ -9744,7 +9744,7 @@ sub_08305110:
 	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r4, #0
 	ldr r5, [pc, #32]
 	b .L083051A6
@@ -11355,7 +11355,7 @@ sub_08305E54:
 	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r4, #0
 	ldr r5, [pc, #32]
 	b .L08305EEA
@@ -12348,7 +12348,7 @@ sub_08306670:
 	bl sub_083191AC
 	ldr r1, [pc, #40]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r4, #0
 	ldr r5, [pc, #36]
 	b .L08306702
@@ -12695,7 +12695,7 @@ sub_0830693C:
 	bl sub_083191AC
 	ldr r1, [pc, #36]
 	movs r0, #0
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r4, #0
 	ldr r5, [pc, #32]
 	b .L083069D2
@@ -16488,7 +16488,7 @@ sub_08308630:
 	strh r0, [r1, #0]
 	ldr r1, [pc, #32]
 	movs r0, #1
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r0, #1
 	bl sub_08001FA0
 	ldr r2, [pc, #24]
@@ -17024,7 +17024,7 @@ sub_08308A84:
 	adds r4, r0, #0
 	ldr r1, [pc, #32]
 	movs r0, #1
-	bl SetIntrHandler
+	bl sub_08001FC8
 	movs r0, #1
 	bl sub_08001FA0
 	ldr r2, [pc, #24]

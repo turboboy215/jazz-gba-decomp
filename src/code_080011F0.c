@@ -3,6 +3,7 @@
 #include "map.h"
 #include "actor.h"
 #include "resbank.h"
+#include "system.h"
 void CpuFastSet(const void *src, void *dst, u32 ctrl);
 u8 sub_080011F0(struct Actor *a, struct Actor **hit)
 {
@@ -48,7 +49,7 @@ void sub_080012C0(struct ResBank *b, int i)
 {
     struct ResHeader *d = b->data;
     u32 *t = (u32 *)((u8 *)d + d->tbl4);
-    sub_08001EBC((u8 *)d + t[i + 1], (void *)0x05000000, 0, 256);
+    sub_08001EBC((const u16 *)((u8 *)d + t[i + 1]), (u16 *)0x05000000, 0, 256);
 }
 
 void *sub_080012E4(struct ResBank *b, int i) {

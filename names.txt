@@ -188,3 +188,8 @@
 08001E4C Brightness_Sub                   # [likely] gBrightness_03005859 -= d, min 0
 08001E60 Brightness_Set                   # [likely]
 08001E70 Palette_SetFaded                 # [likely] pal[idx] = color with each component mapped through gBrightnessTable[brightness]
+08001F34 InitInterrupts                   # [sure] DMA3-copies the IWRAM IRQ dispatcher, sets the vector, VBlank handler, IE=VBlank|GamePak
+08001FA0 EnableIrq                        # [sure] REG_IE |= 1 << irq
+08001FB4 DisableIrq                       # [sure]
+08002058 ResetKeyMapping                  # [likely] identity key mapping
+08002094 ReadKeys                         # [sure] held/newly pressed keys; A+B+Select+Start soft-resets

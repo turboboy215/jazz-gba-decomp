@@ -56,7 +56,7 @@ void *sub_08001BA0(struct ResBank *b);
 u32 sub_08001BCC(struct ResBank *b, u32 x, u32 y);
 u8 sub_08001BAC(struct ResBank *b, u32 x, u32 y);
 u16 sub_08001BBC(struct ResBank *b, u32 x, u32 y);
-void sub_08001EBC(void *src, void *dst, int ofs, int count);
+
 
 /* global flags byte at 0x03005858 and screen brightness 0..7 at 0x03005859 */
 extern u8 gUnk_03005858;
