@@ -161,3 +161,30 @@
 08000B80 InRadius                         # [sure] squared pixel distance <= r*r
 08000BB4 InBox                            # [sure] |x2-x1| <= r && |y2-y1| <= r
 08000BDC PointInRect                      # [sure] strict l < x < r, t < y < b
+080008BC Map_GetCollision                 # [likely] tile & 15; tiles on a layer (bits 4-6) count only while flag bit <layer> is set
+080011F0 Actor_FindHit                    # [likely] first active actor overlapping a (08000D04)
+08001238 Actor_FindHit2                   # [likely] same with 0800104C
+08001280 ResBank_Init                     # [likely] region A sprite library: from field usage
+080012C0 ResBank_LoadPalette              # [likely] copies palette i to 0x05000000 (256 colours)
+080012E4 ResBank_GetPalette               # [likely] region A sprite library: from field usage
+080012F4 ResBank_SetSlotPtr               # [likely] region A sprite library: from field usage
+08001A30 ResBank_GetTbl16                 # [likely] region A sprite library: from field usage
+08001A40 ResBank_GetSlot                  # [likely] region A sprite library: from field usage
+08001A6C ClearVram                        # [sure] CpuFastSet fill of 0x06000000, 0x10000 bytes
+08001B40 ResBank_GetTbl20                 # [likely] region A sprite library: from field usage
+08001B50 ResBank_GetTbl20Entry            # [likely] region A sprite library: from field usage
+08001B6C ResBank_GetTbl24                 # [likely] region A sprite library: from field usage
+08001B7C ResBank_CountTbl24               # [likely] region A sprite library: from field usage
+08001B88 ResBank_CountTbl12               # [likely] region A sprite library: from field usage
+08001B94 ResBank_GetTbl8                  # [likely] region A sprite library: from field usage
+08001BA0 ResBank_GetTbl28                 # [likely] region A sprite library: from field usage
+08001BAC ResBank_GetCellU8                # [likely] region A sprite library: from field usage
+08001BBC ResBank_GetCellU16               # [likely] region A sprite library: from field usage
+08001DBC SetFlags                         # [sure] gFlags_03005858 = v
+08001DC8 SetFlag                          # [sure] sets bit <bit> of gFlags_03005858 to v, returns it
+08001DF4 ToggleFlag                       # [sure]
+08001E18 GetFlag                          # [sure]
+08001E30 Brightness_Add                   # [likely] gBrightness_03005859 += d, max 7
+08001E4C Brightness_Sub                   # [likely] gBrightness_03005859 -= d, min 0
+08001E60 Brightness_Set                   # [likely]
+08001E70 Palette_SetFaded                 # [likely] pal[idx] = color with each component mapped through gBrightnessTable[brightness]

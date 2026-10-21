@@ -35,7 +35,7 @@ u8 sub_08000898(u32 x, int y);
 u16 sub_080008BC(int x, int y);
 int sub_080008F0(int v);
 u8 sub_08000978(u16 coll);
-u8 sub_08001E18(void);
+u8 sub_08001E18(int bit);
 int sub_0831A548(int v); /* Sqrt (BIOS) */
 
 #endif

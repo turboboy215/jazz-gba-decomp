@@ -5,3 +5,15 @@
 0831A3E8 arm  # GAX tracker_asm.o
 0831A3FC arm  # GAX tracker_asm.o (pingpong)
 08318FE8
+08001A40  # region A: hidden in 08001A30's tail (only reached through pointers / not found by Ghidra)
+08001B88  # region A
+08001C88  # region A: char -> glyph index (jump table)
+08001D0C  # region A: char -> glyph index, second font
+08001E30  # region A
+08001E4C  # region A
+08001FEC  # region A: DummyIntrHandler
+08001FF0  # region A: DefaultVBlankHandler
+08003158  # region A
+08004868  # region A
+08004874  # region A
+08004B68  # region A: hex digit -> value
