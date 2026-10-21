@@ -22,7 +22,7 @@ sub_083100D4:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r4, #0
 	bl sub_080005D4
 .L08310100:
@@ -602,7 +602,7 @@ sub_08310154:
 	adds r1, r5, #0
 	movs r2, #0
 	movs r3, #224
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r1, [pc, #144]
 	ldr r0, [pc, #148]
 	ldr r2, [r0, #0]
@@ -616,17 +616,17 @@ sub_08310154:
 	lsls r3, r3, #1
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #128]
 	adds r1, r5, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #120]
 	adds r1, r5, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #112]
 	movs r1, #224
 	lsls r1, r1, #1
@@ -1185,7 +1185,7 @@ sub_08310154:
 	bl sub_08000684
 .L083109F4:
 	ldr r0, [pc, #124]
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	ldr r1, [pc, #120]
 	movs r0, #15
@@ -1232,7 +1232,7 @@ sub_08310154:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	movs r0, #1
 	add sp, #148
 	pop {r3, r4}
@@ -1422,7 +1422,7 @@ sub_08310A8C:
 	mov r0, r9
 .L08310BD0:
 	movs r2, #24
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1450,7 +1450,7 @@ sub_08310A8C:
 	ldr r5, [pc, #100]
 	adds r1, r5, #0
 	movs r2, #24
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1473,7 +1473,7 @@ sub_08310A8C:
 	subs r0, r1, r0
 	adds r1, r5, #0
 	movs r2, #24
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1507,7 +1507,7 @@ sub_08310A8C:
 	movs r0, #0
 	ldr r1, [pc, #92]
 	movs r2, #49
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1535,7 +1535,7 @@ sub_08310A8C:
 	subs r0, r0, r1
 	ldr r1, [pc, #28]
 	movs r2, #49
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1553,7 +1553,7 @@ sub_08310A8C:
 	ldr r1, [pc, #60]
 	movs r0, #1
 	movs r2, #49
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1835,7 +1835,7 @@ sub_08310A8C:
 	adds r0, r7, #0
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1849,7 +1849,7 @@ sub_08310A8C:
 	movs r0, #12
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1894,7 +1894,7 @@ sub_08310A8C:
 	ldr r5, [pc, #260]
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1915,7 +1915,7 @@ sub_08310A8C:
 	subs r0, r7, r0
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -1992,7 +1992,7 @@ sub_08310A8C:
 	movs r0, #12
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 .L0831106C:
 	adds r3, r0, #0
 	lsls r3, r3, #16
@@ -2007,7 +2007,7 @@ sub_08310A8C:
 	movs r0, #12
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2044,7 +2044,7 @@ sub_08310A8C:
 	movs r0, #12
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2074,7 +2074,7 @@ sub_08310A8C:
 	ldr r5, [pc, #148]
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2105,7 +2105,7 @@ sub_08310A8C:
 .L08311156:
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2127,7 +2127,7 @@ sub_08310A8C:
 	adds r1, r5, #0
 	movs r2, #36
 .L08311188:
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2146,7 +2146,7 @@ sub_08310A8C:
 	movs r0, #12
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2160,7 +2160,7 @@ sub_08310A8C:
 	movs r0, #10
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2173,7 +2173,7 @@ sub_08310A8C:
 	movs r0, #11
 	adds r1, r5, #0
 	movs r2, #36
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2239,7 +2239,7 @@ sub_0831125C:
 	ldr r1, [pc, #48]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	cmp r5, #0
 	beq .L08311284
 	adds r1, r5, #2
@@ -2496,7 +2496,7 @@ sub_083112A4:
 	movs r3, #30
 	bl sub_08000684
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	b .L08311490
 	movs r0, r0
 	movs r5, #12
@@ -2513,7 +2513,7 @@ sub_083112A4:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L08311490:
 	adds r5, #100
 	adds r7, #248
@@ -2565,7 +2565,7 @@ sub_083114B0:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r5, #100
 	adds r6, #1
 .L083114F2:
@@ -2594,7 +2594,7 @@ sub_08311500:
 	add r2, sp, #36
 	ldr r1, [pc, #76]
 	add r0, sp, #4
-	bl sub_08005100
+	bl vsprintf
 	movs r5, #0
 	add r4, sp, #4
 .L08311522:
@@ -2608,7 +2608,7 @@ sub_08311500:
 	subs r0, #48
 	ldr r1, [pc, #52]
 	movs r2, #24
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -2651,7 +2651,7 @@ sub_0831156C:
 	bls .L08311582
 	b .L0831184E
 .L08311582:
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r1, [pc, #108]
 	movs r0, #0
@@ -2675,7 +2675,7 @@ sub_0831156C:
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #15
 	bl sub_08004880
 	movs r1, #213
@@ -2686,8 +2686,8 @@ sub_0831156C:
 	ldr r1, [pc, #56]
 	movs r2, #0
 	movs r3, #176
-	bl sub_08001EBC
-	bl sub_0800436C
+	bl Palette_CopyFaded
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	ldrb r6, [r6, #0]
 	cmp r6, #3
@@ -2771,7 +2771,7 @@ sub_0831156C:
 	mov r0, sp
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	mov r0, sp
 	movs r1, #11
 	movs r2, #104
@@ -2780,7 +2780,7 @@ sub_0831156C:
 	mov r0, sp
 	bl sub_08000604
 	mov r0, sp
-	bl sub_08000408
+	bl Sprite_Draw
 	movs r4, #1
 .L0831169E:
 	bl VBlankIntrWait
@@ -2952,7 +2952,7 @@ sub_0831156C:
 	movs r4, #1
 .L08311802:
 	mov r0, sp
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	ldr r0, [pc, #72]
 	ldrh r1, [r0, #0]
@@ -3483,8 +3483,8 @@ sub_08311C50:
 	ldr r0, [pc, #44]
 	str r7, [r0, #0]
 	bl sub_08001F34
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r1, [pc, #28]
 	movs r0, #76
@@ -3635,7 +3635,7 @@ sub_08311C50:
 	ldr r1, [pc, #200]
 	movs r2, #93
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r4, #0
 	adds r0, #93
 	ldrb r1, [r0, #0]
@@ -3663,7 +3663,7 @@ sub_08311C50:
 	movs r3, #128
 	lsls r3, r3, #1
 	movs r2, #0
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #52]
 	asrs r0, r0, #8
@@ -4803,7 +4803,7 @@ sub_083126F0:
 	.thumb_func
 sub_08312730:
 	push {r4, lr}
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r1, [pc, #216]
 	movs r2, #248
@@ -4824,7 +4824,7 @@ sub_08312730:
 	lsls r1, r1, #19
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #15
 	bl sub_08004880
 	ldr r2, [pc, #172]
@@ -4953,7 +4953,7 @@ sub_08312864:
 	mov r0, sp
 	strh r1, [r0, #0]
 	mov r8, r1
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #128]
 	ldr r1, [pc, #128]
@@ -4991,12 +4991,12 @@ sub_08312864:
 	add r2, sp, #4
 	adds r0, r4, #0
 	movs r1, #0
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #0
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r1, [pc, #60]
 	movs r2, #252
 	lsls r2, r2, #5
@@ -5080,7 +5080,7 @@ sub_08312864:
 	bne .L0831297C
 	movs r0, #0
 	mov r8, r0
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #60]
 	ldr r1, [pc, #64]
@@ -5101,7 +5101,7 @@ sub_08312864:
 	movs r1, #0
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	movs r0, #0
 	movs r1, #192
 	movs r2, #20
@@ -5165,7 +5165,7 @@ sub_08312864:
 	bne .L08312A38
 	movs r2, #0
 	mov r8, r2
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #248]
 	ldr r1, [pc, #252]
@@ -5219,7 +5219,7 @@ sub_08312864:
 	adds r0, r5, #0
 	movs r1, #0
 	adds r2, r6, #0
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	add r0, sp, #8
 	strb r4, [r0, #0]
 	strb r4, [r6, #1]
@@ -5228,7 +5228,7 @@ sub_08312864:
 	adds r0, r5, #0
 	movs r1, #1
 	adds r2, r6, #0
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	strb r4, [r6, #0]
 	strb r4, [r6, #1]
 	strb r4, [r6, #2]
@@ -5237,23 +5237,23 @@ sub_08312864:
 	adds r0, r5, #0
 	movs r1, #2
 	adds r2, r6, #0
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	movs r3, #160
 	negs r3, r3
 	adds r0, r5, #0
 	movs r1, #0
 	movs r2, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r1, [pc, #84]
 	movs r2, #252
 	lsls r2, r2, #5
@@ -5312,13 +5312,13 @@ sub_08312864:
 	movs r1, #0
 	movs r2, #0
 	movs r3, #4
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #4
 	negs r3, r3
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r4, #1
 	cmp r4, #39
 	bls .L08312B84
@@ -5971,7 +5971,7 @@ sub_08313088:
 	push {r7}
 	adds r7, r0, #0
 	adds r5, r1, #0
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl sub_08309FF4
 	lsls r0, r0, #24
 	cmp r0, #0
@@ -5983,7 +5983,7 @@ sub_08313088:
 	ldrb r0, [r0, #21]
 	bl sub_08001DBC
 .L083130AE:
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r1, [pc, #20]
 	movs r0, #76
@@ -6038,7 +6038,7 @@ sub_08313088:
 	lsls r3, r3, #1
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r1, [pc, #280]
 	ldr r0, [r1, #52]
 	asrs r0, r0, #8
@@ -7689,7 +7689,7 @@ sub_08313D78:
 	bl sub_0831342C
 	ldr r0, [pc, #32]
 	ldr r1, [pc, #36]
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldr r0, [pc, #32]
 	ldr r0, [r0, #0]
 	cmp r0, #120
@@ -7716,7 +7716,7 @@ sub_08313D78:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313E64
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -7736,7 +7736,7 @@ sub_08313D78:
 	lsls r7, r7, #7
 	adds r0, r7, #0
 	strh r0, [r1, #0]
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	movs r0, #9
 	movs r1, #6
@@ -7793,7 +7793,7 @@ sub_08313D78:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313F0C
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r0, [pc, #96]
 	strh r4, [r0, #0]
@@ -7813,7 +7813,7 @@ sub_08313D78:
 	lsls r4, r4, #7
 	adds r0, r4, #0
 	strh r0, [r1, #0]
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	movs r0, #9
 	movs r1, #6
@@ -7994,7 +7994,7 @@ sub_08313D78:
 	bl sub_0831342C
 	ldr r0, [pc, #52]
 	ldr r1, [pc, #52]
-	bl sub_08002F64
+	bl Link_EnterGame
 	cmp r4, #6
 	bhi .L083140D6
 	bl sub_08313524
@@ -8422,7 +8422,7 @@ sub_08314338:
 	ldr r1, [pc, #12]
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L08314436
 	movs r0, r0
 	lsls r0, r4, #3
@@ -8437,7 +8437,7 @@ sub_08314338:
 	ldr r1, [pc, #12]
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L08314436:
 	movs r0, #1
 	b .L08314442
@@ -9293,7 +9293,7 @@ sub_08314A3C:
 	bl sub_0800060C
 .L08314AB2:
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L08314AB8:
 	adds r6, #1
 	cmp r6, #8
@@ -11925,7 +11925,7 @@ sub_08315664:
 	ldr r0, [r0, #0]
 	ldr r1, [pc, #252]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Map_IsTileBit10: [likely] tile bit 10 at (x, y) for y > 0 (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08000898
 	.thumb_func
 sub_08000898:
+	.global Map_IsTileBit10
+	.thumb_set Map_IsTileBit10, sub_08000898
 	push {lr}
 	cmp r1, #0
 	ble .L080008B4

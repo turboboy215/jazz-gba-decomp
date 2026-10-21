@@ -141,11 +141,14 @@ sub_08001314:
 	pop {r0}
 	bx r0
 
+@ Bg_UpdateScroll: [likely] writes BG0HOFS/VOFS, streams map columns/rows through IWRAM 0831AE68-AE98
 	.thumb
 	.align 1, 0
 	.global sub_08001404
 	.thumb_func
 sub_08001404:
+	.global Bg_UpdateScroll
+	.thumb_set Bg_UpdateScroll, sub_08001404
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -572,11 +575,14 @@ sub_08001404:
 	.4byte 0x04000010
 	.4byte 0x04000012
 
+@ Bg_DrawLevelScreen: [likely] fills screenblock 0x0600F800 from the level map (ResBank tbl8)
 	.thumb
 	.align 1, 0
 	.global sub_08001720
 	.thumb_func
 sub_08001720:
+	.global Bg_DrawLevelScreen
+	.thumb_set Bg_DrawLevelScreen, sub_08001720
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Sprite_Init: [likely] sets bank/anim, creates one Obj per non-empty layer (08004408), frees on failure
 	.thumb
 	.align 1, 0
 	.global sub_080002E0
 	.thumb_func
 sub_080002E0:
+	.global Sprite_Init
+	.thumb_set Sprite_Init, sub_080002E0
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -80,7 +83,7 @@ sub_080002E0:
 	adds r0, #16
 	str r0, [sp, #0]
 	adds r0, r6, #0
-	bl sub_08004408
+	bl Obj_Create
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L080003C4

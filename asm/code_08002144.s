@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_ConnectScreen: [likely] link handshake loop with on-screen messages, IntrWait
 	.thumb
 	.align 1, 0
 	.global sub_08002144
 	.thumb_func
 sub_08002144:
+	.global Link_ConnectScreen
+	.thumb_set Link_ConnectScreen, sub_08002144
 	push {r4, r5, r6, lr}
 	movs r4, #0
 	movs r6, #0

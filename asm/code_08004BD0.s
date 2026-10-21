@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Glyph_Alloc: [likely] reference-counted BG glyph tile cache (0x02002000/0x02002800/0x02003600)
 	.thumb
 	.align 1, 0
 	.global sub_08004BD0
 	.thumb_func
 sub_08004BD0:
+	.global Glyph_Alloc
+	.thumb_set Glyph_Alloc, sub_08004BD0
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8
@@ -115,11 +118,14 @@ sub_08004BD0:
 	.4byte 0x02002000
 	.4byte 0x02003600
 
+@ Glyph_Free: [likely] drops a reference, returns the tile to the free list at 0
 	.thumb
 	.align 1, 0
 	.global sub_08004CA0
 	.thumb_func
 sub_08004CA0:
+	.global Glyph_Free
+	.thumb_set Glyph_Free, sub_08004CA0
 	push {r4, r5, r6, r7, lr}
 	adds r5, r0, #0
 	ldr r0, [pc, #108]
@@ -230,11 +236,14 @@ sub_08004CA0:
 	.2byte 0x0000
 	.4byte 0x03002504
 
+@ Glyph_InitCache: [likely] initialises the glyph tile cache tables at 0x02002000-0x02003600
 	.thumb
 	.align 1, 0
 	.global sub_08004D70
 	.thumb_func
 sub_08004D70:
+	.global Glyph_InitCache
+	.thumb_set Glyph_InitCache, sub_08004D70
 	push {r4, lr}
 	movs r1, #0
 	ldr r4, [pc, #156]

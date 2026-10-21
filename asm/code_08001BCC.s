@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ ResBank_GetCell: [likely] cell value from table 16 entry 0, 4/8/16-bit by header byte 8
 	.thumb
 	.align 1, 0
 	.global sub_08001BCC
 	.thumb_func
 sub_08001BCC:
+	.global ResBank_GetCell
+	.thumb_set ResBank_GetCell, sub_08001BCC
 	push {r4, r5, r6, r7, lr}
 	adds r4, r0, #0
 	adds r7, r1, #0
@@ -106,11 +109,14 @@ sub_08001BCC:
 	bx r1
 	.2byte 0x0000
 
+@ Font_CharToGlyph: [sure] A-Z, a-z, 0-9 and punctuation -> glyph index (jump table in rodata)
 	.thumb
 	.align 1, 0
 	.global sub_08001C88
 	.thumb_func
 sub_08001C88:
+	.global Font_CharToGlyph
+	.thumb_set Font_CharToGlyph, sub_08001C88
 	lsls r0, r0, #24
 	lsrs r1, r0, #24
 	movs r2, #191
@@ -183,11 +189,14 @@ sub_08001C88:
 .L08001D0A:
 	bx lr
 
+@ Font2_CharToGlyph: [sure] second font mapping (jump table in rodata)
 	.thumb
 	.align 1, 0
 	.global sub_08001D0C
 	.thumb_func
 sub_08001D0C:
+	.global Font2_CharToGlyph
+	.thumb_set Font2_CharToGlyph, sub_08001D0C
 	lsls r0, r0, #24
 	lsrs r1, r0, #24
 	movs r2, #191

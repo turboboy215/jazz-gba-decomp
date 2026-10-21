@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Actor_HitPoint: [likely] point vs. the actor's sprite cel rectangles (08000BB4/08000BDC)
 	.thumb
 	.align 1, 0
 	.global sub_08000C00
 	.thumb_func
 sub_08000C00:
+	.global Actor_HitPoint
+	.thumb_set Actor_HitPoint, sub_08000C00
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -141,11 +144,14 @@ sub_08000C00:
 	pop {r1}
 	bx r1
 
+@ Actor_HitActor: [likely] cel rectangle overlap between two actors' sprites
 	.thumb
 	.align 1, 0
 	.global sub_08000D04
 	.thumb_func
 sub_08000D04:
+	.global Actor_HitActor
+	.thumb_set Actor_HitActor, sub_08000D04
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -589,11 +595,14 @@ sub_08000ECC:
 	bx r1
 	.2byte 0x0000
 
+@ Actor_HitActor2: [likely] variant used by Actor_FindHit2
 	.thumb
 	.align 1, 0
 	.global sub_0800104C
 	.thumb_func
 sub_0800104C:
+	.global Actor_HitActor2
+	.thumb_set Actor_HitActor2, sub_0800104C
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9

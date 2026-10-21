@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Obj_Create: [sure] slot + OAM + VRAM allocation (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08004408
 	.thumb_func
 sub_08004408:
+	.global Obj_Create
+	.thumb_set Obj_Create, sub_08004408
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8
@@ -53,7 +56,7 @@ sub_08004408:
 	cmp r0, #255
 	bne .L08004478
 	ldrb r0, [r1, #0]
-	bl sub_080045FC
+	bl Obj_FreeSlot
 	mov r2, r9
 	str r2, [r5, #0]
 	movs r0, #0
@@ -80,7 +83,7 @@ sub_08004408:
 	adds r1, r7, #0
 	ldr r2, [sp, #28]
 	mov r3, r8
-	bl sub_08003FBC
+	bl VramMap_Alloc
 	ldr r1, [r5, #0]
 	strh r0, [r1, #2]
 	ldr r1, [r5, #0]
@@ -89,10 +92,10 @@ sub_08004408:
 	cmp r2, r0
 	bne .L080044D0
 	ldrb r0, [r1, #1]
-	bl sub_08003F00
+	bl Oam_Free
 	ldr r0, [r5, #0]
 	ldrb r0, [r0, #0]
-	bl sub_080045FC
+	bl Obj_FreeSlot
 	mov r0, r9
 	str r0, [r5, #0]
 	movs r0, #0

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Text_ParsePaletteTag: [sure] "{P<n>}" (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08004B14
 	.thumb_func
 sub_08004B14:
+	.global Text_ParsePaletteTag
+	.thumb_set Text_ParsePaletteTag, sub_08004B14
 	push {lr}
 	sub sp, #12
 	adds r2, r0, #0

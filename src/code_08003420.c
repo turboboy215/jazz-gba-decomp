@@ -2,8 +2,7 @@
 #include "system.h"
 #include "link.h"
 #include "oam.h"
-void sub_08004914(int x, int y, const char *s);
-void sub_080049D4(int x, int y, int len, int c);
+#include "text.h"
 void sub_083186FC(void);
 void sub_0831881C(void);
 void sub_08003C1C(void);

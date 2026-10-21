@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Map_HitWall: [likely] scans the leading edge column for COLL_SOLID (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08000990
 	.thumb_func
 sub_08000990:
+	.global Map_HitWall
+	.thumb_set Map_HitWall, sub_08000990
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -85,11 +88,14 @@ sub_08000990:
 	bx r1
 	.2byte 0x0000
 
+@ Map_OnSlope: [likely] slope tile at (x, y) or below (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08000A1C
 	.thumb_func
 sub_08000A1C:
+	.global Map_OnSlope
+	.thumb_set Map_OnSlope, sub_08000A1C
 	push {r4, r5, r6, lr}
 	adds r6, r2, #0
 	asrs r5, r0, #8
@@ -132,11 +138,14 @@ sub_08000A1C:
 	pop {r1}
 	bx r1
 
+@ Map_SnapToSlope: [likely] moves *py onto the slope surface (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08000A70
 	.thumb_func
 sub_08000A70:
+	.global Map_SnapToSlope
+	.thumb_set Map_SnapToSlope, sub_08000A70
 	push {r4, r5, r6, r7, lr}
 	mov r7, r8
 	push {r7}
@@ -203,11 +212,14 @@ sub_08000A70:
 	bx r0
 	.4byte 0x083D1D80
 
+@ Map_GetSlopeDir: [likely] switch over slope types 1-9 -> 1..4 (jump table in rodata)
 	.thumb
 	.align 1, 0
 	.global sub_08000AF8
 	.thumb_func
 sub_08000AF8:
+	.global Map_GetSlopeDir
+	.thumb_set Map_GetSlopeDir, sub_08000AF8
 	push {r4, r5, lr}
 	adds r4, r0, #0
 	adds r5, r1, #0

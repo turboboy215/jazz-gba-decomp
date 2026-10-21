@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_Session: [likely] installs VBlank_LinkError (080033CD), runs a link session via a callback
 	.thumb
 	.align 1, 0
 	.global sub_08002C04
 	.thumb_func
 sub_08002C04:
+	.global Link_Session
+	.thumb_set Link_Session, sub_08002C04
 	push {r4, r5, lr}
 	sub sp, #80
 	ldr r2, [pc, #48]
@@ -56,7 +59,7 @@ sub_08002C04:
 .L08002C62:
 	ldr r0, [pc, #100]
 	ldr r0, [r0, #0]
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	ldr r2, [pc, #96]
 	ldrh r1, [r2, #0]
 	movs r0, #8
@@ -183,7 +186,7 @@ sub_08002C04:
 	movs r3, #0
 	bl sub_080049D4
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	movs r0, #0
 	strb r0, [r4, #4]
 	movs r0, #255
@@ -247,7 +250,7 @@ sub_08002C04:
 .L08002DEA:
 	ldr r0, [pc, #60]
 	ldr r0, [r0, #0]
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	movs r1, #5
 	ldrsb r1, [r4, r1]
 	movs r0, #1
@@ -284,7 +287,7 @@ sub_08002C04:
 	bl sub_08001FC8
 .L08002E3C:
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	bl VBlankIntrWait
 	bl VBlankIntrWait
 	bl VBlankIntrWait
@@ -310,7 +313,7 @@ sub_08002C04:
 	bl VBlankIntrWait
 	adds r0, r4, #0
 	mov r1, sp
-	bl sub_08002F64
+	bl Link_EnterGame
 	mov r0, sp
 	ldrh r0, [r0, #0]
 	cmp r0, #111
@@ -327,12 +330,12 @@ sub_08002C04:
 	adds r1, r5, #0
 	bl sub_08002094
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	movs r0, #0
 	b .L08002F14
 .L08002EA6:
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	ldr r0, [pc, #28]
 	movs r1, #0
 	strb r1, [r0, #4]
@@ -361,7 +364,7 @@ sub_08002C04:
 	bl IntrWait
 	add r0, sp, #64
 	mov r1, sp
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldrh r0, [r4, #0]
 	cmp r0, #111
 	bne .L08002EDA

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Sprite_Draw: [likely] per-layer Obj create/update: gfx, palette, flips, position relative to cel
 	.thumb
 	.align 1, 0
 	.global sub_08000408
 	.thumb_func
 sub_08000408:
+	.global Sprite_Draw
+	.thumb_set Sprite_Draw, sub_08000408
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -99,7 +102,7 @@ sub_08000408:
 	adds r0, #16
 	str r0, [sp, #0]
 	ldr r0, [sp, #8]
-	bl sub_08004408
+	bl Obj_Create
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L080004FA

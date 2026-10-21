@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ number: [sure] Linux lib/vsprintf.c number() (nonmatching: register allocation)
 	.thumb
 	.align 1, 0
 	.global sub_08004F38
 	.thumb_func
 sub_08004F38:
+	.global number
+	.thumb_set number, sub_08004F38
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -264,11 +267,14 @@ sub_08004F38:
 	pop {r1}
 	bx r1
 
+@ vsprintf: [sure] Linux lib/vsprintf.c (flag/conversion switches use rodata jump tables)
 	.thumb
 	.align 1, 0
 	.global sub_08005100
 	.thumb_func
 sub_08005100:
+	.global vsprintf
+	.thumb_set vsprintf, sub_08005100
 	push {r4, r5, r6, r7, lr}
 	mov r7, r8
 	push {r7}
@@ -597,7 +603,7 @@ sub_08005100:
 	adds r0, r5, #0
 .L08005356:
 	adds r3, r7, #0
-	bl sub_08004F38
+	bl number
 	adds r5, r0, #0
 .L0800535E:
 	ldr r1, [sp, #8]
@@ -630,7 +636,7 @@ sub_08005386:
 	push {lr}
 	ldr r1, [sp, #4]
 	add r2, sp, #8
-	bl sub_08005100
+	bl vsprintf
 	pop {r3}
 	add sp, #12
 	bx r3

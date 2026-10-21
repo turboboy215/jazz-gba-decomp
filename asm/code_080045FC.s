@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Obj_FreeSlot: [sure] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_080045FC
 	.thumb_func
 sub_080045FC:
+	.global Obj_FreeSlot
+	.thumb_set Obj_FreeSlot, sub_080045FC
 	lsls r0, r0, #24
 	lsrs r3, r0, #24
 	ldr r1, [pc, #20]

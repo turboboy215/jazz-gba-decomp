@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Oam_SetPosSorted: [likely] moves an OAM entry in the used list by z, sets x/y and priority from thresholds
 	.thumb
 	.align 1, 0
 	.global sub_08003DEC
 	.thumb_func
 sub_08003DEC:
+	.global Oam_SetPosSorted
+	.thumb_set Oam_SetPosSorted, sub_08003DEC
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8
@@ -152,11 +155,14 @@ sub_08003DEC:
 	.4byte 0x0000F3FF
 	.4byte 0x000001FF
 
+@ Oam_Free: [sure] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08003F00
 	.thumb_func
 sub_08003F00:
+	.global Oam_Free
+	.thumb_set Oam_Free, sub_08003F00
 	push {r4, lr}
 	lsls r0, r0, #24
 	lsrs r3, r0, #24

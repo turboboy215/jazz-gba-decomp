@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_SendMultiBoot: [likely] handshake + BIOS MultiBoot call (Single Pak)
 	.thumb
 	.align 1, 0
 	.global sub_080023EC
 	.thumb_func
 sub_080023EC:
+	.global Link_SendMultiBoot
+	.thumb_set Link_SendMultiBoot, sub_080023EC
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8
@@ -360,7 +363,7 @@ sub_080023EC:
 .L08002678:
 	orrs r1, r0
 	adds r0, r6, #0
-	bl sub_080027D4
+	bl Link_Send8
 	b .L080027C8
 	movs r0, r0
 	lsrs r0, r6, #20
@@ -389,7 +392,7 @@ sub_080023EC:
 	orrs r5, r0
 	adds r0, r6, #0
 	adds r1, r5, #0
-	bl sub_080027D4
+	bl Link_Send8
 	b .L080027C8
 .L080026BA:
 	movs r4, #3
@@ -515,7 +518,7 @@ sub_080023EC:
 	ldrb r0, [r0, #0]
 	orrs r1, r0
 	adds r0, r6, #0
-	bl sub_080027D4
+	bl Link_Send8
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L080027C8
@@ -542,11 +545,14 @@ sub_080023EC:
 	pop {r1}
 	bx r1
 
+@ Link_Send8: [likely] (nonmatching: 0x83 comes from the literal pool)
 	.thumb
 	.align 1, 0
 	.global sub_080027D4
 	.thumb_func
 sub_080027D4:
+	.global Link_Send8
+	.thumb_set Link_Send8, sub_080027D4
 	push {r4, lr}
 	adds r2, r0, #0
 	lsls r1, r1, #16

@@ -57,3 +57,4 @@ clean:
 nonmatching:
 	@mkdir -p $(BUILD)/nonmatching
 	$(CPP) -nostdinc -I include -I tools/agbcc/include src/gax/nonmatching.c | tools/agbcc/bin/agbcc $(CFLAGS) -fprologue-bugfix -o $(BUILD)/nonmatching/gax.s
+	$(CPP) -nostdinc -I include -I tools/agbcc/include src/nonmatching/region_a.c | tools/agbcc/bin/old_agbcc $(CFLAGS) -o $(BUILD)/nonmatching/region_a.s

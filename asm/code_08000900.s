@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Map_HitCeiling: [likely] scans tiles above y+dy for COLL_SOLID (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08000900
 	.thumb_func
 sub_08000900:
+	.global Map_HitCeiling
+	.thumb_set Map_HitCeiling, sub_08000900
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Text_PutChar: [likely] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_0800488C
 	.thumb_func
 sub_0800488C:
+	.global Text_PutChar
+	.thumb_set Text_PutChar, sub_0800488C
 	push {r4, r5, r6, lr}
 	lsls r2, r2, #24
 	lsrs r6, r2, #24
@@ -28,7 +31,7 @@ sub_0800488C:
 	cmp r0, #0
 	beq .L080048C4
 	ldrh r0, [r4, #0]
-	bl sub_08004CA0
+	bl Glyph_Free
 	b .L080048CA
 	movs r0, r0
 	movs r4, #240
@@ -48,7 +51,7 @@ sub_0800488C:
 	ldr r2, [r5, #8]
 	ldr r1, [r2, #4]
 	ldrh r2, [r2, #2]
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	lsls r0, r0, #16
 	lsrs r0, r0, #16
 	ldrb r5, [r5, #13]

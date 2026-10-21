@@ -363,11 +363,14 @@ sub_08004164:
 	.2byte 0x0000
 	.4byte 0x03000AF0
 
+@ Obj_InitAll: [sure] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_0800436C
 	.thumb_func
 sub_0800436C:
+	.global Obj_InitAll
+	.thumb_set Obj_InitAll, sub_0800436C
 	push {r4, lr}
 	movs r0, #0
 	ldr r3, [pc, #12]
@@ -396,7 +399,7 @@ sub_0800436C:
 	ldr r1, [pc, #20]
 	movs r0, #255
 	str r0, [r1, #0]
-	bl sub_08003CF4
+	bl Oam_Init
 	bl sub_08003F94
 	pop {r4}
 	pop {r0}

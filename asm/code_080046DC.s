@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Obj_Update: [sure] state -> OAM shadow entry (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_080046DC
 	.thumb_func
 sub_080046DC:
+	.global Obj_Update
+	.thumb_set Obj_Update, sub_080046DC
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	adds r5, r0, #0
@@ -65,7 +68,7 @@ sub_080046DC:
 	ldrb r1, [r5, #10]
 	ldr r2, [r5, #20]
 	ldrb r3, [r5, #13]
-	bl sub_08003FBC
+	bl VramMap_Alloc
 	movs r2, #0
 	strh r0, [r5, #2]
 	ldrb r0, [r5, #1]

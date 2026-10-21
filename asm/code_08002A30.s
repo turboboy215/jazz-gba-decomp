@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Sprites_DrawAll: [likely] walks the sprite list at 0x03003A34: show/hide, position, Sprite_Draw, Obj_UpdateAll
 	.thumb
 	.align 1, 0
 	.global sub_08002A30
 	.thumb_func
 sub_08002A30:
+	.global Sprites_DrawAll
+	.thumb_set Sprites_DrawAll, sub_08002A30
 	push {r4, r5, r6, lr}
 	adds r5, r0, #0
 	ldr r4, [pc, #32]
@@ -131,7 +134,7 @@ sub_08002A30:
 	adds r5, r4, r0
 .L08002B36:
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r4, #100
 	cmp r4, r5
 	bls .L08002B36

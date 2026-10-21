@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_Main: [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
 	.thumb
 	.align 1, 0
 	.global sub_080034A4
 	.thumb_func
 sub_080034A4:
+	.global Link_Main
+	.thumb_set Link_Main, sub_080034A4
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -58,7 +61,7 @@ sub_080034A4:
 	cmp r1, #3
 	bls .L080034E2
 	ldr r0, [r7, #0]
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	ldr r0, [r7, #0]
 	cmp r0, #1
 	bne .L08003530
@@ -179,7 +182,7 @@ sub_080034A4:
 	cmp r0, #0
 	beq .L08003620
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	b .L08003742
 	adds r2, #80
 	lsrs r5, r7, #32
@@ -253,14 +256,14 @@ sub_080034A4:
 	bl sub_08002844
 .L0800369A:
 	mov r0, r9
-	bl sub_080023EC
+	bl Link_SendMultiBoot
 	mov r0, r9
 	bl sub_080028E4
 	cmp r0, #0
 	bne .L080036AC
 	b .L080034D4
 .L080036AC:
-	bl sub_08002144
+	bl Link_ConnectScreen
 	ldr r1, [pc, #176]
 	movs r0, #0
 	bl sub_08001FC8
@@ -316,7 +319,7 @@ sub_080034A4:
 	ldr r0, [pc, #92]
 	str r1, [r0, #0]
 	movs r0, #0
-	bl sub_08002A30
+	bl Sprites_DrawAll
 	movs r0, #1
 	negs r0, r0
 	str r0, [r5, #0]

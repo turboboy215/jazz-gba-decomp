@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ ResBank_SetSlot: [likely] copies a 4-byte slot record (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08001A48
 	.thumb_func
 sub_08001A48:
+	.global ResBank_SetSlot
+	.thumb_set ResBank_SetSlot, sub_08001A48
 	lsls r1, r1, #2
 	adds r3, r0, r1
 	ldrb r1, [r2, #0]

@@ -169,7 +169,7 @@ sub_082F00FC:
 	subs r0, #24
 	str r0, [sp, #8]
 	adds r0, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F0198
@@ -226,7 +226,7 @@ sub_082F00FC:
 	adds r0, r0, r6
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F0230
@@ -237,7 +237,7 @@ sub_082F00FC:
 	lsls r2, r2, #4
 	adds r1, r1, r2
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F0230
@@ -247,7 +247,7 @@ sub_082F00FC:
 	ldr r2, [pc, #32]
 	adds r1, r1, r2
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F0248
@@ -257,7 +257,7 @@ sub_082F00FC:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F026E
 	b .L082F0244
 	.2byte 0xffff @ .raw
@@ -1592,7 +1592,7 @@ sub_082F0B5C:
 	adds r0, r4, #0
 	movs r2, #30
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F0C10
 	.2byte 0xfff0 @ .raw
 	movs r0, r0
@@ -1609,7 +1609,7 @@ sub_082F0B5C:
 	adds r0, r4, #0
 	movs r2, #31
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F0C10:
 	adds r0, r6, #0
 	adds r0, #228
@@ -1862,7 +1862,7 @@ sub_082F0D30:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F0E0C
@@ -1871,7 +1871,7 @@ sub_082F0D30:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0E0C:
@@ -1936,7 +1936,7 @@ sub_082F0E30:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F0E9E
@@ -1945,7 +1945,7 @@ sub_082F0E30:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0E9E:
@@ -2008,7 +2008,7 @@ sub_082F0EBC:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F0F2A
@@ -2017,7 +2017,7 @@ sub_082F0EBC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0F2A:
@@ -2089,7 +2089,7 @@ sub_082F0F48:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F0FC8
@@ -2098,7 +2098,7 @@ sub_082F0F48:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0FC8:
@@ -2171,7 +2171,7 @@ sub_082F0FE8:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1068
@@ -2180,7 +2180,7 @@ sub_082F0FE8:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1068:
@@ -2400,7 +2400,7 @@ sub_082F11A0:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1220
@@ -2409,7 +2409,7 @@ sub_082F11A0:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1220:
@@ -2486,7 +2486,7 @@ sub_082F1240:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F12CA
@@ -2495,7 +2495,7 @@ sub_082F1240:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F12CA:
@@ -2565,7 +2565,7 @@ sub_082F12E8:
 	movs r4, #16
 	str r4, [sp, #4]
 	str r3, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F135A
@@ -2577,7 +2577,7 @@ sub_082F12E8:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F137E
@@ -2586,7 +2586,7 @@ sub_082F12E8:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1386
@@ -2683,7 +2683,7 @@ sub_082F13BC:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F144E
@@ -2692,7 +2692,7 @@ sub_082F13BC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F144E:
@@ -2773,7 +2773,7 @@ sub_082F146C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F14FE
@@ -2782,7 +2782,7 @@ sub_082F146C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F14FE:
@@ -2848,7 +2848,7 @@ sub_082F151C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1594
@@ -2857,7 +2857,7 @@ sub_082F151C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F1594:
@@ -2924,7 +2924,7 @@ sub_082F15B4:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F162C
@@ -2933,7 +2933,7 @@ sub_082F15B4:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F162C:
@@ -3007,7 +3007,7 @@ sub_082F164C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F16CC
@@ -3016,7 +3016,7 @@ sub_082F164C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F16CC:
@@ -3093,7 +3093,7 @@ sub_082F16EC:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1776
@@ -3102,7 +3102,7 @@ sub_082F16EC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1776:
@@ -3389,7 +3389,7 @@ sub_082F1794:
 	subs r0, #24
 	str r0, [sp, #8]
 	adds r0, r6, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F1A38
@@ -3398,7 +3398,7 @@ sub_082F1794:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1A38
@@ -3436,7 +3436,7 @@ sub_082F1794:
 	subs r0, #76
 	str r0, [sp, #8]
 	adds r0, r6, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F1A38
@@ -3445,7 +3445,7 @@ sub_082F1794:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1A38
@@ -3512,7 +3512,7 @@ sub_082F1794:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1AAA
@@ -3521,7 +3521,7 @@ sub_082F1794:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1AB0
@@ -3671,7 +3671,7 @@ sub_082F1AF0:
 	subs r2, #24
 	str r2, [sp, #8]
 	adds r2, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	adds r6, r5, #0
 	adds r6, #100
@@ -3682,7 +3682,7 @@ sub_082F1AF0:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1C5A
@@ -3714,7 +3714,7 @@ sub_082F1AF0:
 	subs r2, #76
 	str r2, [sp, #8]
 	adds r2, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F1C5A
@@ -3723,7 +3723,7 @@ sub_082F1AF0:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1C5A
@@ -3747,7 +3747,7 @@ sub_082F1AF0:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F1C7E
@@ -3756,7 +3756,7 @@ sub_082F1AF0:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1C86
@@ -4244,7 +4244,7 @@ sub_082F1E14:
 	mov r0, sl
 	movs r2, #93
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldrb r0, [r6, #0]
 	cmp r0, #0
 	beq .L082F203E
@@ -4765,7 +4765,7 @@ sub_082F234C:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F251C
@@ -4796,7 +4796,7 @@ sub_082F234C:
 	ldr r2, [pc, #72]
 	movs r3, #12
 	negs r3, r3
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F2484
@@ -4817,7 +4817,7 @@ sub_082F234C:
 	lsls r2, r2, #3
 	movs r3, #12
 	negs r3, r3
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F251C
@@ -4850,7 +4850,7 @@ sub_082F234C:
 	lsls r2, r2, #3
 	movs r3, #12
 	negs r3, r3
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F24F2
@@ -4872,7 +4872,7 @@ sub_082F234C:
 	ldr r2, [pc, #40]
 	movs r3, #12
 	negs r3, r3
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F251C
@@ -4940,7 +4940,7 @@ sub_082F234C:
 	str r4, [sp, #4]
 	subs r4, #20
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F25D8
@@ -4968,7 +4968,7 @@ sub_082F234C:
 	str r4, [sp, #4]
 	subs r4, #20
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F25D8
@@ -4983,7 +4983,7 @@ sub_082F234C:
 	asrs r0, r0, #8
 	ldr r1, [r5, #56]
 	asrs r1, r1, #8
-	bl sub_08000898
+	bl Map_IsTileBit10
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F25F2
@@ -5304,7 +5304,7 @@ sub_082F27E8:
 	bl sub_0800060C
 .L082F284E:
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r6, #0
 	bl sub_082FB850
 	pop {r4, r5, r6}
@@ -5627,7 +5627,7 @@ sub_082F2A0C:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F2A98
@@ -6104,7 +6104,7 @@ sub_082F2A0C:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F2E52
@@ -6121,7 +6121,7 @@ sub_082F2A0C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -6131,7 +6131,7 @@ sub_082F2A0C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F2E98
@@ -6571,7 +6571,7 @@ sub_082F2EE0:
 	movs r4, #8
 	negs r4, r4
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3200
@@ -6592,7 +6592,7 @@ sub_082F2EE0:
 	ldr r0, [r7, #52]
 	ldr r1, [r7, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -6602,7 +6602,7 @@ sub_082F2EE0:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r7, #68]
 	b .L082F3246
@@ -6821,7 +6821,7 @@ sub_082F3294:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F33EA
@@ -6860,7 +6860,7 @@ sub_082F3294:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -6870,7 +6870,7 @@ sub_082F3294:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F345E
@@ -7350,7 +7350,7 @@ sub_082F34A8:
 	str r4, [sp, #0]
 	movs r4, #4
 	str r4, [sp, #4]
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3820
@@ -7390,7 +7390,7 @@ sub_082F34A8:
 	str r4, [sp, #4]
 	movs r4, #4
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3866
@@ -7796,7 +7796,7 @@ sub_082F387C:
 	str r4, [sp, #4]
 	movs r4, #4
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3B90
@@ -7825,7 +7825,7 @@ sub_082F387C:
 	movs r4, #0
 	ldr r0, [r7, #52]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3BCE
@@ -7834,7 +7834,7 @@ sub_082F387C:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #0
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F3BE2
 .L082F3BCE:
 	adds r0, r7, #0
@@ -8127,7 +8127,7 @@ sub_082F3D18:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3E28
@@ -8142,7 +8142,7 @@ sub_082F3D18:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -8152,7 +8152,7 @@ sub_082F3D18:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F3E6E
@@ -8387,7 +8387,7 @@ sub_082F3EB4:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4032
@@ -8403,7 +8403,7 @@ sub_082F3EB4:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -8413,7 +8413,7 @@ sub_082F3EB4:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F4078
@@ -8670,7 +8670,7 @@ sub_082F40A0:
 	str r4, [sp, #4]
 	movs r4, #4
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F427C
@@ -8703,7 +8703,7 @@ sub_082F40A0:
 	ldr r0, [r7, #52]
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F42C2
@@ -8712,7 +8712,7 @@ sub_082F40A0:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #0
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F42D4
 .L082F42C2:
 	adds r0, r7, #0
@@ -8752,7 +8752,7 @@ sub_082F40A0:
 	movs r1, #8
 	str r1, [sp, #4]
 	adds r1, r4, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F431A
@@ -8835,7 +8835,7 @@ sub_082F4370:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F43BA
@@ -8947,7 +8947,7 @@ sub_082F4370:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F44B0
@@ -8956,7 +8956,7 @@ sub_082F4370:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F44C4
 	movs r0, r0
 	adds r4, #220
@@ -9093,7 +9093,7 @@ sub_082F44E8:
 	str r7, [sp, #4]
 	movs r4, #8
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F45BC
@@ -9110,7 +9110,7 @@ sub_082F44E8:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F45F0
@@ -9119,7 +9119,7 @@ sub_082F44E8:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F4604
 	lsrs r4, r2, #20
 	lsls r0, r0, #12
@@ -9614,7 +9614,7 @@ sub_082F4934:
 	ldr r1, [r5, #56]
 	adds r0, r2, #0
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r0, r0, #24
 	cmp r0, #1
@@ -9624,7 +9624,7 @@ sub_082F4934:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #0
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L082F49E2
 .L082F49D4:
 	movs r0, #0
@@ -9645,7 +9645,7 @@ sub_082F4934:
 	str r2, [sp, #8]
 	adds r2, r4, #0
 	mov r3, r8
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4A28
@@ -9990,7 +9990,7 @@ sub_082F4BEC:
 	bl sub_0800060C
 .L082F4C56:
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L082F4C5C:
 	adds r6, #1
 	cmp r6, #19
@@ -10060,7 +10060,7 @@ sub_082F4C68:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F4D0A
 	b .L082F4CE4
 	.2byte 0xffff @ .raw
@@ -10083,7 +10083,7 @@ sub_082F4C68:
 	ldr r1, [pc, #60]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F4D0A:
 	movs r0, #35
 	bl sub_0831683C
@@ -10127,7 +10127,7 @@ sub_082F4D44:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4DAC
@@ -10181,7 +10181,7 @@ sub_082F4D44:
 .L082F4DCA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4E64
@@ -10331,7 +10331,7 @@ sub_082F4ED0:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4F44
@@ -10466,7 +10466,7 @@ sub_082F4FC8:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5054
@@ -10595,7 +10595,7 @@ sub_082F5064:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F5106
 	ble .L082F50E0
 	.2byte 0xffff @ .raw
@@ -10618,7 +10618,7 @@ sub_082F5064:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F5106:
 	movs r0, #40
 	bl sub_083189D0
@@ -10648,7 +10648,7 @@ sub_082F5120:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F51A4
@@ -10714,7 +10714,7 @@ sub_082F5120:
 .L082F51C2:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5268
@@ -10881,7 +10881,7 @@ sub_082F5294:
 	ldr r1, [pc, #24]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F5342
 	movs r0, r0
 	ble .L082F5318
@@ -10907,7 +10907,7 @@ sub_082F5294:
 	ldr r1, [pc, #24]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F5342:
 	add sp, #4
 	pop {r4}
@@ -10935,7 +10935,7 @@ sub_082F5358:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F53C4
@@ -10980,7 +10980,7 @@ sub_082F5358:
 	lsls r2, r2, #4
 	adds r1, r1, r2
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F543C
@@ -11052,7 +11052,7 @@ sub_082F5358:
 .L082F5464:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F550C
@@ -11269,7 +11269,7 @@ sub_082F55EC:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -11298,7 +11298,7 @@ sub_082F55EC:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl sub_08000C00
+	bl Actor_HitPoint
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F56B4
@@ -11407,7 +11407,7 @@ sub_082F56F8:
 	ldr r5, [pc, #76]
 	adds r1, r5, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F578E
@@ -11669,7 +11669,7 @@ sub_082F58E4:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F591E
@@ -11679,7 +11679,7 @@ sub_082F58E4:
 	str r0, [r5, #20]
 	ldr r1, [r5, #24]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -11709,7 +11709,7 @@ sub_082F58E4:
 	asrs r1, r1, #8
 	ldr r6, [pc, #84]
 	adds r2, r6, #0
-	bl sub_08000C00
+	bl Actor_HitPoint
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F59EA
@@ -11746,7 +11746,7 @@ sub_082F58E4:
 	adds r0, r4, #0
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F59C4
 	movs r5, #12
 	lsls r0, r0, #12
@@ -11763,7 +11763,7 @@ sub_082F58E4:
 	adds r0, r4, #0
 	movs r2, #3
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F59C4:
 	ldr r2, [pc, #48]
 	adds r0, r2, #0
@@ -11873,7 +11873,7 @@ sub_082F5A1C:
 	ldr r1, [pc, #16]
 	movs r2, #5
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F5ABE
 	ble .L082F5A98
 	.2byte 0xffff @ .raw
@@ -11896,7 +11896,7 @@ sub_082F5A1C:
 	ldr r1, [pc, #40]
 	movs r2, #4
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F5ABE:
 	movs r0, #40
 	bl sub_0831683C
@@ -11931,7 +11931,7 @@ sub_082F5AE4:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5B54
@@ -11988,7 +11988,7 @@ sub_082F5AE4:
 .L082F5B72:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5C08
@@ -12149,7 +12149,7 @@ sub_082F5C34:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F5CDE
 	.2byte 0xf100, 0xffff @ bl 0x83f6cb6
 	ldrb r5, [r0, r4]
@@ -12170,7 +12170,7 @@ sub_082F5C34:
 	ldr r1, [pc, #40]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F5CDE:
 	movs r0, #40
 	bl sub_0831683C
@@ -12207,7 +12207,7 @@ sub_082F5D04:
 	str r4, [sp, #4]
 	movs r4, #32
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5D70
@@ -12264,7 +12264,7 @@ sub_082F5D04:
 .L082F5D94:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5E2C
@@ -12359,7 +12359,7 @@ sub_082F5E3C:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5EAC
@@ -12416,7 +12416,7 @@ sub_082F5E3C:
 .L082F5ECA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5F60
@@ -12576,7 +12576,7 @@ sub_082F5F8C:
 	ldr r1, [pc, #24]
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F603E
 	movs r0, r0
 	.2byte 0xc900 @ .raw ldmia r1!, {}
@@ -12603,7 +12603,7 @@ sub_082F5F8C:
 	ldr r1, [pc, #52]
 	movs r2, #3
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F603E:
 	movs r0, #40
 	bl sub_0831683C
@@ -12811,7 +12811,7 @@ sub_082F6070:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F61CC
@@ -12868,7 +12868,7 @@ sub_082F6070:
 .L082F6228:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F62A4
@@ -13058,7 +13058,7 @@ sub_082F6378:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -13087,7 +13087,7 @@ sub_082F6378:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl sub_08000C00
+	bl Actor_HitPoint
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6496
@@ -13149,7 +13149,7 @@ sub_082F6378:
 	adds r0, r4, #0
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F6470
 	movs r0, r0
 	str r0, [r5, #96]
@@ -13165,7 +13165,7 @@ sub_082F6378:
 	adds r0, r4, #0
 	movs r2, #3
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F6470:
 	ldr r2, [pc, #48]
 	adds r0, r2, #0
@@ -13267,7 +13267,7 @@ sub_082F650C:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F65A8
@@ -13419,7 +13419,7 @@ sub_082F65C8:
 	ldr r1, [pc, #16]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F666A
 	bhi .L082F6644
 	.2byte 0xffff @ .raw
@@ -13442,7 +13442,7 @@ sub_082F65C8:
 	ldr r1, [pc, #24]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F666A:
 	add sp, #4
 	pop {r4}
@@ -13470,7 +13470,7 @@ sub_082F6680:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F66F0
@@ -13527,7 +13527,7 @@ sub_082F6680:
 .L082F670E:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F67A4
@@ -13687,7 +13687,7 @@ sub_082F67D0:
 	ldr r1, [pc, #20]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F687A
 	movs r0, r0
 	bge .L082F6854
@@ -13711,7 +13711,7 @@ sub_082F67D0:
 	ldr r1, [pc, #52]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F687A:
 	movs r0, #40
 	bl sub_0831683C
@@ -13932,7 +13932,7 @@ sub_082F68AC:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F6A20
@@ -13989,7 +13989,7 @@ sub_082F68AC:
 .L082F6A7C:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6AF8
@@ -14177,7 +14177,7 @@ sub_082F6BC8:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -14206,7 +14206,7 @@ sub_082F6BC8:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl sub_08000C00
+	bl Actor_HitPoint
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6CEE
@@ -14268,7 +14268,7 @@ sub_082F6BC8:
 	adds r0, r4, #0
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F6CC0
 	movs r0, r0
 	str r0, [r1, #100]
@@ -14284,7 +14284,7 @@ sub_082F6BC8:
 	adds r0, r4, #0
 	movs r2, #3
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F6CC0:
 	ldr r2, [pc, #56]
 	adds r0, r2, #0
@@ -14425,7 +14425,7 @@ sub_082F6D20:
 	movs r2, #0
 .L082F6DC4:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	lsls r0, r0, #24
 	lsrs r1, r0, #24
 	cmp r1, #0
@@ -14515,7 +14515,7 @@ sub_082F6DF4:
 	beq .L082F6EB2
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6EB2
@@ -14790,7 +14790,7 @@ sub_082F7054:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F70E0
@@ -14972,7 +14972,7 @@ sub_082F70F0:
 	ldr r1, [pc, #20]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F71FA
 	movs r0, r0
 	ble .L082F71D4
@@ -14997,7 +14997,7 @@ sub_082F70F0:
 	ldr r1, [pc, #48]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F71FA:
 	ldr r1, [sp, #0]
 	movs r0, #0
@@ -15036,7 +15036,7 @@ sub_082F7228:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	lsrs r1, r0, #24
 	cmp r1, #0
@@ -15123,7 +15123,7 @@ sub_082F7228:
 .L082F72EE:
 	ldr r1, [pc, #36]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7388
@@ -15282,7 +15282,7 @@ sub_082F73B4:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F7456
 	bcs .L082F7430
 	.2byte 0xffff @ .raw
@@ -15305,7 +15305,7 @@ sub_082F73B4:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F7456:
 	movs r0, #34
 	bl sub_083189D0
@@ -15335,7 +15335,7 @@ sub_082F7470:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F74D0
@@ -15385,7 +15385,7 @@ sub_082F7470:
 .L082F74EE:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7570
@@ -15533,7 +15533,7 @@ sub_082F75DC:
 	ldr r7, [pc, #88]
 	adds r1, r7, #0
 	movs r2, #1
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	adds r6, r4, #0
 	cmp r0, #0
@@ -15631,7 +15631,7 @@ sub_082F75DC:
 	adds r0, r4, #0
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r4, #0
 	movs r1, #1
 	bl sub_08000680
@@ -15660,7 +15660,7 @@ sub_082F75DC:
 	adds r0, r4, #0
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r4, #0
 	movs r1, #0
 	bl sub_08000680
@@ -15765,7 +15765,7 @@ sub_082F7754:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F77F6
 	ldrb r1, [r2, #0]
 	lsrs r7, r5, #32
@@ -15788,7 +15788,7 @@ sub_082F7754:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F77F6:
 	ldr r1, [sp, #0]
 	movs r0, #0
@@ -15867,7 +15867,7 @@ sub_082F7810:
 	beq .L082F78C8
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F78C8
@@ -16299,7 +16299,7 @@ sub_082F7A2C:
 	ldr r1, [pc, #12]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F7BEA
 	bmi .L082F7BD4
 	.2byte 0xffff @ .raw
@@ -16314,7 +16314,7 @@ sub_082F7A2C:
 	ldr r1, [pc, #24]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F7BEA:
 	ldr r1, [sp, #0]
 	movs r0, #0
@@ -16392,7 +16392,7 @@ sub_082F7C00:
 	beq .L082F7CBE
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7CBE
@@ -16675,7 +16675,7 @@ sub_082F7E20:
 	ldr r1, [pc, #20]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F7ECA
 	movs r0, r0
 	bcc .L082F7EA4
@@ -16699,7 +16699,7 @@ sub_082F7E20:
 	ldr r1, [pc, #52]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F7ECA:
 	movs r0, #40
 	bl sub_0831683C
@@ -16920,7 +16920,7 @@ sub_082F7EFC:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F8070
@@ -16977,7 +16977,7 @@ sub_082F7EFC:
 .L082F80CC:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8148
@@ -17123,7 +17123,7 @@ sub_082F8174:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F8216
 	bge .L082F81F0
 	.2byte 0xffff @ .raw
@@ -17146,7 +17146,7 @@ sub_082F8174:
 	ldr r1, [pc, #40]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F8216:
 	movs r0, #40
 	bl sub_0831683C
@@ -17181,7 +17181,7 @@ sub_082F823C:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F82AC
@@ -17238,7 +17238,7 @@ sub_082F823C:
 .L082F82CA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8360
@@ -17459,7 +17459,7 @@ sub_082F8458:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F8492
@@ -17469,7 +17469,7 @@ sub_082F8458:
 	str r0, [r5, #20]
 	ldr r1, [r5, #24]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	lsrs r4, r0, #24
 	cmp r4, #0
@@ -17499,7 +17499,7 @@ sub_082F8458:
 	asrs r1, r1, #8
 	ldr r6, [pc, #68]
 	adds r2, r6, #0
-	bl sub_08000C00
+	bl Actor_HitPoint
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F855C
@@ -17528,7 +17528,7 @@ sub_082F8458:
 	adds r0, r4, #0
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F8528
 	movs r5, #12
 	lsls r0, r0, #12
@@ -17545,7 +17545,7 @@ sub_082F8458:
 	adds r0, r4, #0
 	movs r2, #3
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F8528:
 	ldr r2, [pc, #60]
 	adds r0, r2, #0
@@ -17666,7 +17666,7 @@ sub_082F8590:
 	ldr r1, [pc, #20]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F863A
 	movs r0, r0
 	.2byte 0xe200 @ b.n 0x82f8a14
@@ -17689,7 +17689,7 @@ sub_082F8590:
 	ldr r1, [pc, #52]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F863A:
 	movs r0, #40
 	bl sub_0831683C
@@ -17910,7 +17910,7 @@ sub_082F866C:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F87E0
@@ -17976,7 +17976,7 @@ sub_082F866C:
 .L082F8850:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F88E0
@@ -18125,7 +18125,7 @@ sub_082F894C:
 	ldr r7, [pc, #76]
 	adds r1, r7, #0
 	movs r2, #1
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F89F4
@@ -18748,7 +18748,7 @@ sub_082F8DEC:
 	ldr r1, [pc, #16]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F8E9A
 	movs r0, r0
 	b .L082F8E70
@@ -18774,7 +18774,7 @@ sub_082F8DEC:
 	ldr r1, [pc, #52]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F8E9A:
 	ldr r0, [sp, #0]
 	adds r0, #140
@@ -18821,7 +18821,7 @@ sub_082F8ED0:
 	str r7, [sp, #4]
 	str r7, [sp, #8]
 	adds r3, r6, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8F08
@@ -18846,7 +18846,7 @@ sub_082F8ED0:
 	str r6, [sp, #0]
 	str r7, [sp, #4]
 	adds r3, r6, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	mov r8, r4
 	cmp r0, #0
@@ -18875,7 +18875,7 @@ sub_082F8ED0:
 	beq .L082F8FC6
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8FC6
@@ -18976,7 +18976,7 @@ sub_082F8ED0:
 	adds r4, #144
 	ldr r1, [r4, #0]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F9078
@@ -19018,7 +19018,7 @@ sub_082F8ED0:
 	lsls r2, r2, #3
 	adds r1, r1, r2
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F90AE
@@ -19129,7 +19129,7 @@ sub_082F90F4:
 	beq .L082F9190
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F9190
@@ -19187,7 +19187,7 @@ sub_082F90F4:
 	adds r6, #144
 	ldr r1, [r6, #0]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F91F4
@@ -19481,7 +19481,7 @@ sub_082F9214:
 	ldr r1, [pc, #12]
 	movs r2, #4
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F9416
 	movs r0, r0
 	adds r4, #192
@@ -19492,7 +19492,7 @@ sub_082F9214:
 	ldr r1, [pc, #48]
 	movs r2, #5
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F9416:
 	ldr r1, [sp, #0]
 	movs r0, #0
@@ -19541,7 +19541,7 @@ sub_082F9444:
 	str r4, [sp, #4]
 	str r4, [sp, #8]
 	adds r3, r6, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F949A
@@ -19551,14 +19551,14 @@ sub_082F9444:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r6, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F949A
 	ldr r0, [r5, #20]
 	ldr r1, [r5, #24]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F94A8
@@ -19605,7 +19605,7 @@ sub_082F9444:
 	beq .L082F955A
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F955A
@@ -20066,7 +20066,7 @@ sub_082F9698:
 	ldr r1, [pc, #12]
 	movs r2, #4
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F986A
 	movs r0, r0
 	adds r4, #192
@@ -20077,7 +20077,7 @@ sub_082F9698:
 	ldr r1, [pc, #48]
 	movs r2, #5
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F986A:
 	ldr r1, [sp, #0]
 	movs r0, #0
@@ -20126,7 +20126,7 @@ sub_082F9898:
 	str r4, [sp, #4]
 	str r4, [sp, #8]
 	adds r3, r6, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F98EE
@@ -20136,14 +20136,14 @@ sub_082F9898:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r6, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F98EE
 	ldr r0, [r5, #20]
 	ldr r1, [r5, #24]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F98FC
@@ -20190,7 +20190,7 @@ sub_082F9898:
 	beq .L082F99AE
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F99AE
@@ -20737,7 +20737,7 @@ sub_082F9AE0:
 	ldr r1, [pc, #12]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082F9D66
 	.2byte 0xfc00 @ .raw
 	.2byte 0xffff @ .raw
@@ -20749,7 +20749,7 @@ sub_082F9AE0:
 	ldr r1, [pc, #72]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082F9D66:
 	ldr r1, [sp, #0]
 	ldr r0, [r1, #20]
@@ -20888,7 +20888,7 @@ sub_082F9DB0:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	str r2, [sp, #4]
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	ldr r2, [sp, #4]
 	cmp r0, #0
@@ -21449,7 +21449,7 @@ sub_082FA0A4:
 	ldr r1, [pc, #8]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082FA2AE
 	.2byte 0xe2d0 @ b.n 0x82fa840
 	lsrs r7, r1, #32
@@ -21459,7 +21459,7 @@ sub_082FA0A4:
 	ldr r1, [pc, #140]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082FA2AE:
 	ldr r1, [sp, #12]
 	movs r0, #6
@@ -21479,7 +21479,7 @@ sub_082FA0A4:
 	str r4, [sp, #4]
 	str r4, [sp, #8]
 	adds r3, r5, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082FA2F4
@@ -21490,7 +21490,7 @@ sub_082FA0A4:
 	str r5, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r5, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA30E
@@ -21603,7 +21603,7 @@ sub_082FA37C:
 	str r6, [sp, #4]
 	str r6, [sp, #8]
 	adds r3, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA3D4
@@ -21618,7 +21618,7 @@ sub_082FA37C:
 	str r4, [sp, #0]
 	str r6, [sp, #4]
 	adds r3, r4, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA440
@@ -21634,7 +21634,7 @@ sub_082FA37C:
 	str r7, [sp, #4]
 	str r7, [sp, #8]
 	adds r3, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA418
@@ -21652,7 +21652,7 @@ sub_082FA37C:
 	str r7, [sp, #4]
 	str r7, [sp, #8]
 	adds r3, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA436
@@ -21677,7 +21677,7 @@ sub_082FA37C:
 	lsls r2, r2, #4
 	adds r1, r1, r2
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA51E
@@ -21686,7 +21686,7 @@ sub_082FA37C:
 	ldr r1, [r5, #24]
 	asrs r1, r1, #8
 	adds r1, #8
-	bl sub_08000AF8
+	bl Map_GetSlopeDir
 	cmp r0, #0
 	beq .L082FA474
 	cmp r0, #4
@@ -21880,7 +21880,7 @@ sub_082FA37C:
 	beq .L082FA624
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA624
@@ -21993,7 +21993,7 @@ sub_082FA37C:
 	ldr r0, [r6, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA710
@@ -22171,7 +22171,7 @@ sub_082FA770:
 	beq .L082FA862
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA862
@@ -22229,7 +22229,7 @@ sub_082FA770:
 	ldr r0, [r6, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA8CC
@@ -22521,7 +22521,7 @@ sub_082FA8EC:
 	adds r0, #40
 	ldr r1, [pc, #16]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082FAAF0
 	movs r0, r0
 	b .L082FAADC
@@ -22536,7 +22536,7 @@ sub_082FA8EC:
 	adds r0, #40
 	ldr r1, [pc, #44]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082FAAF0:
 	ldr r1, [sp, #0]
 	ldr r0, [r1, #20]
@@ -22582,14 +22582,14 @@ sub_082FAB1C:
 	str r6, [sp, #4]
 	str r6, [sp, #8]
 	adds r3, r4, #0
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082FAB6E
 	ldr r0, [r5, #20]
 	ldr r1, [r5, #24]
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082FAB6E
@@ -22599,7 +22599,7 @@ sub_082FAB1C:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r4, #0
-	bl sub_08000900
+	bl Map_HitCeiling
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAB94
@@ -22661,7 +22661,7 @@ sub_082FAB1C:
 	beq .L082FAC2A
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAC2A
@@ -22896,7 +22896,7 @@ sub_082FAD1C:
 	beq .L082FADFA
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FADFA
@@ -22955,7 +22955,7 @@ sub_082FAD1C:
 	ldr r0, [r4, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAE60
@@ -23249,7 +23249,7 @@ sub_082FAE68:
 	ldr r1, [pc, #8]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L082FB076
 	ldr r0, [r0, #68]
 	lsrs r0, r2, #32
@@ -23259,7 +23259,7 @@ sub_082FAE68:
 	ldr r1, [pc, #32]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L082FB076:
 	movs r0, #34
 	bl sub_0831683C
@@ -23312,7 +23312,7 @@ sub_082FB094:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r4, [sp, #8]
-	bl sub_08000990
+	bl Map_HitWall
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082FB0F8
@@ -23325,7 +23325,7 @@ sub_082FB094:
 	lsls r2, r2, #4
 	adds r1, r1, r2
 	movs r2, #0
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FB108
@@ -23383,7 +23383,7 @@ sub_082FB094:
 	beq .L082FB194
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FB194
@@ -24050,7 +24050,7 @@ sub_082FB6B0:
 	ldr r1, [r1, #0]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -24394,7 +24394,7 @@ sub_082FB850:
 	adds r0, r2, #0
 	ldr r1, [pc, #16]
 	adds r0, r0, r1
-	bl sub_08000408
+	bl Sprite_Draw
 	pop {r3}
 	mov r8, r3
 	pop {r4, r5, r6, r7}

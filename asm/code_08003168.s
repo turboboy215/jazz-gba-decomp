@@ -167,11 +167,14 @@ sub_08003168:
 	.4byte 0x04000128
 	.4byte 0x0400010E
 
+@ Link_SerialIntr: [likely] SIO IRQ handler; 0xDEAD sync word
 	.thumb
 	.align 1, 0
 	.global sub_08003298
 	.thumb_func
 sub_08003298:
+	.global Link_SerialIntr
+	.thumb_set Link_SerialIntr, sub_08003298
 	push {r4, r5, r6, r7, lr}
 	ldr r2, [pc, #104]
 	ldrb r4, [r2, #4]

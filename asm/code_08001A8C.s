@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Bg_InitControl: [likely] writes BG0CNT-BG3CNT
 	.thumb
 	.align 1, 0
 	.global sub_08001A8C
 	.thumb_func
 sub_08001A8C:
+	.global Bg_InitControl
+	.thumb_set Bg_InitControl, sub_08001A8C
 	push {r4, r5, lr}
 	adds r3, r0, #0
 	movs r4, #0

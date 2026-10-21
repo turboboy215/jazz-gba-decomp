@@ -251,3 +251,48 @@
 08004ED0 simple_strtol                    # [sure] Linux lib/vsprintf.c
 08004EEC skip_atoi                        # [sure] Linux lib/vsprintf.c
 08004F18 strnlen                          # [sure] written as min(strlen(s), count)
+# --- region A: named but still asm (near misses are in src/nonmatching/region_a.c) -------
+080002E0 Sprite_Init                     # [likely] sets bank/anim, creates one Obj per non-empty layer (08004408), frees on failure
+08000408 Sprite_Draw                     # [likely] per-layer Obj create/update: gfx, palette, flips, position relative to cel
+08000898 Map_IsTileBit10                 # [likely] tile bit 10 at (x, y) for y > 0 (nonmatching)
+08000900 Map_HitCeiling                  # [likely] scans tiles above y+dy for COLL_SOLID (nonmatching)
+08000990 Map_HitWall                     # [likely] scans the leading edge column for COLL_SOLID (nonmatching)
+08000A1C Map_OnSlope                     # [likely] slope tile at (x, y) or below (nonmatching)
+08000A70 Map_SnapToSlope                 # [likely] moves *py onto the slope surface (nonmatching)
+08000AF8 Map_GetSlopeDir                 # [likely] switch over slope types 1-9 -> 1..4 (jump table in rodata)
+08000C00 Actor_HitPoint                  # [likely] point vs. the actor's sprite cel rectangles (08000BB4/08000BDC)
+08000D04 Actor_HitActor                  # [likely] cel rectangle overlap between two actors' sprites
+0800104C Actor_HitActor2                 # [likely] variant used by Actor_FindHit2
+08001A48 ResBank_SetSlot                 # [likely] copies a 4-byte slot record (nonmatching)
+08001BCC ResBank_GetCell                 # [likely] cell value from table 16 entry 0, 4/8/16-bit by header byte 8
+08001C88 Font_CharToGlyph                # [sure] A-Z, a-z, 0-9 and punctuation -> glyph index (jump table in rodata)
+08001D0C Font2_CharToGlyph               # [sure] second font mapping (jump table in rodata)
+08001EBC Palette_CopyFaded               # [likely] palette copy through the brightness table (nonmatching)
+080027D4 Link_Send8                      # [likely] (nonmatching: 0x83 comes from the literal pool)
+080029DC Link_Delay                      # [sure] hand-written asm busy loop, cycle count picked from the PC's memory region
+08003CF4 Oam_Init                        # [sure] (nonmatching)
+08003D54 Oam_Flush                       # [sure] used list -> OAM (nonmatching)
+08003DEC Oam_SetPosSorted                # [likely] moves an OAM entry in the used list by z, sets x/y and priority from thresholds
+08003F00 Oam_Free                        # [sure] (nonmatching)
+08003FBC VramMap_Alloc                   # [sure] (nonmatching)
+0800436C Obj_InitAll                     # [sure] (nonmatching)
+08004408 Obj_Create                      # [sure] slot + OAM + VRAM allocation (nonmatching)
+080045FC Obj_FreeSlot                    # [sure] (nonmatching)
+080046DC Obj_Update                      # [sure] state -> OAM shadow entry (nonmatching)
+0800488C Text_PutChar                    # [likely] (nonmatching)
+08004B14 Text_ParsePaletteTag            # [sure] "{P<n>}" (nonmatching)
+08004BD0 Glyph_Alloc                     # [likely] reference-counted BG glyph tile cache (0x02002000/0x02002800/0x02003600)
+08004CA0 Glyph_Free                      # [likely] drops a reference, returns the tile to the free list at 0
+08004F38 number                          # [sure] Linux lib/vsprintf.c number() (nonmatching: register allocation)
+08005100 vsprintf                        # [sure] Linux lib/vsprintf.c (flag/conversion switches use rodata jump tables)
+08001404 Bg_UpdateScroll                 # [likely] writes BG0HOFS/VOFS, streams map columns/rows through IWRAM 0831AE68-AE98
+08001720 Bg_DrawLevelScreen              # [likely] fills screenblock 0x0600F800 from the level map (ResBank tbl8)
+08001A8C Bg_InitControl                  # [likely] writes BG0CNT-BG3CNT
+08002144 Link_ConnectScreen              # [likely] link handshake loop with on-screen messages, IntrWait
+080023EC Link_SendMultiBoot              # [likely] handshake + BIOS MultiBoot call (Single Pak)
+08002A30 Sprites_DrawAll                 # [likely] walks the sprite list at 0x03003A34: show/hide, position, Sprite_Draw, Obj_UpdateAll
+08002C04 Link_Session                    # [likely] installs VBlank_LinkError (080033CD), runs a link session via a callback
+08002F64 Link_EnterGame                  # [likely] after linking: clears VRAM, Obj_InitAll, prints, starts GAX
+08003298 Link_SerialIntr                 # [likely] SIO IRQ handler; 0xDEAD sync word
+080034A4 Link_Main                       # [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
+08004D70 Glyph_InitCache                 # [likely] initialises the glyph tile cache tables at 0x02002000-0x02003600

@@ -3477,7 +3477,7 @@ sub_08301BD8:
 	mov r0, r9
 	adds r1, r7, #0
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	ldrb r4, [r4, #0]
 	cmp r4, #1
 	bne .L08301D4C
@@ -3521,7 +3521,7 @@ sub_08301BD8:
 	ldr r3, [r0, #0]
 	mov r0, r9
 	adds r1, r7, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	movs r1, #0
 	str r1, [r5, #0]
 	mov r0, sl
@@ -3535,7 +3535,7 @@ sub_08301BD8:
 	cmp r7, #4
 	bne .L08301C84
 	ldr r0, [pc, #28]
-	bl sub_08001A8C
+	bl Bg_InitControl
 	add sp, #12
 	pop {r3, r4, r5}
 	mov r8, r3
@@ -3585,7 +3585,7 @@ sub_08301D98:
 	ldr r3, [r6, #0]
 	ldr r0, [pc, #116]
 	adds r1, r4, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08301DCC:
 	adds r6, #4
 	adds r4, #1
@@ -4130,9 +4130,9 @@ sub_08302170:
 	ldr r1, [pc, #108]
 	movs r0, #0
 	bl sub_08001FC8
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
-	bl sub_0800436C
+	bl Obj_InitAll
 	ldr r1, [pc, #92]
 	ldr r2, [pc, #96]
 	adds r0, r2, #0
@@ -4152,7 +4152,7 @@ sub_08302170:
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #15
 	bl sub_08004880
 	movs r0, #0
@@ -4433,7 +4433,7 @@ sub_083022DC:
 	movs r0, #4
 	ldr r1, [pc, #44]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -4465,7 +4465,7 @@ sub_083022DC:
 	movs r0, #4
 	ldr r1, [pc, #80]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -4746,7 +4746,7 @@ sub_083025FC:
 	adds r0, r4, #0
 	ldr r1, [pc, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -4798,8 +4798,8 @@ sub_083026AC:
 	sub sp, #4
 	adds r6, r0, #0
 	adds r5, r1, #0
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #176]
 	adds r0, r4, #0
@@ -4839,12 +4839,12 @@ sub_083026AC:
 	adds r0, r4, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #96]
 	movs r1, #31
 	bl sub_08004848
@@ -4867,12 +4867,12 @@ sub_083026AC:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #60]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	movs r0, #1
@@ -4898,8 +4898,8 @@ sub_083026AC:
 sub_08302798:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #312]
 	ldr r1, [pc, #316]
@@ -4956,7 +4956,7 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -4966,7 +4966,7 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -4976,22 +4976,22 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #240
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #140]
 	movs r1, #31
 	bl sub_08004848
@@ -5026,12 +5026,12 @@ sub_08302798:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	movs r0, #0
@@ -5086,7 +5086,7 @@ sub_08302798:
 	movs r2, #8
 	negs r2, r2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r4, #1
 	cmp r4, #29
 	bls .L08302932
@@ -5111,12 +5111,12 @@ sub_08302958:
 	movs r1, #2
 	movs r2, #2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r5, #0
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r4, #1
 	cmp r4, #63
 	bls .L0830295E
@@ -5133,8 +5133,8 @@ sub_08302958:
 sub_0830298C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -5191,7 +5191,7 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5201,7 +5201,7 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5211,22 +5211,22 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #3
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -5261,12 +5261,12 @@ sub_0830298C:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5310,7 +5310,7 @@ sub_08302B14:
 	negs r2, r2
 	movs r1, #3
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08302B34:
 	ldr r0, [r4, #0]
 	movs r1, #7
@@ -5322,7 +5322,7 @@ sub_08302B14:
 	negs r3, r3
 	movs r1, #3
 	movs r2, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08302B4C:
 	pop {r4}
 	pop {r0}
@@ -5340,8 +5340,8 @@ sub_08302B5C:
 	mov r6, r8
 	push {r6}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #260]
 	ldr r1, [pc, #264]
@@ -5390,7 +5390,7 @@ sub_08302B5C:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	movs r0, #0
 	mov r8, r0
 	mov r0, sp
@@ -5402,17 +5402,17 @@ sub_08302B5C:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #132]
 	movs r1, #31
 	bl sub_08004848
@@ -5443,12 +5443,12 @@ sub_08302B5C:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	ldr r0, [pc, #72]
@@ -5505,7 +5505,7 @@ sub_08302CB4:
 	ldrsh r3, [r1, r2]
 	movs r1, #2
 	movs r2, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	ldrb r0, [r4, #0]
 	adds r0, #1
 	strb r0, [r4, #0]
@@ -5531,8 +5531,8 @@ sub_08302CB4:
 sub_08302D10:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -5589,7 +5589,7 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5599,7 +5599,7 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5609,22 +5609,22 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -5659,12 +5659,12 @@ sub_08302D10:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5733,7 +5733,7 @@ sub_08302E98:
 	movs r1, #3
 	movs r2, #2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	add sp, #16
 	pop {r0}
 	bx r0
@@ -5752,8 +5752,8 @@ sub_08302E98:
 sub_08302F0C:
 	push {r4, r5, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #184]
 	ldr r1, [pc, #188]
@@ -5797,12 +5797,12 @@ sub_08302F0C:
 	adds r0, r4, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #104]
 	movs r1, #31
 	bl sub_08004848
@@ -5827,12 +5827,12 @@ sub_08302F0C:
 	adds r1, r5, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #68]
 	adds r1, r5, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5859,8 +5859,8 @@ sub_08302F0C:
 sub_08303008:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -5917,7 +5917,7 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5927,7 +5927,7 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5937,22 +5937,22 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #80
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -5987,12 +5987,12 @@ sub_08303008:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6036,19 +6036,19 @@ sub_08303190:
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #4
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	lsrs r3, r4, #9
 	negs r3, r3
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	lsrs r3, r4, #10
 	negs r3, r3
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #1
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r1, r5, #1
 	cmp r4, #255
 	bls .L083031DA
@@ -6087,19 +6087,19 @@ sub_083031F0:
 	movs r1, #1
 	movs r2, #4
 	negs r2, r2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	lsrs r3, r4, #9
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #2
 	negs r2, r2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	lsrs r3, r4, #10
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #1
 	negs r2, r2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r1, r5, #1
 	cmp r4, #255
 	bls .L0830323A
@@ -6126,8 +6126,8 @@ sub_083031F0:
 sub_08303250:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6176,7 +6176,7 @@ sub_08303250:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6186,17 +6186,17 @@ sub_08303250:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #120]
 	movs r1, #31
 	bl sub_08004848
@@ -6227,12 +6227,12 @@ sub_08303250:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6265,7 +6265,7 @@ sub_08303390:
 	negs r2, r2
 	movs r1, #2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6277,8 +6277,8 @@ sub_08303390:
 sub_083033A8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -6335,7 +6335,7 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6345,7 +6345,7 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6355,22 +6355,22 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -6405,12 +6405,12 @@ sub_083033A8:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6445,7 +6445,7 @@ sub_08303530:
 	movs r1, #2
 	movs r2, #0
 	movs r3, #2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -6458,8 +6458,8 @@ sub_08303530:
 sub_08303548:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6508,7 +6508,7 @@ sub_08303548:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6518,17 +6518,17 @@ sub_08303548:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #120]
 	movs r1, #31
 	bl sub_08004848
@@ -6559,12 +6559,12 @@ sub_08303548:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6597,7 +6597,7 @@ sub_08303688:
 	negs r3, r3
 	movs r1, #2
 	adds r2, r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6609,8 +6609,8 @@ sub_08303688:
 sub_083036A0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6659,7 +6659,7 @@ sub_083036A0:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6669,17 +6669,17 @@ sub_083036A0:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #120]
 	movs r1, #31
 	bl sub_08004848
@@ -6710,12 +6710,12 @@ sub_083036A0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6748,7 +6748,7 @@ sub_083037E0:
 	negs r3, r3
 	movs r1, #2
 	movs r2, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6760,8 +6760,8 @@ sub_083037E0:
 sub_083037F8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6810,7 +6810,7 @@ sub_083037F8:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6820,17 +6820,17 @@ sub_083037F8:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #120]
 	movs r1, #31
 	bl sub_08004848
@@ -6861,12 +6861,12 @@ sub_083037F8:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6899,7 +6899,7 @@ sub_08303938:
 	negs r3, r3
 	movs r1, #2
 	movs r2, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6911,8 +6911,8 @@ sub_08303938:
 sub_08303950:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -6969,7 +6969,7 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6979,7 +6979,7 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6989,22 +6989,22 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -7039,12 +7039,12 @@ sub_08303950:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7095,7 +7095,7 @@ sub_08303AD8:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08303B06:
 	pop {r0}
 	bx r0
@@ -7113,8 +7113,8 @@ sub_08303AD8:
 sub_08303B20:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -7171,7 +7171,7 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7181,7 +7181,7 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7191,22 +7191,22 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -7241,12 +7241,12 @@ sub_08303B20:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7297,7 +7297,7 @@ sub_08303CA8:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08303CD6:
 	pop {r0}
 	bx r0
@@ -7315,8 +7315,8 @@ sub_08303CA8:
 sub_08303CF0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -7373,7 +7373,7 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7383,7 +7383,7 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7393,22 +7393,22 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #136]
 	movs r1, #31
 	bl sub_08004848
@@ -7443,12 +7443,12 @@ sub_08303CF0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7499,7 +7499,7 @@ sub_08303E78:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L08303EA6:
 	pop {r0}
 	bx r0
@@ -7517,8 +7517,8 @@ sub_08303E78:
 sub_08303EC0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #312]
 	ldr r1, [pc, #316]
@@ -7575,7 +7575,7 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7585,7 +7585,7 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7595,22 +7595,22 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #140]
 	movs r1, #31
 	bl sub_08004848
@@ -7645,12 +7645,12 @@ sub_08303EC0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	ldr r0, [pc, #76]
@@ -7746,7 +7746,7 @@ sub_08304050:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 .L083040D0:
 	add sp, #48
 	pop {r0}
@@ -7769,8 +7769,8 @@ sub_08304050:
 sub_083040FC:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -7819,7 +7819,7 @@ sub_083040FC:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7829,17 +7829,17 @@ sub_083040FC:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r0, [pc, #120]
 	movs r1, #31
 	bl sub_08004848
@@ -7870,12 +7870,12 @@ sub_083040FC:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7904,8 +7904,8 @@ sub_083040FC:
 sub_0830423C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl sub_0800436C
-	bl sub_08004D70
+	bl Obj_InitAll
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #44]
 	ldr r1, [pc, #48]
@@ -7978,7 +7978,7 @@ sub_0830423C:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	mov r0, sp
 	strb r5, [r0, #0]
 	strb r5, [r4, #1]
@@ -7988,17 +7988,17 @@ sub_0830423C:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	ldr r1, [pc, #76]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -13379,7 +13379,7 @@ sub_08306EBC:
 	ldr r1, [pc, #40]
 	adds r0, r4, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldrb r0, [r7, #0]
 	cmp r0, #0
 	beq .L08306F16
@@ -13468,7 +13468,7 @@ sub_08306F40:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L08306FB0
@@ -13658,7 +13658,7 @@ sub_083070F8:
 	ldr r1, [pc, #56]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #44]
@@ -13766,7 +13766,7 @@ sub_083071BC:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13802,7 +13802,7 @@ sub_08307200:
 	ldr r1, [pc, #28]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13869,7 +13869,7 @@ sub_0830727C:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13905,7 +13905,7 @@ sub_083072C0:
 	ldr r1, [pc, #28]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13972,7 +13972,7 @@ sub_0830733C:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -14097,7 +14097,7 @@ sub_083073FC:
 	adds r0, r4, #0
 	adds r1, r5, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r6, #0
 	adds r1, #212
 	ldr r0, [pc, #48]
@@ -14108,7 +14108,7 @@ sub_083073FC:
 	ldr r0, [r6, #52]
 	ldr r1, [r6, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08307466
@@ -14117,7 +14117,7 @@ sub_083073FC:
 	adds r1, r6, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 .L08307466:
 	pop {r4, r5, r6}
 	pop {r0}
@@ -14290,7 +14290,7 @@ sub_0830758C:
 	bne .L083075C4
 	adds r0, r4, #0
 	adds r1, r6, #0
-	bl sub_0800104C
+	bl Actor_HitActor2
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083075C4
@@ -14400,7 +14400,7 @@ sub_083075D4:
 	ldrb r2, [r2, #1]
 .L0830766C:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830768C
 	cmp r6, #72
 	lsrs r7, r3, #32
@@ -14413,7 +14413,7 @@ sub_083075D4:
 	ldr r2, [pc, #64]
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830768C:
 	adds r1, r4, #0
 	adds r1, #212
@@ -14425,7 +14425,7 @@ sub_083075D4:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083076B8
@@ -14434,7 +14434,7 @@ sub_083075D4:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 .L083076B8:
 	pop {r4, r5}
 	pop {r0}
@@ -14691,11 +14691,11 @@ sub_0830784C:
 	movs r2, #7
 .L083078A0:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L0830790A
@@ -14704,7 +14704,7 @@ sub_0830784C:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 	b .L0830790A
 	movs r0, r0
 	.2byte 0xd530 @ bpl.n 0x830792c
@@ -14727,7 +14727,7 @@ sub_0830784C:
 	movs r2, #1
 .L083078E8:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830790A
 	.2byte 0xd530 @ bpl.n 0x8307954
 	lsrs r3, r1, #32
@@ -14742,7 +14742,7 @@ sub_0830784C:
 	ldr r1, [pc, #28]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830790A:
 	adds r1, r4, #0
 	adds r1, #212
@@ -14832,7 +14832,7 @@ sub_0830792C:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #1
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08307A8C
@@ -15046,7 +15046,7 @@ sub_08307B5C:
 	ldr r1, [pc, #56]
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15163,7 +15163,7 @@ sub_08307C30:
 	ldr r1, [pc, #56]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15304,7 +15304,7 @@ sub_08307D04:
 	adds r0, #100
 	ldr r1, [pc, #56]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15945,7 +15945,7 @@ sub_083081B0:
 	ldr r1, [pc, #24]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L08308214:
 	add sp, #4
 	pop {r4, r5, r6}
@@ -16058,7 +16058,7 @@ sub_0830826C:
 	adds r0, r4, #0
 	adds r1, r5, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldr r0, [sp, #0]
 	adds r0, #100
 	movs r1, #1
@@ -16270,7 +16270,7 @@ sub_08308400:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	movs r0, #1
 	movs r1, #31
 	bl sub_08003F88
@@ -16290,7 +16290,7 @@ sub_08308400:
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	add sp, #4
 	pop {r4}
 	pop {r0}
@@ -16363,7 +16363,7 @@ sub_083084E0:
 	asrs r1, r6, #8
 	subs r3, r3, r1
 	movs r1, #3
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r4, r5, r6}
 	pop {r0}
 	bx r0
@@ -16424,7 +16424,7 @@ sub_08308558:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -16441,7 +16441,7 @@ sub_08308558:
 	movs r1, #3
 	movs r2, #0
 	movs r3, #18
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	strh r5, [r6, #26]
 	add sp, #4
 	pop {r4, r5, r6}
@@ -16469,7 +16469,7 @@ sub_08308618:
 	movs r1, #3
 	movs r2, #2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -16627,7 +16627,7 @@ sub_083086D4:
 	ldr r1, [pc, #32]
 	adds r2, r6, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldr r0, [sp, #0]
 	strh r6, [r0, #12]
 .L08308756:
@@ -16788,7 +16788,7 @@ sub_08308834:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -16805,7 +16805,7 @@ sub_08308834:
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	strh r5, [r6, #26]
 	add sp, #4
 	pop {r4, r5, r6}
@@ -16838,7 +16838,7 @@ sub_083088F4:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #2
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -16890,7 +16890,7 @@ sub_0830891C:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #1
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -16950,7 +16950,7 @@ sub_0830897C:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	ldr r1, [pc, #104]
 	ldr r3, [pc, #108]
 	adds r0, r3, #0
@@ -16967,7 +16967,7 @@ sub_0830897C:
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	movs r0, #0
 	strh r0, [r5, #26]
 	movs r0, #8
@@ -17093,7 +17093,7 @@ sub_08308AB4:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -17110,7 +17110,7 @@ sub_08308AB4:
 	movs r1, #3
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	strh r5, [r6, #26]
 	add sp, #4
 	pop {r4, r5, r6}
@@ -17146,7 +17146,7 @@ sub_08308B74:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #3
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -17238,7 +17238,7 @@ sub_08308BA4:
 	adds r2, #226
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #20]
@@ -17266,7 +17266,7 @@ sub_08308C5C:
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #1
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08308C94
@@ -17499,7 +17499,7 @@ sub_08308D38:
 	ldrh r2, [r4, #10]
 .L08308E26:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L08308E44
 	movs r0, r0
 	ldr r0, [r0, #0]
@@ -17511,7 +17511,7 @@ sub_08308D38:
 	ldrh r2, [r4, #10]
 	adds r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L08308E44:
 	pop {r4, r5, r6}
 	pop {r0}
@@ -17576,7 +17576,7 @@ sub_08308E50:
 	ldr r0, [pc, #44]
 	adds r1, r5, #0
 	movs r2, #1
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08308F2C
@@ -17930,7 +17930,7 @@ sub_08309130:
 	ldr r1, [pc, #32]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r7, #0
 	adds r0, #46
 	strb r6, [r0, #0]
@@ -18084,7 +18084,7 @@ sub_083091EC:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083092D2
@@ -18110,7 +18110,7 @@ sub_083091EC:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08309306
@@ -18159,11 +18159,11 @@ sub_08309320:
 	ldr r1, [pc, #60]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08309362
@@ -18172,7 +18172,7 @@ sub_08309320:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 .L08309362:
 	ldr r0, [pc, #24]
 	ldr r0, [r0, #0]
@@ -18220,7 +18220,7 @@ sub_08309320:
 	adds r2, #1
 	adds r0, r4, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L083093DA
 	movs r5, #12
 	lsls r0, r0, #12
@@ -18234,7 +18234,7 @@ sub_08309320:
 	lsls r2, r0, #1
 	adds r0, r4, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L083093DA:
 	ldr r0, [pc, #48]
 	ldr r0, [r0, #0]
@@ -18817,7 +18817,7 @@ sub_0830983C:
 	ldr r1, [pc, #136]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830986A:
 	ldrb r0, [r5, #0]
 	cmp r0, #1
@@ -18827,7 +18827,7 @@ sub_0830983C:
 	ldr r1, [pc, #116]
 	movs r2, #2
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830987E:
 	ldrb r0, [r5, #0]
 	cmp r0, #2
@@ -18837,7 +18837,7 @@ sub_0830983C:
 	ldr r1, [pc, #96]
 	movs r2, #4
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L08309892:
 	ldrb r0, [r5, #0]
 	cmp r0, #3
@@ -18847,7 +18847,7 @@ sub_0830983C:
 	ldr r1, [pc, #76]
 	movs r2, #6
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L083098A6:
 	ldrb r5, [r5, #0]
 	cmp r5, #4
@@ -18857,12 +18857,12 @@ sub_0830983C:
 	ldr r1, [pc, #56]
 	movs r2, #8
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L083098BA:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl sub_08000A1C
+	bl Map_OnSlope
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083098D8
@@ -18871,7 +18871,7 @@ sub_0830983C:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl sub_08000A70
+	bl Map_SnapToSlope
 .L083098D8:
 	adds r1, r4, #0
 	adds r1, #212
@@ -19058,7 +19058,7 @@ sub_08309A04:
 	ldr r1, [pc, #40]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	movs r0, #192
 	lsls r0, r0, #8
 	str r0, [r4, #52]
@@ -19258,7 +19258,7 @@ sub_08309B90:
 	adds r0, r4, #0
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r4, #0
 	movs r1, #1
 	bl sub_0800078C
@@ -19297,7 +19297,7 @@ sub_08309BE0:
 	ldr r1, [pc, #44]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	mov r0, sp
 	bl sub_08309CB0
 	lsls r0, r0, #24
@@ -19614,7 +19614,7 @@ sub_08309DE4:
 	ldr r0, [pc, #28]
 	adds r1, r4, #0
 	movs r2, #0
-	bl sub_08000D04
+	bl Actor_HitActor
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08309E24
@@ -19735,7 +19735,7 @@ sub_08309E78:
 	bl sub_0800060C
 .L08309EDE:
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L08309EE4:
 	pop {r4, r5}
 	pop {r0}
@@ -19769,7 +19769,7 @@ sub_08309EEC:
 	adds r0, r4, #0
 	bl sub_08000684
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L08309F20:
 	pop {r4, r5}
 	pop {r0}
@@ -19990,7 +19990,7 @@ sub_0830A06C:
 	adds r0, r5, #0
 	bl sub_08000604
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	adds r4, #1
 	cmp r4, #59
@@ -20002,7 +20002,7 @@ sub_0830A06C:
 	adds r0, r5, #0
 	bl sub_080006C4
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	adds r4, #1
 	cmp r4, #59
@@ -20019,7 +20019,7 @@ sub_0830A06C:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #84]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A0DE:
 	bl VBlankIntrWait
 	ldr r0, [pc, #80]
@@ -20027,11 +20027,11 @@ sub_0830A06C:
 	movs r2, #5
 	negs r2, r2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r5, #0
 	bl sub_080006C4
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	lsls r0, r4, #16
 	ldr r1, [pc, #52]
@@ -20067,7 +20067,7 @@ sub_0830A140:
 	movs r1, #16
 	bl sub_0800065C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	movs r4, #5
 	ldr r5, [pc, #64]
@@ -20080,14 +20080,14 @@ sub_0830A140:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #52]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A170:
 	ldr r0, [pc, #48]
 	movs r1, #2
 	movs r2, #95
 	negs r2, r2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	lsls r0, r4, #16
 	ldr r1, [pc, #36]
 	adds r0, r0, r1
@@ -20142,7 +20142,7 @@ sub_0830A1B0:
 	movs r3, #128
 	bl sub_08000684
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	bl sub_08003490
 	lsls r0, r0, #24
@@ -20152,26 +20152,26 @@ sub_0830A1B0:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #104]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A208:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	bl sub_080006C4
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	adds r0, r7, #0
 	movs r1, #2
 	movs r2, #19
 	negs r2, r2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r7, #0
 	movs r1, #1
 	movs r2, #2
 	negs r2, r2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	subs r0, r4, #1
 	lsls r0, r0, #16
 	lsrs r1, r0, #16
@@ -20228,7 +20228,7 @@ sub_0830A274:
 	movs r3, #128
 	bl sub_08000684
 	adds r0, r7, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	bl sub_08003490
 	lsls r0, r0, #24
@@ -20238,19 +20238,19 @@ sub_0830A274:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #84]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A2CC:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	movs r1, #2
 	movs r2, #19
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #2
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	subs r0, r4, #1
 	lsls r0, r0, #16
 	lsrs r1, r0, #16
@@ -20296,7 +20296,7 @@ sub_0830A324:
 	strh r0, [r1, #0]
 	mov r0, r8
 	ldr r1, [pc, #100]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A34C:
 	lsls r4, r5, #16
 	asrs r4, r4, #16
@@ -20309,18 +20309,18 @@ sub_0830A324:
 	movs r3, #128
 	bl sub_08000684
 	adds r0, r7, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #95
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #10
 	movs r3, #0
-	bl sub_08001404
+	bl Bg_UpdateScroll
 	subs r4, #1
 	lsls r4, r4, #16
 	lsrs r5, r4, #16
@@ -20358,7 +20358,7 @@ sub_0830A3B4:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl VBlankIntrWait
 	bl sub_080043B4
 	bl sub_08004A1C
@@ -20372,7 +20372,7 @@ sub_0830A3B4:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #160]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A3F8:
 	bl VBlankIntrWait
 	lsls r4, r4, #16
@@ -20471,7 +20471,7 @@ sub_0830A4AC:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	ldr r4, [pc, #240]
 	adds r0, r4, #0
 	bl sub_0800060C
@@ -20484,11 +20484,11 @@ sub_0830A4AC:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r6, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	ldr r4, [pc, #200]
 	adds r0, r4, #0
 	bl sub_0800060C
@@ -20506,13 +20506,13 @@ sub_0830A4AC:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	mov r0, r8
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r6, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	ldr r4, [pc, #140]
 	adds r0, r4, #0
 	movs r1, #0
@@ -20520,7 +20520,7 @@ sub_0830A4AC:
 	adds r0, r4, #0
 	bl sub_0800060C
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl VBlankIntrWait
 	bl sub_080043B4
 	bl sub_08004A1C
@@ -20535,7 +20535,7 @@ sub_0830A4AC:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #92]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830A57C:
 	lsls r4, r4, #16
 	asrs r5, r4, #16
@@ -21144,7 +21144,7 @@ sub_0830AAA8:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830AAD4:
 	bl VBlankIntrWait
 	ldr r0, [pc, #236]
@@ -21177,7 +21177,7 @@ sub_0830AAA8:
 	ldrb r0, [r0, #0]
 	muls r0, r7
 	adds r0, r0, r6
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830AB22:
 	ldr r2, [r4, #0]
 	movs r3, #216
@@ -21208,7 +21208,7 @@ sub_0830AAA8:
 	ldrb r0, [r0, #0]
 	muls r0, r7
 	adds r0, r0, r6
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830AB62:
 	movs r0, #128
 	mov r1, r9
@@ -21236,7 +21236,7 @@ sub_0830AAA8:
 	ldrb r0, [r0, #0]
 	muls r0, r7
 	adds r0, r0, r6
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830ABA0:
 	ldr r0, [r4, #0]
 	movs r2, #216
@@ -21286,7 +21286,7 @@ sub_0830AAA8:
 	ldrb r0, [r0, #0]
 	muls r0, r7
 	adds r0, r0, r6
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830AC04:
 	ldr r4, [pc, #484]
 	ldr r5, [pc, #476]
@@ -21308,7 +21308,7 @@ sub_0830AAA8:
 	movs r3, #128
 	bl sub_08000684
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	movs r0, #2
 	mov r1, r9
@@ -21764,7 +21764,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	adds r1, r6, #0
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldrh r0, [r6, #0]
 	cmp r0, #222
 	bne .L0830AFC8
@@ -21813,7 +21813,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	ldr r1, [pc, #44]
-	bl sub_08002F64
+	bl Link_EnterGame
 	adds r6, #1
 	cmp r6, #4
 	bls .L0830B02A
@@ -21924,7 +21924,7 @@ sub_0830AF0C:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #84]
-	bl sub_08002F64
+	bl Link_EnterGame
 	movs r0, #10
 	ldrh r2, [r6, #0]
 	ands r0, r2
@@ -21948,7 +21948,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldrh r0, [r4, #0]
 	cmp r0, #127
 	bne .L0830B188
@@ -22081,7 +22081,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	mov r1, r9
-	bl sub_08002F64
+	bl Link_EnterGame
 	mov r0, r9
 	ldrh r0, [r0, #0]
 	cmp r0, #222
@@ -22232,7 +22232,7 @@ sub_0830B318:
 	bl VBlankIntrWait
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldrh r1, [r5, #0]
 	cmp r1, #222
 	bne .L0830B3B6
@@ -22344,7 +22344,7 @@ sub_0830B318:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #52]
-	bl sub_08002F64
+	bl Link_EnterGame
 	movs r0, #10
 	ldrh r1, [r6, #0]
 	ands r0, r1
@@ -22494,7 +22494,7 @@ sub_0830B318:
 	bl VBlankIntrWait
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldrh r0, [r5, #0]
 	cmp r0, #222
 	bne .L0830B5DC
@@ -22578,17 +22578,17 @@ sub_0830B634:
 	strb r1, [r0, #0]
 	bl sub_0830A3B4
 	adds r0, r6, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	mov r0, sl
-	bl sub_08000408
+	bl Sprite_Draw
 	mov r0, r9
-	bl sub_08000408
+	bl Sprite_Draw
 	ldr r4, [pc, #56]
 	adds r0, r4, #0
 	movs r1, #1
 	bl sub_08000680
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	pop {r3, r4, r5}
 	mov r8, r3
 	mov r9, r4
@@ -22682,13 +22682,13 @@ sub_0830B740:
 	bl sub_0800060C
 	bl sub_0830A3B4
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	mov r0, r8
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r6, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	pop {r3}
 	mov r8, r3
 	pop {r4, r5, r6}
@@ -22755,17 +22755,17 @@ sub_0830B7E0:
 	adds r0, r5, #0
 	bl sub_08000604
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r6, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	ldr r4, [pc, #48]
 	adds r0, r4, #0
 	movs r1, #1
 	bl sub_08000680
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	pop {r4, r5, r6}
 	pop {r0}
 	bx r0
@@ -22847,7 +22847,7 @@ sub_0830B8E4:
 	adds r0, r4, #0
 	bl sub_08000604
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -23029,7 +23029,7 @@ sub_0830BAAC:
 	ldrb r0, [r0, #0]
 	cmp r0, #0
 	bne .L0830BADC
-	bl sub_080034A4
+	bl Link_Main
 	ldr r1, [pc, #28]
 	movs r0, #2
 	ldrh r1, [r1, #0]
@@ -23124,7 +23124,7 @@ sub_0830BB74:
 	ldr r0, [pc, #24]
 	bl sub_08002BA0
 	movs r0, #3
-	bl sub_08002C04
+	bl Link_Session
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L0830BBA8
@@ -23214,7 +23214,7 @@ sub_0830BB74:
 	bl sub_08001FFC
 .L0830BC52:
 	bl sub_08004A1C
-	bl sub_0800436C
+	bl Obj_InitAll
 	movs r4, #0
 	.2byte 0xe070 @ b.n 0x830bd40
 	movs r0, #1
@@ -23222,7 +23222,7 @@ sub_0830BB74:
 	bl IntrWait
 	ldr r0, [pc, #36]
 	ldr r1, [pc, #36]
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldr r0, [pc, #36]
 	ldr r1, [r0, #0]
 	adds r1, #1
@@ -23273,7 +23273,7 @@ sub_0830BB74:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L0830BCC4
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -23293,7 +23293,7 @@ sub_0830BB74:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	movs r0, #0
 	movs r1, #6
@@ -23339,7 +23339,7 @@ sub_0830BD38:
 	bl IntrWait
 	ldr r0, [pc, #40]
 	ldr r1, [pc, #36]
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldr r0, [pc, #36]
 	ldr r1, [r0, #0]
 	adds r1, #1
@@ -23402,7 +23402,7 @@ sub_0830BD38:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L0830BDD0
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -23422,7 +23422,7 @@ sub_0830BD38:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	movs r0, #0
 	movs r1, #6
@@ -23554,7 +23554,7 @@ sub_0830BE44:
 	bl VBlankIntrWait
 	ldr r0, [pc, #40]
 	ldr r1, [pc, #44]
-	bl sub_08002F64
+	bl Link_EnterGame
 	adds r4, #1
 	cmp r7, #0
 	.2byte 0xd022 @ beq.n 0x830bf68
@@ -27242,18 +27242,18 @@ sub_0830DBFC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #172]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #164]
 	ldr r1, [pc, #164]
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 .L0830DC52:
 	ldr r1, [pc, #136]
 	movs r0, #17
@@ -27280,18 +27280,18 @@ sub_0830DBFC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #88]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #80]
 	ldr r1, [pc, #80]
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 .L0830DCA6:
 	ldr r0, [pc, #76]
 	ldr r1, [r0, #0]
@@ -28340,18 +28340,18 @@ sub_0830E460:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #308]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #300]
 	ldr r1, [pc, #300]
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [r5, #0]
 	adds r0, #1
 	ldr r1, [pc, #292]
@@ -28966,7 +28966,7 @@ sub_0830E93C:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #260]
-	bl sub_08002F64
+	bl Link_EnterGame
 	ldr r6, [pc, #256]
 	ldr r0, [pc, #260]
 	mov r8, r0
@@ -28974,8 +28974,8 @@ sub_0830E93C:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
-	bl sub_08004D70
+	bl Palette_CopyFaded
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #240]
 	ldr r1, [pc, #240]
@@ -29015,14 +29015,14 @@ sub_0830E93C:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl sub_08001A8C
+	bl Bg_InitControl
 	ldr r1, [pc, #160]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -29043,24 +29043,24 @@ sub_0830E93C:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r5, [pc, #120]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl sub_0800436C
+	bl Obj_InitAll
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -29108,7 +29108,7 @@ sub_0830E93C:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #68]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830EAB0:
 	bl sub_08316F50
 	cmp r0, #0
@@ -29166,7 +29166,7 @@ sub_0830E93C:
 	movs r2, #7
 .L0830EB22:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830EB3C
 	movs r0, r0
 	sub sp, #320
@@ -29177,7 +29177,7 @@ sub_0830E93C:
 	movs r2, #1
 .L0830EB36:
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830EB3C:
 	movs r0, #88
 	adds r1, r7, #0
@@ -29197,7 +29197,7 @@ sub_0830E93C:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	b .L0830EBCC
 	movs r0, r0
 	sub sp, #320
@@ -29210,7 +29210,7 @@ sub_0830E93C:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830EB9C
 	movs r0, r0
 	sub sp, #320
@@ -29220,7 +29220,7 @@ sub_0830E93C:
 	ldr r1, [pc, #228]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830EB9C:
 	movs r0, #88
 	adds r1, r7, #0
@@ -29240,7 +29240,7 @@ sub_0830E93C:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830EBCC:
 	adds r5, #100
 	adds r7, #1
@@ -29318,7 +29318,7 @@ sub_0830E93C:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl sub_08002F64
+	bl Link_EnterGame
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830EC48
@@ -29346,13 +29346,13 @@ sub_0830E93C:
 	ldr r0, [r4, #0]
 	muls r0, r6
 	add r0, sp
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	mov r0, r9
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830ECA6:
 	ldr r0, [r4, #0]
 	muls r0, r6
@@ -29417,13 +29417,13 @@ sub_0830ECF4:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #248]
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl sub_08002F64
-	bl sub_08004D70
+	bl Link_EnterGame
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
 	ldr r1, [pc, #236]
@@ -29463,14 +29463,14 @@ sub_0830ECF4:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl sub_08001A8C
+	bl Bg_InitControl
 	ldr r1, [pc, #156]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -29491,24 +29491,24 @@ sub_0830ECF4:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl sub_0800436C
+	bl Obj_InitAll
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -29554,7 +29554,7 @@ sub_0830ECF4:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #80]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830EE64:
 	bl sub_08316F50
 	cmp r0, #0
@@ -29586,7 +29586,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	ldr r1, [pc, #20]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830EED0
 	subs r4, #4
 	lsls r0, r0, #12
@@ -29604,7 +29604,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	ldr r1, [pc, #12]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830EED0:
 	adds r0, r5, #0
 	mov r1, r8
@@ -29622,7 +29622,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #12]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830EF08
 	movs r0, r0
 	sub sp, #320
@@ -29632,7 +29632,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #52]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830EF08:
 	adds r0, r5, #0
 	mov r1, sl
@@ -29650,7 +29650,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	b .L0830EF8A
 	sub sp, #320
 	lsrs r0, r2, #32
@@ -29662,7 +29662,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830EF60
 	movs r0, r0
 	sub sp, #320
@@ -29672,7 +29672,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #216]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830EF60:
 	adds r0, r5, #0
 	ldr r1, [sp, #332]
@@ -29689,7 +29689,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830EF8A:
 	ldr r2, [sp, #332]
 	adds r2, #72
@@ -29764,7 +29764,7 @@ sub_0830ECF4:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl sub_08002F64
+	bl Link_EnterGame
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830F000
@@ -29792,13 +29792,13 @@ sub_0830ECF4:
 	ldr r0, [r4, #0]
 	muls r0, r6
 	add r0, sp
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	mov r0, r9
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830F05E:
 	ldr r0, [r4, #0]
 	muls r0, r6
@@ -29863,13 +29863,13 @@ sub_0830F0AC:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #248]
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl sub_08002F64
-	bl sub_08004D70
+	bl Link_EnterGame
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
 	ldr r1, [pc, #236]
@@ -29909,14 +29909,14 @@ sub_0830F0AC:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl sub_08001A48
+	bl ResBank_SetSlot
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #0
-	bl sub_08001720
+	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl sub_08001A8C
+	bl Bg_InitControl
 	ldr r1, [pc, #156]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -29937,24 +29937,24 @@ sub_0830F0AC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl sub_0800436C
+	bl Obj_InitAll
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -30000,7 +30000,7 @@ sub_0830F0AC:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #80]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830F21C:
 	bl sub_08316F50
 	cmp r0, #0
@@ -30032,7 +30032,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	ldr r1, [pc, #20]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830F288
 	subs r4, #4
 	lsls r0, r0, #12
@@ -30050,7 +30050,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	ldr r1, [pc, #12]
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830F288:
 	adds r0, r5, #0
 	mov r1, r8
@@ -30068,7 +30068,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #12]
 	movs r2, #7
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830F2C0
 	movs r0, r0
 	sub sp, #320
@@ -30078,7 +30078,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #52]
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830F2C0:
 	adds r0, r5, #0
 	mov r1, sl
@@ -30096,7 +30096,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	b .L0830F342
 	sub sp, #320
 	lsrs r0, r2, #32
@@ -30108,7 +30108,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	b .L0830F318
 	movs r0, r0
 	sub sp, #320
@@ -30118,7 +30118,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #216]
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L0830F318:
 	adds r0, r5, #0
 	ldr r1, [sp, #440]
@@ -30135,7 +30135,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r5, #0
-	bl sub_08000408
+	bl Sprite_Draw
 .L0830F342:
 	ldr r2, [sp, #440]
 	adds r2, #56
@@ -30210,7 +30210,7 @@ sub_0830F0AC:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl sub_08002F64
+	bl Link_EnterGame
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830F3B8
@@ -30238,13 +30238,13 @@ sub_0830F0AC:
 	ldr r0, [r4, #0]
 	muls r0, r6
 	add r0, sp
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	mov r0, r9
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl sub_08002F64
+	bl Link_EnterGame
 .L0830F416:
 	ldr r0, [r4, #0]
 	muls r0, r6
@@ -30308,7 +30308,7 @@ sub_0830F464:
 	movs r1, #0
 	bl sub_08000680
 	adds r0, r4, #0
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	movs r4, #0
 .L0830F4A6:
@@ -30383,7 +30383,7 @@ sub_0830F464:
 	movs r4, #1
 .L0830F53A:
 	ldr r0, [pc, #44]
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_080043B4
 	ldr r1, [pc, #36]
 	ldrh r2, [r1, #0]
@@ -30702,7 +30702,7 @@ sub_0830F78C:
 	cmp r0, #0
 	beq .L0830F7BC
 	ldrh r0, [r4, #0]
-	bl sub_08004CA0
+	bl Glyph_Free
 	b .L0830F7C2
 .L0830F7BC:
 	ldrh r0, [r4, #0]
@@ -30746,7 +30746,7 @@ sub_0830F7CC:
 	adds r0, r4, r0
 	ldr r1, [sp, #44]
 	ldr r2, [sp, #52]
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -30805,12 +30805,12 @@ sub_0830F840:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	ldr r0, [pc, #112]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl sub_08001EBC
+	bl Palette_CopyFaded
 	movs r0, #14
 	bl sub_08004880
 	ldr r5, [pc, #100]
@@ -30818,13 +30818,13 @@ sub_0830F840:
 	adds r0, r5, #0
 	movs r2, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	ldr r4, [pc, #92]
 	ldr r1, [pc, #96]
 	adds r0, r4, #0
 	movs r2, #1
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r4, #0
@@ -31416,7 +31416,7 @@ sub_0830F904:
 	strb r5, [r0, #0]
 .L0830FD72:
 	ldr r0, [pc, #56]
-	bl sub_08000408
+	bl Sprite_Draw
 	bl sub_0800347C
 	lsls r0, r0, #24
 	lsrs r0, r0, #23
@@ -31503,7 +31503,7 @@ sub_0830FDE0:
 	movs r0, #1
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31517,7 +31517,7 @@ sub_0830FDE0:
 	movs r0, #1
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31535,7 +31535,7 @@ sub_0830FDE0:
 	movs r0, #1
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31552,7 +31552,7 @@ sub_0830FDE0:
 	movs r0, #1
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31573,7 +31573,7 @@ sub_0830FDE0:
 	movs r0, #2
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31601,7 +31601,7 @@ sub_0830FDE0:
 	movs r0, #2
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31623,7 +31623,7 @@ sub_0830FDE0:
 	movs r0, #3
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31649,7 +31649,7 @@ sub_0830FDE0:
 	movs r0, #3
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31676,7 +31676,7 @@ sub_0830FDE0:
 	movs r0, #4
 	ldr r1, [sp, #48]
 	movs r2, #0
-	bl sub_08004BD0
+	bl Glyph_Alloc
 	adds r3, r0, #0
 	lsls r3, r3, #16
 	lsrs r3, r3, #16
@@ -31745,7 +31745,7 @@ sub_0830FFD4:
 	adds r0, r4, #0
 	movs r2, #15
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	cmp r5, #16
 	bne .L08310028
 	adds r0, r4, #0
@@ -31778,7 +31778,7 @@ sub_0830FFD4:
 	adds r0, r4, #0
 	movs r2, #4
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 	adds r0, r4, #0
 	movs r1, #8
 	bl sub_0800075C
@@ -31794,7 +31794,7 @@ sub_0830FFD4:
 	ldr r1, [pc, #92]
 	adds r2, r5, #0
 	movs r3, #0
-	bl sub_080002E0
+	bl Sprite_Init
 .L08310070:
 	ldr r0, [pc, #76]
 	bl sub_08000604
@@ -31827,7 +31827,7 @@ sub_0830FFD4:
 	cmp r5, #18
 	beq .L083100B2
 	ldr r0, [pc, #16]
-	bl sub_08000408
+	bl Sprite_Draw
 .L083100B2:
 	add sp, #8
 	pop {r3, r4}

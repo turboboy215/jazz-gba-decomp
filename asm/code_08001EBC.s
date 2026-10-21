@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Palette_CopyFaded: [likely] palette copy through the brightness table (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08001EBC
 	.thumb_func
 sub_08001EBC:
+	.global Palette_CopyFaded
+	.thumb_set Palette_CopyFaded, sub_08001EBC
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_EnterGame: [likely] after linking: clears VRAM, Obj_InitAll, prints, starts GAX
 	.thumb
 	.align 1, 0
 	.global sub_08002F64
 	.thumb_func
 sub_08002F64:
+	.global Link_EnterGame
+	.thumb_set Link_EnterGame, sub_08002F64
 	push {r4, r5, r6, r7, lr}
 	adds r6, r1, #0
 	ldr r4, [pc, #176]
@@ -174,7 +177,7 @@ sub_08002F64:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08003090
-	bl sub_08004D70
+	bl Glyph_InitCache
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -194,7 +197,7 @@ sub_08002F64:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl sub_0800436C
+	bl Obj_InitAll
 	bl VBlankIntrWait
 	ldr r2, [pc, #40]
 	movs r0, #0

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ VramMap_Alloc: [sure] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08003FBC
 	.thumb_func
 sub_08003FBC:
+	.global VramMap_Alloc
+	.thumb_set VramMap_Alloc, sub_08003FBC
 	push {r4, r5, r6, r7, lr}
 	mov ip, r2
 	adds r4, r1, #0

@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Oam_Init: [sure] (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08003CF4
 	.thumb_func
 sub_08003CF4:
+	.global Oam_Init
+	.thumb_set Oam_Init, sub_08003CF4
 	push {r4, r5, r6, lr}
 	movs r2, #0
 	ldr r5, [pc, #28]
@@ -55,11 +58,14 @@ sub_08003CF4:
 	.4byte 0x03001260
 	.4byte 0x03001264
 
+@ Oam_Flush: [sure] used list -> OAM (nonmatching)
 	.thumb
 	.align 1, 0
 	.global sub_08003D54
 	.thumb_func
 sub_08003D54:
+	.global Oam_Flush
+	.thumb_set Oam_Flush, sub_08003D54
 	push {r4, r5, lr}
 	ldr r0, [pc, #92]
 	ldrb r4, [r0, #0]
