@@ -27,3 +27,24 @@ void sub_08001FD8(int idx) { gIntrTable_0300585C[idx] = sub_08001FEC; }
 void sub_08001FEC(void) { }
 
 void sub_08001FF0(void) { INTR_CHECK = 1; }
+
+void sub_08001FFC(u16 key, u16 mask)
+{
+    u16 k = key;
+    u16 *p;
+    if (k == 1)
+        p = &gKeyMapA_03000D28;
+    else if (k == 2)
+        p = &gKeyMapB_03000D2A;
+    else if (k == 0x200)
+        p = &gKeyMapL_03000D24;
+    else if (k == 0x100)
+        p = &gKeyMapR_03000D26;
+    else if (k == 4)
+        p = &gKeyMapSelect_03000D2C;
+    else if (k == 8)
+        p = &gKeyMapStart_03000D2E;
+    else
+        return;
+    *p = mask;
+}

@@ -193,3 +193,12 @@
 08001FB4 DisableIrq                       # [sure]
 08002058 ResetKeyMapping                  # [likely] identity key mapping
 08002094 ReadKeys                         # [sure] held/newly pressed keys; A+B+Select+Start soft-resets
+08001FFC SetKeyMapping                    # [likely] key = KEY_A/B/L/R/SELECT/START picks the gKeyMap slot
+080020C8 MapKeys                          # [likely] translates raw keys through the key mapping (d-pad passes through)
+080023B0 Link_Reset                       # [likely] clears the port state, SIOCNT = 8-bit normal mode 0x2003
+08002820 Link_Toggle                      # [likely]
+080028E4 Link_IsConnected                 # [likely] state == 0xE9
+080029F4 Link_WaitIdle                    # [likely] waits (bounded) for SIOCNT start bit to clear, then delays
+08002B50 LinkBuffers_Init                 # [likely] one-time setup of the link buffer pointers
+08002BA0 LinkBuffers_SetUnk8              # [likely]
+08002BAC Link_InitMulti                   # [likely] multi-player SIO setup; TRUE when no partner answered
