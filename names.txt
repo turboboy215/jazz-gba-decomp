@@ -202,3 +202,14 @@
 08002B50 LinkBuffers_Init                 # [likely] one-time setup of the link buffer pointers
 08002BA0 LinkBuffers_SetUnk8              # [likely]
 08002BAC Link_InitMulti                   # [likely] multi-player SIO setup; TRUE when no partner answered
+08002F28 Link_Close                       # [likely] drops the serial/timer IRQ handler and resets the link id
+0800314C Link_GetUnk4                     # [likely]
+08003158 Link_GetId                       # [likely] player id (-1 none)
+080033CC VBlank_LinkError                 # [sure] VBlank handler; after 160 frames prints "LINK ERROR / PLEASE TURN OFF ALL SYSTEMS / AND TRY AGAIN", runs GAX
+08003420 VBlank_Loading                   # [sure] VBlank handler blinking "Loading... / PLEASE DO NOT POWER OFF SYSTEM"
+0800347C Link_GetIdIfActive               # [likely]
+08003490 Link_IsMulti                     # [likely] unk4 > 1
+08003848 Unk03000970_SetBit7              # [likely]
+08003860 Link_StopTimerSio                # [likely] masks serial/timer3 IRQs, resets SIO, reloads timer 3, acks IF
+08003CB0 VBlank_Main                      # [likely] VBlank work then INTR_CHECK |= 1 with IME off
+08003DC0 Oam_Alloc                        # [sure] pops the free list, pushes onto the used list

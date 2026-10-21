@@ -26,7 +26,7 @@ struct LinkPort {
 struct LinkBuffers {
     s32 unk0;
     u8 unk4;
-    u8 unk5;
+    s8 unk5;           /* 255 = none */
     u8 pad6[2];
     u32 unk8;
     u8 *unkC;
@@ -49,5 +49,11 @@ void sub_08002B50(void);
 void sub_08002BA0(u32 v);
 u8 sub_08002BAC(int mode);
 void sub_0831A54C(void);  /* VBlankIntrWait */
+void sub_08002A30(int v);
+void sub_08002F28(void);
+u8 sub_0800314C(void);
+s8 sub_08003158(void);
+u8 sub_0800347C(void);
+u8 sub_08003490(void);
 
 #endif
