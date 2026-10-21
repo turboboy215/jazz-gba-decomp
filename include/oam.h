@@ -19,7 +19,16 @@ extern u8 gOamFreeHead_0300125C;
 extern u8 gOamUsedHead_03001260;
 extern u8 gUnk_03001264;
 
+extern u8 gOamPrioThresholds_03001258[4];
+extern u8 gVramMap_03001268[1024];   /* OBJ VRAM tile allocation map: 1 = block start, 0xFF = continuation */
+
 void sub_08003CF4(void);
+void sub_08003F00(u8 idx);
+void sub_08003F88(int i, u8 v);
+void sub_08003F94(void);
+u16 sub_08003FBC(int w, int h, const void *src, int is8bpp);
+void sub_0800404C(u16 tile, int w, int h, const void *src, int is8bpp);
+void sub_08004080(u16 tile);
 u8 sub_08003DC0(void);
 void sub_08003F70(void);
 

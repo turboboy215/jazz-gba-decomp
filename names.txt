@@ -213,3 +213,8 @@
 08003860 Link_StopTimerSio                # [likely] masks serial/timer3 IRQs, resets SIO, reloads timer 3, acks IF
 08003CB0 VBlank_Main                      # [likely] VBlank work then INTR_CHECK |= 1 with IME off
 08003DC0 Oam_Alloc                        # [sure] pops the free list, pushes onto the used list
+08003F70 OamPrio_Init                     # [likely] y thresholds 32/96/160/224 used to derive OBJ priority
+08003F88 OamPrio_Set                      # [likely]
+08003F94 VramMap_Clear                    # [sure] DMA3 32-bit fill of the 1 KiB OBJ VRAM map
+0800404C Vram_UploadTiles                 # [sure] CpuFastSet of w*h tiles (x2 for 8bpp) to OBJ tile `tile`
+08004080 VramMap_Free                     # [sure] clears the block starting at tile and its 0xFF continuation bytes
