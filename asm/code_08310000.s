@@ -2651,7 +2651,7 @@ sub_0831156C:
 	bls .L08311582
 	b .L0831184E
 .L08311582:
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r1, [pc, #108]
 	movs r0, #0
@@ -3484,7 +3484,7 @@ sub_08311C50:
 	str r7, [r0, #0]
 	bl sub_08001F34
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r1, [pc, #28]
 	movs r0, #76
@@ -4803,7 +4803,7 @@ sub_083126F0:
 	.thumb_func
 sub_08312730:
 	push {r4, lr}
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r1, [pc, #216]
 	movs r2, #248
@@ -4953,7 +4953,7 @@ sub_08312864:
 	mov r0, sp
 	strh r1, [r0, #0]
 	mov r8, r1
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #128]
 	ldr r1, [pc, #128]
@@ -5080,7 +5080,7 @@ sub_08312864:
 	bne .L0831297C
 	movs r0, #0
 	mov r8, r0
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #60]
 	ldr r1, [pc, #64]
@@ -5165,7 +5165,7 @@ sub_08312864:
 	bne .L08312A38
 	movs r2, #0
 	mov r8, r2
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #248]
 	ldr r1, [pc, #252]
@@ -5983,7 +5983,7 @@ sub_08313088:
 	ldrb r0, [r0, #21]
 	bl sub_08001DBC
 .L083130AE:
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r1, [pc, #20]
 	movs r0, #76
@@ -7716,7 +7716,7 @@ sub_08313D78:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313E64
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -7793,7 +7793,7 @@ sub_08313D78:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313F0C
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r0, [pc, #96]
 	strh r4, [r0, #0]

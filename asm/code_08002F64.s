@@ -177,7 +177,7 @@ sub_08002F64:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08003090
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]

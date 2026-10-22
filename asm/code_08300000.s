@@ -4130,7 +4130,7 @@ sub_08302170:
 	ldr r1, [pc, #108]
 	movs r0, #0
 	bl sub_08001FC8
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	bl Obj_InitAll
 	ldr r1, [pc, #92]
@@ -4799,7 +4799,7 @@ sub_083026AC:
 	adds r6, r0, #0
 	adds r5, r1, #0
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #176]
 	adds r0, r4, #0
@@ -4899,7 +4899,7 @@ sub_08302798:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #312]
 	ldr r1, [pc, #316]
@@ -5134,7 +5134,7 @@ sub_0830298C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -5341,7 +5341,7 @@ sub_08302B5C:
 	push {r6}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #260]
 	ldr r1, [pc, #264]
@@ -5532,7 +5532,7 @@ sub_08302D10:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -5753,7 +5753,7 @@ sub_08302F0C:
 	push {r4, r5, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #184]
 	ldr r1, [pc, #188]
@@ -5860,7 +5860,7 @@ sub_08303008:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -6127,7 +6127,7 @@ sub_08303250:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6278,7 +6278,7 @@ sub_083033A8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -6459,7 +6459,7 @@ sub_08303548:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6610,7 +6610,7 @@ sub_083036A0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6761,7 +6761,7 @@ sub_083037F8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -6912,7 +6912,7 @@ sub_08303950:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -7114,7 +7114,7 @@ sub_08303B20:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -7316,7 +7316,7 @@ sub_08303CF0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
 	ldr r1, [pc, #312]
@@ -7518,7 +7518,7 @@ sub_08303EC0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #312]
 	ldr r1, [pc, #316]
@@ -7770,7 +7770,7 @@ sub_083040FC:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
 	ldr r1, [pc, #248]
@@ -7905,7 +7905,7 @@ sub_0830423C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
 	bl Obj_InitAll
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #44]
 	ldr r1, [pc, #48]
@@ -23273,7 +23273,7 @@ sub_0830BB74:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L0830BCC4
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -23402,7 +23402,7 @@ sub_0830BD38:
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L0830BDD0
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r0, [pc, #76]
 	strh r4, [r0, #0]
@@ -28975,7 +28975,7 @@ sub_0830E93C:
 	movs r2, #0
 	movs r3, #32
 	bl Palette_CopyFaded
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #240]
 	ldr r1, [pc, #240]
@@ -29423,7 +29423,7 @@ sub_0830ECF4:
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
 	bl Link_EnterGame
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
 	ldr r1, [pc, #236]
@@ -29869,7 +29869,7 @@ sub_0830F0AC:
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
 	bl Link_EnterGame
-	bl Glyph_InitCache
+	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
 	ldr r1, [pc, #236]

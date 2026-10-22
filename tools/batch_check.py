@@ -7,7 +7,8 @@
 
 work.c = a shared preamble (#includes), then one section per function:
   //@ 08000604 Sprite_Show # [sure] evidence for names.txt
-  (a switch with its jump table in the ROM rodata: //@ ADDR Name rodata=TABLEADDR # ...)
+  (a switch with its jump table in the ROM rodata: //@ ADDR Name rodata=TABLEADDR # ...;
+   a function followed by data inside its range: //@ ADDR Name end=ADDR # ...)
   void sub_08000604(struct Sprite *s) { s->visible = 1; }
 Each section is compiled as preamble + section with tools/check_func.py. Put prototypes in
 include/*.h, not in sections, so the integrated src/ files merge cleanly. Results are kept in
@@ -40,12 +41,16 @@ def check(path, only):
         env = dict(os.environ)
         if opts.get('rodata'):
             env['RODATA'] = opts['rodata']
+        if opts.get('end'):  # function shorter than the next start (data follows): end=ADDR
+            env['END'] = opts['end']
         r = subprocess.run(['python3', 'tools/check_func.py', tmp, addr], capture_output=True, text=True, cwd=ROOT, env=env)
         ok = r.stdout.startswith('MATCH')
         res[addr] = {'addr': addr, 'name': name, 'comment': comment, 'matched': ok, 'c_code': code}
         m = re.search(r'rodata ([0-9A-F]{8})-([0-9A-F]{8})', r.stdout)
         if ok and m:
             res[addr]['rodata'] = [m.group(1), m.group(2)]
+        if opts.get('end'):
+            res[addr]['end'] = opts['end'].upper()
         print(addr, name, 'MATCH' if ok else 'FAIL')
         if not ok:
             print((r.stdout + r.stderr)[-3000:])
