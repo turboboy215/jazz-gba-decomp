@@ -2,6 +2,7 @@
 #define GUARD_TEXT_H
 
 #include "global.h"
+#include <stdarg.h>
 
 /* Region A BG text printer (08004848-08005386). Characters go to the 32x32 BG map of
  * screenblock gTextCtx.bg; each glyph gets its own tile. Strings may contain "{...}" tags,
@@ -49,6 +50,6 @@ void sub_08004CA0(u32 cell); /* Glyph_Free */
 u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base); /* Glyph_Alloc */
 void sub_0831AE58(u16 cell);
 u32 sub_0831AE48(u32 glyph, const void *gfx, u16 n);
-void sub_08005100(char *dst, const char *fmt, void *ap);
+int sub_08005100(char *buf, const char *fmt, va_list args); /* vsprintf */
 
 #endif

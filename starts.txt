@@ -17,3 +17,4 @@
 08004868  # region A
 08004874  # region A
 08004B68  # region A: hex digit -> value
+08005384  # region A: sprintf (Ghidra started 2 bytes late at 08005386)

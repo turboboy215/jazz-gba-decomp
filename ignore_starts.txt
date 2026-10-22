@@ -2,3 +2,4 @@
 08318542  # tail of GAX2_init
 0831873E  # middle of GAX_irq
 08318802  # middle of GAX_irq
+08005386  # Ghidra: actually the second instruction of sprintf 08005384

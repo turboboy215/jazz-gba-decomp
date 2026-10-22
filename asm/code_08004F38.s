@@ -626,13 +626,13 @@ sub_08005100:
 	pop {r1}
 	bx r1
 	.2byte 0x0000
-	.2byte 0xB40E
 
 	.thumb
 	.align 1, 0
-	.global sub_08005386
+	.global sub_08005384
 	.thumb_func
-sub_08005386:
+sub_08005384:
+	push {r1, r2, r3}
 	push {lr}
 	ldr r1, [sp, #4]
 	add r2, sp, #8

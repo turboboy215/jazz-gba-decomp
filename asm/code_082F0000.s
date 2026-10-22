@@ -21686,7 +21686,7 @@ sub_082FA37C:
 	ldr r1, [r5, #24]
 	asrs r1, r1, #8
 	adds r1, #8
-	bl Map_GetSlopeDir
+	bl sub_08000AF8
 	cmp r0, #0
 	beq .L082FA474
 	cmp r0, #4
