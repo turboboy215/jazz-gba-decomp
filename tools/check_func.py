@@ -95,7 +95,8 @@ def main(cfile, addr):
                   "-I", os.path.join(ROOT, "tools/agbcc/include"), cfile])
         s, o, elf, b = (os.path.join(d, x) for x in ("f.s", "f.o", "f.elf", "f.bin"))
         run([CC1] + CFLAGS + os.environ.get("OPT", "").split() + ["-o", s], input=pp)
-        run(["python3", os.path.join(ROOT, "tools", "jtbl.py"), s])  # jump tables to .rodata, as the Makefile
+        if "-fprologue-bugfix" not in os.environ.get("OPT", "") and not os.environ.get("NOJTBL"):
+            run(["python3", os.path.join(ROOT, "tools", "jtbl.py"), s])  # jump tables to .rodata, as the Makefile (not GAX)
         open(s, "a").write("\t.align 2, 0\n")  # same as the Makefile
         run(["arm-none-eabi-as", "-mcpu=arm7tdmi", "-o", o, s])
         # Externals resolve to the address in their name. Functions need .thumb_set so ld

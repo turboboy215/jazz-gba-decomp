@@ -50,7 +50,8 @@ with `git bundle create jazz-decomp.bundle --all`.
 * Region A links two Nintendo libraries: libmultiboot `080023B0-08002A30` (= pret/pokeemerald
   `src/multiboot.c`) and MultiSio + Sio32MultiLoad `08003790-0800436C` (older revision of SAT-R/sa2
   `src/multi_sio.c`, `src/sio32_multi_load.c`). Code from those decomps is the starting point.
-* Jump tables live in the ROM rodata, not after the code: `tools/jtbl.py` handles it (see below).
+* Region A (and probably the game code) keeps jump tables in the ROM rodata, not after the code:
+  `tools/jtbl.py` handles it (see below). GAX keeps them inline (`JTBL := true` for its files).
 
 ## 3. Tools you'll use
 
@@ -99,8 +100,8 @@ Next, in order:
    Sio32MultiLoadMain (only one register with `-fno-gcse`).
 3. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
    083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
-   `src/gax/nonmatching.c`). Re-check them with `tools/jtbl.py` in place (any `switch` now needs
-   `RODATA=`), and try `-fno-gcse`.
+   `src/gax/nonmatching.c`). GAX keeps its jump tables inline (jtbl.py is skipped for the `bugfix`
+   flavour and for `OPT=-fprologue-bugfix`); `-fno-gcse` is worth a try.
 4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`.
 5. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.

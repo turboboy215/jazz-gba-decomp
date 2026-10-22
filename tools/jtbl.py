@@ -2,8 +2,9 @@
 """Move switch jump tables from .text to .rodata in agbcc output (in place).
 
 agbcc puts a thumb `switch` table right after the `mov pc, rX` dispatch. In this ROM (region A
-library, GAX, ...) the tables live in the ROM's rodata block instead; the code only holds a
-literal-pool word with the table address. Rewriting
+library, game code) the tables live in the ROM's rodata block instead; the code only holds a
+literal-pool word with the table address (GAX is the exception: objects.mk sets JTBL := true
+for its files, and check_func.py skips this with OPT=-fprologue-bugfix). Rewriting
         .align 2, 0
     .L16:
         .word .L10 ...

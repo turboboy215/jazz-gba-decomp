@@ -56,8 +56,8 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
 
 ## Blockers and build features
 
-* **Switches (solved 2026-10-22).** This ROM keeps `switch` jump tables in `.rodata`; agbcc puts
-  them inline. `tools/jtbl.py` (run by the Makefile and `check_func.py`) moves them to `.rodata`
+* **Switches (solved 2026-10-22).** Region A keeps `switch` jump tables in `.rodata`; agbcc puts
+  them inline (as GAX does, so GAX files skip this). `tools/jtbl.py` (run by the Makefile and `check_func.py`) moves them to `.rodata`
   and turns back agbcc's `b<cc>; b @long jump` pairs that only existed because of the inline
   table (it keeps those that agbcc's own range rule, target - branch in [-252, 254], makes long).
   Splits.txt kind `rodata` (`START END rodata FILE`) places `FILE.o(.rodata)` at that ROM address;
