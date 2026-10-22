@@ -88,7 +88,8 @@ def main(path):
     # compiler flavour of this integration (old_agbcc / -O1 / default); never extend a file built differently
     opt = os.environ.get("OPT", "")
     # -fprologue-bugfix is global and old_agbcc output equals it, so only -O1 / no-interwork remain
-    flav = "o1" if "-O1" in opt else ("noiw" if "-mno-thumb-interwork" in opt else "")
+    flav = "o1" if "-O1" in opt else ("noiw" if "-mno-thumb-interwork" in opt else
+                                      ("nogcse" if "-fno-gcse" in opt else ""))
     file_flav = {}
     if os.path.exists("splits.txt"):
         for l in open("splits.txt"):

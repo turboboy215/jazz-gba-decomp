@@ -302,7 +302,7 @@ sub_08002144:
 .L08002386:
 	ldr r0, [pc, #28]
 	adds r1, r6, #0
-	bl sub_080039F0
+	bl MultiSioSendDataSet
 	b .L0800218A
 	lsrs r4, r4, #5
 	lsls r0, r0, #12

@@ -209,8 +209,8 @@
 08003420 VBlank_Loading                   # [sure] VBlank handler blinking "Loading... / PLEASE DO NOT POWER OFF SYSTEM"
 0800347C Link_GetIdIfActive               # [likely]
 08003490 Link_IsMulti                     # [likely] unk4 > 1
-08003848 Unk03000970_SetBit7              # [likely]
-08003860 Link_StopTimerSio                # [likely] masks serial/timer3 IRQs, resets SIO, reloads timer 3, acks IF
+08003848 MultiSioStart                    # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+08003860 MultiSioStop                     # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
 08003CB0 VBlank_Main                      # [likely] VBlank work then INTR_CHECK |= 1 with IME off
 08003DC0 Oam_Alloc                        # [sure] pops the free list, pushes onto the used list
 08003F70 OamPrio_Init                     # [likely] y thresholds 32/96/160/224 used to derive OBJ priority
@@ -299,3 +299,8 @@
 08000ECC Actor_HitShot                    # [likely] shot (layer 0 rectangle) vs. the actor's cel rectangles; like Actor_HitActor
 08002844 MultiBootStartMaster             # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 080028F4 MultiBootHandShake               # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+08003790 MultiSioInit                     # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+080038B0 MultiSioMain                     # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+080039F0 MultiSioSendDataSet              # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+08003A9C MultiSioRecvDataCheck            # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+0831711C MultiSioRecvBufChange            # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)

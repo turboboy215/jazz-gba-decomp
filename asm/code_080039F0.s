@@ -2,188 +2,14 @@
 	.syntax unified
 	.text
 
-	.thumb
-	.align 1, 0
-	.global sub_080038B0
-	.thumb_func
-sub_080038B0:
-	push {r4, r5, r6, r7, lr}
-	mov ip, r0
-	ldr r5, [pc, #20]
-	ldr r7, [r5, #0]
-	ldr r6, [pc, #20]
-	ldrb r0, [r6, #1]
-	cmp r0, #1
-	beq .L0800393A
-	cmp r0, #1
-	bgt .L080038D4
-	cmp r0, #0
-	beq .L080038DA
-	b .L0800397E
-	movs r0, r0
-	lsls r0, r5, #4
-	lsls r0, r0, #16
-	lsrs r0, r6, #5
-	lsls r0, r0, #12
-.L080038D4:
-	cmp r0, #2
-	beq .L08003978
-	b .L0800397E
-.L080038DA:
-	movs r1, #48
-	adds r0, r7, #0
-	ands r0, r1
-	cmp r0, #0
-	bne .L08003934
-	movs r0, #136
-	adds r4, r7, #0
-	ands r4, r0
-	cmp r4, #8
-	bne .L0800397E
-	movs r1, #4
-	adds r0, r7, #0
-	ands r0, r1
-	lsls r0, r0, #24
-	lsrs r1, r0, #24
-	cmp r1, #0
-	bne .L08003934
-	ldr r0, [r6, #20]
-	cmp r0, #12
-	bne .L08003934
-	ldr r3, [pc, #88]
-	strh r1, [r3, #0]
-	ldr r2, [pc, #88]
-	ldrh r1, [r2, #0]
-	ldr r0, [pc, #88]
-	ands r0, r1
-	strh r0, [r2, #0]
-	ldrh r0, [r2, #0]
-	movs r1, #64
-	orrs r0, r1
-	strh r0, [r2, #0]
-	movs r0, #1
-	strh r0, [r3, #0]
-	ldrb r1, [r5, #1]
-	movs r0, #65
-	negs r0, r0
-	ands r0, r1
-	strb r0, [r5, #1]
-	ldr r1, [pc, #64]
-	ldr r0, [pc, #64]
-	str r0, [r1, #0]
-	adds r1, #246
-	movs r0, #192
-	strh r0, [r1, #0]
-	strb r4, [r6, #0]
-.L08003934:
-	ldr r1, [pc, #56]
-	movs r0, #1
-	strb r0, [r1, #1]
-.L0800393A:
-	ldr r1, [pc, #52]
-	movs r0, #240
-	ldrb r2, [r1, #2]
-	ands r0, r2
-	cmp r0, #0
-	beq .L08003978
-	movs r0, #64
-	ldrb r2, [r1, #6]
-	ands r0, r2
-	cmp r0, #0
-	bne .L08003978
-	ldrb r0, [r1, #8]
-	cmp r0, #7
-	bhi .L08003974
-	adds r0, #1
-	strb r0, [r1, #8]
-	b .L08003978
-	lsls r0, r1, #8
-	lsls r0, r0, #16
-	lsls r0, r0, #8
-	lsls r0, r0, #16
-	.2byte 0xff7f @ .raw
-	movs r0, r0
-	lsls r4, r1, #4
-	lsls r0, r0, #16
-	add r3, sp, #1004
-	movs r0, r0
-	lsrs r0, r6, #5
-	lsls r0, r0, #12
-.L08003974:
-	movs r0, #2
-	strb r0, [r1, #1]
-.L08003978:
-	mov r0, ip
-	bl sub_08003A9C
-.L0800397E:
-	ldr r2, [pc, #48]
-	ldrb r0, [r2, #11]
-	adds r0, #1
-	strb r0, [r2, #11]
-	ldrb r1, [r2, #6]
-	movs r3, #16
-	ands r3, r1
-	ldrb r0, [r2, #3]
-	orrs r3, r0
-	movs r0, #32
-	ands r0, r1
-	orrs r3, r0
-	movs r0, #64
-	ands r0, r1
-	orrs r3, r0
-	ldrb r1, [r2, #2]
-	lsrs r0, r1, #4
-	lsls r0, r0, #8
-	ldrb r2, [r2, #0]
-	cmp r2, #8
-	bne .L080039B4
-	movs r1, #128
-	orrs r1, r0
-	orrs r1, r3
-	b .L080039B8
-	lsrs r0, r6, #5
-	lsls r0, r0, #12
-.L080039B4:
-	adds r1, r3, #0
-	orrs r1, r0
-.L080039B8:
-	ldr r2, [pc, #36]
-	ldrb r0, [r2, #7]
-	cmp r0, #0
-	beq .L080039C6
-	movs r0, #128
-	lsls r0, r0, #5
-	orrs r1, r0
-.L080039C6:
-	ldrb r2, [r2, #8]
-	lsrs r0, r2, #3
-	lsls r2, r0, #15
-	lsls r0, r7, #26
-	lsrs r0, r0, #30
-	cmp r0, #3
-	bls .L080039E4
-	movs r0, #128
-	lsls r0, r0, #6
-	orrs r0, r2
-	orrs r0, r1
-	b .L080039E8
-	movs r0, r0
-	lsrs r0, r6, #5
-	lsls r0, r0, #12
-.L080039E4:
-	adds r0, r1, #0
-	orrs r0, r2
-.L080039E8:
-	pop {r4, r5, r6, r7}
-	pop {r1}
-	bx r1
-	.2byte 0x0000
-
+@ MultiSioSendDataSet: [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
 	.thumb
 	.align 1, 0
 	.global sub_080039F0
 	.thumb_func
 sub_080039F0:
+	.global MultiSioSendDataSet
+	.thumb_set MultiSioSendDataSet, sub_080039F0
 	push {r4, r5, r6, r7, lr}
 	movs r6, #0
 	ldr r4, [pc, #152]
@@ -268,11 +94,14 @@ sub_080039F0:
 	.4byte 0x03000AF0
 	.4byte 0x04000004
 
+@ MultiSioRecvDataCheck: [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
 	.thumb
 	.align 1, 0
 	.global sub_08003A9C
 	.thumb_func
 sub_08003A9C:
+	.global MultiSioRecvDataCheck
+	.thumb_set MultiSioRecvDataCheck, sub_08003A9C
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
