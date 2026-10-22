@@ -304,3 +304,5 @@
 080039F0 MultiSioSendDataSet              # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
 08003A9C MultiSioRecvDataCheck            # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
 0831711C MultiSioRecvBufChange            # [sure] Nintendo MultiSio sample library, older revision (cf. SAT-R/sa2 src/multi_sio.c)
+08003C1C MultiSioVSync                    # [likely] Nintendo MultiSio, called once per frame: master swaps buffers and starts the transfer; slave raises the serial bit in INTR_CHECK
+080040C8 Sio32MultiLoadInit               # [sure] Nintendo Sio32MultiLoad library

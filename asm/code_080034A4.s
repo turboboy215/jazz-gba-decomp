@@ -253,7 +253,7 @@ sub_080034A4:
 	ldr r1, [pc, #200]
 	ldr r2, [pc, #204]
 	movs r3, #4
-	bl MultiBootStartMaster
+	bl sub_08002844
 .L0800369A:
 	mov r0, r9
 	bl MultiBootMain

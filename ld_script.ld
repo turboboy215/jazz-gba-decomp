@@ -36,7 +36,7 @@ SECTIONS
         build/asm/code_080023EC.o(.text .rodata .data);
         build/src/code_080027D4.o(.text .rodata .data);
         build/src/code_08002820.o(.text .rodata .data);
-        build/asm/code_08002844.o(.text .rodata .data);
+        build/src/code_08002844.o(.text .data);
         build/src/code_080028E4.o(.text .rodata .data);
         build/asm/code_080028F4.o(.text .rodata .data);
         build/src/code_080029F4.o(.text .rodata .data);
@@ -57,6 +57,7 @@ SECTIONS
         build/src/code_08003860.o(.text .rodata .data);
         build/src/code_080038B0.o(.text .rodata .data);
         build/asm/code_080039F0.o(.text .rodata .data);
+        build/src/code_08003C1C.o(.text .rodata .data);
         build/src/code_08003CB0.o(.text .rodata .data);
         build/asm/code_08003CF4.o(.text .rodata .data);
         build/src/code_08003DC0.o(.text .rodata .data);
@@ -64,7 +65,8 @@ SECTIONS
         build/src/code_08003F70.o(.text .rodata .data);
         build/asm/code_08003FBC.o(.text .rodata .data);
         build/src/code_0800404C.o(.text .rodata .data);
-        build/asm/code_080040C8.o(.text .rodata .data);
+        build/src/code_080040C8.o(.text .rodata .data);
+        build/asm/code_08004164.o(.text .rodata .data);
         build/src/code_080043B4.o(.text .rodata .data);
         build/asm/code_08004408.o(.text .rodata .data);
         build/src/code_08004508.o(.text .rodata .data);
@@ -100,6 +102,8 @@ SECTIONS
         build/src/gax/fx_08319F30.o(.text .rodata .data);
         build/asm/code_08319F88.o(.text .rodata .data);
         build/asm/rodata.o(.text .rodata .data);
+        build/src/code_08002844.o(.rodata);
+        build/asm/rodata_083D3188.o(.text .rodata .data);
         build/asm/iwram_image.o(.text .rodata .data);
         build/asm/data_image.o(.text .rodata .data);
         build/asm/ewram_image.o(.text .rodata .data);

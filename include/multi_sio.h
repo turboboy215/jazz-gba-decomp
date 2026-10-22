@@ -69,7 +69,18 @@ extern struct MultiSioArea gUnk_03000970;
 #define REG_IF  (*(vu16 *)0x04000202)
 #endif
 #define REG_TM3 (*(vu32 *)0x0400010C)
-struct Sio32MultiLoadArea { u8 unk0[3]; u8 downloadSuccessFlag; };
+/* Nintendo Sio32MultiLoad (32-bit serial multi-load), cf. SAT-R/sa2 src/sio32_multi_load.c */
+struct Sio32MultiLoadArea {
+    u8 type;                 /* +0x00 */
+    u8 state;                /* +0x01 */
+    u8 frameCounter;         /* +0x02 */
+    u8 downloadSuccessFlag;  /* +0x03 */
+    u32 *datap;              /* +0x04 */
+    s32 dataCounter;         /* +0x08 */
+    u32 checkSum;            /* +0x0C */
+    u32 checkSumTmp;         /* +0x10 */
+    s32 checkSumCounter;     /* +0x14 */
+};
 extern struct Sio32MultiLoadArea gUnk_03000AF0;
 #define MultiSioRecvBufChange ((u32 (*)(void))0x0831711C)
 
@@ -79,5 +90,8 @@ void sub_08003860(void);               /* MultiSioStop */
 u32 sub_080038B0(void *recvp);         /* MultiSioMain */
 void sub_080039F0(void *sendp, u32 loadRequest); /* MultiSioSendDataSet */
 u32 sub_08003A9C(void *recvp);         /* MultiSioRecvDataCheck */
+void sub_08003C1C(void);               /* MultiSioVSync */
+void sub_080040C8(u32 type, void *datap); /* Sio32MultiLoadInit */
+u32 sub_08004164(u32 *progressCounterp); /* Sio32MultiLoadMain */
 
 #endif

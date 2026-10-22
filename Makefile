@@ -39,6 +39,7 @@ $(BUILD)/%.o: %.s asm/macros.inc | check-baserom
 $(BUILD)/src/%.o: src/%.c | check-baserom
 	@mkdir -p $(dir $@)
 	$(CPP) -nostdinc -I include -I tools/agbcc/include -MMD -MP -MF $(BUILD)/src/$*.d -MT $@ $< | $(CC1) $(CFLAGS) -o $(BUILD)/src/$*.s
+	python3 tools/jtbl.py $(BUILD)/src/$*.s
 	@printf '\t.align 2, 0\n' >> $(BUILD)/src/$*.s
 	$(AS) $(ASFLAGS) -o $@ $(BUILD)/src/$*.s
 

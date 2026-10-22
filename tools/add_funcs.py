@@ -14,13 +14,17 @@ from split import load_funcs, load_splits
 TRACKED = ["splits.txt", "ld_script.ld", "objects.mk"]
 
 
-def check(code, addr, end=None):
+def check(code, addr, end=None, rodata=None):
     if re.search(r"\basm\b|__asm|naked", code) and not os.environ.get("ALLOW_ASM"):  # ALLOW_ASM=1: original source had inline asm (GAX DMA delays)
         return False
     with tempfile.NamedTemporaryFile("w", suffix=".c", delete=False) as f:
         f.write(code)
     try:
-        env = dict(os.environ, END=end) if end else None
+        env = dict(os.environ)
+        if end:
+            env["END"] = end
+        if rodata:  # [start, end] of the function's jump tables in the ROM rodata (tools/jtbl.py)
+            env["RODATA"] = rodata[0]
         r = subprocess.run(["python3", "tools/check_func.py", f.name, addr], capture_output=True, text=True, env=env)
         return r.stdout.startswith("MATCH")
     finally:
@@ -52,7 +56,7 @@ def merge(codes):
 def main(path):
     funcs = {f[0]: f for f in load_funcs()}
     res = [r for r in json.load(open(path)) if r.get("matched")]
-    good = sorted((int(r["addr"], 16), r) for r in res if check(r["c_code"], r["addr"], r.get("end")))
+    good = sorted((int(r["addr"], 16), r) for r in res if check(r["c_code"], r["addr"], r.get("end"), r.get("rodata")))
     print("verified %d/%d claimed matches" % (len(good), len(res)))
     if not good:
         return 1
@@ -62,14 +66,17 @@ def main(path):
     for a, r in good:
         f = funcs[a]
         fe = int(r["end"], 16) if r.get("end") else f[1]  # "end": one C file spanning several functions
-        if runs and runs[-1][1] == a and not r.get("end"):
+        if runs and runs[-1][1] == a and not r.get("end") and not r.get("rodata") and not runs[-1][3]:
             runs[-1][1] = fe; runs[-1][2].append(r["c_code"])
         else:
-            runs.append([a, fe, [r["c_code"]]])
+            runs.append([a, fe, [r["c_code"]], r.get("rodata")])
     # ponytail: functions whose guessed declarations conflict go in separate files; a
     # header-consolidation pass (include/*.h) merges them into subsystem files later.
     split_runs = []
-    for s, e, codes in runs:
+    for s, e, codes, rod in runs:
+        if rod:  # a file with .rodata placed in the ROM rodata: keep it on its own
+            split_runs.append([s, e, codes, True, rod])
+            continue
         prev = ends.get(s)
         alone_ok = len(codes) == 1 or compiles(merge(codes))
         if alone_ok and not (prev and not compiles(merge([open("src/%s.c" % prev[1]).read()] + codes))):
@@ -96,7 +103,9 @@ def main(path):
             q = l.split()
             if len(q) >= 4 and q[2] == "c":
                 file_flav[q[3]] = q[4] if len(q) >= 5 else ""
-    for s, e, codes, standalone in runs:
+    for run in runs:
+        s, e, codes, standalone = run[:4]
+        rod = run[4] if len(run) > 4 else None
         prev = None if standalone else ends.get(s)
         if prev and file_flav.get(prev[1], "") != flav:
             prev = None
@@ -111,6 +120,15 @@ def main(path):
         srcs_names.append(name)
         splits.append((s, e, "c", name))
         ends[e] = (s, name)
+        if rod:  # carve the tables out of the asm rodata row: kind "rodata" -> name.o(.rodata)
+            rs, re_ = int(rod[0], 16), int(rod[1], 16)
+            host = next(x for x in splits if x[2] == "asm" and x[0] <= rs and re_ <= x[1])
+            splits.remove(host)
+            if host[0] < rs:
+                splits.append((host[0], rs, "asm", host[3]))
+            splits.append((rs, re_, "rodata", name))
+            if re_ < host[1]:
+                splits.append((re_, host[1], "asm", "rodata_%08X" % re_))
     for p in srcs:
         if os.path.exists(p):
             shutil.copy(p, os.path.join(backup, os.path.basename(p)))
@@ -118,8 +136,8 @@ def main(path):
         open(p, "w").write(srcs[p])
     for n in srcs_names:
         file_flav[n] = flav
-    tag = lambda n: " " + file_flav[n] if file_flav.get(n) else ""
-    open("splits.txt", "w").write("".join("%08X %08X %s %s%s\n" % (x + (tag(x[3]),)) for x in sorted(splits)))
+    tag = lambda x: " " + file_flav[x[3]] if x[2] == "c" and file_flav.get(x[3]) else ""
+    open("splits.txt", "w").write("".join("%08X %08X %s %s%s\n" % (x[:4] + (tag(x),)) for x in sorted(splits)))
     ok = subprocess.run(["python3", "tools/split.py"]).returncode == 0 and \
         subprocess.run(["make", "-s", "-j%d" % os.cpu_count(), "compare"]).returncode == 0
     if not ok and not os.environ.get("KEEP"):

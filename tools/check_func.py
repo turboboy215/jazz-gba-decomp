@@ -95,6 +95,7 @@ def main(cfile, addr):
                   "-I", os.path.join(ROOT, "tools/agbcc/include"), cfile])
         s, o, elf, b = (os.path.join(d, x) for x in ("f.s", "f.o", "f.elf", "f.bin"))
         run([CC1] + CFLAGS + os.environ.get("OPT", "").split() + ["-o", s], input=pp)
+        run(["python3", os.path.join(ROOT, "tools", "jtbl.py"), s])  # jump tables to .rodata, as the Makefile
         open(s, "a").write("\t.align 2, 0\n")  # same as the Makefile
         run(["arm-none-eabi-as", "-mcpu=arm7tdmi", "-o", o, s])
         # Externals resolve to the address in their name. Functions need .thumb_set so ld
@@ -130,9 +131,24 @@ def main(cfile, addr):
         so = os.path.join(d, "syms.o")
         open(so + ".s", "w").write("\n".join(stub) + "\n")
         run(["arm-none-eabi-as", "-mcpu=arm7tdmi", "-o", so, so + ".s"])
-        run(["arm-none-eabi-ld", "-Ttext=%#x" % start, "-e", "%#x" % start, "-o", elf, o, so])
+        # RODATA=ADDR: the function's switch tables etc. (.rodata) live at ADDR in the ROM's rodata
+        rod = int(os.environ["RODATA"], 16) if os.environ.get("RODATA") else None
+        run(["arm-none-eabi-ld", "-Ttext=%#x" % start, "-e", "%#x" % start]
+            + (["--section-start=.rodata=%#x" % rod] if rod else []) + ["-o", elf, o, so])
         run(["arm-none-eabi-objcopy", "-O", "binary", "-j", ".text", elf, b])
         got = open(b, "rb").read()
+        if rod:
+            rb = b + ".ro"
+            run(["arm-none-eabi-objcopy", "-O", "binary", "-j", ".rodata", elf, rb])
+            ro = open(rb, "rb").read()
+            if ro != rom[rod - BASE:rod - BASE + len(ro)]:
+                print("RODATA MISMATCH at %08X (%d bytes):\n  want %s\n  got  %s" % (
+                    rod, len(ro), rom[rod - BASE:rod - BASE + len(ro)].hex(), ro.hex()))
+                if got == want:
+                    return 1
+            elif got == want:
+                print("MATCH %08X (%d bytes) + rodata %08X-%08X" % (start, len(want), rod, rod + len(ro)))
+                return 0
         if got == want:
             print("MATCH %08X (%d bytes)" % (start, len(want)))
             return 0

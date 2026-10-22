@@ -351,6 +351,8 @@ def main(verify):
                     k = next(i for i, l in enumerate(lines) if l.startswith("\t.4byte")) + 1
                     lines[k:k + 0x9C // 4] = ['\t.incbin "baserom.gba", 0x4, 0x9C  @ Nintendo logo']
                 objs.append(("asm/%s.s" % name, lines))
+            elif kind == "rodata":  # a C file's .rodata (jump tables, tools/jtbl.py) at this address
+                objs.append(("rodata:src/%s.c" % name, None)); pos = e
             else:
                 objs.append(("src/%s.c" % name, None)); pos = e
             while fi < len(funcs) and funcs[fi][0] < pos:
@@ -389,14 +391,25 @@ def main(verify):
     for f in os.listdir("asm"):
         if f.endswith(".s") and "asm/" + f not in keep and not re.match(r"header_\w+\.s$", f):  # keep other versions' headers
             os.remove("asm/" + f)
-    o = ["build/" + re.sub(r"\.[cs]$", ".o", f) for f, _ in objs]
+    o = ["build/" + re.sub(r"\.[cs]$", ".o", f) for f, _ in objs if not f.startswith("rodata:")]
+    # C files whose .rodata is placed separately (splits.txt kind "rodata"): code entry gets .text/.data only
+    ro_files = {"build/" + re.sub(r"\.c$", ".o", f[7:]) for f, _ in objs if f.startswith("rodata:")}
+    ld_entries = []
+    for f, _ in objs:
+        if f.startswith("rodata:"):
+            ld_entries.append("        %s(.rodata);\n" % ("build/" + re.sub(r"\.c$", ".o", f[7:])))
+        else:
+            x = "build/" + re.sub(r"\.[cs]$", ".o", f)
+            ld_entries.append(None if x not in ro_files else "        %s(.text .data);\n" % x)
+    ld_entries_x = [(f, e) for (f, _), e in zip(objs, ld_entries)]
     # agbcc -O1 also emits an unused .rodata copy of the literal pool; those bytes are not in the ROM
     o1set = set()
     if os.path.exists("splits.txt"):
         o1set = {"build/src/%s.o" % l.split()[3] for l in open("splits.txt") if len(l.split()) >= 5 and l.split()[4] == "o1"}
     write_if_changed("ld_script.ld",
         "\nINCLUDE build/syms.ld\nSECTIONS\n{\n    . = 0x08000000;\n    .text : {\n"
-        + "".join(("        %s(.text);\n" if x in o1set else "        %s(.text .rodata .data);\n") % x for x in o)
+        + "".join(e if e else (lambda x: ("        %s(.text);\n" if x in o1set else "        %s(.text .rodata .data);\n") % x)(
+                      "build/" + re.sub(r"\.[cs]$", ".o", f)) for f, e in ld_entries_x)
         + "    }\n    /DISCARD/ : { *(.comment) *(.ARM.attributes)"
         + "".join(" %s(.rodata)" % x for x in sorted(o1set)) + " }\n}\n")
     # splits.txt optional 5th column "old": build that C file with old_agbcc
