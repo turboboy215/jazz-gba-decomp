@@ -47,6 +47,10 @@ with `git bundle create jazz-decomp.bundle --all`.
   (`u16 count, u16 bpp`). Songs and level names: `docs/songs.md`.
 * Text is plain ASCII with C `\n`; `docs/strings.tsv` (`tools/extract_strings.py`).
 * Tournament (link) multiplayer: Battle / Capture The Flag, Single Pak multiboot (`docs/rom_map.md`).
+* Region A links two Nintendo libraries: libmultiboot `080023B0-08002A30` (= pret/pokeemerald
+  `src/multiboot.c`) and MultiSio + Sio32MultiLoad `08003790-0800436C` (older revision of SAT-R/sa2
+  `src/multi_sio.c`, `src/sio32_multi_load.c`). Code from those decomps is the starting point.
+* Jump tables live in the ROM rodata, not after the code: `tools/jtbl.py` handles it (see below).
 
 ## 3. Tools you'll use
 
@@ -62,30 +66,41 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/check_func.py f.c ADDR` | check a GAX function |
 | `make nonmatching` | compile `src/gax/nonmatching.c` (not linked) |
 | `python3 tools/xref_rom.py OTHER.gba` | find Jazz functions in another ROM (masked patterns) |
+| `RODATA=TABLE python3 tools/check_func.py f.c ADDR` | function with a `switch` whose jump table is at TABLE (also compares the table) |
+| `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
+| `OPT=-fno-gcse` (check, batch_check, integrate) | `nogcse` flavour for library code (MultiSio, Sio32MultiLoad, Glyph_InitCache) |
+| `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
 
 To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, then run `split.py`.
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-21):** 5.15% of live code is in C; `make compare` passes.
+**State (2026-10-22):** 6.7% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c`. Details: `docs/gax.md`.
-* Region A: 132/193 functions in byte-matching C, 19 near misses in `src/nonmatching/region_a.c`,
-  and every function is named. Subsystems, globals, blockers and matching notes:
-  `docs/region_a.md`. Headers `include/{sprite,map,actor,resbank,system,link,oam,obj,text}.h`.
+* Region A: 149/193 functions in byte-matching C (8.6 of 21.6 KB), 31 near misses with notes in
+  `src/nonmatching/region_a.c`, every function named. Subsystems, globals, the two Nintendo
+  libraries, build features and matching notes: `docs/region_a.md`. Headers
+  `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
+* Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A, the rest**: the near misses in `src/nonmatching/region_a.c`, then the big ones
-   (`080002E0` Sprite_Init, `08000408` Sprite_Draw, actor collision `08000C00-0800104C`,
-   `Bg_*` at `08001404/08001720`, the link session code, the second SIO driver
-   `08003790-0800436C`, `Oam_SetPosSorted` `08003DEC`, `Glyph_*`). Workflow: write a scratch file
-   of `//@ ADDR Name # evidence` sections, then `tools/batch_check.py work.c` and
-   `tools/batch_check.py --integrate work.c`. Use `tools/variants.py` to try alternatives.
-2. **Rodata split** so `switch` jump tables can live in C: unblocks `08000AF8`, `08001C88`,
-   `08001D0C`, vsprintf `08005100`, plus the GAX rodata move.
+1. **Region A, not yet written in C** (biggest first): `Bg_UpdateScroll` 08001404,
+   `Bg_DrawLevelScreen` 08001720 (both use ResBank `unk34/unk54` scroll pairs and `slots[i][0..1]`
+   wrap flags), the link screens `Link_ConnectScreen` 08002144, `Link_Session` 08002C04,
+   `Link_EnterGame` 08002F64, `08003168`, `Link_SerialIntr` 08003298, `Link_Main` 080034A4,
+   `Oam_SetPosSorted` 08003DEC, and `08005398-08005710` (data, ARM code at 08005480, Thumb
+   080055C8/080055D6). Workflow: scratch file of `//@ ADDR Name # evidence` sections,
+   `tools/batch_check.py work.c`, `tools/batch_check.py --integrate work.c`; `tools/variants.py`
+   for alternatives; `work/`-style helpers: disassemble with literal-pool values
+   (`arm-none-eabi-objdump -D -b binary -marmv4t -M force-thumb`).
+2. **Near misses**: `src/nonmatching/region_a.c` (31). Closest: vsprintf (one dead `ands`),
+   Text_StrRev (2 lines), ResBank_SetTileset (8), MultiSioSendDataSet (7),
+   Sio32MultiLoadMain (only one register with `-fno-gcse`).
 3. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
    083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
-   `src/gax/nonmatching.c`; register allocation, plus a 44-byte frame in generate_audio).
+   `src/gax/nonmatching.c`). Re-check them with `tools/jtbl.py` in place (any `switch` now needs
+   `RODATA=`), and try `-fno-gcse`.
 4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`.
 5. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
@@ -95,7 +110,7 @@ Next, in order:
 it, so update them. decomp-permuter (`tools/permute.py ... --old` for region A) is too slow on
 the 2-core container for these functions. `src/` region A files are still split per integration
 run (`code_<addr>.c`); merge them into subsystem files (sprite.c, oam.c, ...) when a range is
-fully in C.
+fully in C. A C file with a `rodata` row must stay on its own (add_funcs.py does this).
 
 ## 5. Conventions
 

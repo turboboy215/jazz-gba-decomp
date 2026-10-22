@@ -99,6 +99,11 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-10-22: region A to 149/193 matching (actor collision, Bg_InitControl, link screen icons,
+  font maps, Map_GetSlopeDir, sprintf, glyph cache init). Identified Nintendo libmultiboot
+  (= pokeemerald multiboot.c) and MultiSio/Sio32MultiLoad (older than SA2's) in region A.
+  Rodata split: `tools/jtbl.py` + splits.txt kind `rodata` (jump tables in the ROM rodata),
+  `nogcse` flavour, batch_check `rodata=`/`end=` options. 13 more near misses parked.
 - 2026-10-21: region A pass: 132/193 functions matching (sprite/anim accessors, map collision,
   resource bank, flags/brightness, interrupts/keys, link helpers, OAM + OBJ VRAM manager,
   hardware objects, BG text, Linux vsprintf helpers), 19 near misses in
