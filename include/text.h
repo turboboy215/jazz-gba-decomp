@@ -45,8 +45,8 @@ int sub_08004AC8(const char *s);
 char *sub_08004AE4(char **ps);
 int sub_08004B14(const char *s);
 u8 sub_08004BA4(int cell);
-void sub_08004CA0(u16 cell);
-u32 sub_08004BD0(u32 glyph, const void *gfx, u16 n);
+void sub_08004CA0(u32 cell); /* Glyph_Free */
+u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base); /* Glyph_Alloc */
 void sub_0831AE58(u16 cell);
 u32 sub_0831AE48(u32 glyph, const void *gfx, u16 n);
 void sub_08005100(char *dst, const char *fmt, void *ap);

@@ -61,7 +61,7 @@ sub_080034A4:
 	cmp r1, #3
 	bls .L080034E2
 	ldr r0, [r7, #0]
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	ldr r0, [r7, #0]
 	cmp r0, #1
 	bne .L08003530
@@ -182,7 +182,7 @@ sub_080034A4:
 	cmp r0, #0
 	beq .L08003620
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	b .L08003742
 	adds r2, #80
 	lsrs r5, r7, #32
@@ -253,10 +253,10 @@ sub_080034A4:
 	ldr r1, [pc, #200]
 	ldr r2, [pc, #204]
 	movs r3, #4
-	bl sub_08002844
+	bl MultiBootStartMaster
 .L0800369A:
 	mov r0, r9
-	bl Link_SendMultiBoot
+	bl MultiBootMain
 	mov r0, r9
 	bl sub_080028E4
 	cmp r0, #0
@@ -319,7 +319,7 @@ sub_080034A4:
 	ldr r0, [pc, #92]
 	str r1, [r0, #0]
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	movs r0, #1
 	negs r0, r0
 	str r0, [r5, #0]

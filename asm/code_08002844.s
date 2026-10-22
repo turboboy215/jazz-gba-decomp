@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ MultiBootStartMaster: [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 	.thumb
 	.align 1, 0
 	.global sub_08002844
 	.thumb_func
 sub_08002844:
+	.global MultiBootStartMaster
+	.thumb_set MultiBootStartMaster, sub_08002844
 	push {r4, r5, r6, r7, lr}
 	adds r4, r0, #0
 	adds r6, r1, #0

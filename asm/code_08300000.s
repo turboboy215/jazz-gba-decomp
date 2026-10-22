@@ -3535,7 +3535,7 @@ sub_08301BD8:
 	cmp r7, #4
 	bne .L08301C84
 	ldr r0, [pc, #28]
-	bl Bg_InitControl
+	bl sub_08001A8C
 	add sp, #12
 	pop {r3, r4, r5}
 	mov r8, r3
@@ -29022,7 +29022,7 @@ sub_0830E93C:
 	movs r3, #0
 	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl Bg_InitControl
+	bl sub_08001A8C
 	ldr r1, [pc, #160]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -29470,7 +29470,7 @@ sub_0830ECF4:
 	movs r3, #0
 	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl Bg_InitControl
+	bl sub_08001A8C
 	ldr r1, [pc, #156]
 	movs r2, #248
 	lsls r2, r2, #5
@@ -29916,7 +29916,7 @@ sub_0830F0AC:
 	movs r3, #0
 	bl Bg_DrawLevelScreen
 	adds r0, r4, #0
-	bl Bg_InitControl
+	bl sub_08001A8C
 	ldr r1, [pc, #156]
 	movs r2, #248
 	lsls r2, r2, #5

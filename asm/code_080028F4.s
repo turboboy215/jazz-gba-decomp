@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ MultiBootHandShake: [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 	.thumb
 	.align 1, 0
 	.global sub_080028F4
 	.thumb_func
 sub_080028F4:
+	.global MultiBootHandShake
+	.thumb_set MultiBootHandShake, sub_080028F4
 	push {r4, r5, r6, lr}
 	adds r2, r0, #0
 	ldrb r0, [r2, #24]
@@ -76,7 +79,7 @@ sub_080028F4:
 	ldrh r1, [r2, #0]
 .L0800296E:
 	adds r0, r2, #0
-	bl Link_Send8
+	bl sub_080027D4
 	b .L080029D4
 	movs r0, r0
 	lsls r6, r4, #4
@@ -135,14 +138,14 @@ sub_080028F4:
 	bx r1
 	.2byte 0x0000
 
-@ Link_Delay: [sure] hand-written asm busy loop, cycle count picked from the PC's memory region
+@ MultiBootWaitCycles: [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 	.thumb
 	.align 1, 0
 	.global sub_080029DC
 	.thumb_func
 sub_080029DC:
-	.global Link_Delay
-	.thumb_set Link_Delay, sub_080029DC
+	.global MultiBootWaitCycles
+	.thumb_set MultiBootWaitCycles, sub_080029DC
 	mov r2, pc
 	lsrs r2, r2, #24
 	movs r1, #12

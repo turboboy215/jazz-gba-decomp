@@ -100,5 +100,7 @@ u16 sub_08000794(struct Sprite *s); /* Sprite_GetFrame */
 u32 sub_08000798(struct Sprite *s); /* Sprite_GetTick */
 void sub_080003FC(struct Sprite *s, struct AnimBank *bank); /* Sprite_SetBank */
 void sub_080005D4(struct Sprite *s); /* Sprite_FreeObjs */
+u32 sub_080002E0(struct Sprite *s, struct AnimBank *bank, int anim, int frame); /* Sprite_Init */
+u32 sub_08000408(struct Sprite *s); /* Sprite_Draw */
 
 #endif

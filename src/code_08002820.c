@@ -1,13 +1,13 @@
 #include "global.h"
 #include "system.h"
 #include "link.h"
-void sub_08002820(struct LinkPort *p)
+void sub_08002820(struct MultiBootParam *p)
 {
-    if (p->state)
+    if (p->probe_count)
         sub_080023B0(p);
     else {
-        p->unk4A = 0;
-        p->unk1E = 0;
-        p->state = 1;
+        p->check_wait = 0;
+        p->client_bit = 0;
+        p->probe_count = 1;
     }
 }

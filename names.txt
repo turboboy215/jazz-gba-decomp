@@ -195,10 +195,10 @@
 08002094 ReadKeys                         # [sure] held/newly pressed keys; A+B+Select+Start soft-resets
 08001FFC SetKeyMapping                    # [likely] key = KEY_A/B/L/R/SELECT/START picks the gKeyMap slot
 080020C8 MapKeys                          # [likely] translates raw keys through the key mapping (d-pad passes through)
-080023B0 Link_Reset                       # [likely] clears the port state, SIOCNT = 8-bit normal mode 0x2003
-08002820 Link_Toggle                      # [likely]
-080028E4 Link_IsConnected                 # [likely] state == 0xE9
-080029F4 Link_WaitIdle                    # [likely] waits (bounded) for SIOCNT start bit to clear, then delays
+080023B0 MultiBootInit                    # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+08002820 MultiBootStartProbe              # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+080028E4 MultiBootCheckComplete           # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+080029F4 MultiBootWaitSendDone            # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 08002B50 LinkBuffers_Init                 # [likely] one-time setup of the link buffer pointers
 08002BA0 LinkBuffers_SetUnk8              # [likely]
 08002BAC Link_InitMulti                   # [likely] multi-player SIO setup; TRUE when no partner answered
@@ -268,8 +268,8 @@
 08001C88 Font_CharToGlyph                # [sure] A-Z, a-z, 0-9 and punctuation -> glyph index (jump table in rodata)
 08001D0C Font2_CharToGlyph               # [sure] second font mapping (jump table in rodata)
 08001EBC Palette_CopyFaded               # [likely] palette copy through the brightness table (nonmatching)
-080027D4 Link_Send8                      # [likely] (nonmatching: 0x83 comes from the literal pool)
-080029DC Link_Delay                      # [sure] hand-written asm busy loop, cycle count picked from the PC's memory region
+080027D4 MultiBootSend                    # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+080029DC MultiBootWaitCycles              # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 08003CF4 Oam_Init                        # [sure] (nonmatching)
 08003D54 Oam_Flush                       # [sure] used list -> OAM (nonmatching)
 08003DEC Oam_SetPosSorted                # [likely] moves an OAM entry in the used list by z, sets x/y and priority from thresholds
@@ -289,7 +289,7 @@
 08001720 Bg_DrawLevelScreen              # [likely] fills screenblock 0x0600F800 from the level map (ResBank tbl8)
 08001A8C Bg_InitControl                  # [likely] writes BG0CNT-BG3CNT
 08002144 Link_ConnectScreen              # [likely] link handshake loop with on-screen messages, IntrWait
-080023EC Link_SendMultiBoot              # [likely] handshake + BIOS MultiBoot call (Single Pak)
+080023EC MultiBootMain                    # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 08002A30 Sprites_DrawAll                 # [likely] walks the sprite list at 0x03003A34: show/hide, position, Sprite_Draw, Obj_UpdateAll
 08002C04 Link_Session                    # [likely] installs VBlank_LinkError (080033CD), runs a link session via a callback
 08002F64 Link_EnterGame                  # [likely] after linking: clears VRAM, Obj_InitAll, prints, starts GAX
@@ -297,3 +297,5 @@
 080034A4 Link_Main                       # [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
 08004D70 Glyph_InitCache                 # [likely] initialises the glyph tile cache tables at 0x02002000-0x02003600
 08000ECC Actor_HitShot                    # [likely] shot (layer 0 rectangle) vs. the actor's cel rectangles; like Actor_HitActor
+08002844 MultiBootStartMaster             # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
+080028F4 MultiBootHandShake               # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)

@@ -1,9 +1,9 @@
 #include "global.h"
 #include "system.h"
 #include "link.h"
-u8 sub_080028E4(struct LinkPort *p)
+int sub_080028E4(struct MultiBootParam *p)
 {
-    if (p->state == 0xE9)
+    if (p->probe_count == 0xE9)
         return 1;
     return 0;
 }

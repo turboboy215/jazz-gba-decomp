@@ -2,14 +2,14 @@
 	.syntax unified
 	.text
 
-@ Link_SendMultiBoot: [likely] handshake + BIOS MultiBoot call (Single Pak)
+@ MultiBootMain: [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 	.thumb
 	.align 1, 0
 	.global sub_080023EC
 	.thumb_func
 sub_080023EC:
-	.global Link_SendMultiBoot
-	.thumb_set Link_SendMultiBoot, sub_080023EC
+	.global MultiBootMain
+	.thumb_set MultiBootMain, sub_080023EC
 	push {r4, r5, r6, r7, lr}
 	mov r7, r9
 	mov r6, r8
@@ -57,7 +57,7 @@ sub_080023EC:
 	cmp r2, #223
 	bls .L08002492
 	adds r0, r6, #0
-	bl sub_080028F4
+	bl MultiBootHandShake
 	adds r4, r0, #0
 	cmp r4, #0
 	beq .L08002454
@@ -363,7 +363,7 @@ sub_080023EC:
 .L08002678:
 	orrs r1, r0
 	adds r0, r6, #0
-	bl Link_Send8
+	bl sub_080027D4
 	b .L080027C8
 	movs r0, r0
 	lsrs r0, r6, #20
@@ -392,7 +392,7 @@ sub_080023EC:
 	orrs r5, r0
 	adds r0, r6, #0
 	adds r1, r5, #0
-	bl Link_Send8
+	bl sub_080027D4
 	b .L080027C8
 .L080026BA:
 	movs r4, #3
@@ -518,7 +518,7 @@ sub_080023EC:
 	ldrb r0, [r0, #0]
 	orrs r1, r0
 	adds r0, r6, #0
-	bl Link_Send8
+	bl sub_080027D4
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L080027C8
@@ -544,51 +544,3 @@ sub_080023EC:
 	pop {r4, r5, r6, r7}
 	pop {r1}
 	bx r1
-
-@ Link_Send8: [likely] (nonmatching: 0x83 comes from the literal pool)
-	.thumb
-	.align 1, 0
-	.global sub_080027D4
-	.thumb_func
-sub_080027D4:
-	.global Link_Send8
-	.thumb_set Link_Send8, sub_080027D4
-	push {r4, lr}
-	adds r2, r0, #0
-	lsls r1, r1, #16
-	lsrs r1, r1, #16
-	ldr r3, [pc, #32]
-	ldrh r0, [r3, #0]
-	movs r4, #140
-	ands r4, r0
-	cmp r4, #8
-	bne .L0800280C
-	ldr r0, [pc, #24]
-	strh r1, [r0, #0]
-	ldr r1, [pc, #24]
-	adds r0, r1, #0
-	strh r0, [r3, #0]
-	adds r1, r2, #0
-	adds r1, #72
-	movs r0, #1
-	strb r0, [r1, #0]
-	movs r0, #0
-	b .L08002818
-	movs r0, r0
-	lsls r0, r5, #4
-	lsls r0, r0, #16
-	lsls r2, r5, #4
-	lsls r0, r0, #16
-	movs r0, #131
-	movs r0, r0
-.L0800280C:
-	adds r0, r2, #0
-	bl sub_080023B0
-	movs r0, #8
-	eors r4, r0
-	adds r0, r4, #0
-.L08002818:
-	pop {r4}
-	pop {r1}
-	bx r1
-	.2byte 0x0000

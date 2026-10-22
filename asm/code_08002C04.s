@@ -59,7 +59,7 @@ sub_08002C04:
 .L08002C62:
 	ldr r0, [pc, #100]
 	ldr r0, [r0, #0]
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	ldr r2, [pc, #96]
 	ldrh r1, [r2, #0]
 	movs r0, #8
@@ -186,7 +186,7 @@ sub_08002C04:
 	movs r3, #0
 	bl sub_080049D4
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	movs r0, #0
 	strb r0, [r4, #4]
 	movs r0, #255
@@ -250,7 +250,7 @@ sub_08002C04:
 .L08002DEA:
 	ldr r0, [pc, #60]
 	ldr r0, [r0, #0]
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	movs r1, #5
 	ldrsb r1, [r4, r1]
 	movs r0, #1
@@ -287,7 +287,7 @@ sub_08002C04:
 	bl sub_08001FC8
 .L08002E3C:
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	bl VBlankIntrWait
 	bl VBlankIntrWait
 	bl VBlankIntrWait
@@ -330,12 +330,12 @@ sub_08002C04:
 	adds r1, r5, #0
 	bl sub_08002094
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	movs r0, #0
 	b .L08002F14
 .L08002EA6:
 	movs r0, #0
-	bl Sprites_DrawAll
+	bl sub_08002A30
 	ldr r0, [pc, #28]
 	movs r1, #0
 	strb r1, [r0, #4]
