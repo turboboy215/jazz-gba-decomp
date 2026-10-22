@@ -262,7 +262,7 @@
 08000AF8 Map_GetSlopeDir                 # [likely] switch over slope types 1-9 -> 1..4 (jump table in rodata)
 08000C00 Actor_HitPoint                  # [likely] point vs. the actor's sprite cel rectangles (08000BB4/08000BDC)
 08000D04 Actor_HitActor                  # [likely] cel rectangle overlap between two actors' sprites
-0800104C Actor_HitActor2                 # [likely] variant used by Actor_FindHit2
+0800104C Actor_HitShot2                  # [likely] Actor_HitShot plus hit flag (+0x2F) and distance check; used by Actor_FindHit2
 08001A48 ResBank_SetSlot                 # [likely] copies a 4-byte slot record (nonmatching)
 08001BCC ResBank_GetCell                 # [likely] cell value from table 16 entry 0, 4/8/16-bit by header byte 8
 08001C88 Font_CharToGlyph                # [sure] A-Z, a-z, 0-9 and punctuation -> glyph index (jump table in rodata)
@@ -296,3 +296,4 @@
 08003298 Link_SerialIntr                 # [likely] SIO IRQ handler; 0xDEAD sync word
 080034A4 Link_Main                       # [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
 08004D70 Glyph_InitCache                 # [likely] initialises the glyph tile cache tables at 0x02002000-0x02003600
+08000ECC Actor_HitShot                    # [likely] shot (layer 0 rectangle) vs. the actor's cel rectangles; like Actor_HitActor

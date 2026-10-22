@@ -4765,7 +4765,7 @@ sub_082F234C:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F251C
@@ -10181,7 +10181,7 @@ sub_082F4D44:
 .L082F4DCA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4E64
@@ -10331,7 +10331,7 @@ sub_082F4ED0:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F4F44
@@ -10466,7 +10466,7 @@ sub_082F4FC8:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5054
@@ -10714,7 +10714,7 @@ sub_082F5120:
 .L082F51C2:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5268
@@ -11052,7 +11052,7 @@ sub_082F5358:
 .L082F5464:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F550C
@@ -11298,7 +11298,7 @@ sub_082F55EC:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl Actor_HitPoint
+	bl sub_08000C00
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F56B4
@@ -11407,7 +11407,7 @@ sub_082F56F8:
 	ldr r5, [pc, #76]
 	adds r1, r5, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F578E
@@ -11709,7 +11709,7 @@ sub_082F58E4:
 	asrs r1, r1, #8
 	ldr r6, [pc, #84]
 	adds r2, r6, #0
-	bl Actor_HitPoint
+	bl sub_08000C00
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F59EA
@@ -11988,7 +11988,7 @@ sub_082F5AE4:
 .L082F5B72:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5C08
@@ -12264,7 +12264,7 @@ sub_082F5D04:
 .L082F5D94:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5E2C
@@ -12416,7 +12416,7 @@ sub_082F5E3C:
 .L082F5ECA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F5F60
@@ -12868,7 +12868,7 @@ sub_082F6070:
 .L082F6228:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F62A4
@@ -13087,7 +13087,7 @@ sub_082F6378:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl Actor_HitPoint
+	bl sub_08000C00
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6496
@@ -13267,7 +13267,7 @@ sub_082F650C:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F65A8
@@ -13527,7 +13527,7 @@ sub_082F6680:
 .L082F670E:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F67A4
@@ -13989,7 +13989,7 @@ sub_082F68AC:
 .L082F6A7C:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6AF8
@@ -14206,7 +14206,7 @@ sub_082F6BC8:
 	asrs r1, r1, #8
 	ldr r6, [pc, #64]
 	adds r2, r6, #0
-	bl Actor_HitPoint
+	bl sub_08000C00
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6CEE
@@ -14515,7 +14515,7 @@ sub_082F6DF4:
 	beq .L082F6EB2
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F6EB2
@@ -14790,7 +14790,7 @@ sub_082F7054:
 	ldr r6, [pc, #40]
 	adds r1, r6, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F70E0
@@ -15123,7 +15123,7 @@ sub_082F7228:
 .L082F72EE:
 	ldr r1, [pc, #36]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7388
@@ -15385,7 +15385,7 @@ sub_082F7470:
 .L082F74EE:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7570
@@ -15533,7 +15533,7 @@ sub_082F75DC:
 	ldr r7, [pc, #88]
 	adds r1, r7, #0
 	movs r2, #1
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	adds r6, r4, #0
 	cmp r0, #0
@@ -15867,7 +15867,7 @@ sub_082F7810:
 	beq .L082F78C8
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F78C8
@@ -16392,7 +16392,7 @@ sub_082F7C00:
 	beq .L082F7CBE
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F7CBE
@@ -16977,7 +16977,7 @@ sub_082F7EFC:
 .L082F80CC:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8148
@@ -17238,7 +17238,7 @@ sub_082F823C:
 .L082F82CA:
 	ldr r1, [pc, #32]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8360
@@ -17499,7 +17499,7 @@ sub_082F8458:
 	asrs r1, r1, #8
 	ldr r6, [pc, #68]
 	adds r2, r6, #0
-	bl Actor_HitPoint
+	bl sub_08000C00
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F855C
@@ -17976,7 +17976,7 @@ sub_082F866C:
 .L082F8850:
 	ldr r1, [pc, #28]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F88E0
@@ -18125,7 +18125,7 @@ sub_082F894C:
 	ldr r7, [pc, #76]
 	adds r1, r7, #0
 	movs r2, #1
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F89F4
@@ -18875,7 +18875,7 @@ sub_082F8ED0:
 	beq .L082F8FC6
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F8FC6
@@ -18976,7 +18976,7 @@ sub_082F8ED0:
 	adds r4, #144
 	ldr r1, [r4, #0]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F9078
@@ -19129,7 +19129,7 @@ sub_082F90F4:
 	beq .L082F9190
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F9190
@@ -19187,7 +19187,7 @@ sub_082F90F4:
 	adds r6, #144
 	ldr r1, [r6, #0]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F91F4
@@ -19605,7 +19605,7 @@ sub_082F9444:
 	beq .L082F955A
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F955A
@@ -20190,7 +20190,7 @@ sub_082F9898:
 	beq .L082F99AE
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F99AE
@@ -20888,7 +20888,7 @@ sub_082F9DB0:
 	adds r0, r5, #0
 	adds r1, r4, #0
 	str r2, [sp, #4]
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	ldr r2, [sp, #4]
 	cmp r0, #0
@@ -21880,7 +21880,7 @@ sub_082FA37C:
 	beq .L082FA624
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA624
@@ -21993,7 +21993,7 @@ sub_082FA37C:
 	ldr r0, [r6, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA710
@@ -22171,7 +22171,7 @@ sub_082FA770:
 	beq .L082FA862
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA862
@@ -22229,7 +22229,7 @@ sub_082FA770:
 	ldr r0, [r6, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA8CC
@@ -22661,7 +22661,7 @@ sub_082FAB1C:
 	beq .L082FAC2A
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAC2A
@@ -22896,7 +22896,7 @@ sub_082FAD1C:
 	beq .L082FADFA
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FADFA
@@ -22955,7 +22955,7 @@ sub_082FAD1C:
 	ldr r0, [r4, #0]
 	ldr r1, [r0, #16]
 	adds r0, r5, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAE60
@@ -23383,7 +23383,7 @@ sub_082FB094:
 	beq .L082FB194
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Actor_HitActor2
+	bl sub_0800104C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FB194

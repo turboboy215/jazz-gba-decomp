@@ -7679,7 +7679,7 @@ sub_082EBC68:
 	adds r0, r4, #0
 	adds r1, r5, #0
 	movs r2, #0
-	bl Actor_HitActor
+	bl sub_08000D04
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EBD92

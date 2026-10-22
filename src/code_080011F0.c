@@ -18,7 +18,7 @@ u8 sub_080011F0(struct Actor *a, struct Actor **hit)
     return 0;
 }
 
-u8 sub_08001238(struct Actor *a, struct Actor **hit)
+u8 sub_08001238(struct Shot *a, struct Actor **hit)
 {
     u32 i;
     for (i = 0; i < MAX_ACTORS; i++) {

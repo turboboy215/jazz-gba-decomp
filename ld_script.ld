@@ -20,7 +20,6 @@ SECTIONS
         build/src/code_08000978.o(.text .rodata .data);
         build/asm/code_08000990.o(.text .rodata .data);
         build/src/code_08000B58.o(.text .rodata .data);
-        build/asm/code_08000C00.o(.text .rodata .data);
         build/src/code_080011F0.o(.text .rodata .data);
         build/asm/code_08001314.o(.text .rodata .data);
         build/src/code_08001A30.o(.text .rodata .data);

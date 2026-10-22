@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+struct Obj;
+
 /* Region A sprite library: a multi-layer animated sprite ("Sprite") drawn from an
  * animation bank ("AnimBank"). Layout from the region A accessors 080002E0-08000898. */
 
@@ -11,11 +13,26 @@
 
 /* One cel of one layer in one frame (8 bytes). */
 struct AnimCel {
-    u16 x;        /* +0 */
-    u16 y;        /* +2 */
+    s16 x;        /* +0 hotspot, subtracted from the sprite position */
+    s16 y;        /* +2 */
     u16 gfx:14;   /* +4 graphic index into the bank's graphics table (0x3FFF = empty) */
-    u16 gfxFlags:2;
+    u16 hflip:1;  /* +4 bit 14 */
+    u16 vflip:1;  /* +4 bit 15 */
     u16 delay;    /* +6 frame duration in ticks (only read from layer 0) */
+};
+
+/* Graphic header in the bank's graphics table (Anim_GetCelGfx / Sprite_GetCelGfx). */
+struct CelGfx {
+    u16 w;          /* +0x00 width in tiles */
+    u16 h;          /* +0x02 height in tiles */
+    s16 rx;         /* +0x04 hit rectangle, relative to the cel; -1 = none */
+    s16 ry;         /* +0x06 */
+    s16 rw;         /* +0x08 */
+    s16 rh;         /* +0x0A */
+    u8 is8bpp:1;    /* +0x0C */
+    u8 palette:4;   /* +0x0C bits 1-4, used when the sprite's palette is ANIM_DEFAULT */
+    u8 pad[3];
+    u8 data[1];     /* +0x10 tile data */
 };
 
 /* Animation: frameCount frames of layerCount cels each. */
@@ -46,7 +63,7 @@ struct Sprite {
     u16 loopEnd;                        /* +0x14 ANIM_DEFAULT: frameCount - 1 */
     u16 palette[SPRITE_MAX_LAYERS];     /* +0x16 0-15, or ANIM_DEFAULT */
     struct AnimBank *bank;              /* +0x30 */
-    void *objs[SPRITE_MAX_LAYERS];      /* +0x34 hardware sprite handles, one per layer */
+    struct Obj *objs[SPRITE_MAX_LAYERS]; /* +0x34 hardware sprites (obj.h), one per layer */
 };
 
 /* region A prototypes (C keeps sub_ADDR names; readable names are in names.txt) */
