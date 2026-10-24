@@ -4940,7 +4940,7 @@ sub_08312730:
 	bx r0
 	.2byte 0x0000
 
-@ Boot_LogoScreens: [likely] three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
+@ Boot_LogoScreens: [sure] (order confirmed by the user) three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
 	.thumb
 	.align 1, 0
 	.global sub_08312864

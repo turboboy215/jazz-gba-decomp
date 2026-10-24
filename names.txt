@@ -311,7 +311,7 @@
 
 # --- boot / title / menu (user's observed boot sequence: docs/boot_sequence.md) ---------------
 08312730 Boot_LegalScreen                # [sure] prints the Epic/Jaleco trademark text (083DF104-083DF2xx); first screen after AgbMain's GAX init (spacelevel)
-08312864 Boot_LogoScreens                # [likely] three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
+08312864 Boot_LogoScreens                # [sure] (order confirmed by the user) three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
 0830A638 Title_Init                      # [likely] title screen: BG layers + 11 sprites (title logo), palette fade, reads the volume settings; plays spacelevel (docs/songs.md)
 0830A06C Scene_WaitFrame                 # [likely] per-frame update: sprites, Obj_UpdateAll, Bg_UpdateScroll, Link_Exchange in multiplayer, VBlankIntrWait
 0830A3B4 Menu_DrawFrame                  # [likely] plays the menu sound (GAX_fx), prints the menu title and the "@Select" / "%Back" footer (@/% = A/B button glyphs)
