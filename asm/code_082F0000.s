@@ -5050,7 +5050,7 @@ sub_082F234C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	adds r4, r5, #0
 	adds r4, #92
 	b .L082F2674
@@ -5060,7 +5060,7 @@ sub_082F234C:
 .L082F2670:
 	bl VBlankIntrWait
 .L082F2674:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r2, r0, #0
 	cmp r2, #0
 	bne .L082F2670
@@ -5125,7 +5125,7 @@ sub_082F234C:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082F2710
 	movs r0, r0
 	subs r1, #140
@@ -24615,12 +24615,12 @@ sub_082FBA94:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FBAAC
 .L082FBAA8:
 	bl VBlankIntrWait
 .L082FBAAC:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FBAA8
@@ -24637,7 +24637,7 @@ sub_082FBA94:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -24700,12 +24700,12 @@ sub_082FBB38:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FBB50
 .L082FBB4C:
 	bl VBlankIntrWait
 .L082FBB50:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FBB4C
@@ -24722,7 +24722,7 @@ sub_082FBB38:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -24741,12 +24741,12 @@ sub_082FBB8C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FBBA4
 .L082FBBA0:
 	bl VBlankIntrWait
 .L082FBBA4:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FBBA0
@@ -24763,7 +24763,7 @@ sub_082FBB8C:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -25022,12 +25022,12 @@ sub_082FBE0C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FBE1E
 .L082FBE1A:
 	bl VBlankIntrWait
 .L082FBE1E:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FBE1A
 	movs r0, #1
@@ -25059,7 +25059,7 @@ sub_082FBE0C:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -25268,12 +25268,12 @@ sub_082FBFF4:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FC00C
 .L082FC008:
 	bl VBlankIntrWait
 .L082FC00C:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FC008
 	ldr r0, [pc, #16]
@@ -25303,7 +25303,7 @@ sub_082FBFF4:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -25460,12 +25460,12 @@ sub_082FC180:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FC198
 .L082FC194:
 	bl VBlankIntrWait
 .L082FC198:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FC194
@@ -25482,7 +25482,7 @@ sub_082FC180:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -25501,12 +25501,12 @@ sub_082FC1D4:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FC1EC
 .L082FC1E8:
 	bl VBlankIntrWait
 .L082FC1EC:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FC1E8
@@ -25523,7 +25523,7 @@ sub_082FC1D4:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -26365,12 +26365,12 @@ sub_082FC918:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FC92A
 .L082FC926:
 	bl VBlankIntrWait
 .L082FC92A:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FC926
 	movs r0, #1
@@ -27550,12 +27550,12 @@ sub_082FD314:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FD32C
 .L082FD328:
 	bl VBlankIntrWait
 .L082FD32C:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FD328
@@ -27572,7 +27572,7 @@ sub_082FD314:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -27863,12 +27863,12 @@ sub_082FD5B8:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FD5DE
 .L082FD5DA:
 	bl VBlankIntrWait
 .L082FD5DE:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FD5DA
 	ldr r0, [pc, #16]
@@ -27897,7 +27897,7 @@ sub_082FD5B8:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 .L082FD61E:
 	pop {r0}
 	bx r0
@@ -29087,12 +29087,12 @@ sub_082FE014:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FE02C
 .L082FE028:
 	bl VBlankIntrWait
 .L082FE02C:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FE028
@@ -29109,7 +29109,7 @@ sub_082FE014:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -29742,12 +29742,12 @@ sub_082FE5A0:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FE5B2
 .L082FE5AE:
 	bl VBlankIntrWait
 .L082FE5B2:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FE5AE
 	movs r0, #1
@@ -29779,7 +29779,7 @@ sub_082FE5A0:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -30876,12 +30876,12 @@ sub_082FEF2C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FEF44
 .L082FEF40:
 	bl VBlankIntrWait
 .L082FEF44:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FEF40
@@ -30898,7 +30898,7 @@ sub_082FEF2C:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -31435,12 +31435,12 @@ sub_082FF3D0:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FF3E8
 .L082FF3E4:
 	bl VBlankIntrWait
 .L082FF3E8:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FF3E4
@@ -31457,7 +31457,7 @@ sub_082FF3D0:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -31664,12 +31664,12 @@ sub_082FF5C4:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FF5DC
 .L082FF5D8:
 	bl VBlankIntrWait
 .L082FF5DC:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L082FF5D8
@@ -31686,7 +31686,7 @@ sub_082FF5C4:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r4}
 	pop {r0}
 	bx r0
@@ -32236,12 +32236,12 @@ sub_082FFAC0:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FFAD2
 .L082FFACE:
 	bl VBlankIntrWait
 .L082FFAD2:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FFACE
 	movs r0, #1
@@ -32276,7 +32276,7 @@ sub_082FFAC0:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r0}
 	bx r0
 	.4byte 0x0200755C
@@ -32295,12 +32295,12 @@ sub_082FFB38:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	b .L082FFB50
 .L082FFB4C:
 	bl VBlankIntrWait
 .L082FFB50:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L082FFB4C
 	ldr r0, [pc, #16]
@@ -32330,7 +32330,7 @@ sub_082FFB38:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl sub_08316F10
+	bl Fade_Start
 	pop {r0}
 	bx r0
 	.2byte 0x0000

@@ -4366,7 +4366,7 @@ sub_08312398:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	ldr r4, [pc, #104]
 	adds r5, r4, #0
 	adds r5, #90
@@ -4681,7 +4681,7 @@ sub_08312398:
 	bl sub_082EA3A4
 	bl sub_08309D20
 	bl sub_082F4BEC
-	bl sub_08316F50
+	bl Fade_IsBusy
 	ldr r1, [pc, #100]
 	ldr r0, [r1, #0]
 	adds r0, #1
@@ -4724,7 +4724,7 @@ sub_08312398:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #10
-	bl sub_08316F10
+	bl Fade_Start
 	b .L083126C4
 	movs r0, r0
 	lsrs r4, r3, #20
@@ -4744,7 +4744,7 @@ sub_08312398:
 .L083126C0:
 	bl VBlankIntrWait
 .L083126C4:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L083126C0
 .L083126CC:
@@ -4797,11 +4797,14 @@ sub_083126F0:
 	.4byte 0x04000004
 	.4byte 0x04000208
 
+@ Boot_LegalScreen: [sure] prints the Epic/Jaleco trademark text (083DF104-083DF2xx); first screen after AgbMain's GAX init (spacelevel)
 	.thumb
 	.align 1, 0
 	.global sub_08312730
 	.thumb_func
 sub_08312730:
+	.global Boot_LegalScreen
+	.thumb_set Boot_LegalScreen, sub_08312730
 	push {r4, lr}
 	bl sub_08004D70
 	bl sub_08001A6C
@@ -4893,7 +4896,7 @@ sub_08312730:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08312854
 	movs r0, r0
 	movs r0, r1
@@ -4929,7 +4932,7 @@ sub_08312730:
 .L08312850:
 	bl VBlankIntrWait
 .L08312854:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08312850
 	pop {r4}
@@ -4937,11 +4940,14 @@ sub_08312730:
 	bx r0
 	.2byte 0x0000
 
+@ Boot_LogoScreens: [likely] three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
 	.thumb
 	.align 1, 0
 	.global sub_08312864
 	.thumb_func
 sub_08312864:
+	.global Boot_LogoScreens
+	.thumb_set Boot_LogoScreens, sub_08312864
 	push {r4, r5, r6, r7, lr}
 	mov r7, r8
 	push {r7}
@@ -5008,7 +5014,7 @@ sub_08312864:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	adds r7, r5, #0
 	add r6, sp, #8
 	b .L08312940
@@ -5043,7 +5049,7 @@ sub_08312864:
 	movs r0, #1
 	mov r8, r0
 .L08312940:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08312924
 	movs r4, #0
@@ -5070,12 +5076,12 @@ sub_08312864:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08312980
 .L0831297C:
 	bl VBlankIntrWait
 .L08312980:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L0831297C
 	movs r0, #0
@@ -5105,7 +5111,7 @@ sub_08312864:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L083129FC
 	movs r0, r0
 	subs r1, #140
@@ -5128,7 +5134,7 @@ sub_08312864:
 	movs r2, #1
 	mov r8, r2
 .L083129FC:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L083129E0
 	movs r4, #0
@@ -5155,12 +5161,12 @@ sub_08312864:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08312A3C
 .L08312A38:
 	bl VBlankIntrWait
 .L08312A3C:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08312A38
 	movs r2, #0
@@ -5275,7 +5281,7 @@ sub_08312864:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08312B78
 	movs r0, r0
 	subs r1, #140
@@ -5301,7 +5307,7 @@ sub_08312864:
 .L08312B74:
 	bl VBlankIntrWait
 .L08312B78:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08312B74
 	movs r4, #0
@@ -5348,12 +5354,12 @@ sub_08312864:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #20
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08312BE4
 .L08312BE0:
 	bl VBlankIntrWait
 .L08312BE4:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08312BE0
 	add sp, #12
@@ -5415,12 +5421,12 @@ sub_08312BF8:
 	ldr r1, [pc, #64]
 	movs r0, #0
 	bl sub_08001FC8
-	bl sub_08312730
-	bl sub_08312864
-	bl sub_0830A638
-	bl sub_0830A06C
-	bl sub_0830A3B4
-	bl sub_0830AAA8
+	bl Boot_LegalScreen
+	bl Boot_LogoScreens
+	bl Title_Init
+	bl Scene_WaitFrame
+	bl Menu_DrawFrame
+	bl MainMenu
 .L08312C7C:
 	b .L08312C7C
 	.2byte 0x0000
@@ -6134,7 +6140,7 @@ sub_08313088:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	ldr r0, [pc, #124]
 	strb r4, [r0, #0]
 	bl sub_0830A000
@@ -7193,7 +7199,7 @@ sub_08313754:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #15
-	bl sub_08316F10
+	bl Fade_Start
 	ldr r1, [pc, #84]
 	movs r0, #20
 	strb r0, [r1, #0]
@@ -7639,7 +7645,7 @@ sub_08313D78:
 	ldr r7, [pc, #28]
 	mov r9, r7
 .L08313DCA:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	bl sub_0800347C
 	lsls r0, r0, #24
 	cmp r0, #0
@@ -7697,7 +7703,7 @@ sub_08313D78:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #10
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08313E68
 	ldrh r0, [r5, r0]
 	lsls r0, r0, #12
@@ -7712,7 +7718,7 @@ sub_08313D78:
 .L08313E64:
 	bl VBlankIntrWait
 .L08313E68:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313E64
@@ -7780,7 +7786,7 @@ sub_08313D78:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #10
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08313F10
 	ldrh r0, [r1, r0]
 	lsls r0, r0, #12
@@ -7789,7 +7795,7 @@ sub_08313D78:
 .L08313F0C:
 	bl VBlankIntrWait
 .L08313F10:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08313F0C
@@ -8013,7 +8019,7 @@ sub_08313D78:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08314108
 	movs r0, r0
 	eors r4, r0
@@ -8023,7 +8029,7 @@ sub_08313D78:
 .L08314104:
 	bl VBlankIntrWait
 .L08314108:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	cmp r0, #0
 	bne .L08314104
 	b .L08314120
@@ -14126,11 +14132,14 @@ sub_08316F04:
 	bx lr
 	.4byte 0x0300571C
 
+@ Fade_Start: [sure] REG_BLDCNT = mode | 0x3F (0x80 brighten, 0xC0 darken), step = 0x110000 / frames
 	.thumb
 	.align 1, 0
 	.global sub_08316F10
 	.thumb_func
 sub_08316F10:
+	.global Fade_Start
+	.thumb_set Fade_Start, sub_08316F10
 	push {r4, r5, lr}
 	adds r3, r0, #0
 	adds r5, r1, #0
@@ -14160,11 +14169,14 @@ sub_08316F10:
 	.4byte 0x0300583C
 	.4byte 0x04000050
 
+@ Fade_IsBusy: [likely] nonzero while the fade counter at 0x03005A4C is below 0x110000
 	.thumb
 	.align 1, 0
 	.global sub_08316F50
 	.thumb_func
 sub_08316F50:
+	.global Fade_IsBusy
+	.thumb_set Fade_IsBusy, sub_08316F50
 	ldr r0, [pc, #12]
 	ldr r3, [r0, #0]
 	ldr r0, [pc, #12]

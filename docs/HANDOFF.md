@@ -102,7 +102,8 @@ Next, in order:
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the
    MultiSio/Sio32 IRQ handlers (`030004EC`, `030005F8`).
-4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
+4. Region B game code via the claim queue, starting from `AgbMain`. The boot/title/menu functions
+   are mapped to what the user sees in `docs/boot_sequence.md` (`0830AAA8` is `MainMenu`).
 5. Data: level-record struct, tilemap format (now partly known: `struct CellMap` + 16x16 metatiles,
    see `docs/region_a.md`), palette CLUT mapping, what the 11 client data blocks hold.
 

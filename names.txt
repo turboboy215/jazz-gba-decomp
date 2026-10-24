@@ -308,3 +308,13 @@
 080040C8 Sio32MultiLoadInit               # [sure] Nintendo Sio32MultiLoad library
 08005384 sprintf                          # [sure] Linux lib/vsprintf.c sprintf (calls vsprintf 08005100)
 08003168 Link_HandshakeIntr               # [sure] serial/timer IRQ during Link_Session: counts partners answering 0xDEAD, takes the id from SIOCNT when the parent sends 20, parent prints "PRESS START TO BEGIN" and sends 20 on Start, restarts the transfer
+
+# --- boot / title / menu (user's observed boot sequence: docs/boot_sequence.md) ---------------
+08312730 Boot_LegalScreen                # [sure] prints the Epic/Jaleco trademark text (083DF104-083DF2xx); first screen after AgbMain's GAX init (spacelevel)
+08312864 Boot_LogoScreens                # [likely] three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
+0830A638 Title_Init                      # [likely] title screen: BG layers + 11 sprites (title logo), palette fade, reads the volume settings; plays spacelevel (docs/songs.md)
+0830A06C Scene_WaitFrame                 # [likely] per-frame update: sprites, Obj_UpdateAll, Bg_UpdateScroll, Link_Exchange in multiplayer, VBlankIntrWait
+0830A3B4 Menu_DrawFrame                  # [likely] plays the menu sound (GAX_fx), prints the menu title and the "@Select" / "%Back" footer (@/% = A/B button glyphs)
+0830AAA8 MainMenu                        # [sure] "MAIN MENU", NEW GAME / CONTINUE / SETTINGS / TOURNAMENT, "SELECT A SAVE FILE"; AgbMain's last call (never returns)
+08316F10 Fade_Start                      # [sure] REG_BLDCNT = mode | 0x3F (0x80 brighten, 0xC0 darken), step = 0x110000 / frames
+08316F50 Fade_IsBusy                     # [likely] nonzero while the fade counter at 0x03005A4C is below 0x110000

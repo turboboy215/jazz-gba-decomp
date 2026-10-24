@@ -70,8 +70,8 @@ words through `Link_Exchange`.
 
 In game, each player sends an 8-halfword packet per frame (`struct LinkPacket`): `Link_Exchange`
 (`08002F64`) copies the outgoing one into `unk10` and the received ones (`bufs[4..7]`) to the
-caller, and after 120 frames with a missing partner (`0xFFFF`) fades the music
-(`08316F10(1, 192, 10)`), shows "LINK ERROR / PLEASE TURN OFF ALL SYSTEMS / AND TRY AGAIN" and
+caller, and after 120 frames with a missing partner (`0xFFFF`) fades the screen to
+black (`Fade_Start(1, 0xC0, 10)`, `08316F10`), shows "LINK ERROR / PLEASE TURN OFF ALL SYSTEMS / AND TRY AGAIN" and
 hangs. `Link_SerialIntr` (`08003298`) moves one halfword per player per serial IRQ into `bufs[0..3]`
 (index `unk0`, -1 = idle `0xDEAD` words) and swaps `bufs[0-3]`/`bufs[4-7]` after 8.
 

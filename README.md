@@ -41,6 +41,7 @@ make -j$(nproc) compare
 | `names.txt` | function names and comments → alias labels in the asm |
 | `splits.txt` | C/asm ranges and link order |
 | `docs/HANDOFF.md` | **start here** in a new session: setup, verified facts, next tasks |
+| `docs/boot_sequence.md` | power-on to main menu as seen on screen, mapped to the functions |
 | `docs/songs.md` | songs, internal vs actual names, level table with level names |
 | `docs/rom_map.md` | memory map, sections, crt0, interrupts, veneers, libraries, **the multiboot client image** |
 | `docs/gax.md` | the GAX 3.01 sound engine: both copies, function map, how the game uses it |

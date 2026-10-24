@@ -166,14 +166,14 @@ sub_08002F64:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #10
-	bl sub_08316F10
+	bl Fade_Start
 	b .L08003094
 	ldr r4, [r2, r2]
 	lsls r0, r0, #12
 .L08003090:
 	bl VBlankIntrWait
 .L08003094:
-	bl sub_08316F50
+	bl Fade_IsBusy
 	adds r4, r0, #0
 	cmp r4, #0
 	bne .L08003090
