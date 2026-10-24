@@ -17,3 +17,4 @@
 - 2026-10-20: GAX 3.01: 38/43 functions matching in src/gax/ (agbcc -fprologue-bugfix); 5 in src/gax/nonmatching.c. code decompiled to C: 7192 / 228980 bytes (3.14%); rate 63 b
 - 2026-10-21: region A: 132/193 functions matching (docs/region_a.md); 19 in src/nonmatching/region_a.c. code decompiled to C: 11796 / 228980 bytes (5.15%); rate 83 bytes/hour; ETA 2027-02-07 06:25
 - 2026-10-22: region A: 149/193 functions matching; rodata split (tools/jtbl.py); libmultiboot + MultiSio identified; 31 near misses in src/nonmatching/region_a.c. code decompiled to C: 15468 / 228980 bytes (6.76%); rate 95 bytes/hour; ETA 2027-01-24
+- 2026-10-24: region A complete in C: 151/190 functions matching (Link_Session, Link_HandshakeIntr), 38 near misses; 080053A0-08012974 reclassified as the multiboot client image (excluded, total 228100). code decompiled to C: 16576 / 228100 bytes (7.27%); rate 77 bytes/hour; ETA 2027-02-15 12:42

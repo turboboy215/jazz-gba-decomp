@@ -73,5 +73,5 @@ level record. Map/metatile format: TODO.
 
 ## Ripping notes
 
-The orphaned GAX copy (see `rom_map.md`) makes gaxtapper pick the dead library. The workaround is to patch
+The GAX copy in the multiboot client image (see `rom_map.md`) makes gaxtapper pick the wrong library. The workaround is to patch
 ROM offset `0xF2CC` to 0 ([gaxtapper#17](https://github.com/loveemu/gaxtapper/issues/17)).

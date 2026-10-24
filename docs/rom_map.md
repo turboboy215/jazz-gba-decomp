@@ -16,9 +16,9 @@ All addresses are GBA bus addresses (ROM = 0x08000000 + file offset).
 |---|---|---|---|
 | `08000000-080000C0` | 0xC0 | Cartridge header (Nintendo logo is `.incbin`'d, never stored in the repo) | `asm/header.s` |
 | `080000C0-080002E0` | 0x220 | `crt0`: ARM entry, mode/stack setup, section copies, `__MultipleInterrupts` IRQ dispatcher (ARM) | `asm/crt0.s` |
-| `080002E0-08005710` | ~21 KB | **Region A, live**: low-level engine library: sprite/animation accessors, OAM/BG/palette helpers, interrupt table helpers, sound IRQ glue. Called ~3,000 times from region B | `asm/code_08000000.s` |
-| `08005710-08012974` | ~53 KB | **Orphaned block (dead code)**: a self-contained, internally linked code image from an *older build* of the game plus its own copy of GAX 3.01 and libgcc/newlib. Nothing live reaches it | `asm/orphan_*.s` |
-| `08012974-082E8470` | ~2.8 MB | Graphics, tiles, maps, level data, sound banks, (orphan's GAX tables at the start) | `data/data_08012974.s` |
+| `080002E0-080053A0` | ~20 KB | **Region A, live**: low-level engine library: sprite/animation accessors, OAM/BG/palette helpers, interrupt table helpers, sound IRQ glue. Called ~3,000 times from region B | `asm/code_08000000.s` |
+| `080053A0-080193A0` | 0x14000 | **Single Pak multiboot client image** (sent to the other GBAs by `Link_Main`, runs there from `0x02000000`): 0xC0-byte header at `080053A0`, 0x13F40 bytes from `08005460` (code to `08012974`, then data), with its own GAX 3.01 and libgcc/newlib. Never runs on the host GBA | `asm/orphan_080053A0.s`, `asm/orphan_08010000.s`, start of `data/data_08012974.s` |
+| `08012974-082E8470` | ~2.8 MB | Rest of the client image (to `080193A0`), then the **11 client data blocks** of 0x4000 bytes at `080193A0-080453A0` (`Link_SendClientData`, table `083D30D8`), then graphics, tiles, maps, level data, sound banks | `data/data_08012974.s` |
 | `082E8470-0831AEB4` | ~203 KB | **Region B, live**: game code, live GAX 3.01, BIOS SWI stubs, newlib, libgcc, ld interworking veneers | `asm/code_082E0000.s` … `code_08310000.s` |
 | `0831AEB4-083E085C` | ~790 KB | `.rodata`: tables, pointer tables, **all game text** (see `docs/strings.tsv`), GAX copyright/assert strings | `asm/rodata.s` |
 | `083E085C-083E1140` | 0x8E4 | `.iwram` load image → `03000000-030008E4` (fast code: VBlank handler, routines reached through veneers) | `asm/iwram_image.s` |
@@ -27,7 +27,7 @@ All addresses are GBA bus addresses (ROM = 0x08000000 + file offset).
 | `083E9978-08400000` | | `0xFF` padding | `asm/rom_padding.s` |
 
 Code totals: 1,539 functions found (Ghidra + fixes). **228,980 bytes of live code** count toward progress;
-the orphaned block is excluded.
+the multiboot client image is excluded.
 
 ## crt0 (0x080000C0)
 
@@ -78,31 +78,40 @@ Eight ld-generated Thumb→IWRAM long-call veneers (`push {r0}; ldr r0,=target; 
 libgcc is built without interworking (`mov pc, lr` returns). These names are in `lib/aliases.s`
 territory: the C compiler emits them by name, and `tools/check_func.py` resolves them.
 
-## The orphaned block (0x08005710-0x08012974)
+## The multiboot client image (0x080053A0-0x080193A0)
 
-This is what makes tools such as gaxtapper find an "invalid" GAX copy
-([gaxtapper issue #17](https://github.com/loveemu/gaxtapper/issues/17)).
+Found 2026-10-24 from `Link_Main` (`080034A4`): Tournament mode with one cartridge sends a
+separate program to the other GBAs with Nintendo's libmultiboot. `Link_Main` sets
+`MultiBootParam.masterp = 0x080053A0` (the 0xC0-byte multiboot header, `b` to +0xC0 at its start)
+and calls `MultiBootStartMaster(mp, 0x08005460, 0x13F40, 4, 4)`, so the client is
+`080053A0 + 0x14000` bytes, loaded to `0x02000000` on each client. After the download,
+`Link_SendClientData` (`08002144`) sends 11 more blocks of 0x4000 bytes over Sio32MultiLoad
+(pointer table `083D30D8`: `0x080193A0 + n * 0x4000`, so `080193A0-080453A0`), probably the
+client's graphics and level data.
 
-Evidence that it is a stale image from an older link, not live code:
+That explains everything first noted about this block when it was taken for dead code from an
+older build:
 
-* Reachability: walking `bl` edges and code pointers from `AgbMain`, crt0 and the
-  interrupt table reaches **none** of its ~330 functions. Three apparent hits are a coincidental data word
-  (`0800AD00`) and its callee.
-* It is internally consistent. Its `bl`s land on its own function starts, and it has its own GAX 3.01
+* Nothing on the host GBA calls into it (it runs on the other systems).
+* It is internally consistent: its `bl`s land on its own function starts, and it has its own GAX 3.01
   (gax.o `0800F23C`, sync.o `08010FB0`, tracker.o `080112A8`, output_asm `08011E20`,
   tracker_asm `08012108`), its own newlib/libgcc (`_call_via_r0` at `08012324`, `__udivsi3` at
   `080127CC`), and its own IWRAM veneers.
 * Its veneers target a **different IWRAM layout** (`03000369`, `03000421`, `030000BD`, `03000001`,
-  `030001ED`, `03000059`, `0300031D`) and expects different EWRAM variable addresses (e.g. `0200D5D4`,
-  `02011EEC`). That fits gaxtapper's observation that its GAX "switch table" jumps into EWRAM: it was
-  linked against memory contents that this build doesn't have.
+  `030001ED`, `03000059`, `0300031D`) and it uses its own EWRAM variables (e.g. `0200D5D4`,
+  `02011EEC`, beyond the client code), as a separately linked program would. gaxtapper's
+  observation that its GAX "switch table" jumps into EWRAM fits: the client runs from EWRAM.
 * GAX function bodies are 82–100% byte-identical to the live copy; the remaining differences are
-  relocations. Offset live − orphan = `0x003082DC`. The live names, `orphan_`-prefixed, are applied in `names.txt`.
+  relocations. Offset live − client = `0x003082DC`. The live names, `orphan_`-prefixed, are applied in `names.txt`.
 
-The likely cause is that the developers' ROM build appended or kept a previous binary blob (for
-example a leftover object or a padded image section). It is emitted as labelled asm so the ROM still
-matches, but it is **excluded from progress** and from decompilation (`tools/claim.py` skips it
-unless `ORPHAN=1`). It has no value for the PC port.
+This copy is what makes tools such as gaxtapper find an "invalid" GAX copy
+([gaxtapper issue #17](https://github.com/loveemu/gaxtapper/issues/17)).
+
+It is emitted as labelled asm so the ROM still matches, and it is **excluded from progress** and
+from the claim queue (`tools/split.py` `ORPHAN = (0x080053A0, 0x08012974)`, the old name is kept;
+`tools/claim.py` skips it unless `ORPHAN=1`). It is a second program: decompiling it is a separate
+project (it would need its own link at `0x02000000`). The PC port only needs it for Single Pak
+multiplayer.
 
 ## Text
 

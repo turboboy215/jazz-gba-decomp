@@ -20019,7 +20019,7 @@ sub_0830A06C:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #84]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A0DE:
 	bl VBlankIntrWait
 	ldr r0, [pc, #80]
@@ -20080,7 +20080,7 @@ sub_0830A140:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #52]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A170:
 	ldr r0, [pc, #48]
 	movs r1, #2
@@ -20152,7 +20152,7 @@ sub_0830A1B0:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #104]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A208:
 	bl VBlankIntrWait
 	adds r0, r5, #0
@@ -20238,7 +20238,7 @@ sub_0830A274:
 	strh r0, [r6, #0]
 	adds r0, r6, #0
 	ldr r1, [pc, #84]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A2CC:
 	bl VBlankIntrWait
 	adds r0, r5, #0
@@ -20296,7 +20296,7 @@ sub_0830A324:
 	strh r0, [r1, #0]
 	mov r0, r8
 	ldr r1, [pc, #100]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A34C:
 	lsls r4, r5, #16
 	asrs r4, r4, #16
@@ -20372,7 +20372,7 @@ sub_0830A3B4:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #160]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A3F8:
 	bl VBlankIntrWait
 	lsls r4, r4, #16
@@ -20535,7 +20535,7 @@ sub_0830A4AC:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #92]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830A57C:
 	lsls r4, r4, #16
 	asrs r5, r4, #16
@@ -21144,7 +21144,7 @@ sub_0830AAA8:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830AAD4:
 	bl VBlankIntrWait
 	ldr r0, [pc, #236]
@@ -21764,7 +21764,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	adds r1, r6, #0
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldrh r0, [r6, #0]
 	cmp r0, #222
 	bne .L0830AFC8
@@ -21813,7 +21813,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	ldr r1, [pc, #44]
-	bl Link_EnterGame
+	bl Link_Exchange
 	adds r6, #1
 	cmp r6, #4
 	bls .L0830B02A
@@ -21924,7 +21924,7 @@ sub_0830AF0C:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #84]
-	bl Link_EnterGame
+	bl Link_Exchange
 	movs r0, #10
 	ldrh r2, [r6, #0]
 	ands r0, r2
@@ -21948,7 +21948,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	adds r1, r4, #0
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldrh r0, [r4, #0]
 	cmp r0, #127
 	bne .L0830B188
@@ -22081,7 +22081,7 @@ sub_0830AF0C:
 	bl VBlankIntrWait
 	adds r0, r5, #0
 	mov r1, r9
-	bl Link_EnterGame
+	bl Link_Exchange
 	mov r0, r9
 	ldrh r0, [r0, #0]
 	cmp r0, #222
@@ -22232,7 +22232,7 @@ sub_0830B318:
 	bl VBlankIntrWait
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldrh r1, [r5, #0]
 	cmp r1, #222
 	bne .L0830B3B6
@@ -22344,7 +22344,7 @@ sub_0830B318:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #52]
-	bl Link_EnterGame
+	bl Link_Exchange
 	movs r0, #10
 	ldrh r1, [r6, #0]
 	ands r0, r1
@@ -22494,7 +22494,7 @@ sub_0830B318:
 	bl VBlankIntrWait
 	adds r0, r4, #0
 	adds r1, r5, #0
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldrh r0, [r5, #0]
 	cmp r0, #222
 	bne .L0830B5DC
@@ -23124,7 +23124,7 @@ sub_0830BB74:
 	ldr r0, [pc, #24]
 	bl sub_08002BA0
 	movs r0, #3
-	bl Link_Session
+	bl sub_08002C04
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L0830BBA8
@@ -23222,7 +23222,7 @@ sub_0830BB74:
 	bl IntrWait
 	ldr r0, [pc, #36]
 	ldr r1, [pc, #36]
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldr r0, [pc, #36]
 	ldr r1, [r0, #0]
 	adds r1, #1
@@ -23339,7 +23339,7 @@ sub_0830BD38:
 	bl IntrWait
 	ldr r0, [pc, #40]
 	ldr r1, [pc, #36]
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldr r0, [pc, #36]
 	ldr r1, [r0, #0]
 	adds r1, #1
@@ -23554,7 +23554,7 @@ sub_0830BE44:
 	bl VBlankIntrWait
 	ldr r0, [pc, #40]
 	ldr r1, [pc, #44]
-	bl Link_EnterGame
+	bl Link_Exchange
 	adds r4, #1
 	cmp r7, #0
 	.2byte 0xd022 @ beq.n 0x830bf68
@@ -28966,7 +28966,7 @@ sub_0830E93C:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #260]
-	bl Link_EnterGame
+	bl Link_Exchange
 	ldr r6, [pc, #256]
 	ldr r0, [pc, #260]
 	mov r8, r0
@@ -29108,7 +29108,7 @@ sub_0830E93C:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #68]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830EAB0:
 	bl sub_08316F50
 	cmp r0, #0
@@ -29318,7 +29318,7 @@ sub_0830E93C:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl Link_EnterGame
+	bl Link_Exchange
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830EC48
@@ -29352,7 +29352,7 @@ sub_0830E93C:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830ECA6:
 	ldr r0, [r4, #0]
 	muls r0, r6
@@ -29422,7 +29422,7 @@ sub_0830ECF4:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl Link_EnterGame
+	bl Link_Exchange
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
@@ -29554,7 +29554,7 @@ sub_0830ECF4:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #80]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830EE64:
 	bl sub_08316F50
 	cmp r0, #0
@@ -29764,7 +29764,7 @@ sub_0830ECF4:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl Link_EnterGame
+	bl Link_Exchange
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830F000
@@ -29798,7 +29798,7 @@ sub_0830ECF4:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830F05E:
 	ldr r0, [r4, #0]
 	muls r0, r6
@@ -29868,7 +29868,7 @@ sub_0830F0AC:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #244]
-	bl Link_EnterGame
+	bl Link_Exchange
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #236]
@@ -30000,7 +30000,7 @@ sub_0830F0AC:
 	movs r1, #120
 	strh r1, [r0, #0]
 	ldr r1, [pc, #80]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830F21C:
 	bl sub_08316F50
 	cmp r0, #0
@@ -30210,7 +30210,7 @@ sub_0830F0AC:
 	strh r0, [r1, #0]
 	mov r0, sl
 	ldr r1, [pc, #44]
-	bl Link_EnterGame
+	bl Link_Exchange
 	adds r4, #1
 	cmp r4, #89
 	bls .L0830F3B8
@@ -30244,7 +30244,7 @@ sub_0830F0AC:
 	strh r0, [r5, #0]
 	adds r0, r5, #0
 	ldr r1, [pc, #68]
-	bl Link_EnterGame
+	bl Link_Exchange
 .L0830F416:
 	ldr r0, [r4, #0]
 	muls r0, r6

@@ -5,11 +5,12 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 * Version strings: `"GAX Sound Engine 3.01 (Sep 13 2002) \xa9 Shin'en Multimedia. Code: B.Wodok"` and
   `"GAX ENGINE V3.01 Sep 13 2002"`. The credits also say `AUDIO ENGINE: GAX v3.0`.
 * There are **two copies** in the ROM. The **live** one is at `08317518-0831A528`, in region B. The
-  **orphaned** one is at `0800F23C-08012190`, part of the dead block; see `rom_map.md`. That second copy is
+  second one is at `0800F23C-08012190`, inside the Single Pak multiboot client image that is sent to the
+  other GBAs (it was first taken for dead code; see `rom_map.md`). That second copy is
   why gaxtapper/foobar2000 play silence
   ([gaxtapper#17](https://github.com/loveemu/gaxtapper/issues/17)): its workaround patches ROM
   0xF2CC (`orphan_GAX2_calc_mem`) so the scanner skips to the live copy. `tools/xref_rom.py baserom.gba`
-  shows that the orphaned copy has the same code as the live one, apart from addresses.
+  shows that the client's copy has the same code as the live one, apart from addresses.
 * Reference material:
   * `shinen-gax-decomp`: WIP C decomp of **3.05A** (Aug 2004). Names follow it wherever a function's
     identity is established.

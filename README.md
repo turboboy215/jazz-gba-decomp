@@ -15,7 +15,7 @@ jazz.gba: OK
 |---|---|
 | Target ROM | `Jazz Jackrabbit (U).gba`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0` |
 | Compiler | pret `old_agbcc` `-O2 -mthumb-interwork` (identified by matching; see `docs/STRATEGY.md`) |
-| Progress | `make progress` (C bytes / live code bytes; the orphaned dead block is excluded) |
+| Progress | `make progress` (C bytes / live code bytes; the multiboot client image is excluded) |
 
 This repository contains **no ROM data**. Bring your own copy.
 
@@ -42,7 +42,7 @@ make -j$(nproc) compare
 | `splits.txt` | C/asm ranges and link order |
 | `docs/HANDOFF.md` | **start here** in a new session: setup, verified facts, next tasks |
 | `docs/songs.md` | songs, internal vs actual names, level table with level names |
-| `docs/rom_map.md` | memory map, sections, crt0, interrupts, veneers, libraries, **the orphaned code block** |
+| `docs/rom_map.md` | memory map, sections, crt0, interrupts, veneers, libraries, **the multiboot client image** |
 | `docs/gax.md` | the GAX 3.01 sound engine: both copies, function map, how the game uses it |
 | `docs/strings.tsv` | all ASCII text (dialogue, menus, credits) |
 | `docs/STRATEGY.md` | project log: compiler evidence, tool changes, work order |

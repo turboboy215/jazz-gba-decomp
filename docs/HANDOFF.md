@@ -34,9 +34,10 @@ with `git bundle create jazz-decomp.bundle --all`.
 * **Compiler: `old_agbcc -O2 -mthumb-interwork`** for game code (the default in Makefile and all tools).
   **GAX needs `agbcc -fprologue-bugfix`** (splits.txt flavour `bugfix`); several GAX functions don't match
   with `old_agbcc`.
-* Code regions: A `080002E0-08012974` (live library `…-08005710`, then **orphaned dead block**
-  `08005710-08012974` with a stale GAX copy: never decompile it unless asked); B `082E8470-0831AEB4`.
-  Details: `docs/rom_map.md`.
+* Code regions: A `080002E0-08012974` (live library `…-080053A0`, then the **Single Pak multiboot
+  client image** `080053A0-080193A0`, a separate program with its own GAX copy that `Link_Main`
+  sends to the other GBAs; the splitter still calls it `ORPHAN`; don't decompile it unless asked);
+  B `082E8470-0831AEB4`. Client data blocks `080193A0-080453A0` (11 x 0x4000). Details: `docs/rom_map.md`.
 * `AgbMain` `08312BF8` → `0830AAA8` (likely main loop). `IntrTable` `0300585C`; VBlank handler in IWRAM
   `0300087C`.
 * GAX 3.01 live at `08317518-0831A528`, 43 functions + 6 ARM routines named in `names.txt`, `GAX_ram`
@@ -59,7 +60,8 @@ with `git bundle create jazz-decomp.bundle --all`.
 |---|---|
 | `make -j8 compare` | full byte-identical build check |
 | `python3 tools/split.py [--verify]` | regenerate `asm/` from `decomp/functions.csv` + `splits.txt` + `names.txt` + `starts.txt` |
-| `flock .decomp.lock python3 tools/claim.py` | next undecompiled function (skips the orphan block) |
+| `flock .decomp.lock python3 tools/claim.py` | next undecompiled function (skips the client image) |
+| `python3 tools/disasm.py START [END] [--arm]` | readable disassembly of a ROM range: literal values, names, string previews, pools as `.word` |
 | `python3 tools/check_func.py file.c ADDR` | compile one function and diff it against the ROM (env `CC1`, `OPT`, `END`, `EXTRA_INC`) |
 | `sh tools/integrate_one.sh ADDR file.c Name` | add to `src/`, `make compare`, commit (use `ALLOW_ASM=1` only for GAX's DMA delay asm) |
 | `python3 tools/progress.py` | % of live code in C |
@@ -76,36 +78,40 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-22):** 6.7% of live code is in C; `make compare` passes.
+**State (2026-10-24):** 7.27% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c`. Details: `docs/gax.md`.
-* Region A: 149/193 functions in byte-matching C (8.6 of 21.6 KB), 31 near misses with notes in
-  `src/nonmatching/region_a.c`, every function named. Subsystems, globals, the two Nintendo
-  libraries, build features and matching notes: `docs/region_a.md`. Headers
+* Region A (`080002E0-080053A0`): **every function is in C**. 151/190 byte-matching (9.5 of 20.7 KB),
+  38 near misses with notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
+  Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A, not yet written in C** (biggest first): `Bg_UpdateScroll` 08001404,
-   `Bg_DrawLevelScreen` 08001720 (both use ResBank `unk34/unk54` scroll pairs and `slots[i][0..1]`
-   wrap flags), the link screens `Link_ConnectScreen` 08002144, `Link_Session` 08002C04,
-   `Link_EnterGame` 08002F64, `08003168`, `Link_SerialIntr` 08003298, `Link_Main` 080034A4,
-   `Oam_SetPosSorted` 08003DEC, and `08005398-08005710` (data, ARM code at 08005480, Thumb
-   080055C8/080055D6). Workflow: scratch file of `//@ ADDR Name # evidence` sections,
-   `tools/batch_check.py work.c`, `tools/batch_check.py --integrate work.c`; `tools/variants.py`
-   for alternatives; `work/`-style helpers: disassemble with literal-pool values
-   (`arm-none-eabi-objdump -D -b binary -marmv4t -M force-thumb`).
-2. **Near misses**: `src/nonmatching/region_a.c` (31). Closest: vsprintf (one dead `ands`),
-   Text_StrRev (2 lines), ResBank_SetTileset (8), MultiSioSendDataSet (7),
-   Sio32MultiLoadMain (only one register with `-fno-gcse`).
-3. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 38). Closest: `Link_Main` 080034A4 (3 lines,
+   one swapped register pair), vsprintf (one dead `ands`), Text_StrRev (2 lines),
+   `Link_SendClientData` 08002144 (one block placement), `Bg_UpdateScroll`
+   08001404 (46 lines, stack-slot order only), ResBank_SetTileset (8), MultiSioSendDataSet (7),
+   Sio32MultiLoadMain (one register with `-fno-gcse`). `Link_SerialIntr` / `Link_Exchange` behave as
+   if built with `-fno-strict-aliasing` (see `docs/region_a.md`, "Blockers"): a Makefile/check
+   flavour for that may unlock them.
+2. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
    083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
    `src/gax/nonmatching.c`). GAX keeps its jump tables inline (jtbl.py is skipped for the `bugfix`
    flavour and for `OPT=-fprologue-bugfix`); `-fno-gcse` is worth a try.
-4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
-   lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`.
-5. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
-6. Data: level-record struct, tilemap format, palette CLUT mapping, multiboot image location.
+3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
+   lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the
+   MultiSio/Sio32 IRQ handlers (`030004EC`, `030005F8`).
+4. Region B game code via the claim queue, starting from `AgbMain` / `0830AAA8`.
+5. Data: level-record struct, tilemap format (now partly known: `struct CellMap` + 16x16 metatiles,
+   see `docs/region_a.md`), palette CLUT mapping, what the 11 client data blocks hold.
+
+**Workflow** for a batch of functions: a scratch file (`work/*.c`, gitignored) with a preamble of
+`#include`s and one `//@ ADDR Name # [sure|likely] evidence` section per function;
+`tools/batch_check.py work.c` checks them, `tools/batch_check.py --integrate work.c` adds the matches
+(set `OPT=-fno-gcse` on both for the `nogcse` flavour); `tools/variants.py ADDR file.c` compares
+alternatives separated by `//%` lines (it passes `OPT`/`RODATA` through); `tools/disasm.py` to read
+the target.
 
 **Tooling notes:** `tools/integrate_one.sh` commit trailers point at the session that last edited
 it, so update them. decomp-permuter (`tools/permute.py ... --old` for region A) is too slow on

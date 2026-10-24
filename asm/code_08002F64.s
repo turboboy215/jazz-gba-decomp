@@ -2,14 +2,14 @@
 	.syntax unified
 	.text
 
-@ Link_EnterGame: [likely] after linking: clears VRAM, Obj_InitAll, prints, starts GAX
+@ Link_Exchange: [sure] per-frame 8-halfword packet exchange (send -> unk10, partners -> recv[i]); 120 frames with a missing partner -> LINK ERROR screen and hang (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_08002F64
 	.thumb_func
 sub_08002F64:
-	.global Link_EnterGame
-	.thumb_set Link_EnterGame, sub_08002F64
+	.global Link_Exchange
+	.thumb_set Link_Exchange, sub_08002F64
 	push {r4, r5, r6, r7, lr}
 	adds r6, r1, #0
 	ldr r4, [pc, #176]

@@ -16,12 +16,14 @@ BASE = 0x08000000
 # Jazz Jackrabbit (USA) has two .text regions with ~2.8 MB of graphics/level data between
 # them (see docs/rom_map.md). Everything outside CODE_REGIONS is emitted as .incbin data.
 CODE_REGIONS = [
-    (0x080002E0, 0x08012974),  # region A: engine library (live) + orphaned old build (dead)
+    (0x080002E0, 0x08012974),  # region A: engine library (live) + multiboot client image (not run on this GBA)
     (0x082E8470, 0x0831AEB4),  # region B: game code, live GAX 3.01, ld interworking veneers
 ]
 CODE_END = CODE_REGIONS[-1][1]
-# Orphaned, never-referenced code image (old game build + stale GAX 3.01 copy). Kept as asm.
-ORPHAN = (0x08005710, 0x08012974)
+# Multiboot client image (header 080053A0 + 0x13F40 bytes from 08005460, loaded to 0x02000000 on the
+# other GBAs by Link_Main; has its own GAX 3.01 copy). Never runs on the host GBA; kept as asm.
+# (Named ORPHAN for history: it was first taken for dead code from an older build.)
+ORPHAN = (0x080053A0, 0x08012974)
 CHUNK = 0x10000           # one asm file per 64 KiB of code
 OUT_ROM = "jazz.gba"
 
@@ -367,7 +369,8 @@ def main(verify):
             continue
         ensure_file(pos)
         nxt = min([funcs[fi][0] if fi < len(funcs) else code_end, region_end(pos)]
-                  + ([splits[si][0]] if si < len(splits) else []))
+                  + ([splits[si][0]] if si < len(splits) else [])
+                  + ([ORPHAN[0]] if pos < ORPHAN[0] else []))  # the client image starts its own file
         chunk_end = BASE + ((pos - BASE) // CHUNK + 1) * CHUNK
         if pos < nxt:  # gap: literal pools / data between functions
             stop = min(nxt, chunk_end)

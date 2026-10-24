@@ -43,8 +43,10 @@ to write equivalent C (method → function taking `this`); that usually produces
 See `docs/rom_map.md`. In short:
 
 * Two code regions: **A** = `080002E0-08012974` and **B** = `082E8470-0831AEB4`, with 2.8 MB of data between them.
-* **Orphaned block** `08005710-08012974`: an unreachable, self-consistent older code image with a
-  second GAX copy. It is kept as asm and excluded from progress and claims.
+* **Multiboot client image** `080053A0-080193A0` (code to `08012974`): the program `Link_Main` sends
+  to the other GBAs in Single Pak Tournament mode, with its own GAX copy. First taken for dead code
+  from an older build ("orphaned block", `ORPHAN` in the tools). Kept as asm and excluded from
+  progress and claims.
 * `.iwram` (0x8E4 bytes of code), `.data` and `.ewram` load images follow `.rodata`. They are currently
   `.incbin`; disassembling `.iwram` as an overlay (VMA `03000000`) is a TODO.
 
@@ -71,14 +73,15 @@ uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. List of files that use it: `src/c
 
 1. **GAX library first**: about 40 functions with a reference decomp, and four are already matched. That
    validates the GAX struct layout, which the PC port needs early.
-2. **Region A live library** (`080002E0-08005710`, 193 functions, 132 matched so far, see
+2. **Region A live library** (`080002E0-080053A0`, 190 functions, all in C, 151 matching, see
    `docs/region_a.md`): small, heavily used accessors.
    Naming them makes every caller in region B readable.
 3. **Region B game code** in address order through the claim queue. `AgbMain` (`08312BF8`) never returns:
    it initialises, then calls `0830AAA8`, which looks like the scene/main loop. Start the naming pass there.
 4. **IWRAM image**: disassemble as an overlay. It holds the VBlank handler (`0300087C`) and the eight
    veneer targets.
-5. Orphaned block: last, optional (only for 100% "asm-free" bragging rights; it has no runtime value).
+5. Multiboot client image: a separate program (linked at `0x02000000`); a project of its own,
+   only needed for Single Pak multiplayer in a port.
 
 ## Agent workflow notes
 
@@ -98,6 +101,14 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
   and `include/*.h`. For many small functions at once use `tools/batch_check.py`.
 
 ## Log
+
+- 2026-10-24: region A finished in C: Link_Session and Link_HandshakeIntr (nogcse) match;
+  Bg_UpdateScroll, Bg_DrawLevelScreen, Oam_SetPosSorted, Link_SendClientData, Link_Exchange,
+  Link_SerialIntr, Link_Main as near misses (38 in total). `Link_Main` showed that the "orphaned
+  block" is the Single Pak multiboot client image (`080053A0`, 0x14000 bytes) plus 11 Sio32 data
+  blocks at `080193A0`; ORPHAN moved to `080053A0` (live total 228,100 bytes). The link code
+  reloads struct fields after halfword stores, as if built with `-fno-strict-aliasing`.
+  New `tools/disasm.py`. BG layer scroll/metatile format, `struct LinkPacket`, link flow documented.
 
 - 2026-10-22: region A to 149/193 matching (actor collision, Bg_InitControl, link screen icons,
   font maps, Map_GetSlopeDir, sprintf, glyph cache init). Identified Nintendo libmultiboot

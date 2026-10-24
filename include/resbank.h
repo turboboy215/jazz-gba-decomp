@@ -26,13 +26,16 @@ struct ResTable {
 #define RES_ENTRY(d, tbl, i) ((u8 *)(d) + ((u32 *)((u8 *)(d) + (d)->tbl))[(i) + 1])
 
 
+/* level map layer (ResBank ptrs[i]): w x h tiles, then cells */
+struct CellMap { u32 w; u32 h; u8 size; u8 pad[3]; u8 data[1]; };
+
 struct ResBank {
     struct ResHeader *data;   /* +0x00 */
-    void *ptrs[4];            /* +0x04 */
-    u32 unk14[4];             /* +0x14 */
-    u32 unk24[4];             /* +0x24 */
-    u32 unk34[8];             /* +0x34 */
-    u32 unk54[8];             /* +0x54 */
+    struct CellMap *ptrs[4];  /* +0x04 map layers */
+    u32 unk14[4];             /* +0x14 tileset per layer (struct TilesetHdr *) */
+    u32 unk24[4];             /* +0x24 first glyph tile of the tileset per layer */
+    s32 unk34[8];             /* +0x34 BG scroll register value per layer {x, y} (0..255) */
+    s32 unk54[8];             /* +0x54 world scroll position per layer {x, y} */
     u8 slots[4][4];           /* +0x74 */
     void *unk84;              /* +0x84 */
     void *unk88;              /* +0x88 */
@@ -69,5 +72,11 @@ u8 sub_08001E30(int d);
 void sub_08001E4C(int d);
 void sub_08001E60(u32 v);
 void sub_08001E70(u16 *pal, int idx, u16 color);
+
+/* IWRAM veneers (0831AE38-0831AEA8): BG map streaming. pos = column (0..30) or row (0..20) */
+void sub_0831AE68(struct ResBank *b, int layer, int row);  /* new map row after the scroll moved */
+void sub_0831AE78(struct ResBank *b, int layer, int row);  /* row before the move */
+void sub_0831AE88(struct ResBank *b, int layer, int col);  /* new map column */
+void sub_0831AE98(struct ResBank *b, int layer, int col);  /* column before the move */
 
 #endif

@@ -2,7 +2,7 @@
 	.syntax unified
 	.text
 
-@ Link_Main: [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
+@ Link_Main: [sure] Tournament Single Pak entry: multiboot master sends the client image (header 080053A0, 0x13F40 bytes from 08005460), then Link_SendClientData and multi-player SIO setup (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_080034A4
@@ -263,7 +263,7 @@ sub_080034A4:
 	bne .L080036AC
 	b .L080034D4
 .L080036AC:
-	bl Link_ConnectScreen
+	bl Link_SendClientData
 	ldr r1, [pc, #176]
 	movs r0, #0
 	bl sub_08001FC8

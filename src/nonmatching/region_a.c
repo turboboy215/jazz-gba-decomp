@@ -22,7 +22,6 @@
 #include "multi_sio.h"
 #include <stdarg.h>
 struct TilesetHdr { u16 count; u16 bpp; };
-struct CellMap { u32 w; u32 h; u8 size; u8 pad[3]; u8 data[1]; };
 struct CellTiles { u32 unk0; u8 size; u8 pad[3]; u8 data[1]; };
 extern u16 gUnk_03002500, gUnk_03002504;
 extern u16 gUnk_03000D30[MULTIBOOT_NCHILD];
@@ -1331,4 +1330,559 @@ u32 sub_08004164(u32 *progressCounterp)
     }
     ++Sio.frameCounter;
     return 0;
+}
+
+/* ==== Session 2026-10-24: the rest of region A (bg scroll, OAM sort, link screens) ==== */
+
+/* ---- Bg_UpdateScroll 08001404 ---- same code and size (796 bytes); 46 diff lines, all stack-slot
+ * numbering: the ROM spills layer*2, layer*4, layer*8 to sp+24/28/32 and &b->unk54 to sp+36, this
+ * build puts &b->unk54 first. The params are reused as the clamped step (dx/dy) and the loop runs
+ * on copies (rx/ry): that is what puts dx in r4 and the copy in sl as in the ROM. Clamp stores are
+ * written unk34 = unk54 = v so unk54 is stored first. unk34 = BG scroll register value (0..255),
+ * unk54 = world position; wrap[0]/[1] (slots[layer][0..1]) choose wrapping or clamping. */
+void sub_08001404(struct ResBank *b, int layer, int dx, int dy)
+{
+    int rx = dx, ry = dy;
+    u8 *wrap = b->slots[layer];
+    struct CellMap *m = b->ptrs[layer];
+    s32 w = m->w * 8;
+    s32 h = m->h * 8;
+
+    while (rx != 0 || ry != 0) {
+        s32 tx = b->unk34[layer * 2] >> 3;
+        s32 ty = b->unk34[layer * 2 + 1] >> 3;
+
+        if (rx > 8)
+            dx = 8;
+        else if (rx < -8)
+            dx = -8;
+        else
+            dx = rx;
+        if (ry > 8)
+            dy = 8;
+        else if (ry < -8)
+            dy = -8;
+        else
+            dy = ry;
+
+        if (tx != (b->unk34[layer * 2] + dx) >> 3) {
+            if (dx > 0)
+                sub_0831AE98(b, layer, 0);
+            else if (dx < 0)
+                sub_0831AE98(b, layer, 30);
+        }
+        b->unk54[layer * 2] += dx;
+        b->unk34[layer * 2] += dx;
+        if (wrap[0] == 0) {
+            if (b->unk54[layer * 2] < 0)
+                b->unk34[layer * 2] = b->unk54[layer * 2] = 0;
+            if (b->unk54[layer * 2] >= w - 240)
+                b->unk34[layer * 2] = b->unk54[layer * 2] = w - 241;
+        } else {
+            while (b->unk54[layer * 2] < 0)
+                b->unk54[layer * 2] += w;
+            while (b->unk54[layer * 2] >= w)
+                b->unk54[layer * 2] -= w;
+        }
+        while (b->unk34[layer * 2] < 0)
+            b->unk34[layer * 2] += 256;
+        b->unk34[layer * 2] &= 0xFF;
+        if (tx != b->unk34[layer * 2] >> 3) {
+            if (dx > 0)
+                sub_0831AE88(b, layer, 30);
+            else if (dx < 0)
+                sub_0831AE88(b, layer, 0);
+        }
+
+        if (ty != (b->unk34[layer * 2 + 1] + dy) >> 3) {
+            if (dy > 0)
+                sub_0831AE78(b, layer, 0);
+            else if (dy < 0)
+                sub_0831AE78(b, layer, 20);
+        }
+        b->unk54[layer * 2 + 1] += dy;
+        b->unk34[layer * 2 + 1] += dy;
+        if (wrap[1] == 0) {
+            if (b->unk54[layer * 2 + 1] < 0)
+                b->unk34[layer * 2 + 1] = b->unk54[layer * 2 + 1] = 0;
+            if (b->unk54[layer * 2 + 1] >= h - 160)
+                b->unk34[layer * 2 + 1] = b->unk54[layer * 2 + 1] = h - 161;
+        } else {
+            while (b->unk54[layer * 2 + 1] < 0)
+                b->unk54[layer * 2 + 1] += h;
+            while (b->unk54[layer * 2 + 1] >= h)
+                b->unk54[layer * 2 + 1] -= h;
+        }
+        while (b->unk34[layer * 2 + 1] < 0)
+            b->unk34[layer * 2 + 1] += 256;
+        b->unk34[layer * 2 + 1] &= 0xFF;
+        if (ty != b->unk34[layer * 2 + 1] >> 3) {
+            if (dy > 0)
+                sub_0831AE68(b, layer, 20);
+            else if (dy < 0)
+                sub_0831AE68(b, layer, 0);
+        }
+
+        if (rx > 8)
+            rx -= 8;
+        else if (rx < -8)
+            rx += 8;
+        else
+            rx = 0;
+        if (ry > 8)
+            ry -= 8;
+        else if (ry < -8)
+            ry += 8;
+        else
+            ry = 0;
+    }
+    *(vu16 *)(0x04000010 + layer * 4) = b->unk34[layer * 2];
+    *(vu16 *)(0x04000012 + layer * 4) = b->unk34[layer * 2 + 1];
+}
+
+/* ---- Bg_DrawLevelScreen 08001720 ---- same structure; 784 vs 768 bytes. The ROM keeps more on the
+ * stack (frame 100 vs 92), holds the constant 0 in r3 for the clamp stores and reloads the
+ * unk54/unk34 addresses in the y-wrap loops. The map is drawn from 16x16 metatiles: cells[] (u16
+ * per metatile, after the CellMap header) index the metatile table (ResBank tbl8 entry 0, +4),
+ * 4 tiles each; tile bits 14-15 become the BG flip bits (0xC00), the rest goes through the IWRAM
+ * glyph allocator with the layer's tileset (unk14) and first tile (unk24). */
+void sub_08001720(struct ResBank *b, int layer, int x, int y)
+{
+    u8 *wrap = b->slots[layer];
+    s32 w = b->ptrs[layer]->w * 8;
+    s32 h = b->ptrs[layer]->h * 8;
+    u16 *meta = (u16 *)((u8 *)sub_08001B94(b) + 4);
+    u16 *cells = (u16 *)b->ptrs[layer]->data;
+    s32 tx, ty, sx, sy;
+    u16 *screen;
+    int i, j;
+    u32 mw, mh;
+
+    b->unk54[layer * 2] = x;
+    b->unk54[layer * 2 + 1] = y;
+    b->unk34[layer * 2] = x;
+    b->unk34[layer * 2 + 1] = y;
+    if (wrap[0] == 0) {
+        if (b->unk54[layer * 2] < 0)
+            b->unk34[layer * 2] = b->unk54[layer * 2] = 0;
+        if (b->unk54[layer * 2] >= w - 240)
+            b->unk34[layer * 2] = b->unk54[layer * 2] = w - 241;
+    } else {
+        while (b->unk54[layer * 2] < 0)
+            b->unk54[layer * 2] += w;
+        while (b->unk54[layer * 2] >= w)
+            b->unk54[layer * 2] -= w;
+    }
+    if (wrap[1] == 0) {
+        if (b->unk54[layer * 2 + 1] < 0)
+            b->unk34[layer * 2 + 1] = b->unk54[layer * 2 + 1] = 0;
+        if (b->unk54[layer * 2 + 1] >= h - 160)
+            b->unk34[layer * 2 + 1] = b->unk54[layer * 2 + 1] = h - 161;
+    } else {
+        while (b->unk54[layer * 2 + 1] < 0)
+            b->unk54[layer * 2 + 1] += h;
+        while (b->unk54[layer * 2 + 1] >= h)
+            b->unk54[layer * 2 + 1] -= h;
+    }
+    while (b->unk34[layer * 2] < 0)
+        b->unk34[layer * 2] += 256;
+    while (b->unk34[layer * 2 + 1] < 0)
+        b->unk34[layer * 2 + 1] += 256;
+    b->unk34[layer * 2] &= 0xFF;
+    b->unk34[layer * 2 + 1] &= 0xFF;
+    *(vu16 *)(0x04000010 + layer * 4) = b->unk34[layer * 2];
+    *(vu16 *)(0x04000012 + layer * 4) = b->unk34[layer * 2 + 1];
+
+    tx = b->unk54[layer * 2] >> 3;
+    ty = b->unk54[layer * 2 + 1] >> 3;
+    sx = b->unk34[layer * 2] >> 3;
+    sy = b->unk34[layer * 2 + 1] >> 3;
+    if (sx < 0)
+        sx += 32;
+    if (sy < 0)
+        sy += 32;
+    screen = (u16 *)(0x0600F800 - layer * 0x800);
+    mw = (u32)w >> 3;
+    mh = (u32)h >> 3;
+    for (i = 0; i < 21; i++) {
+        int cx = sx, mx = tx;
+        if (ty >= (int)mh)
+            ty -= mh;
+        for (j = 0; j < 31; j++) {
+            u16 tile, *dst;
+            if (mx >= (int)mw)
+                mx -= mw;
+            tile = meta[cells[(ty >> 1) * (mw >> 1) + (mx >> 1)] * 4 + (mx & 1) + (ty & 1) * 2];
+            dst = &screen[sy * 32 + cx];
+            sub_0831AE58(*dst);
+            *dst = sub_0831AE48(tile & 0x3FFF, (u8 *)b->unk14[layer] + 4, b->unk24[layer]) | ((tile >> 4) & 0xC00);
+            cx = (cx + 1) & 31;
+            mx++;
+        }
+        sy = (sy + 1) & 31;
+        ty++;
+    }
+}
+
+/* ---- Oam_SetPosSorted 08003DEC ---- 284 vs 276 bytes. Same unlink loop as Oam_Free (08003F00,
+ * also a near miss). The ROM keeps &gOamUsedHead in r5 and idx*8 in r3 for the whole function and
+ * puts y << 24 back into y's register; this build needs one more callee-saved register.
+ * -fno-gcse gives the right size (276) but worse allocation. */
+void sub_08003DEC(u8 idx, s16 x, s16 y, u8 z) /* the ROM zero-extends x and y (u16); obj.h keeps s16 for the matching caller Obj_Update */
+{
+    u8 prev = 0xFF;
+    u8 cur = gOamUsedHead_03001260;
+
+    while (cur != 0xFF) {
+        struct OamEntry *e = &gOamBuffer_03000E58[cur];
+        if (e->unk7 >= z)
+            break;
+        prev = cur;
+        cur = e->next;
+    }
+    if (idx != prev && idx != cur) {
+        if (gOamUsedHead_03001260 == idx) {
+            gOamUsedHead_03001260 = gOamBuffer_03000E58[idx].next;
+        } else {
+            u8 i = gOamUsedHead_03001260;
+            while (i != 0xFF) {
+                struct OamEntry *e = &gOamBuffer_03000E58[i];
+                i = e->next;
+                if (i == idx) {
+                    e->next = gOamBuffer_03000E58[idx].next;
+                    break;
+                }
+            }
+        }
+        gOamBuffer_03000E58[idx].next = cur;
+        if (prev == 0xFF)
+            gOamUsedHead_03001260 = idx;
+        else
+            gOamBuffer_03000E58[prev].next = idx;
+    }
+    gOamBuffer_03000E58[idx].unk7 = z;
+    {
+        int prio = 0, i;
+        struct OamEntry *e;
+        for (i = 0; i < 3; i++)
+            if (z > gOamPrioThresholds_03001258[i])
+                prio++;
+        e = &gOamBuffer_03000E58[idx];
+        e->attr2 = (e->attr2 & 0xF3FF) | (prio << 10);
+        e->attr0 = (e->attr0 & 0xFF00) | (u8)y;
+        e->attr1 = (e->attr1 & 0xFE00) | (x & 0x1FF);
+    }
+}
+
+/* ---- Link_SendClientData 08002144 ---- 616 vs 620 bytes, everything else identical: the ROM keeps
+ * the "all 11 blocks sent" exit (DisableIrq(6); return) in place inside case 4 and branches to the
+ * epilogue; agbcc moves that block to the end of the function (tried return, goto, while(1),
+ * do/while, goto loop, -fno-gcse, -fno-thread-jumps). Jump table at 083D314C (rodata=083D314C).
+ * What it does: after the multiboot download, MultiSio handshake with the clients, then sends
+ * the 11 Sio32MultiLoad blocks of 0x4000 bytes listed at 083D30D8 (0x080193A0 + n*0x4000) to them,
+ * blinking "Loading... / PLEASE DO NOT POWER OFF SYSTEM". */
+void sub_08002144(void)
+{
+    u8 *block = NULL;
+    u32 loadRequest = 0;
+
+    sub_08001FC8(0, sub_08003CB0);
+    REG_IE = 1;
+    if (*(u8 *)0x080000B2 == 0x96 && *(u32 *)0x080000AC == *(u32 *)gUnk_083D3104)
+        REG_IE |= 0x2000;
+    REG_DISPSTAT = 8;
+    REG_IME = 1;
+    gUnk_030008F0 = &gUnk_03000900[5];
+    for (;;) {
+        if ((++gUnk_03005890 & 31) > 16) {
+            sub_080049D4(0, 15, 30, 0);
+            sub_080049D4(0, 16, 30, 0);
+        } else {
+            sub_08004914(0, 15, gUnk_083D310C);
+            sub_08004914(0, 16, gUnk_083D312C);
+        }
+        if ((gUnk_03000910 & 0x180) != 0x100 || gUnk_03000914 > 3)
+            sub_0831A54C();
+        else
+            sub_0831A534(1, 0x80);
+        switch (gUnk_03000914) {
+        case 0:
+            gUnk_03000918 = 0;
+        case 1:
+            sub_08001FC8(6, MultiSioIntr_IWRAM);
+            sub_08003790((gUnk_03000918 & 0xF00) >> 8);
+            loadRequest = 0;
+            if (gUnk_03000914 == 0)
+                gUnk_03000914 = 3;
+            else
+                gUnk_03000914 = 2;
+            break;
+        case 2:
+            if (gUnk_03000910 & 0x10) {
+                if (gUnk_03000910 & 0x40)
+                    (*gUnk_030008F0)++;
+                gUnk_03000914 = 3;
+            }
+            sub_08003848();
+        case 3:
+            if (gUnk_03000910 & 0x20)
+                gUnk_03000914 = 4;
+            if (gUnk_03000910 & 0x10)
+                loadRequest = 1;
+            gUnk_03000910 = sub_080038B0(gUnk_03000920);
+            sub_08003848();
+            if (gUnk_03000960 != gUnk_03000920[5]) {
+                gUnk_03000960 = gUnk_03000920[5];
+                gUnk_03000964 = 0;
+            }
+            block = gUnk_083D30D8[gUnk_03000960];
+            break;
+        case 4:
+            sub_08003860();
+            if (gUnk_03000960 != 11) {
+                sub_08001FC8(6, Sio32MultiLoadIntr_IWRAM);
+                sub_080040C8(gUnk_03000910 & 0x80, block);
+                gUnk_03000914 = 5;
+                break;
+            }
+            sub_08001FB4(6);
+            return;
+        case 5:
+            if (sub_08004164(&gUnk_03000964)) {
+                gUnk_03000918 = gUnk_03000910;
+                gUnk_03000910 = 0;
+                gUnk_03000914 = 1;
+            }
+            break;
+        }
+        if (gUnk_03000968 == 0 && (gUnk_03000910 & 0x100))
+            gUnk_03000968 = 1;
+        sub_080039F0(gUnk_03000900, loadRequest);
+    }
+}
+
+/* ---- Link_Exchange 08002F64 (was Link_Exchange) ---- per-frame packet exchange. 496 vs 488.
+ * The ROM reloads b->unk10 / b->bufs[n+4] after every halfword store (as if type-based aliasing
+ * were off) and uses one strength-reduced pointer for recv. Struct LinkPacket stores reproduce the
+ * reloads but split the recv pointer into two givs (base, base+2). Closest so far: plain u16
+ * pointers with the loads written through (u16 *volatile *) casts = 488 bytes, 89 diff lines
+ * (only the source pointer is not strength-reduced). -fno-strict-aliasing behaves like the struct
+ * version. */
+void sub_08002F64(struct LinkPacket *send, struct LinkPacket *recv)
+{
+    int n = gUnk_03000D38.unk4;
+    u32 ok;
+    u32 i;
+
+    LINK_SEND(0) = send->data[0];
+    LINK_SEND(1) = send->data[1];
+    LINK_SEND(2) = send->data[2];
+    LINK_SEND(3) = send->data[3];
+    LINK_SEND(4) = send->data[4];
+    LINK_SEND(5) = send->data[5];
+    LINK_SEND(6) = send->data[6];
+    LINK_SEND(7) = send->data[7];
+    ok = 1;
+    while (n--) {
+        recv[n].data[0] = LINK_RECV(n, 0);
+        recv[n].data[1] = LINK_RECV(n, 1);
+        recv[n].data[2] = LINK_RECV(n, 2);
+        recv[n].data[3] = LINK_RECV(n, 3);
+        recv[n].data[4] = LINK_RECV(n, 4);
+        recv[n].data[5] = LINK_RECV(n, 5);
+        recv[n].data[6] = LINK_RECV(n, 6);
+        recv[n].data[7] = LINK_RECV(n, 7);
+    }
+    if (sub_0800347C() == 0 && (u16)(REG_SIOCNT & 4) != sub_0800347C())
+        ok = 0;
+    for (i = 0; i < sub_0800314C(); i++) {
+        switch (i) {
+        case 0:
+            if (recv[0].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 1:
+            if (recv[1].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 2:
+            if (recv[2].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 3:
+            if (recv[3].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        }
+    }
+    if (ok == 1)
+        gUnk_03005894 = 0;
+    else
+        gUnk_03005894++;
+    if (gUnk_03005894 >= 120) {
+        sub_08316F10(1, 192, 10);
+        while (sub_08316F50() != 0)
+            sub_0831A54C();
+        sub_08004D70();
+        sub_08001A6C();
+        *(vu16 *)0x04000050 = 0;
+        *(vu16 *)0x04000008 = 0x1F01;
+        *(vu16 *)0x04000000 = 0x1140;
+        sub_08004A1C();
+        *(vu16 *)0x05000000 = 0x6A80;
+        sub_0800436C();
+        sub_0831A54C();
+        sub_08004914(0, 6, gUnk_083D31A0);
+        sub_08004914(0, 13, gUnk_083D31C0);
+        sub_08004914(0, 14, gUnk_083D31E0);
+        for (;;)
+            ;
+    }
+    if (gUnk_03000D38.unk0 == -1) {
+        u8 *t = gUnk_03000D38.unkC;
+        gUnk_03000D38.unkC = gUnk_03000D38.unk10;
+        gUnk_03000D38.unk10 = t;
+        if (gUnk_03000D38.unk5 == 0) {
+            REG_SIOCNT |= 0x80;
+            *(vu16 *)0x0400010E = 0xC0;
+        }
+    }
+}
+
+/* ---- Link_SerialIntr 08003298 ---- with OPT="-fno-gcse -fno-strict-aliasing" (the ROM reloads
+ * unk0 after each u16 store into bufs[n], i.e. no type-based aliasing): 308 bytes = ROM size,
+ * 65 diff lines, register allocation (the ROM keeps -1 in r6 for both loops and reloads
+ * &gUnk_03000D38 into r3 inside the second loop). Without those flags: 312 bytes. */
+void sub_08003298(void)
+{
+    int n = gUnk_03000D38.unk4;
+
+    if (gUnk_03000D38.unk5 == 0)
+        *(vu16 *)0x0400010E = 0;
+    if ((REG_SIOCNT & 0x40) && gUnk_03000D38.unk8 != 0 && LINK_CALLBACK(gUnk_03000D38)() == 0)
+        return;
+    if (gUnk_03000D38.unk0 > -1) {
+        while (n--)
+            ((u16 *)gUnk_03000D38.bufs[n])[gUnk_03000D38.unk0] = REG_SIOMULTI(n);
+    } else {
+        while (n--) {
+            if (REG_SIOMULTI(n) != 0xDEAD && gUnk_03000D38.unk8 != 0 && LINK_CALLBACK(gUnk_03000D38)() == 0)
+                return;
+        }
+    }
+    if (++gUnk_03000D38.unk0 <= 7) {
+        REG_SIODATA8 = ((u16 *)gUnk_03000D38.unkC)[gUnk_03000D38.unk0];
+        if (gUnk_03000D38.unk5 == 0) {
+            REG_SIOCNT |= 0x80;
+            *(vu16 *)0x0400010E = 0xC0;
+        }
+    } else {
+        u8 *t;
+        gUnk_03000D38.unk0 = -1;
+        t = gUnk_03000D38.bufs[0]; gUnk_03000D38.bufs[0] = gUnk_03000D38.bufs[4]; gUnk_03000D38.bufs[4] = t;
+        t = gUnk_03000D38.bufs[1]; gUnk_03000D38.bufs[1] = gUnk_03000D38.bufs[5]; gUnk_03000D38.bufs[5] = t;
+        t = gUnk_03000D38.bufs[2]; gUnk_03000D38.bufs[2] = gUnk_03000D38.bufs[6]; gUnk_03000D38.bufs[6] = t;
+        t = gUnk_03000D38.bufs[3]; gUnk_03000D38.bufs[3] = gUnk_03000D38.bufs[7]; gUnk_03000D38.bufs[7] = t;
+        REG_SIODATA8 = 0xDEAD;
+    }
+    gUnk_030058A0 = 0;
+}
+
+/* ---- Link_Main 080034A4 ---- 3 diff lines: in `gUnk_03000D38.unk4 = 2` the ROM moves the
+ * hoisted constant 2 (r8) to r0 and the address to r1, this build the other way round. Tried a
+ * pointer, a key local, an extra else, u32 started. The multiboot master sends the client image:
+ * header at 080053A0 (masterp), 0x13F40 bytes from 08005460, palette 4/4. */
+void sub_080034A4(void)
+{
+    u32 started;
+    u32 i;
+
+    sub_08002B50();
+    gUnk_03000E0C.masterp = (const u8 *)0x080053A0;
+    gUnk_03000E0C.server_type = 1;
+    sub_080023B0(&gUnk_03000E0C);
+    started = 0;
+    do {
+        sub_0831A54C();
+        gUnk_0300589C = 1;
+        for (i = 1; i < 4; i++)
+            if (((gUnk_03000E0C.response_bit >> i) & 1) && ((gUnk_03000E0C.client_bit >> i) & 1))
+                gUnk_0300589C++;
+        sub_08002A30(gUnk_0300589C);
+        if (gUnk_0300589C == 1)
+            sub_08004914(4, 14, gUnk_083D3290);
+        else
+            sub_080049D4(4, 14, 25, 0);
+        if (gUnk_03000E0C.client_bit & 14) {
+            switch (gUnk_03000E0C.probe_count) {
+            case 0:
+                if ((++gUnk_030058A8 & 31) > 16) {
+                    sub_080049D4(0, 15, 25, 0);
+                    sub_080049D4(0, 16, 25, 0);
+                } else {
+                    sub_08004914(0, 15, gUnk_083D32A8);
+                    sub_08004914(0, 16, gUnk_083D32C8);
+                }
+                break;
+            case 0xD1:
+                sub_080049D4(0, 16, 25, 0);
+                sub_08004914(0, 15, gUnk_083D3250);
+                sub_08004914(0, 16, gUnk_083D3270);
+                break;
+            }
+        }
+        if (started) {
+            sub_080049D4(0, 16, 25, 0);
+            sub_08004914(0, 15, gUnk_083D3250);
+            sub_08004914(0, 16, gUnk_083D3270);
+        }
+        sub_08002094(&gUnk_03000D10, &gUnk_03000D12);
+        if (gUnk_03000D12 & 2) {
+            sub_08002A30(0);
+            return;
+        }
+        if ((gUnk_03000D12 & 8) && gUnk_03000E0C.probe_count == 0 && gUnk_03000E0C.client_bit != 0) {
+            started = 1;
+            sub_08316824();
+            if (gUnk_03000E0C.client_bit & 8)
+                gUnk_03000D38.unk4 = 4;
+            else if (gUnk_03000E0C.client_bit & 4)
+                gUnk_03000D38.unk4 = 3;
+            else if (gUnk_03000E0C.client_bit & 2)
+                gUnk_03000D38.unk4 = 2;
+            sub_080049D4(0, 15, 25, 0);
+            sub_08002844(&gUnk_03000E0C, (const u8 *)0x08005460, 0x13F40, 4, 4);
+        }
+        sub_080023EC(&gUnk_03000E0C);
+    } while (!sub_080028E4(&gUnk_03000E0C));
+    sub_08002144();
+    sub_08001FC8(0, sub_08001FF0);
+    REG_RCNT = 0;
+    REG_SIOCNT = 0;
+    REG_SIODATA8 = 0;
+    REG_SIOMULTI(0) = 0;
+    REG_SIODATA8 = 0;
+    REG_SIOMULTI(0) = 0;
+    REG_SIOMULTI(0) = 0;
+    REG_SIOMULTI(1) = 0;
+    REG_SIOMULTI(2) = 0;
+    REG_SIOMULTI(3) = 0;
+    sub_0831A54C();
+    sub_0831A54C();
+    sub_0831A54C();
+    sub_08002B50();
+    REG_IME = 1;
+    REG_RCNT = 0;
+    *(vu16 *)0x0400010C = 0x83E0;
+    REG_SIOCNT = 0x2000;
+    REG_SIOCNT |= 0x4003;
+    sub_0831A54C();
+    sub_0831A54C();
+    sub_08001FA0(6);
+    sub_08001FC8(6, sub_08003298);
+    gUnk_03000D38.unk5 = 0;
+    gUnk_0300589C = 0;
+    sub_08002A30(0);
+    gUnk_03000D38.unk0 = -1;
+    sub_08001FC8(0, sub_080033CC);
 }

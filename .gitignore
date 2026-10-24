@@ -17,3 +17,4 @@ __pycache__/
 .one.json
 tools/permuter-venv/
 permuter/
+work/

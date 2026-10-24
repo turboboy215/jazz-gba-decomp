@@ -2,7 +2,7 @@
 	.syntax unified
 	.text
 
-@ Oam_SetPosSorted: [likely] moves an OAM entry in the used list by z, sets x/y and priority from thresholds
+@ Oam_SetPosSorted: [sure] re-links OAM entry idx into the z-sorted used list, priority = number of thresholds (0x03001258) below z, sets x/y (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_08003DEC

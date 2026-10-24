@@ -21,7 +21,7 @@ import argparse, json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from split import BASE, load_funcs, rom, NAMES  # noqa: E402
 
-ORPHAN = (0x08005710, 0x08012974)
+ORPHAN = (0x080053A0, 0x08012974)  # multiboot client image (see split.py)
 
 
 def h(a):

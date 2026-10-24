@@ -35,6 +35,8 @@ struct MultiBootParam {
     u8 server_type;                     /* +0x4B */
 };
 
+struct LinkPacket { u16 data[8]; };  /* one player's per-frame link data */
+
 struct LinkBuffers {
     s32 unk0;
     u8 unk4;
@@ -71,5 +73,60 @@ u8 sub_0800314C(void);
 s8 sub_08003158(void);
 u8 sub_0800347C(void);
 u8 sub_08003490(void);
+
+/* Tournament link session state (IWRAM .data/.bss, 0x030008F0-0x03000968) */
+extern u32 gUnk_03000910;      /* MultiSioMain status flags */
+extern u32 gUnk_03000914;      /* link loop state 0-5 (Link_SendClientData) */
+extern u32 gUnk_03000918;      /* status flags saved after a finished Sio32 block (connected bits 8-11) */
+extern u8 *gUnk_030008F0;      /* -> byte 5 of the send packet */
+extern u8 gUnk_03000900[];     /* MultiSio send packet */
+extern u8 gUnk_03000920[];     /* MultiSio receive packets; +5 = requested block */
+extern u8 gUnk_03000960;       /* multiboot block index (0-10, 11 = done) */
+extern u32 gUnk_03000964;      /* Sio32MultiLoad progress counter */
+extern u8 gUnk_03000968;
+extern u32 gUnk_03005890;      /* frame counter for the blinking "Loading..." text */
+extern u8 *const gUnk_083D30D8[11]; /* multiboot client image, 11 blocks of 0x4000 from 0x080193A0 */
+extern const char gUnk_083D3104[]; /* "AGBJ" */
+extern const char gUnk_083D310C[]; /* "          Loading...          " */
+extern const char gUnk_083D312C[]; /* "PLEASE DO NOT POWER OFF SYSTEM" */
+#define MultiSioIntr_IWRAM ((void (*)(void))0x030004ED)
+#define Sio32MultiLoadIntr_IWRAM ((void (*)(void))0x030005F9)
+void sub_08003CB0(void); /* VBlank_Main */
+void sub_0831A534(int discard, int flags); /* IntrWait */
+
+extern u16 gUnk_03000D10, gUnk_03000D12; /* keys held / newly pressed (link screens) */
+extern u32 gUnk_0300589C;                /* number of player icons to draw */
+extern u32 gUnk_030058A0, gUnk_030058A4; /* link screen frame counters */
+extern const char gUnk_083D3188[];       /* "     PLEASE WAIT      " */
+extern const char gUnk_083D3200[];       /* "PRESS START TO BEGIN" */
+#define LINK_CALLBACK(b) ((u32 (*)(void))(b).unk8) /* returns 0 to cancel */
+void sub_08001FA0(int irq);       /* EnableIrq */
+void sub_08001FB4(int irq);       /* DisableIrq */
+void sub_08001FD8(int idx);       /* ClearIntrHandler */
+void sub_08002094(u16 *held, u16 *pressed); /* ReadKeys */
+void sub_08002F64(struct LinkPacket *send, struct LinkPacket *recv); /* Link_Exchange */
+void sub_08003168(void);
+void sub_08003298(void);          /* Link_SerialIntr */
+void sub_080033CC(void);          /* VBlank_LinkError */
+
+#define LINK_SEND(k) (((struct LinkPacket *)gUnk_03000D38.unk10)->data[k])
+#define LINK_RECV(n, k) (((struct LinkPacket *)gUnk_03000D38.bufs[(n) + 4])->data[k])
+extern u32 gUnk_03005894;      /* frames with a missing partner (Link_Exchange) */
+extern const char gUnk_083D31A0[], gUnk_083D31C0[], gUnk_083D31E0[]; /* LINK ERROR / PLEASE TURN OFF ALL SYSTEMS / AND TRY AGAIN */
+void sub_08316F10(int a, int b, int c);
+int sub_08316F50(void);
+void sub_08004D70(void);  /* Glyph_InitCache */
+void sub_08001A6C(void);  /* ClearVram */
+void sub_08004A1C(void);  /* Text_ClearAll */
+void sub_0800436C(void);  /* Obj_InitAll */
+
+extern struct MultiBootParam gUnk_03000E0C;
+extern u32 gUnk_030058A8;      /* frame counter for the blinking "Press Start" text */
+extern const char gUnk_083D3250[], gUnk_083D3270[]; /* "Loading..." / "PLEASE DO NOT POWER OFF SYSTEM" */
+extern const char gUnk_083D3290[]; /* "Waiting for players..." */
+extern const char gUnk_083D32A8[], gUnk_083D32C8[]; /* "Press Start" / "To Begin Transfer" */
+void sub_08316824(void);
+void sub_08001FF0(void);  /* DefaultVBlankHandler */
+void sub_08002144(void);  /* Link_SendClientData */
 
 #endif

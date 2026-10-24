@@ -141,7 +141,7 @@ sub_08001314:
 	pop {r0}
 	bx r0
 
-@ Bg_UpdateScroll: [likely] writes BG0HOFS/VOFS, streams map columns/rows through IWRAM 0831AE68-AE98
+@ Bg_UpdateScroll: [sure] scrolls a BG layer by (dx, dy) in steps of <= 8 px: wraps or clamps (slots[layer][0..1]), streams edge columns/rows through IWRAM 0831AE68-AE98, writes BGnHOFS/VOFS (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_08001404
@@ -575,7 +575,7 @@ sub_08001404:
 	.4byte 0x04000010
 	.4byte 0x04000012
 
-@ Bg_DrawLevelScreen: [likely] fills screenblock 0x0600F800 from the level map (ResBank tbl8)
+@ Bg_DrawLevelScreen: [sure] sets layer scroll to (x, y), redraws the visible 31x21 tiles of screenblock 0x0600F800 - layer*0x800 from 16x16 metatiles (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_08001720

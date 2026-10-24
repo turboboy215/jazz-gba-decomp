@@ -272,7 +272,7 @@
 080029DC MultiBootWaitCycles              # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 08003CF4 Oam_Init                        # [sure] (nonmatching)
 08003D54 Oam_Flush                       # [sure] used list -> OAM (nonmatching)
-08003DEC Oam_SetPosSorted                # [likely] moves an OAM entry in the used list by z, sets x/y and priority from thresholds
+08003DEC Oam_SetPosSorted                # [sure] re-links OAM entry idx into the z-sorted used list, priority = number of thresholds (0x03001258) below z, sets x/y (near miss)
 08003F00 Oam_Free                        # [sure] (nonmatching)
 08003FBC VramMap_Alloc                   # [sure] (nonmatching)
 0800436C Obj_InitAll                     # [sure] (nonmatching)
@@ -285,16 +285,16 @@
 08004CA0 Glyph_Free                      # [likely] drops a reference, returns the tile to the free list at 0
 08004F38 number                          # [sure] Linux lib/vsprintf.c number() (nonmatching: register allocation)
 08005100 vsprintf                        # [sure] Linux lib/vsprintf.c (flag/conversion switches use rodata jump tables)
-08001404 Bg_UpdateScroll                 # [likely] writes BG0HOFS/VOFS, streams map columns/rows through IWRAM 0831AE68-AE98
-08001720 Bg_DrawLevelScreen              # [likely] fills screenblock 0x0600F800 from the level map (ResBank tbl8)
+08001404 Bg_UpdateScroll                 # [sure] scrolls a BG layer by (dx, dy) in steps of <= 8 px: wraps or clamps (slots[layer][0..1]), streams edge columns/rows through IWRAM 0831AE68-AE98, writes BGnHOFS/VOFS (near miss)
+08001720 Bg_DrawLevelScreen              # [sure] sets layer scroll to (x, y), redraws the visible 31x21 tiles of screenblock 0x0600F800 - layer*0x800 from 16x16 metatiles (near miss)
 08001A8C Bg_InitControl                  # [likely] writes BG0CNT-BG3CNT
-08002144 Link_ConnectScreen              # [likely] link handshake loop with on-screen messages, IntrWait
+08002144 Link_SendClientData             # [sure] after the multiboot download: MultiSio handshake, then the 11 Sio32MultiLoad blocks at 083D30D8 (0x080193A0 + n*0x4000); "Loading..." (near miss)
 080023EC MultiBootMain                    # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
 08002A30 Sprites_DrawAll                 # [likely] walks the sprite list at 0x03003A34: show/hide, position, Sprite_Draw, Obj_UpdateAll
 08002C04 Link_Session                    # [likely] installs VBlank_LinkError (080033CD), runs a link session via a callback
-08002F64 Link_EnterGame                  # [likely] after linking: clears VRAM, Obj_InitAll, prints, starts GAX
-08003298 Link_SerialIntr                 # [likely] SIO IRQ handler; 0xDEAD sync word
-080034A4 Link_Main                       # [likely] Tournament link entry: SIO setup, handlers, multiboot or connect
+08002F64 Link_Exchange                   # [sure] per-frame 8-halfword packet exchange (send -> unk10, partners -> recv[i]); 120 frames with a missing partner -> LINK ERROR screen and hang (near miss)
+08003298 Link_SerialIntr                 # [sure] in-game serial IRQ: one halfword per player per IRQ into bufs[0-3], 8 per packet, then swaps bufs[0-3]/[4-7]; 0xDEAD idle words (near miss)
+080034A4 Link_Main                       # [sure] Tournament Single Pak entry: multiboot master sends the client image (header 080053A0, 0x13F40 bytes from 08005460), then Link_SendClientData and multi-player SIO setup (near miss)
 08004D70 Glyph_InitCache                 # [likely] initialises the glyph tile cache tables at 0x02002000-0x02003600
 08000ECC Actor_HitShot                    # [likely] shot (layer 0 rectangle) vs. the actor's cel rectangles; like Actor_HitActor
 08002844 MultiBootStartMaster             # [sure] Nintendo libmultiboot (same code as pret/pokeemerald src/multiboot.c)
@@ -307,3 +307,4 @@
 08003C1C MultiSioVSync                    # [likely] Nintendo MultiSio, called once per frame: master swaps buffers and starts the transfer; slave raises the serial bit in INTR_CHECK
 080040C8 Sio32MultiLoadInit               # [sure] Nintendo Sio32MultiLoad library
 08005384 sprintf                          # [sure] Linux lib/vsprintf.c sprintf (calls vsprintf 08005100)
+08003168 Link_HandshakeIntr               # [sure] serial/timer IRQ during Link_Session: counts partners answering 0xDEAD, takes the id from SIOCNT when the parent sends 20, parent prints "PRESS START TO BEGIN" and sends 20 on Start, restarts the transfer

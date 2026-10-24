@@ -2,14 +2,14 @@
 	.syntax unified
 	.text
 
-@ Link_ConnectScreen: [likely] link handshake loop with on-screen messages, IntrWait
+@ Link_SendClientData: [sure] after the multiboot download: MultiSio handshake, then the 11 Sio32MultiLoad blocks at 083D30D8 (0x080193A0 + n*0x4000); "Loading..." (near miss)
 	.thumb
 	.align 1, 0
 	.global sub_08002144
 	.thumb_func
 sub_08002144:
-	.global Link_ConnectScreen
-	.thumb_set Link_ConnectScreen, sub_08002144
+	.global Link_SendClientData
+	.thumb_set Link_SendClientData, sub_08002144
 	push {r4, r5, r6, lr}
 	movs r4, #0
 	movs r6, #0

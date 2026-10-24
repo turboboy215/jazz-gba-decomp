@@ -13,7 +13,7 @@ tmp = os.path.join(ROOT, 'build', 'variant.c')
 os.makedirs(os.path.dirname(tmp), exist_ok=True)
 for i, v in enumerate(parts[1:]):
     open(tmp, 'w').write(parts[0] + '\n' + v)
-    r = subprocess.run(['python3', 'tools/check_func.py', tmp, addr], capture_output=True, text=True, cwd=ROOT)
+    r = subprocess.run(['python3', 'tools/check_func.py', tmp, addr], capture_output=True, text=True, cwd=ROOT, env=dict(os.environ))
     out = r.stdout + r.stderr
     if out.startswith('MATCH'):
         print(i, 'MATCH')
