@@ -285,7 +285,7 @@
 08004CA0 Glyph_Free                      # [likely] drops a reference, returns the tile to the free list at 0
 08004F38 number                          # [sure] Linux lib/vsprintf.c number() (nonmatching: register allocation)
 08005100 vsprintf                        # [sure] Linux lib/vsprintf.c (flag/conversion switches use rodata jump tables)
-08001404 Bg_UpdateScroll                 # [sure] scrolls a BG layer by (dx, dy) in steps of <= 8 px: wraps or clamps (slots[layer][0..1]), streams edge columns/rows through IWRAM 0831AE68-AE98, writes BGnHOFS/VOFS (near miss)
+08001404 Bg_UpdateScroll                 # [sure] scrolls a BG layer by (dx, dy) in steps of <= 8 px: wraps or clamps (slots[layer][0..1]), streams edge columns/rows through IWRAM 0831AE68-AE98, writes BGnHOFS/VOFS
 08001720 Bg_DrawLevelScreen              # [sure] sets layer scroll to (x, y), redraws the visible 31x21 tiles of screenblock 0x0600F800 - layer*0x800 from 16x16 metatiles (near miss)
 08001A8C Bg_InitControl                  # [likely] writes BG0CNT-BG3CNT
 08002144 Link_SendClientData             # [sure] after the multiboot download: MultiSio handshake, then the 11 Sio32MultiLoad blocks at 083D30D8 (0x080193A0 + n*0x4000); "Loading..." (near miss)

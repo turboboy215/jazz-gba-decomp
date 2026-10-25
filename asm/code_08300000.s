@@ -3585,7 +3585,7 @@ sub_08301D98:
 	ldr r3, [r6, #0]
 	ldr r0, [pc, #116]
 	adds r1, r4, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08301DCC:
 	adds r6, #4
 	adds r4, #1
@@ -5086,7 +5086,7 @@ sub_08302798:
 	movs r2, #8
 	negs r2, r2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r4, #1
 	cmp r4, #29
 	bls .L08302932
@@ -5111,12 +5111,12 @@ sub_08302958:
 	movs r1, #2
 	movs r2, #2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r5, #0
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r4, #1
 	cmp r4, #63
 	bls .L0830295E
@@ -5310,7 +5310,7 @@ sub_08302B14:
 	negs r2, r2
 	movs r1, #3
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08302B34:
 	ldr r0, [r4, #0]
 	movs r1, #7
@@ -5322,7 +5322,7 @@ sub_08302B14:
 	negs r3, r3
 	movs r1, #3
 	movs r2, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08302B4C:
 	pop {r4}
 	pop {r0}
@@ -5505,7 +5505,7 @@ sub_08302CB4:
 	ldrsh r3, [r1, r2]
 	movs r1, #2
 	movs r2, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	ldrb r0, [r4, #0]
 	adds r0, #1
 	strb r0, [r4, #0]
@@ -5733,7 +5733,7 @@ sub_08302E98:
 	movs r1, #3
 	movs r2, #2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	add sp, #16
 	pop {r0}
 	bx r0
@@ -6036,19 +6036,19 @@ sub_08303190:
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #4
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	lsrs r3, r4, #9
 	negs r3, r3
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	lsrs r3, r4, #10
 	negs r3, r3
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #1
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r1, r5, #1
 	cmp r4, #255
 	bls .L083031DA
@@ -6087,19 +6087,19 @@ sub_083031F0:
 	movs r1, #1
 	movs r2, #4
 	negs r2, r2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	lsrs r3, r4, #9
 	adds r0, r6, #0
 	movs r1, #2
 	movs r2, #2
 	negs r2, r2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	lsrs r3, r4, #10
 	adds r0, r6, #0
 	movs r1, #3
 	movs r2, #1
 	negs r2, r2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r1, r5, #1
 	cmp r4, #255
 	bls .L0830323A
@@ -6265,7 +6265,7 @@ sub_08303390:
 	negs r2, r2
 	movs r1, #2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6445,7 +6445,7 @@ sub_08303530:
 	movs r1, #2
 	movs r2, #0
 	movs r3, #2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -6597,7 +6597,7 @@ sub_08303688:
 	negs r3, r3
 	movs r1, #2
 	adds r2, r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6748,7 +6748,7 @@ sub_083037E0:
 	negs r3, r3
 	movs r1, #2
 	movs r2, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -6899,7 +6899,7 @@ sub_08303938:
 	negs r3, r3
 	movs r1, #2
 	movs r2, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.4byte 0x0300398C
@@ -7095,7 +7095,7 @@ sub_08303AD8:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08303B06:
 	pop {r0}
 	bx r0
@@ -7297,7 +7297,7 @@ sub_08303CA8:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08303CD6:
 	pop {r0}
 	bx r0
@@ -7499,7 +7499,7 @@ sub_08303E78:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L08303EA6:
 	pop {r0}
 	bx r0
@@ -7746,7 +7746,7 @@ sub_08304050:
 	movs r1, #3
 	movs r2, #1
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 .L083040D0:
 	add sp, #48
 	pop {r0}
@@ -16363,7 +16363,7 @@ sub_083084E0:
 	asrs r1, r6, #8
 	subs r3, r3, r1
 	movs r1, #3
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r4, r5, r6}
 	pop {r0}
 	bx r0
@@ -16469,7 +16469,7 @@ sub_08308618:
 	movs r1, #3
 	movs r2, #2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	pop {r0}
 	bx r0
 	.2byte 0x0000
@@ -16838,7 +16838,7 @@ sub_083088F4:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #2
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -16890,7 +16890,7 @@ sub_0830891C:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #1
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -17146,7 +17146,7 @@ sub_08308B74:
 	adds r0, r4, #0
 	movs r1, #3
 	movs r2, #3
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	ldr r0, [r4, #104]
 	strh r0, [r5, #26]
 	pop {r4, r5}
@@ -20030,7 +20030,7 @@ sub_0830A06C:
 	movs r2, #5
 	negs r2, r2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r5, #0
 	bl sub_080006C4
 	adds r0, r5, #0
@@ -20090,7 +20090,7 @@ sub_0830A140:
 	movs r2, #95
 	negs r2, r2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	lsls r0, r4, #16
 	ldr r1, [pc, #36]
 	adds r0, r0, r1
@@ -20168,13 +20168,13 @@ sub_0830A1B0:
 	movs r2, #19
 	negs r2, r2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r7, #0
 	movs r1, #1
 	movs r2, #2
 	negs r2, r2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	subs r0, r4, #1
 	lsls r0, r0, #16
 	lsrs r1, r0, #16
@@ -20248,12 +20248,12 @@ sub_0830A274:
 	movs r1, #2
 	movs r2, #19
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #2
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	subs r0, r4, #1
 	lsls r0, r0, #16
 	lsrs r1, r0, #16
@@ -20318,12 +20318,12 @@ sub_0830A324:
 	movs r1, #2
 	movs r2, #95
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #10
 	movs r3, #0
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	subs r4, #1
 	lsls r4, r4, #16
 	lsrs r5, r4, #16

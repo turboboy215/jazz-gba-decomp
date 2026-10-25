@@ -5318,13 +5318,13 @@ sub_08312864:
 	movs r1, #0
 	movs r2, #0
 	movs r3, #4
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
 	movs r3, #4
 	negs r3, r3
-	bl Bg_UpdateScroll
+	bl sub_08001404
 	adds r4, #1
 	cmp r4, #39
 	bls .L08312B84
