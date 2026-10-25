@@ -111,23 +111,6 @@ u8 sub_08000990(int x, int y, int dx, int left, int top, int right, int height)
     return 0;
 }
 
-/* ---- Map_OnSlope 08000A1C ---- */
-u8 sub_08000A1C(int x, int y, int checkBelow)
-{
-    int tx = x >> 8;
-    u32 ty = y >> 8;
-    if (ty <= gUnk_0300398C.layer->height * 8 - 8) {
-        if (sub_08000978(sub_080008BC(tx, ty)))
-            return 1;
-        if (checkBelow) {
-            ty += 8;
-            if (sub_08000978(sub_080008BC(tx, ty)))
-                return 1;
-        }
-    }
-    return 0;
-}
-
 /* ---- ResBank_SetSlot 08001A48 ---- */
 void sub_08001A48(struct ResBank *b, int i, u8 *src)
 {

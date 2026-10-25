@@ -14108,7 +14108,7 @@ sub_083073FC:
 	ldr r0, [r6, #52]
 	ldr r1, [r6, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08307466
@@ -14425,7 +14425,7 @@ sub_083075D4:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083076B8
@@ -14695,7 +14695,7 @@ sub_0830784C:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L0830790A
@@ -18163,7 +18163,7 @@ sub_08309320:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L08309362
@@ -18862,7 +18862,7 @@ sub_0830983C:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L083098D8

@@ -257,7 +257,7 @@
 08000898 Map_IsTileBit10                 # [likely] tile bit 10 at (x, y) for y > 0 (nonmatching)
 08000900 Map_HitCeiling                  # [likely] scans tiles above y+dy for COLL_SOLID (nonmatching)
 08000990 Map_HitWall                     # [likely] scans the leading edge column for COLL_SOLID (nonmatching)
-08000A1C Map_OnSlope                     # [likely] slope tile at (x, y) or below (nonmatching)
+08000A1C Map_OnSlope                     # [likely] slope tile at (x, y) or below
 08000A70 Map_SnapToSlope                 # [likely] moves *py onto the slope surface
 08000AF8 Map_GetSlopeDir                 # [likely] switch over slope types 1-9 -> 1..4 (jump table in rodata)
 08000C00 Actor_HitPoint                  # [likely] point vs. the actor's sprite cel rectangles (08000BB4/08000BDC)

@@ -582,7 +582,7 @@ sub_082E874C:
 	ble .L082E88AE
 	ldr r0, [r5, #52]
 	movs r2, #0
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E88AE
@@ -1541,7 +1541,7 @@ sub_082E8E74:
 	adds r0, r0, r6
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E8FA2
@@ -1552,7 +1552,7 @@ sub_082E8E74:
 	lsls r2, r2, #4
 	adds r1, r1, r2
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E8FA2
@@ -1562,7 +1562,7 @@ sub_082E8E74:
 	ldr r2, [pc, #36]
 	adds r1, r1, r2
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E8FBC
@@ -1989,7 +1989,7 @@ sub_082E9250:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E92E4
@@ -2721,7 +2721,7 @@ sub_082E9748:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E9804
@@ -2985,7 +2985,7 @@ sub_082E987C:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E9A2C
@@ -3847,7 +3847,7 @@ sub_082E9FE4:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EA098
@@ -5048,7 +5048,7 @@ sub_082EA8AC:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EA968
@@ -5422,7 +5422,7 @@ sub_082EA9D0:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EAC5E
@@ -5605,7 +5605,7 @@ sub_082EACE0:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EAD98
@@ -8688,7 +8688,7 @@ sub_082EC3CC:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EC48E
@@ -8970,7 +8970,7 @@ sub_082EC518:
 	adds r0, r0, r1
 	ldr r1, [r6, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC6E4
@@ -8998,7 +8998,7 @@ sub_082EC518:
 	adds r0, r0, r1
 	ldr r1, [r6, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EC6EE
@@ -9144,7 +9144,7 @@ sub_082EC77C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EC814
@@ -9830,7 +9830,7 @@ sub_082ECC74:
 	ble .L082ECD92
 	ldr r0, [r5, #52]
 	movs r2, #0
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082ECD92
@@ -10922,7 +10922,7 @@ sub_082ED478:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082ED552
@@ -11247,7 +11247,7 @@ sub_082ED5B8:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED7F6
@@ -11278,7 +11278,7 @@ sub_082ED5B8:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082ED800
@@ -12738,7 +12738,7 @@ sub_082EE078:
 	ble .L082EE2BC
 	ldr r0, [r5, #52]
 	movs r2, #0
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EE2BC
@@ -14020,7 +14020,7 @@ sub_082EEB54:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEC20
@@ -14305,7 +14305,7 @@ sub_082EED44:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEE48
@@ -14482,7 +14482,7 @@ sub_082EED44:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEFA4
@@ -15105,7 +15105,7 @@ sub_082EF300:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EF40A
@@ -15903,7 +15903,7 @@ sub_082EF8EC:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EF998
@@ -16074,7 +16074,7 @@ sub_082EFA1C:
 	adds r0, r0, r1
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EFB10
@@ -16242,7 +16242,7 @@ sub_082EFB9C:
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
-	bl Map_OnSlope
+	bl sub_08000A1C
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EFC34
