@@ -28,6 +28,7 @@ struct ResTable {
 
 /* level map layer (ResBank ptrs[i]): w x h tiles, then cells */
 struct CellMap { u32 w; u32 h; u8 size; u8 pad[3]; u8 data[1]; };
+struct CellTiles { u32 unk0; u8 size; u8 pad[3]; u8 data[1]; }; /* 2x2 cell -> tile table (ResBank_GetCell) */
 
 struct ResBank {
     struct ResHeader *data;   /* +0x00 */

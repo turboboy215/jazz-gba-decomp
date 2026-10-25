@@ -43,3 +43,34 @@ void *sub_08001BA0(struct ResBank *b) {
 u8 sub_08001BAC(struct ResBank *b, u32 x, u32 y) { return sub_08001BCC(b, x, y); }
 
 u16 sub_08001BBC(struct ResBank *b, u32 x, u32 y) { return sub_08001BCC(b, x, y); }
+
+u32 sub_08001BCC(struct ResBank *b, u32 x, u32 y)
+{
+    struct CellMap *m = sub_08001A30(b, 0);
+    struct CellTiles *t = sub_08001BA0(b);
+    u32 v;
+    u8 size;
+
+    size = m->size;
+    if (size == 1) {
+        u8 *d = m->data;
+        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
+    } else if (size == 2) {
+        u16 *d = (u16 *)m->data;
+        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
+    } else {
+        u32 *d = (u32 *)m->data;
+        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
+    }
+    size = t->size;
+    if (size == 1) {
+        u8 *d = t->data;
+        return d[(v << 2) + ((y & 1) << 1) + (x & 1)];
+    } else if (size == 2) {
+        u16 *d = (u16 *)t->data;
+        return d[(v << 2) + ((y & 1) << 1) + (x & 1)];
+    } else {
+        u32 *d = (u32 *)t->data;
+        return d[(v << 2) + ((y & 1) << 1) + (x & 1)];
+    }
+}

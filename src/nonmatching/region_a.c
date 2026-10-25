@@ -22,7 +22,6 @@
 #include "multi_sio.h"
 #include <stdarg.h>
 struct TilesetHdr { u16 count; u16 bpp; };
-struct CellTiles { u32 unk0; u8 size; u8 pad[3]; u8 data[1]; };
 extern u16 gUnk_03002500, gUnk_03002504;
 extern u16 gUnk_03000D30[MULTIBOOT_NCHILD];
 int sub_08004EEC(const char **s);
@@ -602,34 +601,6 @@ void sub_08001314(struct ResBank *b, u8 slot, void *tiles)
                 k = j - 1;
         if (k != -1)
             b->unk24[i] = ofs[k];
-    }
-}
-
-/* ---- ResBank_GetCell 08001BCC ---- register allocation (x/y swapped, t->size in r4) */
-u32 sub_08001BCC(struct ResBank *b, u32 x, u32 y)
-{
-    struct CellMap *m = sub_08001A30(b, 0);
-    struct CellTiles *t = sub_08001BA0(b);
-    u32 v;
-    if (m->size == 1) {
-        u8 *d = m->data;
-        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
-    } else if (m->size == 2) {
-        u16 *d = (u16 *)m->data;
-        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
-    } else {
-        u32 *d = (u32 *)m->data;
-        v = d[(y >> 1) * (m->w >> 1) + (x >> 1)];
-    }
-    if (t->size == 1) {
-        u8 *d = t->data;
-        return d[v * 4 + (y & 1) * 2 + (x & 1)];
-    } else if (t->size == 2) {
-        u16 *d = (u16 *)t->data;
-        return d[v * 4 + (y & 1) * 2 + (x & 1)];
-    } else {
-        u32 *d = (u32 *)t->data;
-        return d[v * 4 + (y & 1) * 2 + (x & 1)];
     }
 }
 

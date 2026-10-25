@@ -29,7 +29,6 @@ SECTIONS
         build/asm/code_08001A48.o(.text .rodata .data);
         build/src/code_08001A6C.o(.text .rodata .data);
         build/src/code_08001B40.o(.text .rodata .data);
-        build/asm/code_08001BCC.o(.text .rodata .data);
         build/src/code_08001C88.o(.text .data);
         build/src/code_08001D0C.o(.text .data);
         build/src/code_08001DBC.o(.text .rodata .data);

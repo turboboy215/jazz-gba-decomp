@@ -10,7 +10,6 @@ void sub_08001A6C(void)
     CpuFastSet(&zero, (void *)0x06000000, 0x01003FFF);
 }
 
-struct CellTiles { u32 unk0; u8 size; u8 pad[3]; u8 data[1]; };
 struct TilesetHdr { u16 count; u16 bpp; };
 void sub_08001A8C(struct ResBank *b)
 {
