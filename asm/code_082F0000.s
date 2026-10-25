@@ -257,7 +257,7 @@ sub_082F00FC:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F026E
 	b .L082F0244
 	.2byte 0xffff @ .raw
@@ -1871,7 +1871,7 @@ sub_082F0D30:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0E0C:
@@ -1945,7 +1945,7 @@ sub_082F0E30:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0E9E:
@@ -2017,7 +2017,7 @@ sub_082F0EBC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0F2A:
@@ -2098,7 +2098,7 @@ sub_082F0F48:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F0FC8:
@@ -2180,7 +2180,7 @@ sub_082F0FE8:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1068:
@@ -2409,7 +2409,7 @@ sub_082F11A0:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1220:
@@ -2495,7 +2495,7 @@ sub_082F1240:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F12CA:
@@ -2586,7 +2586,7 @@ sub_082F12E8:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1386
@@ -2692,7 +2692,7 @@ sub_082F13BC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F144E:
@@ -2782,7 +2782,7 @@ sub_082F146C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F14FE:
@@ -2857,7 +2857,7 @@ sub_082F151C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F1594:
@@ -2933,7 +2933,7 @@ sub_082F15B4:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F162C:
@@ -3016,7 +3016,7 @@ sub_082F164C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 .L082F16CC:
@@ -3102,7 +3102,7 @@ sub_082F16EC:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r4, #68]
 .L082F1776:
@@ -3521,7 +3521,7 @@ sub_082F1794:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1AB0
@@ -3756,7 +3756,7 @@ sub_082F1AF0:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F1C86
@@ -6131,7 +6131,7 @@ sub_082F2A0C:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F2E98
@@ -6602,7 +6602,7 @@ sub_082F2EE0:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r7, #68]
 	b .L082F3246
@@ -6870,7 +6870,7 @@ sub_082F3294:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F345E
@@ -7834,7 +7834,7 @@ sub_082F387C:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #0
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F3BE2
 .L082F3BCE:
 	adds r0, r7, #0
@@ -8152,7 +8152,7 @@ sub_082F3D18:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F3E6E
@@ -8413,7 +8413,7 @@ sub_082F3EB4:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	movs r0, #0
 	str r0, [r5, #68]
 	b .L082F4078
@@ -8712,7 +8712,7 @@ sub_082F40A0:
 	adds r1, r7, #0
 	adds r1, #56
 	movs r2, #0
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F42D4
 .L082F42C2:
 	adds r0, r7, #0
@@ -8956,7 +8956,7 @@ sub_082F4370:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F44C4
 	movs r0, r0
 	adds r4, #220
@@ -9119,7 +9119,7 @@ sub_082F44E8:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F4604
 	lsrs r4, r2, #20
 	lsls r0, r0, #12
@@ -9624,7 +9624,7 @@ sub_082F4934:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #0
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L082F49E2
 .L082F49D4:
 	movs r0, #0

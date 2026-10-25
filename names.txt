@@ -258,7 +258,7 @@
 08000900 Map_HitCeiling                  # [likely] scans tiles above y+dy for COLL_SOLID (nonmatching)
 08000990 Map_HitWall                     # [likely] scans the leading edge column for COLL_SOLID (nonmatching)
 08000A1C Map_OnSlope                     # [likely] slope tile at (x, y) or below (nonmatching)
-08000A70 Map_SnapToSlope                 # [likely] moves *py onto the slope surface (nonmatching)
+08000A70 Map_SnapToSlope                 # [likely] moves *py onto the slope surface
 08000AF8 Map_GetSlopeDir                 # [likely] switch over slope types 1-9 -> 1..4 (jump table in rodata)
 08000C00 Actor_HitPoint                  # [likely] point vs. the actor's sprite cel rectangles (08000BB4/08000BDC)
 08000D04 Actor_HitActor                  # [likely] cel rectangle overlap between two actors' sprites

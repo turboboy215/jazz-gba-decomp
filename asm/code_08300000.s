@@ -14117,7 +14117,7 @@ sub_083073FC:
 	adds r1, r6, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 .L08307466:
 	pop {r4, r5, r6}
 	pop {r0}
@@ -14434,7 +14434,7 @@ sub_083075D4:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 .L083076B8:
 	pop {r4, r5}
 	pop {r0}
@@ -14704,7 +14704,7 @@ sub_0830784C:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 	b .L0830790A
 	movs r0, r0
 	.2byte 0xd530 @ bpl.n 0x830792c
@@ -18172,7 +18172,7 @@ sub_08309320:
 	adds r1, r5, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 .L08309362:
 	ldr r0, [pc, #24]
 	ldr r0, [r0, #0]
@@ -18871,7 +18871,7 @@ sub_0830983C:
 	adds r1, r4, #0
 	adds r1, #56
 	movs r2, #1
-	bl Map_SnapToSlope
+	bl sub_08000A70
 .L083098D8:
 	adds r1, r4, #0
 	adds r1, #212
