@@ -63,6 +63,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `flock .decomp.lock python3 tools/claim.py` | next undecompiled function (skips the client image) |
 | `python3 tools/disasm.py START [END] [--arm]` | readable disassembly of a ROM range: literal values, names, string previews, pools as `.word` |
 | `python3 tools/check_func.py file.c ADDR` | compile one function and diff it against the ROM (env `CC1`, `OPT`, `END`, `EXTRA_INC`) |
+| `python3 tools/adiff.py ADDR file.c` | the same check as an aligned diff: only the real edits and their count (`Q=1`: count only) |
 | `sh tools/integrate_one.sh ADDR file.c Name` | add to `src/`, `make compare`, commit (use `ALLOW_ASM=1` only for GAX's DMA delay asm) |
 | `python3 tools/progress.py` | % of live code in C |
 | `python3 tools/gax_songs.py` | song + level table dump → `docs/songs_generated.md` |
@@ -78,23 +79,27 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-24):** 7.27% of live code is in C; `make compare` passes.
+**State (2026-10-25):** 8.02% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c`. Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 151/190 byte-matching (9.5 of 20.7 KB),
-  38 near misses with notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
+* Region A (`080002E0-080053A0`): **every function is in C**. 156/190 byte-matching (11.2 of 20.7 KB),
+  33 near misses with notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
+  2026-10-25 matched Sio32MultiLoadMain, Bg_UpdateScroll, ResBank_GetCell, Map_SnapToSlope,
+  Map_OnSlope; the tricks that did it (`<< 1` indexes, one reused local, `int` bool returns,
+  early returns, field-then-pointer locals) are at the end of `docs/region_a.md`.
   Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 38). Closest: `Link_Main` 080034A4 (3 lines,
-   one swapped register pair), vsprintf (one dead `ands`), Text_StrRev (2 lines),
-   `Link_SendClientData` 08002144 (one block placement), `Bg_UpdateScroll`
-   08001404 (46 lines, stack-slot order only), ResBank_SetTileset (8), MultiSioSendDataSet (7),
-   Sio32MultiLoadMain (one register with `-fno-gcse`). `Link_SerialIntr` / `Link_Exchange` behave as
-   if built with `-fno-strict-aliasing` (see `docs/region_a.md`, "Blockers"): a Makefile/check
-   flavour for that may unlock them.
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 33), by aligned diff size
+   (`tools/adiff.py`): vsprintf 2, Text_StrRev 2, Link_Main 3, ResBank_SetTileset 4 (with the
+   `*p++` form in its note), Text_PutChar 4, Map_IsTileBit10 6, MultiSioSendDataSet 7 (2 with
+   a `vu16` read), Oam_Flush 9, Link_SendClientData 13, Palette_CopyFaded 15, ResBank_SetSlot 15,
+   Text_ParsePaletteTag 16, Map_HitCeiling 17. The five smallest were attacked hard on
+   2026-10-25 (notes say what was tried); Map_IsTileBit10 and below have had less attention.
+   Try the `<< 1` rewrite and `int` return prototypes on each first: they are cheap. Link_SerialIntr
+   and Link_Exchange still want a `-fno-strict-aliasing` flavour (see `docs/region_a.md`).
 2. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
    083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
    `src/gax/nonmatching.c`). GAX keeps its jump tables inline (jtbl.py is skipped for the `bugfix`

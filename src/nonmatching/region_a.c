@@ -342,7 +342,9 @@ void sub_080046DC(struct Obj *o)
     gOamBuffer_03000E58[o->oam].attr1 |= (o->hflip << 12) | (o->vflip << 13);
 }
 
-/* ---- Text_PutChar 0800488C ---- */
+/* ---- Text_PutChar 0800488C ---- 4 diff lines: the ternary gives the ROM's single strh at the join; the ROM
+ * still zero-extends Glyph_Alloc's result (lsls/lsrs 16) before the orr, agbcc drops it (u16/int/u32
+ * prototypes, casts, & 0xFFFF and agbcc all tried). */
 void sub_0800488C(int x, int y, u8 c)
 {
     u16 *cell = (u16 *)((gTextCtx_030024F0.bg << 11) + 0x06000000);
@@ -355,10 +357,9 @@ void sub_0800488C(int x, int y, u8 c)
             sub_0831AE58(*cell);
     }
     t = &gTextCtx_030024F0;
-    if (t->font->type == 0)
-        *cell = (u16)sub_08004BD0(t->font->map(c), t->font->gfx, t->font->unk2) | (t->palette << 12);
-    else
-        *cell = sub_0831AE48(t->font->map(c), t->font->gfx, t->font->unk2);
+    *cell = t->font->type == 0
+        ? (u16)sub_08004BD0(t->font->map(c), t->font->gfx, t->font->unk2) | (t->palette << 12)
+        : sub_0831AE48(t->font->map(c), t->font->gfx, t->font->unk2);
 }
 
 /* ---- Text_ParsePaletteTag 08004B14 ---- */
@@ -530,7 +531,10 @@ u32 sub_08000408(struct Sprite *s)
     return 1;
 }
 
-/* ---- ResBank_SetTileset 08001314 ---- 8 diff lines: the second search loop must post-increment the list pointer (ldmia) while k = j uses the old j */
+/* ---- ResBank_SetTileset 08001314 ---- 8 diff lines: the second search loop must post-increment the list pointer (ldmia) while k = j uses the old j.
+ * 2026-10-25: `struct TilesetHdr **p = list; for (j = 0; j < n; j++) if (unk14[i] == *p++) ...`
+ * in both loops gets ldmia and j++ in place (4 lines left): the ROM sets p (`mov r3, sp`) after
+ * the hoisted unk14[i] load, as a strength-reduced giv would be, but plain list[j] loses ldmia. */
 void sub_08001314(struct ResBank *b, u8 slot, void *tiles)
 {
     struct TilesetHdr *list[5];
@@ -948,7 +952,10 @@ int sub_080028F4(struct MultiBootParam *mp)
 #undef must_data
 }
 
-/* ---- MultiSioSendDataSet 080039F0 ---- 7 diff lines: checksum loop registers */
+/* ---- MultiSioSendDataSet 080039F0 ---- 7 diff lines: checksum loop registers (ROM: pointer r1, value r0,
+ * add after the pointer increment). Reading through `((vu16 *)Ms.nextSendBufp)[i]` gets the
+ * registers right and leaves 2 lines (the add comes before `adds r1, #2`); s16 gets them right
+ * with ldrsh. *p++ with a separate counter, temp locals and u32/s32 types do not help. */
 void sub_080039F0(void *sendp, u32 loadRequest)
 {
     s32 checkSum = 0;
@@ -1008,7 +1015,9 @@ u32 sub_08003A9C(void *recvp)
     }
     return Ms.recvSuccessFlags;
 }
-/* ---- Text_StrRev 08004A54 ---- 2 diff lines: the ROM decrements the dst pointer before incrementing src */
+/* ---- Text_StrRev 08004A54 ---- 2 diff lines: the ROM decrements the dst pointer before incrementing src
+ * (giv increment order). 2026-10-25 tried: pointer loops, j counting down, u32/u16/s16 n and i,
+ * a char temp, *(dst + ...), -fno-gcse/-fno-strength-reduce, agbcc: none moves it. */
 void sub_08004A54(char *dst, const char *src)
 {
     int n = sub_08004A40(src);
@@ -1536,7 +1545,11 @@ void sub_08003298(void)
 
 /* ---- Link_Main 080034A4 ---- 3 diff lines: in `gUnk_03000D38.unk4 = 2` the ROM moves the
  * hoisted constant 2 (r8) to r0 and the address to r1, this build the other way round. Tried a
- * pointer, a key local, an extra else, u32 started. The multiboot master sends the client image:
+ * pointer, a key local, an extra else, u32 started. 2026-10-25: the RTL shows CSE replacing the
+ * constant with the loop-hoisted HImode 2 from `gUnk_03000D12 & 2` (pseudo 88), so insn 534 is
+ * a store of (subreg:QI 88) through the REG_EQUIV address; reload gives the address the first
+ * reload reg. The ROM looks like a real copy insn (value pseudo local in r0). Casts on the key
+ * test, -fno-gcse/-fno-strict-aliasing and agbcc do not change it. The multiboot master sends the client image:
  * header at 080053A0 (masterp), 0x13F40 bytes from 08005460, palette 4/4. */
 void sub_080034A4(void)
 {

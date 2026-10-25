@@ -6,11 +6,12 @@ link. It is linked first, before the game objects. What follows it (`080053A0-08
 Single Pak multiboot client image that `Link_Main` sends to the other GBAs, a separate program
 (see `docs/rom_map.md`).
 
-**Status (2026-10-24):** every function is written in C. 151 of 190 are byte-matching (9,480 of
-20,672 bytes); 38 are near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
+**Status (2026-10-25):** every function is written in C. 156 of 190 are byte-matching (11,204 of
+20,672 bytes); 33 are near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
 with a note on what is left; `MultiBootWaitCycles` stays hand-written asm. Every function has a
 name in `names.txt`. (The three functions at `08005480-080055E0` counted before belong to the
-client image, so the total went from 193 to 190.)
+client image, so the total went from 193 to 190.) Matched 2026-10-25: Sio32MultiLoadMain,
+Bg_UpdateScroll, ResBank_GetCell, Map_SnapToSlope, Map_OnSlope.
 
 Two Nintendo libraries are linked into region A, so their code is known from other decomps:
 * **libmultiboot** `080023B0-08002A30`: `MultiBootInit/Main/Send/StartProbe/StartMaster/
@@ -139,4 +140,19 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   (Bg_UpdateScroll: `rx = dx`, then `dx` = clamped step).
 * Checksum loops with `bls` (unsigned) bounds come from `i < sizeof(struct X) / 2 - 2` with a
   signed `i` (Nintendo sample code).
-
+* **`x << 1` instead of `x * 2` in array indexes** changes pseudo order and stack slots:
+  Bg_UpdateScroll only matches with `b->unk34[layer << 1]`, ResBank_GetCell with
+  `(v << 2) + ((y & 1) << 1)`. Try it whenever a near miss is stack-slot or register order only
+  (`work/shift.py`-style rewrite of every `* 2/4/8`).
+* **One local reused for two values**: ResBank_GetCell keeps both header sizes in r4 because the
+  original had one `u8 size` assigned twice (`size = m->size; ... size = t->size;`).
+* **Unmasked bool results**: the ROM tests `Coll_IsSlope` (08000978) without `lsls/lsrs #24`, so
+  it returns `int`, not `u8` (Map_SnapToSlope matched once the prototype changed; the callee is
+  unchanged).
+* **`return 1` block after the fall-through `return 0`** (`bne ret1; movs r0, #0; b end; ret1:`):
+  write a chain of early returns, `if (!a) return 0; if (b) return 1; if (!c) return 0; ...`
+  (Map_OnSlope).
+* **A register copy of a global's address kept for a later case** (`ldr r0, =X; ldrb r1, [r0, #1];
+  adds r3, r0, #0`): read the field into a local first, then set a pointer local and use it
+  where the ROM uses the copy (`state = Sio.state; p = &Sio; switch (state) ... p->frameCounter`,
+  Sio32MultiLoadMain).
