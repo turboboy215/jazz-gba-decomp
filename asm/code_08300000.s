@@ -4132,7 +4132,7 @@ sub_08302170:
 	bl sub_08001FC8
 	bl sub_08004D70
 	bl sub_08001A6C
-	bl Obj_InitAll
+	bl sub_0800436C
 	ldr r1, [pc, #92]
 	ldr r2, [pc, #96]
 	adds r0, r2, #0
@@ -4798,7 +4798,7 @@ sub_083026AC:
 	sub sp, #4
 	adds r6, r0, #0
 	adds r5, r1, #0
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #176]
@@ -4898,7 +4898,7 @@ sub_083026AC:
 sub_08302798:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #312]
@@ -5133,7 +5133,7 @@ sub_08302958:
 sub_0830298C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -5340,7 +5340,7 @@ sub_08302B5C:
 	mov r6, r8
 	push {r6}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #260]
@@ -5531,7 +5531,7 @@ sub_08302CB4:
 sub_08302D10:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -5752,7 +5752,7 @@ sub_08302E98:
 sub_08302F0C:
 	push {r4, r5, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #184]
@@ -5859,7 +5859,7 @@ sub_08302F0C:
 sub_08303008:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -6126,7 +6126,7 @@ sub_083031F0:
 sub_08303250:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
@@ -6277,7 +6277,7 @@ sub_08303390:
 sub_083033A8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -6458,7 +6458,7 @@ sub_08303530:
 sub_08303548:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
@@ -6609,7 +6609,7 @@ sub_08303688:
 sub_083036A0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
@@ -6760,7 +6760,7 @@ sub_083037E0:
 sub_083037F8:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
@@ -6911,7 +6911,7 @@ sub_08303938:
 sub_08303950:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -7113,7 +7113,7 @@ sub_08303AD8:
 sub_08303B20:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -7315,7 +7315,7 @@ sub_08303CA8:
 sub_08303CF0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r6, [pc, #308]
@@ -7517,7 +7517,7 @@ sub_08303E78:
 sub_08303EC0:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #312]
@@ -7769,7 +7769,7 @@ sub_08304050:
 sub_083040FC:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r5, [pc, #244]
@@ -7904,7 +7904,7 @@ sub_083040FC:
 sub_0830423C:
 	push {r4, r5, r6, lr}
 	sub sp, #4
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #44]
@@ -23226,7 +23226,7 @@ sub_0830BB74:
 	bl sub_08001FFC
 .L0830BC52:
 	bl sub_08004A1C
-	bl Obj_InitAll
+	bl sub_0800436C
 	movs r4, #0
 	.2byte 0xe070 @ b.n 0x830bd40
 	movs r0, #1
@@ -23305,7 +23305,7 @@ sub_0830BB74:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	movs r0, #0
 	movs r1, #6
@@ -23434,7 +23434,7 @@ sub_0830BD38:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	movs r0, #0
 	movs r1, #6
@@ -29072,7 +29072,7 @@ sub_0830E93C:
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl Obj_InitAll
+	bl sub_0800436C
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -29520,7 +29520,7 @@ sub_0830ECF4:
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl Obj_InitAll
+	bl sub_0800436C
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
@@ -29966,7 +29966,7 @@ sub_0830F0AC:
 	bl sub_08004848
 	movs r0, #15
 	bl sub_08004880
-	bl Obj_InitAll
+	bl sub_0800436C
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30

@@ -197,7 +197,7 @@ sub_08002F64:
 	lsls r2, r2, #7
 	adds r0, r2, #0
 	strh r0, [r1, #0]
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	ldr r2, [pc, #40]
 	movs r0, #0

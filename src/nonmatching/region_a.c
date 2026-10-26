@@ -279,26 +279,6 @@ void sub_080046DC(struct Obj *o)
     gOamBuffer_03000E58[o->oam].attr1 |= (o->hflip << 12) | (o->vflip << 13);
 }
 
-/* ---- Text_PutChar 0800488C ---- 4 diff lines: the ternary gives the ROM's single strh at the join; the ROM
- * still zero-extends Glyph_Alloc's result (lsls/lsrs 16) before the orr, agbcc drops it (u16/int/u32
- * prototypes, casts, & 0xFFFF and agbcc all tried). */
-void sub_0800488C(int x, int y, u8 c)
-{
-    u16 *cell = (u16 *)((gTextCtx_030024F0.bg << 11) + 0x06000000);
-    struct TextCtx *t;
-    cell += x + y * 32;
-    if (cell != NULL) {
-        if (sub_08004BA4(*cell))
-            sub_08004CA0(*cell);
-        else
-            sub_0831AE58(*cell);
-    }
-    t = &gTextCtx_030024F0;
-    *cell = t->font->type == 0
-        ? (u16)sub_08004BD0(t->font->map(c), t->font->gfx, t->font->unk2) | (t->palette << 12)
-        : sub_0831AE48(t->font->map(c), t->font->gfx, t->font->unk2);
-}
-
 /* ---- Text_ParsePaletteTag 08004B14 ---- 5 aligned-diff ops (was 16). 2026-10-26: testing the
  * stored byte (`while (buf[n++] != '}')`) gives the ROM's lsls/lsrs #24 of the loaded value and the
  * `n--` before the terminator. Left: the ROM strength-reduces &buf[n] (giv `n + sp`, incremented

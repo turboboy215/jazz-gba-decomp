@@ -2687,7 +2687,7 @@ sub_0831156C:
 	movs r2, #0
 	movs r3, #176
 	bl Palette_CopyFaded
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	ldrb r6, [r6, #0]
 	cmp r6, #3
@@ -3483,7 +3483,7 @@ sub_08311C50:
 	ldr r0, [pc, #44]
 	str r7, [r0, #0]
 	bl sub_08001F34
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r1, [pc, #28]
@@ -5977,7 +5977,7 @@ sub_08313088:
 	push {r7}
 	adds r7, r0, #0
 	adds r5, r1, #0
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl sub_08309FF4
 	lsls r0, r0, #24
 	cmp r0, #0
@@ -7742,7 +7742,7 @@ sub_08313D78:
 	lsls r7, r7, #7
 	adds r0, r7, #0
 	strh r0, [r1, #0]
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	movs r0, #9
 	movs r1, #6
@@ -7819,7 +7819,7 @@ sub_08313D78:
 	lsls r4, r4, #7
 	adds r0, r4, #0
 	strh r0, [r1, #0]
-	bl Obj_InitAll
+	bl sub_0800436C
 	bl VBlankIntrWait
 	movs r0, #9
 	movs r1, #6
