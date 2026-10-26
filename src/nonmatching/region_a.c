@@ -72,25 +72,6 @@ u8 sub_08000898(u32 x, int y)
     return r;
 }
 
-/* ---- Map_HitWall 08000990 ---- */
-u8 sub_08000990(int x, int y, int dx, int left, int top, int right, int height)
-{
-    int ofs, tx, ty, ty0;
-    if (left == 0) left = -1;
-    if (top == 0) top = -1;
-    if (right == 0) right = 1;
-    if (height == 0) height = 1;
-    ofs = left;
-    if (sub_080008F0(dx) == 1)
-        ofs = right;
-    tx = ((x + dx) >> 8) + ofs;
-    ty0 = y >> 8;
-    for (ty = ty0 + top; ty < ty0 + height; ty += 8)
-        if (ty >= 0 && sub_080008BC(tx, ty) == COLL_SOLID)
-            return 1;
-    return 0;
-}
-
 /* ---- Palette_CopyFaded 08001EBC ---- 7 aligned-diff ops (was 15). 2026-10-26: `int c = src[i]` with
  * `(u16)c >> 5` gives the ROM's lsls/lsrs #16/#21 extraction, and `(u8)(c & 31)` makes the red mask a
  * QImode constant that loop.c does not hoist (the ROM's fresh `movs r2, #31`). Left: the ROM puts
@@ -318,7 +299,10 @@ void sub_0800488C(int x, int y, u8 c)
         : sub_0831AE48(t->font->map(c), t->font->gfx, t->font->unk2);
 }
 
-/* ---- Text_ParsePaletteTag 08004B14 ---- */
+/* ---- Text_ParsePaletteTag 08004B14 ---- 5 aligned-diff ops (was 16). 2026-10-26: testing the
+ * stored byte (`while (buf[n++] != '}')`) gives the ROM's lsls/lsrs #24 of the loaded value and the
+ * `n--` before the terminator. Left: the ROM strength-reduces &buf[n] (giv `n + sp`, incremented
+ * right after the strb) and increments s after n; here sp + n is recomputed in the loop. */
 int sub_08004B14(const char *s)
 {
     char buf[12];
@@ -326,13 +310,12 @@ int sub_08004B14(const char *s)
     if (*s != 'P' && *s != 'p')
         return 0;
     if (*s++ != '}') {
-        u8 c;
         do {
-            c = *s++;
-            buf[n++] = c;
-        } while (c != '}');
+            buf[n] = *s++;
+        } while (buf[n++] != '}');
     }
-    buf[n - 1] = 0;
+    n--;
+    buf[n] = 0;
     gTextCtx_030024F0.palette = sub_08004A8C(buf);
     return 1;
 }

@@ -80,7 +80,6 @@ SECTIONS
         build/src/code_08004654.o(.text .rodata .data);
         build/asm/code_080046DC.o(.text .rodata .data);
         build/src/code_0800481C.o(.text .rodata .data);
-        build/asm/code_0800488C.o(.text .rodata .data);
         build/src/code_08004914.o(.text .rodata .data);
         build/asm/code_08004A54.o(.text .rodata .data);
         build/src/code_08004A8C.o(.text .rodata .data);
