@@ -111,27 +111,21 @@ u8 sub_08000990(int x, int y, int dx, int left, int top, int right, int height)
     return 0;
 }
 
-/* ---- ResBank_SetSlot 08001A48 ---- */
-void sub_08001A48(struct ResBank *b, int i, u8 *src)
-{
-    u8 *s = (u8 *)b + i * 4;
-    s[0x74] = src[0];
-    s[0x75] = src[1];
-    s[0x77] = src[3];
-    s[0x76] = src[2];
-}
-
-/* ---- Palette_CopyFaded 08001EBC ---- */
+/* ---- Palette_CopyFaded 08001EBC ---- 7 aligned-diff ops (was 15). 2026-10-26: `int c = src[i]` with
+ * `(u16)c >> 5` gives the ROM's lsls/lsrs #16/#21 extraction, and `(u8)(c & 31)` makes the red mask a
+ * QImode constant that loop.c does not hoist (the ROM's fresh `movs r2, #31`). Left: the ROM puts
+ * the src giv increment right after the ldrh (loop.c auto_inc_opt: the address giv must be the
+ * master, here it is combined into the src + 2i DEST_REG giv) and `ands` reg order. */
 void sub_08001EBC(const u16 *src, u16 *dst, int ofs, int count)
 {
     int i;
     u16 *d = dst + ofs;
     for (i = 0; i != count; i++) {
-        u16 c = *src++;
+        int c = src[i];
         const u8 *t = gUnk_083D2FD8;
-        const u8 *r = &t[(c & 31) + gUnk_03005859 * 32];
-        const u8 *g = &t[((c >> 5) & 31) + gUnk_03005859 * 32];
-        const u8 *b = &t[((c >> 10) & 31) + gUnk_03005859 * 32];
+        const u8 *r = &t[(u8)(c & 31) + gUnk_03005859 * 32];
+        const u8 *g = &t[(((u16)c >> 5) & 31) + gUnk_03005859 * 32];
+        const u8 *b = &t[(((u16)c >> 10) & 31) + gUnk_03005859 * 32];
         *d++ = (*g << 5) | *r | (*b << 10);
     }
 }

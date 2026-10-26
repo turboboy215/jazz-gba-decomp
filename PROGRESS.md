@@ -20,3 +20,4 @@
 - 2026-10-24: region A complete in C: 151/190 functions matching (Link_Session, Link_HandshakeIntr), 38 near misses; 080053A0-08012974 reclassified as the multiboot client image (excluded, total 228100). code decompiled to C: 16576 / 228100 bytes (7.27%); rate 77 bytes/hour; ETA 2027-02-15 12:42
 - 2026-10-25: region A: 156/190 functions matching (Sio32MultiLoadMain, Bg_UpdateScroll, ResBank_GetCell, Map_SnapToSlope, Map_OnSlope), 33 near misses. code decompiled to C: 18300 / 228100 bytes (8.02%); rate 78 bytes/hour; ETA 2027-02-14
 - 2026-10-26: ResBank_SetSlot (08001A48). code decompiled to C: 18336 / 228100 bytes (8.04%); rate 71 bytes/hour; ETA 2027-02-26 13:17
+- 2026-10-26: MultiSioSendDataSet (080039F0). code decompiled to C: 18508 / 228100 bytes (8.11%); rate 72 bytes/hour; ETA 2027-02-25 09:23
