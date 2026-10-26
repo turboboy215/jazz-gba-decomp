@@ -9966,7 +9966,7 @@ sub_082ECDB8:
 	negs r3, r3
 	str r3, [sp, #0]
 	str r4, [sp, #4]
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ECE8E

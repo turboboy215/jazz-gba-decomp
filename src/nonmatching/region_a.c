@@ -151,24 +151,6 @@ void sub_08003CF4(void)
     sub_08003F70();
 }
 
-/* ---- Oam_Flush 08003D54 ---- */
-void sub_08003D54(void)
-{
-    u8 i = gOamUsedHead_03001260;
-    u8 n = 0;
-    u8 j;
-    while (i != 255) {
-        struct OamEntry *e = &gOamBuffer_03000E58[i];
-        sub_0831A52C(e, &OAM_HW[n], 3);
-        i = e->next;
-        n++;
-    }
-    if (gUnk_03001264 > n)
-        for (j = n; j < gUnk_03001264; j++)
-            OAM_HW[j].attr0 = 0x200;
-    gUnk_03001264 = n;
-}
-
 /* ---- Oam_Free 08003F00 ---- */
 void sub_08003F00(u8 idx)
 {

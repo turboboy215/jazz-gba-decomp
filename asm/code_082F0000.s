@@ -7350,7 +7350,7 @@ sub_082F34A8:
 	str r4, [sp, #0]
 	movs r4, #4
 	str r4, [sp, #4]
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F3820
@@ -8752,7 +8752,7 @@ sub_082F40A0:
 	movs r1, #8
 	str r1, [sp, #4]
 	adds r1, r4, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082F431A
@@ -18846,7 +18846,7 @@ sub_082F8ED0:
 	str r6, [sp, #0]
 	str r7, [sp, #4]
 	adds r3, r6, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	mov r8, r4
 	cmp r0, #0
@@ -19551,7 +19551,7 @@ sub_082F9444:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r6, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F949A
@@ -20136,7 +20136,7 @@ sub_082F9898:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r6, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082F98EE
@@ -21490,7 +21490,7 @@ sub_082FA0A4:
 	str r5, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r5, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA30E
@@ -21618,7 +21618,7 @@ sub_082FA37C:
 	str r4, [sp, #0]
 	str r6, [sp, #4]
 	adds r3, r4, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FA440
@@ -22599,7 +22599,7 @@ sub_082FAB1C:
 	str r6, [sp, #0]
 	str r4, [sp, #4]
 	adds r3, r4, #0
-	bl Map_HitCeiling
+	bl sub_08000900
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082FAB94

@@ -22,3 +22,4 @@
 - 2026-10-26: ResBank_SetSlot (08001A48). code decompiled to C: 18336 / 228100 bytes (8.04%); rate 71 bytes/hour; ETA 2027-02-26 13:17
 - 2026-10-26: MultiSioSendDataSet (080039F0). code decompiled to C: 18508 / 228100 bytes (8.11%); rate 72 bytes/hour; ETA 2027-02-25 09:23
 - 2026-10-26: Oam_Flush (08003D54). code decompiled to C: 18616 / 228100 bytes (8.16%); rate 72 bytes/hour; ETA 2027-02-24 15:26
+- 2026-10-26: Map_HitCeiling (08000900). code decompiled to C: 18736 / 228100 bytes (8.21%); rate 72 bytes/hour; ETA 2027-02-23 19:28
