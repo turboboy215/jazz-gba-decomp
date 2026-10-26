@@ -72,26 +72,6 @@ u8 sub_08000898(u32 x, int y)
     return r;
 }
 
-/* ---- Map_HitCeiling 08000900 ---- */
-u8 sub_08000900(int x, int y, int dy, int ofsX, int ofsY, int width)
-{
-    int tx;
-    if (ofsX == 0) ofsX = -1;
-    if (ofsY == 0) ofsY = -1;
-    if (width == 0) width = 1;
-    if (sub_080008F0(dy) != 1) {
-        tx = x >> 8;
-        ofsX += tx;
-        ofsY += (y + dy) >> 8;
-        if (ofsY >= 0) {
-            for (; ofsX < tx + width; ofsX += 8)
-                if (sub_080008BC(ofsX, ofsY) == COLL_SOLID)
-                    return 1;
-        }
-    }
-    return 0;
-}
-
 /* ---- Map_HitWall 08000990 ---- */
 u8 sub_08000990(int x, int y, int dx, int left, int top, int right, int height)
 {

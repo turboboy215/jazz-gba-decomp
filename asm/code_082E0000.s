@@ -526,7 +526,7 @@ sub_082E874C:
 	adds r0, r4, #0
 	movs r3, #60
 .L082E8820:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E8832
@@ -1486,7 +1486,7 @@ sub_082E8E74:
 	subs r0, #24
 	str r0, [sp, #8]
 	adds r0, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E8F10
@@ -1977,7 +1977,7 @@ sub_082E9250:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E92C4
@@ -2158,7 +2158,7 @@ sub_082E9384:
 	movs r2, #128
 	lsls r2, r2, #4
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082E9406
@@ -2192,7 +2192,7 @@ sub_082E9384:
 	str r6, [sp, #8]
 	ldr r2, [pc, #28]
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E9520
@@ -2262,7 +2262,7 @@ sub_082E9384:
 	movs r2, #128
 	lsls r2, r2, #4
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E9520
@@ -2294,7 +2294,7 @@ sub_082E9384:
 	str r6, [sp, #8]
 	ldr r2, [pc, #28]
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E9520
@@ -2976,7 +2976,7 @@ sub_082E987C:
 	negs r2, r2
 	str r2, [sp, #8]
 	adds r2, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E9A2C
@@ -3717,7 +3717,7 @@ sub_082E9F28:
 	negs r1, r1
 	str r1, [sp, #8]
 	adds r1, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082E9F9C
@@ -3813,7 +3813,7 @@ sub_082E9FE4:
 	negs r1, r1
 	str r1, [sp, #8]
 	adds r1, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EA052
@@ -4534,7 +4534,7 @@ sub_082EA50C:
 	movs r2, #128
 	lsls r2, r2, #4
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EA58E
@@ -4568,7 +4568,7 @@ sub_082EA50C:
 	str r6, [sp, #8]
 	ldr r2, [pc, #28]
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EA6A8
@@ -4638,7 +4638,7 @@ sub_082EA50C:
 	movs r2, #128
 	lsls r2, r2, #4
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EA6A8
@@ -4670,7 +4670,7 @@ sub_082EA50C:
 	str r6, [sp, #8]
 	ldr r2, [pc, #28]
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EA6A8
@@ -5413,7 +5413,7 @@ sub_082EA9D0:
 	adds r2, r4, #0
 	movs r3, #44
 .L082EAC00:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EAC5E
@@ -5593,7 +5593,7 @@ sub_082EACE0:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EAD74
@@ -7744,7 +7744,7 @@ sub_082EBC68:
 	str r4, [sp, #4]
 	subs r4, #106
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EBE60
@@ -7768,7 +7768,7 @@ sub_082EBC68:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EBE60
@@ -7802,7 +7802,7 @@ sub_082EBC68:
 	str r4, [sp, #4]
 	subs r4, #40
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EBE56
@@ -7819,7 +7819,7 @@ sub_082EBC68:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r3, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EBE60
@@ -8115,7 +8115,7 @@ sub_082EC000:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EC080
@@ -8150,7 +8150,7 @@ sub_082EC000:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC194
@@ -8217,7 +8217,7 @@ sub_082EC000:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC194
@@ -8250,7 +8250,7 @@ sub_082EC000:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC194
@@ -8961,7 +8961,7 @@ sub_082EC518:
 	subs r2, #24
 	str r2, [sp, #8]
 	adds r2, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC6EE
@@ -8989,7 +8989,7 @@ sub_082EC518:
 	str r2, [sp, #8]
 	adds r2, r4, #0
 	movs r3, #44
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC6EE
@@ -9132,7 +9132,7 @@ sub_082EC77C:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EC7F0
@@ -9804,7 +9804,7 @@ sub_082ECC74:
 	str r2, [sp, #8]
 	adds r2, r4, #0
 .L082ECD00:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ECD12
@@ -10062,7 +10062,7 @@ sub_082ECDB8:
 	str r2, [sp, #8]
 	adds r2, r4, #0
 .L082ECEF8:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082ECF0E
@@ -10395,7 +10395,7 @@ sub_082ED110:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082ED194
@@ -10436,7 +10436,7 @@ sub_082ED110:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED2C4
@@ -10507,7 +10507,7 @@ sub_082ED110:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED2C4
@@ -10544,7 +10544,7 @@ sub_082ED110:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED2C4
@@ -11238,7 +11238,7 @@ sub_082ED5B8:
 	subs r2, #24
 	str r2, [sp, #8]
 	adds r2, r4, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED7B8
@@ -11269,7 +11269,7 @@ sub_082ED5B8:
 	str r2, [sp, #8]
 	adds r2, r4, #0
 	movs r3, #44
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082ED800
@@ -12682,7 +12682,7 @@ sub_082EE078:
 	adds r0, r4, #0
 	movs r3, #60
 .L082EE22C:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EE23E
@@ -13433,7 +13433,7 @@ sub_082EE778:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EE7F8
@@ -13468,7 +13468,7 @@ sub_082EE778:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EE90C
@@ -13535,7 +13535,7 @@ sub_082EE778:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EE90C
@@ -13568,7 +13568,7 @@ sub_082EE778:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EE90C
@@ -14002,7 +14002,7 @@ sub_082EEB54:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEBF8
@@ -14284,7 +14284,7 @@ sub_082EED44:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEE20
@@ -14461,7 +14461,7 @@ sub_082EED44:
 	movs r4, #8
 	str r4, [sp, #4]
 	str r3, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EEF7C
@@ -14758,7 +14758,7 @@ sub_082EF124:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EF1F8
@@ -14795,7 +14795,7 @@ sub_082EF124:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EF1F8
@@ -15447,7 +15447,7 @@ sub_082EF5F8:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	beq .L082EF678
@@ -15482,7 +15482,7 @@ sub_082EF5F8:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EF78C
@@ -15549,7 +15549,7 @@ sub_082EF5F8:
 	str r6, [sp, #8]
 	movs r2, #8
 	adds r3, r7, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EF78C
@@ -15582,7 +15582,7 @@ sub_082EF5F8:
 	str r7, [sp, #8]
 	adds r2, r6, #0
 	adds r3, r6, #0
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EF78C
@@ -16065,7 +16065,7 @@ sub_082EFA1C:
 	adds r2, r4, #0
 	movs r3, #44
 .L082EFABC:
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EFB10
@@ -16230,7 +16230,7 @@ sub_082EFB9C:
 	str r4, [sp, #4]
 	subs r4, #24
 	str r4, [sp, #8]
-	bl Map_HitWall
+	bl sub_08000990
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L082EFC10
