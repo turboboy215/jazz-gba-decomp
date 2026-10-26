@@ -946,28 +946,6 @@ int sub_080028F4(struct MultiBootParam *mp)
 #undef must_data
 }
 
-/* ---- MultiSioSendDataSet 080039F0 ---- 7 diff lines: checksum loop registers (ROM: pointer r1, value r0,
- * add after the pointer increment). Reading through `((vu16 *)Ms.nextSendBufp)[i]` gets the
- * registers right and leaves 2 lines (the add comes before `adds r1, #2`); s16 gets them right
- * with ldrsh. *p++ with a separate counter, temp locals and u32/s32 types do not help. */
-void sub_080039F0(void *sendp, u32 loadRequest)
-{
-    s32 checkSum = 0;
-    s32 i;
-
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->loadRequest = loadRequest;
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->downloadSuccessFlag = gUnk_03000AF0.downloadSuccessFlag;
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->loadSuccessFlag = Ms.loadSuccessFlag;
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->frameCounter = Ms.sendFrameCounter;
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->recvErrorFlags = Ms.recvFlagsHistory ^ Ms.recvSuccessFlags;
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->checkSum = 0;
-    sub_0831A52C(sendp, &Ms.nextSendBufp[2], 0x04000000 | (16 / 4));
-    for (i = 0; i < sizeof(struct MultiSioPacket) / 2 - 2; i++)
-        checkSum += Ms.nextSendBufp[i];
-    ((struct MultiSioPacket *)Ms.nextSendBufp)->checkSum = ~checkSum - 12;
-    Ms.sendReady = 1;
-}
-
 /* ---- MultiSioRecvDataCheck 08003A9C ---- register allocation (the ROM spills i - 1) */
 u32 sub_08003A9C(void *recvp)
 {
