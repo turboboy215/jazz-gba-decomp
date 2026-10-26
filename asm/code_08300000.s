@@ -3477,7 +3477,7 @@ sub_08301BD8:
 	mov r0, r9
 	adds r1, r7, #0
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	ldrb r4, [r4, #0]
 	cmp r4, #1
 	bne .L08301D4C
@@ -4839,7 +4839,7 @@ sub_083026AC:
 	adds r0, r4, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
@@ -4956,7 +4956,7 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -4966,7 +4966,7 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -4976,7 +4976,7 @@ sub_08302798:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #240
@@ -5191,7 +5191,7 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5201,7 +5201,7 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5211,7 +5211,7 @@ sub_0830298C:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #3
@@ -5390,7 +5390,7 @@ sub_08302B5C:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	movs r0, #0
 	mov r8, r0
 	mov r0, sp
@@ -5402,7 +5402,7 @@ sub_08302B5C:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -5589,7 +5589,7 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5599,7 +5599,7 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5609,7 +5609,7 @@ sub_08302D10:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -5797,7 +5797,7 @@ sub_08302F0C:
 	adds r0, r4, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
@@ -5917,7 +5917,7 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5927,7 +5927,7 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -5937,7 +5937,7 @@ sub_08303008:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -6176,7 +6176,7 @@ sub_08303250:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6186,7 +6186,7 @@ sub_08303250:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -6335,7 +6335,7 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6345,7 +6345,7 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6355,7 +6355,7 @@ sub_083033A8:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -6508,7 +6508,7 @@ sub_08303548:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6518,7 +6518,7 @@ sub_08303548:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -6659,7 +6659,7 @@ sub_083036A0:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6669,7 +6669,7 @@ sub_083036A0:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -6810,7 +6810,7 @@ sub_083037F8:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -6820,7 +6820,7 @@ sub_083037F8:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -6969,7 +6969,7 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6979,7 +6979,7 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -6989,7 +6989,7 @@ sub_08303950:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -7171,7 +7171,7 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7181,7 +7181,7 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7191,7 +7191,7 @@ sub_08303B20:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -7373,7 +7373,7 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7383,7 +7383,7 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r4, [r0, #0]
 	strb r4, [r5, #1]
@@ -7393,7 +7393,7 @@ sub_08303CF0:
 	adds r0, r6, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -7575,7 +7575,7 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7585,7 +7585,7 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7595,7 +7595,7 @@ sub_08303EC0:
 	adds r0, r5, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -7819,7 +7819,7 @@ sub_083040FC:
 	adds r0, r5, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r6, [r0, #0]
 	strb r6, [r4, #1]
@@ -7829,7 +7829,7 @@ sub_083040FC:
 	adds r0, r5, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r5, #0
 	movs r1, #1
 	movs r2, #0
@@ -7978,7 +7978,7 @@ sub_0830423C:
 	adds r0, r6, #0
 	movs r1, #1
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	mov r0, sp
 	strb r5, [r0, #0]
 	strb r5, [r4, #1]
@@ -7988,7 +7988,7 @@ sub_0830423C:
 	adds r0, r6, #0
 	movs r1, #2
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r6, #0
 	movs r1, #1
 	movs r2, #0
@@ -16270,7 +16270,7 @@ sub_08308400:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	movs r0, #1
 	movs r1, #31
 	bl sub_08003F88
@@ -16424,7 +16424,7 @@ sub_08308558:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -16788,7 +16788,7 @@ sub_08308834:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -16950,7 +16950,7 @@ sub_0830897C:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	ldr r1, [pc, #104]
 	ldr r3, [pc, #108]
 	adds r0, r3, #0
@@ -17093,7 +17093,7 @@ sub_08308AB4:
 	adds r0, r4, #0
 	movs r1, #3
 	mov r2, sp
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	ldr r1, [pc, #76]
 	ldr r2, [pc, #80]
 	adds r0, r2, #0
@@ -29027,7 +29027,7 @@ sub_0830E93C:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
@@ -29475,7 +29475,7 @@ sub_0830ECF4:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
@@ -29921,7 +29921,7 @@ sub_0830F0AC:
 	str r0, [r2, #0]
 	adds r0, r4, #0
 	movs r1, #1
-	bl ResBank_SetSlot
+	bl sub_08001A48
 	adds r0, r4, #0
 	movs r1, #1
 	movs r2, #0
