@@ -91,19 +91,25 @@ void sub_08001EBC(const u16 *src, u16 *dst, int ofs, int count)
     }
 }
 
-/* ---- Oam_Init 08003CF4 ---- */
+/* ---- Oam_Init 08003CF4 ---- 7 aligned-diff ops with OPT=-fno-gcse (21 before this rewrite, 62
+ * with gcse). 2026-10-26: the `i = j` loop of Obj_InitAll; left is loop.c's choice of
+ * invariants: the ROM hoists the table base, 0x200 and 0xFF but keeps 0x07000000 and the 0 for
+ * unk7 in the loop. Here pass 2 of loop.c (23 insns) hoists 0x07000000 and 0xFF; with
+ * `o = OAM_HW; o += i;` 0x07000000 stays but the 0 is hoisted too (the ROM loop must be 24-26
+ * insns at pass 2). */
 void sub_08003CF4(void)
 {
     u8 i;
-    for (i = 0; i < 128;) {
+    u32 j;
+    for (i = 0; i < 128; i = j) {
         struct OamEntry *e = &gOamBuffer_03000E58[i];
         OAM_HW[i].attr0 = 0x200;
         e->attr0 = 0x200;
-        i++;
-        if (i == 128)
-            e->next |= 0xFF;
+        j = i + 1;
+        if (j != 128)
+            e->next = j;
         else
-            e->next = i;
+            e->next |= 0xFF;
         e->unk7 = 0;
     }
     gOamFreeHead_0300125C = 0;
@@ -172,25 +178,6 @@ found:
     return t;
 }
 
-/* ---- Obj_InitAll 0800436C ---- */
-void sub_0800436C(void)
-{
-    u32 i = 0, j;
-loop:
-    j = i + 1;
-    if (j == 128)
-        gObjNext_03002268[i] |= 0xFF;
-    else
-        gObjNext_03002268[i] = j;
-    i = j;
-    if (i <= 127)
-        goto loop;
-    gObjFreeHead_030022E8 = 0;
-    gObjUsedHead_030022EC = 255;
-    sub_08003CF4();
-    sub_08003F94();
-}
-
 /* ---- Obj_Create 08004408 ---- */
 u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
 {
@@ -246,22 +233,25 @@ void sub_080045FC(u8 id)
     gObjFreeHead_030022E8 = id;
 }
 
-/* ---- Obj_Update 080046DC ---- */
+/* ---- Obj_Update 080046DC ---- 20 aligned-diff ops with OPT=-fno-gcse (27 before). 2026-10-26: the size/shape
+ * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
+ * loads o->oam before the table address as the ROM does. Left: the last three statements get the
+ * table address in r2 and the ldrh temp in r3; the ROM has them the other way round. */
 void sub_080046DC(struct Obj *o)
 {
     struct OamEntry *e;
     if (!o->visible) {
-        gOamBuffer_03000E58[o->oam].attr0 &= 0xFCFF;
-        gOamBuffer_03000E58[o->oam].attr0 |= 0x200;
+        (*(gOamBuffer_03000E58 + o->oam)).attr0 &= 0xFCFF;
+        (*(gOamBuffer_03000E58 + o->oam)).attr0 |= 0x200;
         return;
     }
-    *(u32 *)&gOamBuffer_03000E58[o->oam] &= 0x3FFF3FFF;
-    *(u32 *)&gOamBuffer_03000E58[o->oam] |= (o->is8bpp << 13) | sub_08004654(o->w, o->h);
+    *(u32 *)&(*(gOamBuffer_03000E58 + o->oam)) &= 0x01FF00FF;
+    *(u32 *)&(*(gOamBuffer_03000E58 + o->oam)) |= (o->is8bpp << 13) | sub_08004654(o->w, o->h);
     if (o->sizeDirty) {
         sub_08004080(o->tile);
         o->tile = sub_08003FBC(o->w, o->h, o->gfx, o->is8bpp);
-        gOamBuffer_03000E58[o->oam].attr2 &= 0xFC00;
-        gOamBuffer_03000E58[o->oam].attr2 |= o->tile;
+        (*(gOamBuffer_03000E58 + o->oam)).attr2 &= 0xFC00;
+        (*(gOamBuffer_03000E58 + o->oam)).attr2 |= o->tile;
         o->sizeDirty = 0;
         o->gfxDirty = 0;
     } else if (o->gfxDirty) {
@@ -269,14 +259,14 @@ void sub_080046DC(struct Obj *o)
         o->gfxDirty = 0;
     }
     if (o->palDirty) {
-        gOamBuffer_03000E58[o->oam].attr2 &= 0x0FFF;
-        gOamBuffer_03000E58[o->oam].attr2 |= o->palette << 12;
+        (*(gOamBuffer_03000E58 + o->oam)).attr2 &= 0x0FFF;
+        (*(gOamBuffer_03000E58 + o->oam)).attr2 |= o->palette << 12;
         o->palDirty = 0;
     }
-    gOamBuffer_03000E58[o->oam].attr0 &= 0xF3FF;
+    (*(gOamBuffer_03000E58 + o->oam)).attr0 &= 0xF3FF;
     if (o->mosaic)
-        gOamBuffer_03000E58[o->oam].attr0 |= 0x400;
-    gOamBuffer_03000E58[o->oam].attr1 |= (o->hflip << 12) | (o->vflip << 13);
+        (*(gOamBuffer_03000E58 + o->oam)).attr0 |= 0x400;
+    (*(gOamBuffer_03000E58 + o->oam)).attr1 |= (o->hflip << 12) | (o->vflip << 13);
 }
 
 /* ---- Text_ParsePaletteTag 08004B14 ---- 5 aligned-diff ops (was 16). 2026-10-26: testing the

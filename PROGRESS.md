@@ -26,3 +26,4 @@
 - 2026-10-26: Map_HitWall (08000990). code decompiled to C: 18876 / 228100 bytes (8.28%); rate 73 bytes/hour; ETA 2027-02-22 20:12
 - 2026-10-26: Text_PutChar (0800488C). code decompiled to C: 19012 / 228100 bytes (8.33%); rate 74 bytes/hour; ETA 2027-02-21 22:32
 - 2026-10-26: Obj_InitAll (0800436C). code decompiled to C: 19084 / 228100 bytes (8.37%); rate 74 bytes/hour; ETA 2027-02-21 11:11
+- 2026-10-26: region A: 163/190 functions matching (ResBank_SetSlot, MultiSioSendDataSet, Oam_Flush, Map_HitCeiling, Map_HitWall, Text_PutChar, Obj_InitAll), 26 near misses; OAM/Obj manager is -fno-gcse code. code decompiled to C: 19084 / 228100 bytes (8.37%)
