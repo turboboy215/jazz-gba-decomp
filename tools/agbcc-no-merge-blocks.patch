@@ -1,0 +1,41 @@
+--- a/gcc/flags.h	2026-10-28 10:43:43.803331011 -0700
++++ b/gcc/flags.h	2026-10-28 11:15:22.177143279 -0700
+@@ -457,3 +457,6 @@
+ 
+ /* Nonzero if prologue bug should be fixed.  */
+ extern int flag_prologue_bugfix;
++
++/* Nonzero if the merge_blocks pass should run (default).  */
++extern int flag_merge_blocks;
+--- a/gcc/flow.c	2026-10-28 10:43:43.803331011 -0700
++++ b/gcc/flow.c	2026-10-28 11:15:22.177541524 -0700
+@@ -3820,7 +3820,7 @@
+      the effort to try and maintain all the data structures that have
+      to be preserved after that point.  Most of the benefits come from
+      the first couple passes anyway.  */
+-  if (reload_completed)
++  if (reload_completed || ! flag_merge_blocks)
+     return;
+ 
+   /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
+--- a/gcc/toplev.c	2026-10-28 10:43:43.811331010 -0700
++++ b/gcc/toplev.c	2026-10-28 11:15:22.176834789 -0700
+@@ -591,6 +591,9 @@
+ /* Fix prologue bug in new compiler.  */
+ int flag_prologue_bugfix = 0;
+ 
++/* Run the Cygnus merge_blocks pass (-fno-merge-blocks turns it off).  */
++int flag_merge_blocks = 1;
++
+ typedef struct
+ {
+     char *string;
+@@ -732,6 +735,8 @@
+      "Use hex instead of decimal in assembly output"},
+     {"fix-debug-line", &flag_fixed_debug_line_info, 1,
+      "Generate fixed DWARF line info"},
++    {"merge-blocks", &flag_merge_blocks, 1,
++     "Run the basic block merging pass (off to match some GBA games)"},
+ #ifndef OLD_COMPILER
+     /* This flag fixes a bug in the newer agbcc version that causes `lr` to be
+        saved onto the stack in functions where it is not necessary. This is

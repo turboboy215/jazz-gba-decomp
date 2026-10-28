@@ -9,7 +9,7 @@ OBJCOPY := $(PREFIX)objcopy
 CC1     := tools/agbcc/bin/old_agbcc
 CPP     := $(PREFIX)cpp
 ASFLAGS := -mcpu=arm7tdmi -I include
-CFLAGS  := -mthumb-interwork -Wimplicit -Wparentheses -O2 -fhex-asm
+CFLAGS  := -mthumb-interwork -Wimplicit -Wparentheses -O2 -fhex-asm -fno-merge-blocks
 # jump tables to .rodata (region A and game code); GAX keeps them inline (objects.mk sets JTBL := true)
 JTBL    := python3 tools/jtbl.py
 
