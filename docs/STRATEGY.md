@@ -31,6 +31,13 @@ The Makefile, `check_func.py`, `add_funcs.py`, `use_headers.py` and `permuter_co
 narrow parameters are **not** re-truncated in the callee (Game Titan's prototypes take `int`, and
 `s8`/`s16` are sign-extended in the body); `add rD, rS, #0` moves.
 
+**No `merge_blocks` (2026-10-28).** pret's agbcc runs a Cygnus pass, `merge_blocks` (flow.c, called
+after the first jump pass and after CSE at `-O2`), that moves a block next to its only predecessor.
+The ROM's compiler did not: `MultiBootHandShake` and `Link_SendClientData` match only with the pass
+off, VramMap_Alloc's block order needs it off too, and the whole ROM (GAX included) still builds
+byte-identical with it off. `tools/agbcc-no-merge-blocks.patch` adds `-fno-merge-blocks` to both
+agbcc builds (default unchanged); the Makefile and the tools pass it for all C.
+
 libgcc in this ROM is built **without interworking** (`mov pc, lr`). newlib is ordinary.
 
 C++? Many tiny out-of-line accessors (`strh r1,[r0,#8]; bx lr`) look like C++ methods, but there is no

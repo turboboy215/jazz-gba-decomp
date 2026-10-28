@@ -15,7 +15,7 @@ to write `Makefile`) and `jazz-decomp.bundle` (full git history). The ROM is
 git clone jazz-decomp.bundle jazz && cd jazz
 cp "<staged>/Jazz Jackrabbit (U).gba" baserom.gba
 sudo apt-get install -y binutils-arm-none-eabi gcc-arm-none-eabi bison flex libpng-dev
-J=$PWD; git clone --depth 1 https://github.com/pret/agbcc /tmp/agbcc && (cd /tmp/agbcc && ./build.sh && ./install.sh "$J")
+sh tools/build_agbcc.sh             # pret/agbcc + tools/agbcc-no-merge-blocks.patch -> tools/agbcc
 make -j8 compare                    # must print: jazz.gba: OK
 ```
 
@@ -31,7 +31,9 @@ with `git bundle create jazz-decomp.bundle --all`.
 ## 2. Key facts (verified, don't redo)
 
 * ROM `AJJE`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0`, 4 MiB.
-* **Compiler: `old_agbcc -O2 -mthumb-interwork`** for game code (the default in Makefile and all tools).
+* **Compiler: `old_agbcc -O2 -mthumb-interwork -fno-merge-blocks`** for game code (the default in Makefile
+  and all tools). `-fno-merge-blocks` comes from our patch (`tools/agbcc-no-merge-blocks.patch`): the ROM's
+  compiler had no merge_blocks pass (2026-10-28, `docs/STRATEGY.md`). Stock pret agbcc rejects the flag.
   **GAX needs `agbcc -fprologue-bugfix`** (splits.txt flavour `bugfix`); several GAX functions don't match
   with `old_agbcc`.
 * Code regions: A `080002E0-08012974` (live library `…-080053A0`, then the **Single Pak multiboot
@@ -77,41 +79,44 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
 | `OPT=-fno-gcse` (check, batch_check, integrate) | `nogcse` flavour for library code (MultiSio, Sio32MultiLoad, Glyph_InitCache) |
 | `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
+| `python3 tools/vadiff.py ADDR file.c` | like variants.py, but prints the aligned-diff count per variant (each written to `build/vad_N.c`) |
+| `sh tools/exitcount.sh file.c sub_ADDR` | insns in a loop's exit code at expand time (jump.c copies it in front of the loop unless > 30, a label, a call or a loop note) |
 
 To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, then run `split.py`.
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-26):** 8.37% of live code is in C; `make compare` passes.
+**State (2026-10-28):** 8.96% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
-  The other 5 are in `src/gax/nonmatching.c`. Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 163/190 byte-matching (12.0 of 20.7 KB),
-  26 near misses with notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-10-26 matched ResBank_SetSlot, MultiSioSendDataSet, Oam_Flush, Map_HitCeiling, Map_HitWall,
-  Text_PutChar, Obj_InitAll. The OAM/Obj manager (`08003CF4-08004848`) is `-fno-gcse` code.
-  The tricks (pointer temp in checksum loops, set-then-advance pointers, new locals for operand
-  order, QImode masks) and two open problems (address givs, loops entered from an `else`) are at
-  the end of `docs/region_a.md`.
+  The other 5 are in `src/gax/nonmatching.c` (unchanged by `-fno-merge-blocks`). Details: `docs/gax.md`.
+* Region A (`080002E0-080053A0`): **every function is in C**. 169/190 byte-matching (13.3 of 20.7 KB),
+  20 near misses with notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
+  2026-10-28 matched ResBank_SetTileset, Palette_CopyFaded, Text_ParsePaletteTag, Text_StrRev (the old
+  "address givs" open problem: a separate induction variable or a pointer set inside the loop guard),
+  MultiBootHandShake and Link_SendClientData (`-fno-merge-blocks`). The OAM/Obj manager
+  (`08003CF4-08004848`) is `-fno-gcse` code. Tricks and the remaining open problem (loops entered from
+  an `else`: jump.c copies the exit test) are at the end of `docs/region_a.md`.
   Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 26). Score them all with
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 20). Score them with
    `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c` (add
-   `OPT=-fno-gcse` for `08003CF4-08004848`, `RODATA=` for vsprintf/Link_SendClientData). Aligned
-   diff ops now: vsprintf 2 (RODATA=083D338C), Text_StrRev 2, Link_Main 3, ResBank_SetTileset 4
-   (`*p++` form), Text_ParsePaletteTag 5, Map_IsTileBit10 6, Palette_CopyFaded 7, Oam_Init 7
-   (nogcse), Link_SendClientData 13, Obj_FreeSlot 25 / Oam_Free 27 / Obj_Update 20 (nogcse),
-   then the 35+ group (Link_Exchange, Sprite_Init, Glyph_Alloc, Glyph_Free, Obj_Create, ...).
-   The small ones were attacked hard on 2026-10-25/26 (notes say what was tried). Two open
-   problems cover several of them (address givs; loops entered from an `else`, end of
-   `docs/region_a.md`): solving either may match 2-3 functions at once. Link_SerialIntr and
-   Link_Exchange still want a `-fno-strict-aliasing` flavour (see `docs/region_a.md`).
+   `OPT=-fno-gcse` for `08003CF4-08004848`, `RODATA=083D338C` for vsprintf). Aligned diff ops now:
+   VramMap_Alloc 2 (nogcse; one compare folded), vsprintf 2, Link_Main 3, Map_IsTileBit10 6,
+   Oam_Init 7 (nogcse), Obj_Update 20 (nogcse), Link_SerialIntr 23 (`OPT="-fno-gcse -fno-strict-aliasing"`),
+   Obj_FreeSlot 25 / Oam_Free 27 (nogcse, the exit-test copy), then the 35+ group (Link_Exchange,
+   Sprite_Init, Obj_Create, Glyph_Alloc, number, ...). Retry the 35+ group with the new tricks first
+   (pointer increments right after an access, values computed early into locals): they were not
+   attacked this session. Map_IsTileBit10, vsprintf, Link_Main and Oam_Init got another hour on
+   2026-10-28 without progress (notes say what was tried). Link_SerialIntr and Link_Exchange still want
+   a `-fno-strict-aliasing` flavour (see `docs/region_a.md`).
 2. **Finish GAX matching**: `GAX2_calc_mem` 083175A8, `GAX2_init` 08317CD8, `GAXSync_render`
    083192C0, `GAXTracker_generate_audio` 08319C60, `GAXFx_render` 08319F88 (start from
    `src/gax/nonmatching.c`). GAX keeps its jump tables inline (jtbl.py is skipped for the `bugfix`
-   flavour and for `OPT=-fprologue-bugfix`); `-fno-gcse` is worth a try.
+   flavour and for `OPT=-fprologue-bugfix`); `-fno-gcse` is worth a try. The region A tricks above
+   (separate induction variables, pointer inits inside loop guards) may apply.
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the
    MultiSio/Sio32 IRQ handlers (`030004EC`, `030005F8`).

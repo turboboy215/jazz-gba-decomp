@@ -14,7 +14,7 @@ jazz.gba: OK
 | | |
 |---|---|
 | Target ROM | `Jazz Jackrabbit (U).gba`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0` |
-| Compiler | pret `old_agbcc` `-O2 -mthumb-interwork` (identified by matching; see `docs/STRATEGY.md`) |
+| Compiler | pret `old_agbcc` `-O2 -mthumb-interwork -fno-merge-blocks` (identified by matching; see `docs/STRATEGY.md`) |
 | Progress | `make progress` (C bytes / live code bytes; the multiboot client image is excluded) |
 
 This repository contains **no ROM data**. Bring your own copy.
@@ -22,10 +22,12 @@ This repository contains **no ROM data**. Bring your own copy.
 ## Building
 
 Requirements: a Unix-like shell (Linux, macOS, or WSL on Windows), Python 3, `arm-none-eabi` binutils
-and `arm-none-eabi-cpp` (Debian/Ubuntu: `gcc-arm-none-eabi binutils-arm-none-eabi`), and pret's agbcc.
+and `arm-none-eabi-cpp` (Debian/Ubuntu: `gcc-arm-none-eabi binutils-arm-none-eabi`), and pret's agbcc
+with a small patch that adds `-fno-merge-blocks` (`tools/agbcc-no-merge-blocks.patch`; the ROM's
+compiler did not run that pass). `tools/build_agbcc.sh` clones, patches, builds and installs it.
 
 ```sh
-git clone https://github.com/pret/agbcc && (cd agbcc && ./build.sh && ./install.sh ../jazz-decomp)
+sh tools/build_agbcc.sh            # pret/agbcc + tools/agbcc-no-merge-blocks.patch -> tools/agbcc
 cp "Jazz Jackrabbit (U).gba" baserom.gba
 make -j$(nproc) compare
 ```

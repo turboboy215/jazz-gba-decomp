@@ -6,16 +6,18 @@ link. It is linked first, before the game objects. What follows it (`080053A0-08
 Single Pak multiboot client image that `Link_Main` sends to the other GBAs, a separate program
 (see `docs/rom_map.md`).
 
-**Status (2026-10-26):** every function is written in C. 163 of 190 are byte-matching (11,988 of
-20,672 bytes); 26 are near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
+**Status (2026-10-28):** every function is written in C. 169 of 190 are byte-matching (13,340 of
+20,672 bytes); 20 are near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
 with a note on what is left; `MultiBootWaitCycles` stays hand-written asm. Every function has a
 name in `names.txt`. (The three functions at `08005480-080055E0` counted before belong to the
 client image, so the total went from 193 to 190.) Matched 2026-10-25: Sio32MultiLoadMain,
 Bg_UpdateScroll, ResBank_GetCell, Map_SnapToSlope, Map_OnSlope. Matched 2026-10-26:
 ResBank_SetSlot, MultiSioSendDataSet, Oam_Flush, Map_HitCeiling, Map_HitWall, Text_PutChar,
-Obj_InitAll; closer near misses: Palette_CopyFaded (15 to 7 aligned-diff ops),
-Text_ParsePaletteTag (16 to 5), Oam_Init (62 to 7 with `-fno-gcse`), Obj_Update (27 to 20,
-and its mask constant was wrong).
+Obj_InitAll. Matched 2026-10-28: ResBank_SetTileset, Palette_CopyFaded, Text_ParsePaletteTag,
+Text_StrRev (the "address giv" problem, solved, see the matching notes), MultiBootHandShake and
+Link_SendClientData (they need `-fno-merge-blocks`, now the default, see `docs/STRATEGY.md`);
+closer: VramMap_Alloc (44 to 2 aligned-diff ops), Link_SerialIntr (28 to 23 with
+`OPT="-fno-gcse -fno-strict-aliasing"`).
 
 **The OAM/Obj manager is `-fno-gcse` code.** Oam_Flush and Obj_InitAll only match with it, and
 Oam_Init, Oam_Free, Obj_FreeSlot and Obj_Update get much closer (62, 72, 54, 46 aligned-diff ops
@@ -189,11 +191,36 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   (ResBank_SetSlot).
 * **A fresh `movs rX, #31` for one mask while the others use a hoisted 31**: make that mask QImode,
   `(u8)(c & 31)` (Palette_CopyFaded). `(u16)c >> 5` on an `int c` gives the `lsls #16; lsrs #21` pair.
-* **Open problem, address givs** (Palette_CopyFaded, ResBank_SetTileset, Text_ParsePaletteTag): the
-  ROM strength-reduces `p[i]` with the increment right after the load/store (loop.c `auto_inc_opt`).
-  In our builds the DEST_ADDR giv is combined into the `base + i*k` DEST_REG giv, which can't take
-  `auto_inc_opt`, so the increment lands at the loop end. A user pointer with `*p++` gets the
-  increment right but puts the pointer's init before the loop test.
-* **Open problem, loops entered from an `else`** (Oam_Free, Obj_FreeSlot): jump.c threads the else
-  branch into the rotated loop's test, loop.c then ignores the loop ("multiple entry points", see
-  `-dL`) and hoists nothing. The ROM has a preheader (`ldr r4, =base; lsls r1, r3, #3; b test`).
+* **Pointer increments right after the access (the old "address givs" problem, solved 2026-10-28).**
+  When the ROM increments a pointer right after its load/store (`ldrb; adds r1, #1`, `ldmia r3!`) while
+  the loop counter's `++` stays at the end, the original used a **separate induction variable** for the
+  access. loop.c only puts a reduced giv's increment next to its use for an address giv that is not
+  combined into a register giv (never the case for `base[i]` here), so the increment lands where the
+  biv is incremented. Either give the access its own index incremented at the access,
+  `list[m++]` with `j++` in the for (ResBank_SetTileset), `src[k++]` (Palette_CopyFaded); or use a user
+  pointer set **inside the loop's guard**, after the entry test, as a giv init would be:
+  `if (*src) { s = src; d = ...; do { *d = *s; d--; s++; } while (*s); }` (Text_StrRev, the order of
+  `d--; s++;` is the order of the increments), `if (j < n) { q = p; do ... *q++ ... }` (VramMap_Alloc).
+* **Giv init operand order**: the ROM's `adds r1, r3, r0` (n + sp) comes from a pointer set to
+  `(char *)(n + (int)buf)`; `buf + n` gives `adds r1, r0, r3` (Text_ParsePaletteTag). For a base minus
+  one, `char *e = dst - 1; d = (char *)(n + (int)e);` (Text_StrRev).
+* **A u16 value used both masked and shifted** (Palette_CopyFaded): `u16 c = src[k++]; int ci = c;`,
+  red from `c & 31` (the ROM's `movs r2, #31; ands r2, r1`), green/blue from `(u16)ci >> 5` / `>> 10`
+  (the `lsls #16` + `lsrs` pairs).
+* **A constant materialised before the inits of a following loop** (VramMap_Alloc's `movs r3, #255`
+  before `adds r0, r5, #1; subs r1, r4, #1`): put it in a local first, `u8 v = 0xFF; u8 *q = p + 1;
+  int k = n - 1; do *q++ = v; while (--k != 0);`. Values the ROM computes early (before a loop) come
+  from locals assigned there (`ofs = t << 5; sz = n << 3;`).
+* **Block order and `merge_blocks`**: if the ROM keeps a block in place and branches over it (an early
+  `return` inside a loop, a `goto found` with the target after a `return`) where our build moves the
+  block next to its only predecessor, that was merge_blocks. It is off now (`-fno-merge-blocks`).
+* **Open problem, loops entered from an `else`** (Oam_Free, Obj_FreeSlot): the ROM loop is entered by
+  `ldr base; b test` and laid out step, test, body. stmt.c's expand_end_loop moves the test and the body
+  up to the `break` to the loop bottom (as the ROM shows), but then jump.c's
+  `duplicate_loop_exit_test` copies that exit code in front of the loop, and loop.c sees "multiple
+  entry points" and hoists nothing. The copy is refused only if the exit code has a CODE_LABEL, a call,
+  a LOOP_BEG/LOOP_CONT note or more than 30 insns at expand time; ours have 25 and 27
+  (`tools/exitcount.sh file.c sub_ADDR` counts them). So the original body was probably longer before
+  CSE, or had a label in it. A statement expression with a local in the test stops the copy but adds a
+  store-flag. (Old note: jump.c threads the else branch into the rotated loop's test.)
+* **Register-only leftovers** (Oam_Init, Obj_Update, Link_Main, VramMap_Alloc's i/j swap): see each note.

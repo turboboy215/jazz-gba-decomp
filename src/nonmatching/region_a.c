@@ -99,7 +99,8 @@ void sub_08003CF4(void)
     sub_08003F70();
 }
 
-/* ---- Oam_Free 08003F00 ---- */
+/* ---- Oam_Free 08003F00 ---- 27 aligned-diff ops with OPT=-fno-gcse. Same exit-test copy problem as
+ * Obj_FreeSlot (see there): 27 insns in the exit code at expand time, the copy is refused only above 30. */
 void sub_08003F00(u8 idx)
 {
     u8 j = gOamUsedHead_03001260;
@@ -125,21 +126,33 @@ void sub_08003F00(u8 idx)
     gOamFreeHead_0300125C = idx;
 }
 
-/* ---- VramMap_Alloc 08003FBC ---- */
+/* ---- VramMap_Alloc 08003FBC ---- 2 aligned-diff ops with OPT=-fno-gcse (44 before). 2026-10-28: the
+ * search loop reads through a pointer q set inside the `j < n` guard (the ROM's ldrb/adds #1 pair,
+ * q's init after the test), the fill loop keeps 0xFF in a local set first (the ROM's movs #255 before
+ * the q/k inits), and t*32 / n*8 go into locals right after `*p = 1`. With -fno-merge-blocks the
+ * found/next/return layout is right. Left: `n > j` makes agbcc fold the guard to `cmp n, #0`; the
+ * ROM compares j (register) with n. Writing `j < n` keeps the compare but swaps the i/j registers
+ * (10 ops); `(j = 0) < n` folds too. */
 u16 sub_08003FBC(int w, int h, const void *src, int is8bpp)
 {
     int n = h * w;
     int i, j;
-    u8 *p;
+    u8 *p, *q;
     u16 t;
+    u32 ofs, sz;
     if (is8bpp)
         n <<= 1;
     for (i = 1024 - n; i >= 0; i -= n) {
         p = &gVramMap_03001268[i];
         if (*p == 0) {
-            for (j = 0; j < n; j++)
-                if (p[j] != 0)
-                    goto next;
+            j = 0;
+            if (n > j) {
+                q = p;
+                do {
+                    if (*q++ != 0)
+                        goto next;
+                } while (++j < n);
+            }
             t = i;
             goto found;
         }
@@ -148,14 +161,17 @@ u16 sub_08003FBC(int w, int h, const void *src, int is8bpp)
     return 0xFFFF;
 found:
     *p = 1;
+    ofs = t << 5;
+    sz = n << 3;
     if (n > 1) {
+        u8 v = 0xFF;
         u8 *q = p + 1;
         int k = n - 1;
         do {
-            *q++ = 0xFF;
+            *q++ = v;
         } while (--k != 0);
     }
-    CpuFastSet(src, (u8 *)0x06010000 + t * 32, (n * 8) & 0x1FFFFF);
+    CpuFastSet(src, (void *)(ofs + 0x06010000), sz & 0x1FFFFF);
     return t;
 }
 
@@ -193,7 +209,16 @@ u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
     return 1;
 }
 
-/* ---- Obj_FreeSlot 080045FC ---- */
+/* ---- Obj_FreeSlot 080045FC ---- 25 aligned-diff ops with OPT=-fno-gcse. Same loop problem as Oam_Free:
+ * the ROM loop is entered by `ldr base; b test` (step block, test, body; no copy of the test). Here
+ * jump.c's duplicate_loop_exit_test copies the exit code (test + if + store + break, which
+ * stmt.c's expand_end_loop moved to the loop bottom) in front of the loop, so loop.c sees
+ * "multiple entry points". It refuses only if the exit code has a CODE_LABEL, a call, a
+ * LOOP_BEG/LOOP_CONT note, or more than LOOP_TEST_THRESHOLD (30) insns; this version has 25 at
+ * expand time (tools/exitcount.sh prints the count). So the original body was probably longer at expand time (more
+ * RTL that CSE later removes), or had a label inside. A statement expression with a local in
+ * the test (`({ u8 t = j; t != 255; })`) stops the copy and gives the ROM layout (19 ops), but
+ * turns the test into a store-flag that leaves 255 in a register. */
 void sub_080045FC(u8 id)
 {
     u32 h = gObjUsedHead_030022EC;
@@ -1158,24 +1183,30 @@ void sub_08002F64(struct LinkPacket *send, struct LinkPacket *recv)
     }
 }
 
-/* ---- Link_SerialIntr 08003298 ---- with OPT="-fno-gcse -fno-strict-aliasing" (the ROM reloads
- * unk0 after each u16 store into bufs[n], i.e. no type-based aliasing): 308 bytes = ROM size,
- * 65 diff lines, register allocation (the ROM keeps -1 in r6 for both loops and reloads
- * &gUnk_03000D38 into r3 inside the second loop). Without those flags: 312 bytes. */
+/* ---- Link_SerialIntr 08003298 ---- 23 aligned-diff ops with OPT="-fno-gcse -fno-strict-aliasing" (28 before;
+ * the ROM reloads unk0 after each u16 store into bufs[n], i.e. no type-based aliasing). 2026-10-28: reading
+ * unk0 into `idx` and taking `p = &gUnk_03000D38` only for the second loop (the ROM's `adds r3, r0, #0`
+ * copy, `ldr r0, [r3, #8]` in loop 2). Writing loop 1 with two pointers set inside an `if (n--)` guard
+ * (`bp = (u8 **)((n * 4 + 52) + (int)p)`, `mp = (vu16 *)(n * 2 + 0x04000120)`, `*bp--`, `*mp--`) gives
+ * the ROM's loop-1 body exactly (decrements right after each access) but scores 25 overall. Left:
+ * the ROM keeps -1 in r2 and copies it (and p) into r6/r5 before loop 1 (loop.c moving copies of
+ * CSE'd constants), here -1 stays in one register. */
 void sub_08003298(void)
 {
     int n = gUnk_03000D38.unk4;
+    s32 idx; struct LinkBuffers *p;
 
     if (gUnk_03000D38.unk5 == 0)
         *(vu16 *)0x0400010E = 0;
     if ((REG_SIOCNT & 0x40) && gUnk_03000D38.unk8 != 0 && LINK_CALLBACK(gUnk_03000D38)() == 0)
         return;
-    if (gUnk_03000D38.unk0 > -1) {
+    idx = gUnk_03000D38.unk0; p = &gUnk_03000D38;
+    if (idx > -1) {
         while (n--)
             ((u16 *)gUnk_03000D38.bufs[n])[gUnk_03000D38.unk0] = REG_SIOMULTI(n);
     } else {
         while (n--) {
-            if (REG_SIOMULTI(n) != 0xDEAD && gUnk_03000D38.unk8 != 0 && LINK_CALLBACK(gUnk_03000D38)() == 0)
+            if (REG_SIOMULTI(n) != 0xDEAD && p->unk8 != 0 && LINK_CALLBACK(*p)() == 0)
                 return;
         }
     }
