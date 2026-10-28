@@ -825,19 +825,6 @@ u32 sub_08003A9C(void *recvp)
     }
     return Ms.recvSuccessFlags;
 }
-/* ---- Text_StrRev 08004A54 ---- 2 diff lines: the ROM decrements the dst pointer before incrementing src
- * (giv increment order). 2026-10-25 tried: pointer loops, j counting down, u32/u16/s16 n and i,
- * a char temp, *(dst + ...), -fno-gcse/-fno-strength-reduce, agbcc: none moves it. */
-void sub_08004A54(char *dst, const char *src)
-{
-    int n = sub_08004A40(src);
-    int i;
-    if (n != 0) {
-        for (i = 0; src[i]; i++)
-            dst[n - 1 - i] = src[i];
-        dst[n] = 0;
-    }
-}
 /* ---- vsprintf 08005100 ---- Linux 2.0 lib/vsprintf.c; one extra dead `ands r0, r3` before the int/unsigned
  * va_arg (the ROM keeps only the `movs r0, #2`). Jump tables at 083D338C (build with tools/jtbl.py). */
 int sub_08005100(char *buf, const char *fmt, va_list args)
