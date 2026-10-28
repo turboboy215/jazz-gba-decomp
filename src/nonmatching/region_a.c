@@ -440,43 +440,6 @@ u32 sub_08000408(struct Sprite *s)
     return 1;
 }
 
-/* ---- ResBank_SetTileset 08001314 ---- 8 diff lines: the second search loop must post-increment the list pointer (ldmia) while k = j uses the old j.
- * 2026-10-25: `struct TilesetHdr **p = list; for (j = 0; j < n; j++) if (unk14[i] == *p++) ...`
- * in both loops gets ldmia and j++ in place (4 lines left): the ROM sets p (`mov r3, sp`) after
- * the hoisted unk14[i] load, as a strength-reduced giv would be, but plain list[j] loses ldmia. */
-void sub_08001314(struct ResBank *b, u8 slot, void *tiles)
-{
-    struct TilesetHdr *list[5];
-    u32 ofs[5];
-    u32 n, i, j;
-    b->unk14[slot] = (u32)tiles;
-    b->unk24[slot] = 0;
-    n = 0;
-    for (i = 0; i < 4; i++) {
-        u8 dup = 0;
-        for (j = 0; j < n;)
-            if ((struct TilesetHdr *)b->unk14[i] == list[j++])
-                dup = 1;
-        if (b->unk14[i] != 0 && !dup)
-            list[n++] = (struct TilesetHdr *)b->unk14[i];
-    }
-    ofs[0] = 0;
-    for (i = 1; i < n; i++) {
-        u32 m = 2;
-        if (list[i - 1]->bpp == 4)
-            m = 1;
-        ofs[i] = ofs[i - 1] + list[i - 1]->count * m;
-    }
-    for (i = 0; i < 4; i++) {
-        int k = -1;
-        for (j = 0; j < n;)
-            if ((struct TilesetHdr *)b->unk14[i] == list[j++])
-                k = j - 1;
-        if (k != -1)
-            b->unk24[i] = ofs[k];
-    }
-}
-
 /* ---- Glyph_Alloc 08004BD0 ---- register allocation; the free-list heads are re-read after the compare */
 u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
 {
