@@ -72,25 +72,6 @@ u8 sub_08000898(u32 x, int y)
     return r;
 }
 
-/* ---- Palette_CopyFaded 08001EBC ---- 7 aligned-diff ops (was 15). 2026-10-26: `int c = src[i]` with
- * `(u16)c >> 5` gives the ROM's lsls/lsrs #16/#21 extraction, and `(u8)(c & 31)` makes the red mask a
- * QImode constant that loop.c does not hoist (the ROM's fresh `movs r2, #31`). Left: the ROM puts
- * the src giv increment right after the ldrh (loop.c auto_inc_opt: the address giv must be the
- * master, here it is combined into the src + 2i DEST_REG giv) and `ands` reg order. */
-void sub_08001EBC(const u16 *src, u16 *dst, int ofs, int count)
-{
-    int i;
-    u16 *d = dst + ofs;
-    for (i = 0; i != count; i++) {
-        int c = src[i];
-        const u8 *t = gUnk_083D2FD8;
-        const u8 *r = &t[(u8)(c & 31) + gUnk_03005859 * 32];
-        const u8 *g = &t[(((u16)c >> 5) & 31) + gUnk_03005859 * 32];
-        const u8 *b = &t[(((u16)c >> 10) & 31) + gUnk_03005859 * 32];
-        *d++ = (*g << 5) | *r | (*b << 10);
-    }
-}
-
 /* ---- Oam_Init 08003CF4 ---- 7 aligned-diff ops with OPT=-fno-gcse (21 before this rewrite, 62
  * with gcse). 2026-10-26: the `i = j` loop of Obj_InitAll; left is loop.c's choice of
  * invariants: the ROM hoists the table base, 0x200 and 0xFF but keeps 0x07000000 and the 0 for
