@@ -4152,7 +4152,7 @@ sub_08302170:
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #15
 	bl sub_08004880
 	movs r0, #0
@@ -4867,12 +4867,12 @@ sub_083026AC:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #60]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	movs r0, #1
@@ -5026,12 +5026,12 @@ sub_08302798:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	movs r0, #0
@@ -5261,12 +5261,12 @@ sub_0830298C:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5443,12 +5443,12 @@ sub_08302B5C:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	ldr r0, [pc, #72]
@@ -5659,12 +5659,12 @@ sub_08302D10:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5827,12 +5827,12 @@ sub_08302F0C:
 	adds r1, r5, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #68]
 	adds r1, r5, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -5987,12 +5987,12 @@ sub_08303008:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6227,12 +6227,12 @@ sub_08303250:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6405,12 +6405,12 @@ sub_083033A8:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6559,12 +6559,12 @@ sub_08303548:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6710,12 +6710,12 @@ sub_083036A0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -6861,12 +6861,12 @@ sub_083037F8:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7039,12 +7039,12 @@ sub_08303950:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7241,12 +7241,12 @@ sub_08303B20:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7443,12 +7443,12 @@ sub_08303CF0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #84]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -7645,12 +7645,12 @@ sub_08303EC0:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #88]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	ldr r0, [pc, #76]
@@ -7870,12 +7870,12 @@ sub_083040FC:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #76]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	add sp, #4
@@ -27254,18 +27254,18 @@ sub_0830DBFC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #172]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #164]
 	ldr r1, [pc, #164]
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 .L0830DC52:
 	ldr r1, [pc, #136]
 	movs r0, #17
@@ -27292,18 +27292,18 @@ sub_0830DBFC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #88]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #80]
 	ldr r1, [pc, #80]
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 .L0830DCA6:
 	ldr r0, [pc, #76]
 	ldr r1, [r0, #0]
@@ -28352,18 +28352,18 @@ sub_0830E460:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #308]
 	ldr r0, [r0, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #300]
 	ldr r1, [pc, #300]
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [r5, #0]
 	adds r0, #1
 	ldr r1, [pc, #292]
@@ -28986,7 +28986,7 @@ sub_0830E93C:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	bl sub_08004D70
 	bl sub_08001A6C
 	ldr r4, [pc, #240]
@@ -29055,18 +29055,18 @@ sub_0830E93C:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r5, [pc, #120]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
@@ -29429,7 +29429,7 @@ sub_0830ECF4:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #248]
 	movs r1, #120
 	strh r1, [r0, #0]
@@ -29503,18 +29503,18 @@ sub_0830ECF4:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
@@ -29875,7 +29875,7 @@ sub_0830F0AC:
 	mov r1, r8
 	movs r2, #0
 	movs r3, #32
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #248]
 	movs r1, #120
 	strh r1, [r0, #0]
@@ -29949,18 +29949,18 @@ sub_0830F0AC:
 	adds r1, r4, #0
 	movs r2, #0
 	movs r3, #240
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #8]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r6, #0
 	mov r1, r8
 	movs r2, #0
 	movs r3, #160
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	adds r0, r5, #0
 	movs r1, #31
 	bl sub_08004848
@@ -30817,12 +30817,12 @@ sub_0830F840:
 	adds r1, r4, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #112]
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #14
 	bl sub_08004880
 	ldr r5, [pc, #100]

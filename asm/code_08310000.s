@@ -602,7 +602,7 @@ sub_08310154:
 	adds r1, r5, #0
 	movs r2, #0
 	movs r3, #224
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r1, [pc, #144]
 	ldr r0, [pc, #148]
 	ldr r2, [r0, #0]
@@ -616,17 +616,17 @@ sub_08310154:
 	lsls r3, r3, #1
 	adds r1, r4, #0
 	movs r2, #0
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #128]
 	adds r1, r5, #0
 	movs r2, #224
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #120]
 	adds r1, r5, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r0, [pc, #112]
 	movs r1, #224
 	lsls r1, r1, #1
@@ -2675,7 +2675,7 @@ sub_0831156C:
 	adds r1, r4, #0
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #15
 	bl sub_08004880
 	movs r1, #213
@@ -2686,7 +2686,7 @@ sub_0831156C:
 	ldr r1, [pc, #56]
 	movs r2, #0
 	movs r3, #176
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	bl sub_0800436C
 	bl VBlankIntrWait
 	ldrb r6, [r6, #0]
@@ -3663,7 +3663,7 @@ sub_08311C50:
 	movs r3, #128
 	lsls r3, r3, #1
 	movs r2, #0
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r5, [pc, #116]
 	ldr r0, [r5, #52]
 	asrs r0, r0, #8
@@ -4827,7 +4827,7 @@ sub_08312730:
 	lsls r1, r1, #19
 	movs r2, #240
 	movs r3, #16
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	movs r0, #15
 	bl sub_08004880
 	ldr r2, [pc, #172]
@@ -6044,7 +6044,7 @@ sub_08313088:
 	lsls r3, r3, #1
 	adds r1, r4, #0
 	movs r2, #0
-	bl Palette_CopyFaded
+	bl sub_08001EBC
 	ldr r1, [pc, #280]
 	ldr r0, [r1, #52]
 	asrs r0, r0, #8
