@@ -57,7 +57,7 @@ sub_080023EC:
 	cmp r2, #223
 	bls .L08002492
 	adds r0, r6, #0
-	bl MultiBootHandShake
+	bl sub_080028F4
 	adds r4, r0, #0
 	cmp r4, #0
 	beq .L08002454

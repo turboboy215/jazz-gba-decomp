@@ -263,7 +263,7 @@ sub_080034A4:
 	bne .L080036AC
 	b .L080034D4
 .L080036AC:
-	bl Link_SendClientData
+	bl sub_08002144
 	ldr r1, [pc, #176]
 	movs r0, #0
 	bl sub_08001FC8

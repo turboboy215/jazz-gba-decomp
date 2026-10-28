@@ -31,3 +31,4 @@
 - 2026-10-28: Palette_CopyFaded (08001EBC). code decompiled to C: 19444 / 228100 bytes (8.52%); rate 63 bytes/hour; ETA 2027-03-14 15:12
 - 2026-10-28: Text_ParsePaletteTag (08004B14). code decompiled to C: 19528 / 228100 bytes (8.56%); rate 64 bytes/hour; ETA 2027-03-14 00:15
 - 2026-10-28: Text_StrRev (08004A54). code decompiled to C: 19584 / 228100 bytes (8.59%); rate 64 bytes/hour; ETA 2027-03-13 14:09
+- 2026-10-28: MultiBootHandShake (080028F4), Link_SendClientData (08002144) with -fno-merge-blocks. code decompiled to C: 20436 / 228100 bytes (8.96%); rate 67 bytes/hour; ETA 2027-03-07 12:30
