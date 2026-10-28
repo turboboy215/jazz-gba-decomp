@@ -250,27 +250,6 @@ void sub_080046DC(struct Obj *o)
     (*(gOamBuffer_03000E58 + o->oam)).attr1 |= (o->hflip << 12) | (o->vflip << 13);
 }
 
-/* ---- Text_ParsePaletteTag 08004B14 ---- 5 aligned-diff ops (was 16). 2026-10-26: testing the
- * stored byte (`while (buf[n++] != '}')`) gives the ROM's lsls/lsrs #24 of the loaded value and the
- * `n--` before the terminator. Left: the ROM strength-reduces &buf[n] (giv `n + sp`, incremented
- * right after the strb) and increments s after n; here sp + n is recomputed in the loop. */
-int sub_08004B14(const char *s)
-{
-    char buf[12];
-    int n = 0;
-    if (*s != 'P' && *s != 'p')
-        return 0;
-    if (*s++ != '}') {
-        do {
-            buf[n] = *s++;
-        } while (buf[n++] != '}');
-    }
-    n--;
-    buf[n] = 0;
-    gTextCtx_030024F0.palette = sub_08004A8C(buf);
-    return 1;
-}
-
 /* ---- number 08004F38 ---- */
 char *sub_08004F38(char *str, long num, int base, int size, int precision, int type)
 {
