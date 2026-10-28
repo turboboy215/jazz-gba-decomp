@@ -30,3 +30,4 @@
 - 2026-10-28: ResBank_SetTileset (08001314). code decompiled to C: 19324 / 228100 bytes (8.47%); rate 63 bytes/hour; ETA 2027-03-15 13:13
 - 2026-10-28: Palette_CopyFaded (08001EBC). code decompiled to C: 19444 / 228100 bytes (8.52%); rate 63 bytes/hour; ETA 2027-03-14 15:12
 - 2026-10-28: Text_ParsePaletteTag (08004B14). code decompiled to C: 19528 / 228100 bytes (8.56%); rate 64 bytes/hour; ETA 2027-03-14 00:15
+- 2026-10-28: Text_StrRev (08004A54). code decompiled to C: 19584 / 228100 bytes (8.59%); rate 64 bytes/hour; ETA 2027-03-13 14:09
