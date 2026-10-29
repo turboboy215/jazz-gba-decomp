@@ -134,9 +134,14 @@ the target.
 
 **Tooling notes:** `tools/integrate_one.sh` commit trailers point at the session that last edited
 it, so update them. decomp-permuter (`tools/permute.py ... --old` for region A) is too slow on
-the 2-core container for these functions. `src/` region A files are still split per integration
-run (`code_<addr>.c`); merge them into subsystem files (sprite.c, oam.c, ...) when a range is
-fully in C. A C file with a `rodata` row must stay on its own (add_funcs.py does this).
+the 2-core container for these functions. **`src/` is organised by subsystem (2026-10-28)** for region A:
+`sprite`, `map`, `actor`, `resbank`, `font`, `system`, `link`, `multiboot`, `multi_sio`, `oam`,
+`sio32_multi_load`, `obj`, `text`, `vsprintf` (ranges in `tools/subsystems.py`). A subsystem whose
+near misses are still asm is split into contiguous parts (`oam_1.c`, `oam_2.c`, ...; the parts must
+stay separate because the asm sits between them). add_funcs.py names new files from that table,
+extends a file only within its subsystem and compiler flavour, and joins the next part when a
+match fills the gap between two parts. Each file is one flavour (`nogcse` for the OAM/Obj and
+MultiSio parts). GAX is in `src/gax/`; region B still gets `code_<addr>.c` files.
 
 ## 5. Conventions
 

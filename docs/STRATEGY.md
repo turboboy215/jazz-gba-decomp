@@ -73,8 +73,7 @@ See `docs/rom_map.md`. In short:
 
 GAX's DMA stop sequence `mov r3, r3; nop; nop; nop` comes from inline asm in Shin'en's own
 source and can't come from C. `include/gax.h` wraps it as `GAX_DMA_DELAY()`, and integration of such files
-uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. List of files that use it: `src/code_08318FF8.c`,
-`src/code_08319214.c`.
+uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. It is used in `src/gax/gax_083185D0.c` (GAX_pause 08318FF8, GAX_stop 08319214).
 
 ## Work order (recommended)
 

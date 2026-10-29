@@ -40,6 +40,8 @@ Two Nintendo libraries are linked into region A, so their code is known from oth
   `MultiSioRecvBufChange` = `0831711C` (called through a pointer). MultiSioMain and
   Sio32MultiLoadInit only match with `-fno-gcse` (splits.txt flavour `nogcse`).
 
+Sources: one file per subsystem in the table below (`src/sprite_1.c`, `src/oam_2.c`, ...; split
+into numbered parts where near misses are still asm between them; ranges in `tools/subsystems.py`).
 Headers: `include/sprite.h`, `map.h`, `actor.h`, `resbank.h`, `system.h`, `link.h`, `oam.h`,
 `obj.h`, `text.h`. C still uses `sub_ADDR` names; the readable names are in `names.txt` (and in
 comments next to the prototypes).

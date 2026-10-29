@@ -3,13 +3,16 @@
 
 results.json: [{"addr": "XXXXXXXX", "matched": true, "c_code": "...", "name": "..."}, ...]
 Each claimed match is re-checked with tools/check_func.py (inline asm is rejected). Runs of
-consecutive matched functions go into one src/code_<first addr>.c, appended to an existing
-file when it ends right where the run starts. Then the split is regenerated and `make compare`
+consecutive matched functions go into one file, appended to an existing file when it ends right
+where the run starts (and the file that starts where the run ends is joined to it). In region A the
+files are named by subsystem (tools/subsystems.py: src/oam.c, src/oam_2.c, ...), elsewhere
+src/code_<first addr>.c; a file is only extended within its subsystem and compiler flavour. Then the split is regenerated and `make compare`
 must pass; on any failure every touched file is restored.
 """
 import json, os, re, shutil, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(__file__))
 from split import load_funcs, load_splits
+from subsystems import subsystem, file_subsystem, new_name, header, hoist_includes
 
 TRACKED = ["splits.txt", "ld_script.ld", "objects.mk"]
 
@@ -91,7 +94,7 @@ def main(path):
     for t in TRACKED:
         if os.path.exists(t):
             shutil.copy(t, backup)
-    srcs, srcs_names = {}, []
+    srcs, srcs_names, removed = {}, [], []
     # compiler flavour of this integration (old_agbcc / -O1 / default); never extend a file built differently
     opt = os.environ.get("OPT", "")
     # -fprologue-bugfix is global and old_agbcc output equals it, so only -O1 / no-interwork remain
@@ -106,8 +109,9 @@ def main(path):
     for run in runs:
         s, e, codes, standalone = run[:4]
         rod = run[4] if len(run) > 4 else None
+        sub, desc = subsystem(s)
         prev = None if standalone else ends.get(s)
-        if prev and file_flav.get(prev[1], "") != flav:
+        if prev and (file_flav.get(prev[1], "") != flav or file_subsystem(prev[1]) != sub):
             prev = None
         if prev:  # extend the file that ends where this run starts
             ps, name = prev
@@ -115,8 +119,21 @@ def main(path):
             s, old = ps, open("src/%s.c" % name).read()
             codes = [old] + codes
         else:
-            name = "code_%08X" % s
-        srcs["src/%s.c" % name] = merge(codes)
+            taken = {x[3] for x in splits if x[2] == "c"} | set(srcs_names)
+            name = new_name(sub, taken) if sub else "code_%08X" % s
+            if sub:
+                codes = [header(name, sub, desc)] + codes
+        nxt = None if standalone else next((x for x in splits if x[2] == "c" and x[0] == e), None)
+        if nxt and sub and file_subsystem(nxt[3]) == sub and file_flav.get(nxt[3], "") == flav:
+            # the run fills the gap before the next part of the subsystem: join that file too
+            ntext = open("src/%s.c" % nxt[3]).read()
+            ntext = re.sub(r"\A/\*.*?\*/\n", "", ntext, flags=re.S)  # its header comment
+            codes = codes + [ntext]
+            splits = [x for x in splits if x[0] != nxt[0]]
+            splits = [(a, b, k, name if k == "rodata" and n == nxt[3] else n) for a, b, k, n in splits]
+            removed.append("src/%s.c" % nxt[3])
+            e = nxt[1]
+        srcs["src/%s.c" % name] = re.sub(r"\n{3,}", "\n\n", hoist_includes(merge(codes)))
         srcs_names.append(name)
         splits.append((s, e, "c", name))
         ends[e] = (s, name)
@@ -134,6 +151,10 @@ def main(path):
             shutil.copy(p, os.path.join(backup, os.path.basename(p)))
         touched.append(p)
         open(p, "w").write(srcs[p])
+    for p in removed:
+        shutil.copy(p, os.path.join(backup, os.path.basename(p)))
+        touched.append(p)
+        os.remove(p)
     for n in srcs_names:
         file_flav[n] = flav
     tag = lambda x: " " + file_flav[x[3]] if x[2] == "c" and file_flav.get(x[3]) else ""
