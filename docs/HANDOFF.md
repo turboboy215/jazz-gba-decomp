@@ -8,16 +8,21 @@ open the doc for the task at hand. Don't re-derive what's recorded here.
 The repo lives in the user's folder `C:\Users\Super\Documents\Research\Decomp\JazzGBARE\`:
 `jazz-decomp\` (working tree; **`Makefile` is stored as `Makefile.txt`** because the file bridge refuses
 to write `Makefile`) and `jazz-decomp.bundle` (full git history). The ROM is
-`Jazz Jackrabbit (U).gba` in the same folder.
+`Jazz Jackrabbit (U).gba` in the same folder. **The compiler is already built:**
+`agbcc-prebuilt-linux-x64.tar.gz` in the same folder holds `tools/agbcc` (Linux x86-64, built from
+pret/agbcc + `tools/agbcc-jazz.patch`, stamped with the patch's SHA1). Don't rebuild agbcc.
 
 ```sh
-# stage jazz-decomp.bundle + the ROM from the user's folder, then:
+# stage jazz-decomp.bundle, the ROM and agbcc-prebuilt-linux-x64.tar.gz from the user's folder, then:
 git clone jazz-decomp.bundle jazz && cd jazz
 cp "<staged>/Jazz Jackrabbit (U).gba" baserom.gba
-sudo apt-get install -y binutils-arm-none-eabi gcc-arm-none-eabi bison flex libpng-dev
-sh tools/build_agbcc.sh             # pret/agbcc + tools/agbcc-jazz.patch -> tools/agbcc
+sh tools/setup_toolchain.sh "<staged>/agbcc-prebuilt-linux-x64.tar.gz"   # seconds; installs binutils too
 make -j8 compare                    # must print: jazz.gba: OK
 ```
+
+`setup_toolchain.sh` only builds from source (~10 min) if the archive is missing, stale (the patch
+changed) or does not run. It then writes `build/agbcc-prebuilt-linux-x64.tar.gz`: **copy that back to the
+user's folder** so the next session has it. The same applies whenever `tools/agbcc-jazz.patch` changes.
 
 If the bundle is older than the working tree (the user may have edited files), stage the changed files
 over the clone. Optional: Ghidra 11.4.2 headless (GitHub release zip, JDK 21) to regenerate
