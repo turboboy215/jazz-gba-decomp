@@ -68,7 +68,7 @@ sub_080046DC:
 	ldrb r1, [r5, #10]
 	ldr r2, [r5, #20]
 	ldrb r3, [r5, #13]
-	bl VramMap_Alloc
+	bl sub_08003FBC
 	movs r2, #0
 	strh r0, [r5, #2]
 	ldrb r0, [r5, #1]

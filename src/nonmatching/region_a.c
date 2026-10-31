@@ -126,55 +126,6 @@ void sub_08003F00(u8 idx)
     gOamFreeHead_0300125C = idx;
 }
 
-/* ---- VramMap_Alloc 08003FBC ---- 2 aligned-diff ops with OPT=-fno-gcse (44 before). 2026-10-28: the
- * search loop reads through a pointer q set inside the `j < n` guard (the ROM's ldrb/adds #1 pair,
- * q's init after the test), the fill loop keeps 0xFF in a local set first (the ROM's movs #255 before
- * the q/k inits), and t*32 / n*8 go into locals right after `*p = 1`. With -fno-merge-blocks the
- * found/next/return layout is right. Left: `n > j` makes agbcc fold the guard to `cmp n, #0`; the
- * ROM compares j (register) with n. Writing `j < n` keeps the compare but swaps the i/j registers
- * (10 ops); `(j = 0) < n` folds too. */
-u16 sub_08003FBC(int w, int h, const void *src, int is8bpp)
-{
-    int n = h * w;
-    int i, j;
-    u8 *p, *q;
-    u16 t;
-    u32 ofs, sz;
-    if (is8bpp)
-        n <<= 1;
-    for (i = 1024 - n; i >= 0; i -= n) {
-        p = &gVramMap_03001268[i];
-        if (*p == 0) {
-            j = 0;
-            if (n > j) {
-                q = p;
-                do {
-                    if (*q++ != 0)
-                        goto next;
-                } while (++j < n);
-            }
-            t = i;
-            goto found;
-        }
-    next:;
-    }
-    return 0xFFFF;
-found:
-    *p = 1;
-    ofs = t << 5;
-    sz = n << 3;
-    if (n > 1) {
-        u8 v = 0xFF;
-        u8 *q = p + 1;
-        int k = n - 1;
-        do {
-            *q++ = v;
-        } while (--k != 0);
-    }
-    CpuFastSet(src, (void *)(ofs + 0x06010000), sz & 0x1FFFFF);
-    return t;
-}
-
 /* ---- Obj_Create 08004408 ---- */
 u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
 {

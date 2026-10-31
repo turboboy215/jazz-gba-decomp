@@ -26,3 +26,64 @@ void sub_08003F94(void)
     dma[2] = 0x85000100;
     dma[2];
 }
+
+u16 sub_08003FBC(int w, int h, const void *src, int is8bpp)
+{
+    int n = h * w;
+    int i, j;
+    u8 *p, *q;
+    u16 t;
+    u32 ofs, sz;
+    if (is8bpp)
+        n <<= 1;
+    for (i = 1024 - n; i >= 0; i -= n) {
+        p = &gVramMap_03001268[i];
+        if (*p == 0) {
+            j = 0;
+            if (j < n) {
+                q = p;
+            again:
+                if (*q++ != 0)
+                    goto next;
+                if (++j < n)
+                    goto again;
+            }
+            t = i;
+            goto found;
+        }
+    next:;
+    }
+    return 0xFFFF;
+found:
+    *p = 1;
+    ofs = t << 5;
+    sz = n << 3;
+    if (n > 1) {
+        u8 v = 0xFF;
+        u8 *q = p + 1;
+        int k = n - 1;
+        do {
+            *q++ = v;
+        } while (--k != 0);
+    }
+    CpuFastSet(src, (void *)(ofs + 0x06010000), sz & 0x1FFFFF);
+    return t;
+}
+
+void sub_0800404C(u16 tile, int w, int h, const void *src, int is8bpp)
+{
+    int n = h * w;
+    if (is8bpp)
+        n <<= 1;
+    CpuFastSet(src, (u8 *)0x06010000 + tile * 32, (n * 8) & 0x1FFFFF);
+}
+
+void sub_08004080(u16 tile)
+{
+    u16 i = tile;
+    if (i != 0xFFFF) {
+        gVramMap_03001268[i++] = 0;
+        while (gVramMap_03001268[i] == 0xFF)
+            gVramMap_03001268[i++] = 0;
+    }
+}

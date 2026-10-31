@@ -83,7 +83,7 @@ sub_08004408:
 	adds r1, r7, #0
 	ldr r2, [sp, #28]
 	mov r3, r8
-	bl VramMap_Alloc
+	bl sub_08003FBC
 	ldr r1, [r5, #0]
 	strh r0, [r1, #2]
 	ldr r1, [r5, #0]
