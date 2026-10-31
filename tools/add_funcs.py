@@ -37,7 +37,7 @@ def check(code, addr, end=None, rodata=None):
 def compiles(code):
     pp = subprocess.run(["arm-none-eabi-cpp", "-nostdinc", "-I", "include", "-I", "tools/agbcc/include", "-"],
                         input=code, capture_output=True, text=True)
-    cc = subprocess.run(["tools/agbcc/bin/old_agbcc", "-mthumb-interwork", "-O2", "-fhex-asm", "-fno-merge-blocks", "-o", "/dev/null"],
+    cc = subprocess.run(["tools/agbcc/bin/old_agbcc", "-mthumb-interwork", "-O2", "-fhex-asm", "-fno-merge-blocks", "-fdelete-dead-after-reload", "-o", "/dev/null"],
                         input=pp.stdout, capture_output=True, text=True)
     return pp.returncode == 0 and cc.returncode == 0 and "error" not in cc.stderr
 

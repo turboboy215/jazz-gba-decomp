@@ -2594,7 +2594,7 @@ sub_08311500:
 	add r2, sp, #36
 	ldr r1, [pc, #76]
 	add r0, sp, #4
-	bl vsprintf
+	bl sub_08005100
 	movs r5, #0
 	add r4, sp, #4
 .L08311522:

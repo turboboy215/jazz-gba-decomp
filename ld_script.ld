@@ -53,6 +53,7 @@ SECTIONS
         build/src/text_2.o(.text .rodata .data);
         build/src/vsprintf_1.o(.text .rodata .data);
         build/asm/code_08004F38.o(.text .rodata .data);
+        build/src/vsprintf_3.o(.text .data);
         build/src/vsprintf_2.o(.text .rodata .data);
         build/asm/code_08005398.o(.text .rodata .data);
         build/asm/orphan_080053A0.o(.text .rodata .data);
@@ -83,6 +84,8 @@ SECTIONS
         build/asm/rodata_083D3188.o(.text .rodata .data);
         build/src/sio32_multi_load.o(.rodata);
         build/asm/rodata_083D3334.o(.text .rodata .data);
+        build/src/vsprintf_3.o(.rodata);
+        build/asm/rodata_083D3520.o(.text .rodata .data);
         build/asm/iwram_image.o(.text .rodata .data);
         build/asm/data_image.o(.text .rodata .data);
         build/asm/ewram_image.o(.text .rodata .data);

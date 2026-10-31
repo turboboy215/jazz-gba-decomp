@@ -51,5 +51,8 @@ u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base); /* Glyph_Alloc */
 void sub_0831AE58(u16 cell);
 u32 sub_0831AE48(u32 glyph, const void *gfx, u32 base); /* IWRAM Glyph_Alloc */
 int sub_08005100(char *buf, const char *fmt, va_list args); /* vsprintf */
+int sub_08004EEC(const char **s); /* skip_atoi */
+u32 sub_08004F18(const char *s, u32 count); /* strnlen */
+char *sub_08004F38(char *str, long num, int base, int size, int precision, int type); /* number */
 
 #endif
