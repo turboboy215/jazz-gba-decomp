@@ -35,8 +35,17 @@ narrow parameters are **not** re-truncated in the callee (Game Titan's prototype
 after the first jump pass and after CSE at `-O2`), that moves a block next to its only predecessor.
 The ROM's compiler did not: `MultiBootHandShake` and `Link_SendClientData` match only with the pass
 off, VramMap_Alloc's block order needs it off too, and the whole ROM (GAX included) still builds
-byte-identical with it off. `tools/agbcc-no-merge-blocks.patch` adds `-fno-merge-blocks` to both
+byte-identical with it off. `tools/agbcc-jazz.patch` adds `-fno-merge-blocks` to both
 agbcc builds (default unchanged); the Makefile and the tools pass it for all C.
+
+**Dead feeders deleted after reload (2026-10-31).** pret's jump.c has another Cygnus change
+(`/* CYGNUS LOCAL amylaar / gcc/13233 */ if (! reload_completed)` in `delete_computation`) that stops
+it from deleting the insns that fed a deleted compare once reload has run. The ROM's compiler did
+delete them: in vsprintf a cross-jumped `if (flags & SIGN)` (both arms `va_arg(args, int)`) leaves
+only `movs r0, #2` (the `ands r0, r3` was deleted with the `cmp`, its input was not). The same patch
+adds `-fdelete-dead-after-reload`, which skips that check; vsprintf matches with it and the whole ROM
+stays byte-identical with it on, so the Makefile and the tools pass it for all C. Both findings say
+the ROM's compiler was a GCC snapshot from before those Cygnus changes, not pret's exact tree.
 
 libgcc in this ROM is built **without interworking** (`mov pc, lr`). newlib is ordinary.
 

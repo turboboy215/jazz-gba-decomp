@@ -225,4 +225,24 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   (`tools/exitcount.sh file.c sub_ADDR` counts them). So the original body was probably longer before
   CSE, or had a label in it. A statement expression with a local in the test stops the copy but adds a
   store-flag. (Old note: jump.c threads the else branch into the rotated loop's test.)
+* **Loop counter allocated after the loop-invariant index (goto loops, 2026-10-31).** global.c allocates
+  pseudos by priority, `log2(refs) * refs / live_length`, and flow counts each ref weighted by loop
+  depth. A short inner counter `j` used only in an inner loop outranks the outer index `i` and takes the
+  lower register. If the ROM gives `i` the lower register, the inner loop was probably a hand-written
+  `goto` loop (no loop notes, so no depth weighting): `q = p; again: if (*q++ != 0) goto next; if (++j < n)
+  goto again;` (VramMap_Alloc). The `.lreg` dump (`-dl`) prints `Register N used M times across K insns`.
+* **A lone constant load left before a merged branch** (`movs r0, #2` falling into the next block, no
+  `ands`/`cmp`): two identical arms (e.g. `va_arg(args, int)` and `va_arg(args, unsigned int)`)
+  cross-jumped after reload, and jump.c deleted the compare and its dead feeder. Needs
+  `-fdelete-dead-after-reload` (default now; vsprintf).
+* **Oam_Free's `b test` loop shape** (2026-10-31): with a base local (`b = gOamBuffer`) and the test
+  written `if (b[j].next == idx)` the exit code is long enough that jump.c keeps the ROM's `b test`
+  entry and loop.c hoists the base. Left (16 ops): the ROM computes `idx * 8` in both arms of the
+  `j == idx` test and reuses it after the merge, which neither flavour does here (see the note).
+* **Loop invariant budget, worked example (Oam_Init, 2026-10-31).** move_movables moves an invariant if
+  `threshold * savings * lifetime >= insn_count` (`threshold` = 26 without a call, minus 3 after each
+  move, fresh in the `-frerun-loop-opt` pass). Our pass 1 (25 insns) moves the base and 0x200, pass 2 (23
+  insns) 0x07000000 and 0xFF. The ROM keeps 0x07000000 and the unk7 0 in the loop but hoists 0xFF: that
+  needs 0xFF moved in pass 1 (lifetime >= 2, so a load or use between its set and the `orr`) and a pass-2
+  count above 26, i.e. a loop of about 30 insns at loop time.
 * **Register-only leftovers** (Oam_Init, Obj_Update, Link_Main, VramMap_Alloc's i/j swap): see each note.
