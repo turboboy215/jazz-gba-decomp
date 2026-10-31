@@ -1,9 +1,34 @@
-/* oam_1.c: shadow OAM manager and the OBJ VRAM block allocator. One of several oam files: the functions between them
+/* oam_3.c: shadow OAM manager and the OBJ VRAM block allocator. One of several oam files: the functions between them
  * are still asm (near misses in src/nonmatching/region_a.c). */
+
 #include "global.h"
 #include "oam.h"
 #include "system.h"
 #include "link.h"
+
+void sub_08003CF4(void)
+{
+    u8 i;
+    u32 j;
+    for (i = 0; i < 128; i = j) {
+        struct OamEntry *e;
+        j = 0x07000000;
+        e = &gOamBuffer_03000E58[i];
+        ((struct OamEntry *)j)[i].attr0 = 0x200;
+        e->attr0 = 0x200;
+        j = i;
+        j++;
+        if (j != 128)
+            e->next = j;
+        else
+            e->next |= 0xFF;
+        e->unk7 = 0;
+    }
+    gOamFreeHead_0300125C = 0;
+    gOamUsedHead_03001260 = 255;
+    gUnk_03001264 = 0;
+    sub_08003F70();
+}
 
 void sub_0831A52C(const void *src, void *dst, u32 ctrl); /* CpuSet */
 void sub_08004914(int x, int y, const char *s);

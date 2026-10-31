@@ -239,10 +239,14 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   written `if (b[j].next == idx)` the exit code is long enough that jump.c keeps the ROM's `b test`
   entry and loop.c hoists the base. Left (16 ops): the ROM computes `idx * 8` in both arms of the
   `j == idx` test and reuses it after the merge, which neither flavour does here (see the note).
-* **Loop invariant budget, worked example (Oam_Init, 2026-10-31).** move_movables moves an invariant if
+* **Loop invariant budget (Oam_Init, solved 2026-10-31).** move_movables moves an invariant if
   `threshold * savings * lifetime >= insn_count` (`threshold` = 26 without a call, minus 3 after each
-  move, fresh in the `-frerun-loop-opt` pass). Our pass 1 (25 insns) moves the base and 0x200, pass 2 (23
-  insns) 0x07000000 and 0xFF. The ROM keeps 0x07000000 and the unk7 0 in the loop but hoists 0xFF: that
-  needs 0xFF moved in pass 1 (lifetime >= 2, so a load or use between its set and the `orr`) and a pass-2
-  count above 26, i.e. a loop of about 30 insns at loop time.
-* **Register-only leftovers** (Oam_Init, Obj_Update, Link_Main, VramMap_Alloc's i/j swap): see each note.
+  move, fresh in the `-frerun-loop-opt` pass). `tools/loopinfo.sh file.c` prints each pass's insn count
+  and decisions. The ROM hoists the base, 0x200 and 0xFF but keeps 0x07000000 and the unk7 0 in the
+  loop. Two changes did it: `j = i; j++;` (one more insn, so pass 2 counts 24 and the 0 is "not
+  desirable" after 0xFF moves), and 0x07000000 kept in a variable that is set more than once (only
+  single-set regs are movable): `j = 0x07000000; e = &buf[i]; ((struct OamEntry *)j)[i].attr0 = 0x200;`.
+  The order of `j = 0x07000000` before `e = ...` set the registers (a decomp-permuter find).
+  **When the ROM keeps a constant in a loop that this build hoists, put it in a variable that is
+  assigned twice.**
+* **Register-only leftovers** (Obj_Update, Link_Main, VramMap_Alloc's i/j swap): see each note.

@@ -33,3 +33,4 @@
 - 2026-10-28: Text_StrRev (08004A54). code decompiled to C: 19584 / 228100 bytes (8.59%); rate 64 bytes/hour; ETA 2027-03-13 14:09
 - 2026-10-28: MultiBootHandShake (080028F4), Link_SendClientData (08002144) with -fno-merge-blocks. code decompiled to C: 20436 / 228100 bytes (8.96%); rate 67 bytes/hour; ETA 2027-03-07 12:30
 - 2026-10-31: vsprintf (08005100, with the new -fdelete-dead-after-reload flag), VramMap_Alloc (08003FBC). code decompiled to C: 21224 / 228100 bytes (9.30%); rate 56 bytes/hour; ETA 2027-04-03 18:09
+- 2026-10-31: Oam_Init (08003CF4). code decompiled to C: 21320 / 228100 bytes (9.35%); rate 56 bytes/hour; ETA 2027-04-03 02:11

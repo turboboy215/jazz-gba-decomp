@@ -83,36 +83,37 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `OPT=-fno-gcse` (check, batch_check, integrate) | `nogcse` flavour for library code (MultiSio, Sio32MultiLoad, Glyph_InitCache) |
 | `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
 | `python3 tools/vadiff.py ADDR file.c` | like variants.py, but prints the aligned-diff count per variant (each written to `build/vad_N.c`) |
+| `OPT=... sh tools/loopinfo.sh file.c` | loop.c's insn count per pass and which invariants it moves or calls "not desirable" (see the Oam_Init budget note in `docs/region_a.md`) |
 | `sh tools/exitcount.sh file.c sub_ADDR` | insns in a loop's exit code at expand time (jump.c copies it in front of the loop unless > 30, a label, a call or a loop note) |
 
 To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, then run `split.py`.
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-31):** 9.30% of live code is in C; `make compare` passes.
+**State (2026-10-31):** 9.35% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 171/190 byte-matching, 18 near misses with
+* Region A (`080002E0-080053A0`): **every function is in C**. 172/190 byte-matching, 17 near misses with
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-10-31 matched **vsprintf** (new flag `-fdelete-dead-after-reload`, see above) and
+  2026-10-31 matched **vsprintf** (new flag `-fdelete-dead-after-reload`, see above),
   **VramMap_Alloc** (the inner search is a `goto` loop: no loop-depth weighting, so global.c allocates
-  `i` before `j`). Tricks and open problems are at the end of `docs/region_a.md` (new: goto loops and
+  `i` before `j`) and **Oam_Init** (loop.c budget: a constant kept in a multiply-set variable). Tricks and open problems are at the end of `docs/region_a.md` (new: goto loops and
   register priority, Oam_Free's `b test` shape, the loop.c invariant budget worked through for Oam_Init).
   Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 18). Score them with
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 17). Score them with
    `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c` (add
    `OPT=-fno-gcse` for `08003CF4-08004848`). Aligned diff ops (2026-10-31): Link_Main 3, Map_IsTileBit10 6,
-   Oam_Init 7 (nogcse), Oam_Free 16 (nogcse), Obj_Update 20 (nogcse), Link_SerialIntr 23
+   Oam_Free 16 (nogcse), Obj_Update 20 (nogcse), Link_SerialIntr 23
    (`OPT="-fno-gcse -fno-strict-aliasing"`), Obj_FreeSlot 25 (nogcse; try Oam_Free's new shape), then the
    35+ group (Link_Exchange 38, Sprite_Init 39, Obj_Create 43, Glyph_Alloc 53, number 59, ...). Still
    unattacked with the 2026-10-28/31 tricks: the 35+ group. Leads:
-   * Oam_Init: needs a loop of ~30 insns at loop time with 0xFF's lifetime >= 2 (worked example in
-     `docs/region_a.md`).
+   * Constants the ROM keeps inside a loop: a variable assigned twice (Oam_Init); check with
+     `tools/loopinfo.sh`.
    * Map_IsTileBit10: jump.c's store-flag conversion of `r = 0; if (t & 0x400) r = 1;` must not happen
      (note in the source).
    * Link_Main: one store's reload order (value r0 / address r1); the RTL is otherwise the same.

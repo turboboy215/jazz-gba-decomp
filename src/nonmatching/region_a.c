@@ -78,33 +78,6 @@ u8 sub_08000898(u32 x, int y)
     return r;
 }
 
-/* ---- Oam_Init 08003CF4 ---- 7 aligned-diff ops with OPT=-fno-gcse (21 before this rewrite, 62
- * with gcse). 2026-10-26: the `i = j` loop of Obj_InitAll; left is loop.c's choice of
- * invariants: the ROM hoists the table base, 0x200 and 0xFF but keeps 0x07000000 and the 0 for
- * unk7 in the loop. Here pass 2 of loop.c (23 insns) hoists 0x07000000 and 0xFF; with
- * `o = OAM_HW; o += i;` 0x07000000 stays but the 0 is hoisted too (the ROM loop must be 24-26
- * insns at pass 2). */
-void sub_08003CF4(void)
-{
-    u8 i;
-    u32 j;
-    for (i = 0; i < 128; i = j) {
-        struct OamEntry *e = &gOamBuffer_03000E58[i];
-        OAM_HW[i].attr0 = 0x200;
-        e->attr0 = 0x200;
-        j = i + 1;
-        if (j != 128)
-            e->next = j;
-        else
-            e->next |= 0xFF;
-        e->unk7 = 0;
-    }
-    gOamFreeHead_0300125C = 0;
-    gOamUsedHead_03001260 = 255;
-    gUnk_03001264 = 0;
-    sub_08003F70();
-}
-
 /* ---- Oam_Free 08003F00 ---- 16 aligned-diff ops with OPT=-fno-gcse (27 before 2026-10-31). With the base
  * in a local and the test written `b[j].next == idx`, jump.c keeps the ROM's `b test` loop entry (the
  * exit code is too long to copy) and loop.c hoists the base. Left: the ROM computes idx * 8 into one
