@@ -102,7 +102,7 @@ sub_08000408:
 	adds r0, #16
 	str r0, [sp, #0]
 	ldr r0, [sp, #8]
-	bl Obj_Create
+	bl sub_08004408
 	lsls r0, r0, #24
 	cmp r0, #0
 	bne .L080004FA
