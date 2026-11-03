@@ -36,14 +36,13 @@ with `git bundle create jazz-decomp.bundle --all`.
 ## 2. Key facts (verified, don't redo)
 
 * ROM `AJJE`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0`, 4 MiB.
-* **Compiler: `old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload`** for game
-  code (the default in Makefile and all tools). Both flags come from our patch (`tools/agbcc-jazz.patch`):
-  the ROM's compiler had no merge_blocks pass (2026-10-28) and still deleted dead feeder insns after
-  reload, i.e. it predates Cygnus gcc/13233 in jump.c (2026-10-31, vsprintf). Details in
-  `docs/STRATEGY.md`. Stock pret agbcc rejects both flags. If a build tool is copied in from elsewhere,
-  give it both.
-  **GAX needs `agbcc -fprologue-bugfix`** (splits.txt flavour `bugfix`); several GAX functions don't match
-  with `old_agbcc`.
+* **Compiler: `old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const
+  -fno-strict-aliasing -fcombine-givs-fix`** for game code (the default in Makefile and all tools). All but
+  `-fno-strict-aliasing` come from our patch (`tools/agbcc-jazz.patch`); stock pret agbcc rejects them. The ROM's
+  compiler was a GCC snapshot from before several Cygnus changes. Details in `docs/STRATEGY.md`, including how
+  to test a new compiler idea in minutes. **When a near miss resists, suspect the compiler:** that found
+  all five flags. **GAX needs `agbcc -fprologue-bugfix`** with only the first two (splits.txt flavour `bugfix`,
+  objects.mk empties `GAMEFLAGS`); several GAX functions don't match with `old_agbcc`, and it breaks with the new flags.
 * Code regions: A `080002E0-08012974` (live library `…-080053A0`, then the **Single Pak multiboot
   client image** `080053A0-080193A0`, a separate program with its own GAX copy that `Link_Main`
   sends to the other GBAs; the splitter still calls it `ORPHAN`; don't decompile it unless asked);
@@ -75,7 +74,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `python3 tools/check_func.py file.c ADDR` | compile one function and diff it against the ROM (env `CC1`, `OPT`, `END`, `EXTRA_INC`) |
 | `python3 tools/adiff.py ADDR file.c` | the same check as an aligned diff: only the real edits and their count (`Q=1`: count only) |
 | `python3 tools/nm_explode.py` | one `work/ADDR_Name.c` per near miss in `src/nonmatching/region_a.c` (check_func needs one function per file) |
-| `python3 tools/nm_replace.py ADDR [file.c]` | replace that near miss's section (file starts with its `/* ---- Name ADDR ----` comment), or delete it after a match |
+| `python3 tools/nm_replace.py ADDR [file.c]` | replace that near miss's section (file starts with its `/* ---- Name ADDR ----` comment), or delete it after a match. Run it **after** `integrate_one.sh` reports `verified 1/1`: add_funcs rejects any file containing the word "asm", comments included |
 | `old_agbcc ... -dL file.i` | loop.c dump (`file.i.loop`): invariants moved / "not desirable", givs combined, "multiple entry points" |
 | `sh tools/integrate_one.sh ADDR file.c Name` | add to `src/`, `make compare`, commit (use `ALLOW_ASM=1` only for GAX's DMA delay asm) |
 | `python3 tools/progress.py` | % of live code in C |
@@ -85,7 +84,6 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `python3 tools/xref_rom.py OTHER.gba` | find Jazz functions in another ROM (masked patterns) |
 | `RODATA=TABLE python3 tools/check_func.py f.c ADDR` | function with a `switch` whose jump table is at TABLE (also compares the table) |
 | `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
-| `OPT=-fno-gcse` (check, batch_check, integrate) | `nogcse` flavour for library code (MultiSio, Sio32MultiLoad, Glyph_InitCache) |
 | `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
 | `python3 tools/vadiff.py ADDR file.c` | like variants.py, but prints the aligned-diff count per variant (each written to `build/vad_N.c`) |
 | `OPT=... sh tools/loopinfo.sh file.c` | loop.c's insn count per pass and which invariants it moves or calls "not desirable" (see the Oam_Init budget note in `docs/region_a.md`) |
@@ -95,37 +93,31 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-02):** 9.45% of live code is in C; `make compare` passes.
+**State (2026-11-03):** 9.87% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 175/190 byte-matching, 14 near misses with
+* Region A (`080002E0-080053A0`): **every function is in C**. 178/190 byte-matching, 11 near misses with
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-11-02 matched **Map_IsTileBit10** (signed `> 0` test of a zero-extended byte temp keeps jump.c's
-  store-flag away; Map_GetTile called as returning int), **Obj_FreeSlot** and **Oam_Free** (the
-  "loop entered from an else" problem: a hand-written goto loop plus element addresses written as
-  `offset + base` integer sums; Oam_Free's shared `idx * 8` is a variable set in both arms). All in
-  `docs/region_a.md`'s matching notes. Link_Main and Obj_Update were analysed down to reload register
-  choice (notes there, under "Register-only leftovers"); neither moved.
+  2026-11-03: found three compiler differences (one configuration for all game code, the `nogcse` flavour
+  is gone), matched **Link_Exchange**, **Glyph_Free**, **Obj_Create**. New tricks in `docs/region_a.md`'s last note.
   Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 14). Score them with
-   `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c`
-   (add `OPT=-fno-gcse` for `08003CF4-08004848`). Aligned diff ops (2026-11-02): Link_Main 3 (reload
-   order, hard), Obj_Update 20 (nogcse; reload spill choice, hard), Link_SerialIntr 23
-   (`OPT="-fno-gcse -fno-strict-aliasing"`), then the 35+ group (Link_Exchange 38, Sprite_Init 39,
-   Obj_Create 43 nogcse, Glyph_Alloc 42, Glyph_Free 45, number 59, Sprite_Draw 71, Oam_SetPosSorted 94
-   nogcse, MultiSioRecvDataCheck 95, MultiBootMain 100, Bg_DrawLevelScreen 337). Leads:
-   * Try the 2026-11-02 tricks on the 35+ group: goto loops where the ROM has a `b test` loop with no
-     copied test; `offset + base` integer sums where an add's operand order (and with it global.c's
-     register preference) is reversed; a variable set in both arms for a value reused after a merge.
-   * Constants the ROM keeps inside a loop: a variable assigned twice (Oam_Init); check with
-     `tools/loopinfo.sh`.
-   * When a near miss is only register order, check `-dl` refs/live lengths against global.c's priority
-     before trying source shuffles.
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 11). Score them with
+   `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c`. Aligned diff ops
+   (2026-11-03): MultiSioRecvDataCheck 8, Sprite_Init 9, Link_Main 14 (3 with `OPT=-fno-gcse-no-const`), Obj_Update 20,
+   Link_SerialIntr 23, Glyph_Alloc 23, number 57, Sprite_Draw 71, MultiBootMain 100, Oam_SetPosSorted 108,
+   Bg_DrawLevelScreen 249. Leads:
+   * The shared open question: reload's spill register order (`last_spill_reg`, reload1.c) in
+     MultiSioRecvDataCheck, Link_Main and Obj_Update. It may be one more compiler difference; test it as in STRATEGY.md.
+   * Link_SerialIntr's `adds r3, r0, #0` before the `cmp` and the `ldr r3, =gUnk_03000D38` before a loop's `cmp`
+     are PRE-shaped, yet `-fgcse-no-const` forbids that symbol. The exact rule may be different.
+   * Sprite_Draw should take the Sprite_Init fixes (inline `g->is8bpp`, and the `ldmia` loop wants a separate pointer).
+   * Glyph_Alloc needs two live registers holding 0xFFFF in the else arm.
+   * Re-try old "tried and failed" notes in `src/nonmatching/region_a.c`: most predate the new flags.
 2. **Finish GAX matching** (scores above): start with GAXSync_render (7). GAX keeps its jump tables inline
    (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
@@ -139,7 +131,7 @@ Next, in order:
 **Workflow** for a batch of functions: a scratch file (`work/*.c`, gitignored) with a preamble of
 `#include`s and one `//@ ADDR Name # [sure|likely] evidence` section per function;
 `tools/batch_check.py work.c` checks them, `tools/batch_check.py --integrate work.c` adds the matches
-(set `OPT=-fno-gcse` on both for the `nogcse` flavour); `tools/variants.py ADDR file.c` compares
+`tools/variants.py ADDR file.c` compares
 alternatives separated by `//%` lines (it passes `OPT`/`RODATA` through); `tools/disasm.py` to read
 the target.
 
@@ -151,9 +143,8 @@ functions its best outputs can hint at the fix (VramMap_Alloc: "use j again late
 `sio32_multi_load`, `obj`, `text`, `vsprintf` (ranges in `tools/subsystems.py`). A subsystem whose
 near misses are still asm is split into contiguous parts (`oam_1.c`, `oam_2.c`, ...; the parts must
 stay separate because the asm sits between them). add_funcs.py names new files from that table,
-extends a file only within its subsystem and compiler flavour, and joins the next part when a
-match fills the gap between two parts. Each file is one flavour (`nogcse` for the OAM/Obj and
-MultiSio parts). GAX is in `src/gax/`; region B still gets `code_<addr>.c` files.
+extends a file only within its subsystem, and joins the next part when a
+match fills the gap between two parts. GAX is in `src/gax/`; region B still gets `code_<addr>.c` files.
 
 ## 5. Conventions
 

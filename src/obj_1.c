@@ -9,7 +9,7 @@
 #define Sio gUnk_03000AF0
 
 /* Obj_InitAll: links the 128 hardware objects into the free list and resets OAM and OBJ VRAM.
- * Library code built with -fno-gcse (the ROM loads the list head addresses after the loop). */
+ * The ROM loads the list head addresses after the loop (no PRE of pool constants, -fgcse-no-const). */
 void sub_0800436C(void)
 {
     u32 i, j;

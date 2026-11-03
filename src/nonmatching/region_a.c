@@ -59,7 +59,7 @@ extern const char gUnk_083D335C[]; /* "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" */
 #define LARGE   64
 #define do_div(n, base) ({ int __res; __res = ((unsigned long)n) % (unsigned)base; n = ((unsigned long)n) / (unsigned)base; __res; })
 
-/* ---- Obj_Update 080046DC ---- 20 aligned-diff ops with OPT=-fno-gcse (27 before). 2026-10-26: the size/shape
+/* ---- Obj_Update 080046DC ---- 20 aligned-diff ops (27 before). 2026-10-26: the size/shape
  * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
  * loads o->oam before the table address as the ROM does. Left: the last three statements get the
  * table address in r2 and the ldrh temp in r3; the ROM has them the other way round. 2026-11-02: the ldrh
@@ -96,7 +96,8 @@ void sub_080046DC(struct Obj *o)
     (*(gOamBuffer_03000E58 + o->oam)).attr1 |= (o->hflip << 12) | (o->vflip << 13);
 }
 
-/* ---- number 08004F38 ---- */
+/* ---- number 08004F38 ---- 57 aligned-diff ops; the if/else on c gives the ROM's size and `movs r1, #32; str` shape.
+ * Left: the ROM has str in r5, size in r6 and slots sign/digits/c at sp+68/72/76; here str r6, size r7, slots c/sign/digits. */
 char *sub_08004F38(char *str, long num, int base, int size, int precision, int type)
 {
     char c, sign, tmp[66];
@@ -109,7 +110,10 @@ char *sub_08004F38(char *str, long num, int base, int size, int precision, int t
         type &= ~ZEROPAD;
     if (base < 2 || base > 36)
         return 0;
-    c = (type & ZEROPAD) ? '0' : ' ';
+    if (type & ZEROPAD)
+        c = '0';
+    else
+        c = ' ';
     sign = 0;
     if (type & SIGN) {
         if (num < 0) {
@@ -163,7 +167,11 @@ char *sub_08004F38(char *str, long num, int base, int size, int precision, int t
     return str;
 }
 
-/* ---- Sprite_Init 080002E0 ---- register allocation: the ROM keeps i*4 in sl and spills anim; note the original bug (the failure loop clears objs[i], not objs[j]) */
+/* ---- Sprite_Init 080002E0 ---- 9 aligned-diff ops (2026-11-03, was 39): allocation is right (i*4 in sl, anim spilled).
+ * Left: the ROM's `else` store recomputes i*4 and s+52 (`lsls r0, r4, #2; adds r1, r5, #0; adds r1, #52`), here it
+ * combines with the &objs[i] giv in r6. Hiding the multiply from loop.c moved i*4 to r7 and lost the allocation (37 ops);
+ * a user pointer biv for &objs[i], and dropping conditional address givs in the compiler, did not help.
+ * Note the original bug (the failure loop clears objs[i], not objs[j]). */
 u32 sub_080002E0(struct Sprite *s, struct AnimBank *bank, int anim, int frame)
 {
     struct Anim *a = sub_0800079C(bank, anim);
@@ -181,15 +189,14 @@ u32 sub_080002E0(struct Sprite *s, struct AnimBank *bank, int anim, int frame)
     for (i = 0; i < a->layerCount; i++) {
         if (sub_080007AC(bank, anim, frame, i)->gfx != 0x3FFF) {
             struct CelGfx *g = sub_080007CC(bank, anim, frame, i);
-            u8 bpp = g->is8bpp;
-            if (!sub_08004408(&s->objs[i], g->w, g->h, bpp, g->data)) {
+            if (!sub_08004408(&s->objs[i], g->w, g->h, g->is8bpp, g->data)) {
                 for (j = i; j < SPRITE_MAX_LAYERS; j++)
                     s->objs[i] = NULL;
                 sub_080005D4(s);
                 return 0;
             }
         } else
-            s->objs[i] = NULL;
+            *(struct Obj **)((u8 *)s->objs + i * 4) = NULL;
     }
     for (; i < SPRITE_MAX_LAYERS; i++)
         s->objs[i] = NULL;
@@ -246,35 +253,41 @@ u32 sub_08000408(struct Sprite *s)
     return 1;
 }
 
-/* ---- Glyph_Alloc 08004BD0 ---- register allocation; the free-list heads are re-read after the compare */
+/* ---- Glyph_Alloc 08004BD0 ---- 23 aligned-diff ops (2026-11-03, was 42 nogcse). The key*2 shared across the merge in
+ * ip is PRE (right with -fgcse-no-const); `glyph += base` reuses the parameter. The first read of the list head is
+ * volatile-like (`ldrh r7; adds r0, r7`, then a real reload). Left: the ROM keeps both r7 (loaded value, stored to
+ * list[tile + 1]) and r0 (copy, compared) live into the else arm; here CSE leaves one, so one register less is used
+ * and g, gfx, key*2 land one register lower. */
 u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
 {
     u16 g = glyph;
-    u32 key = glyph + base;
-    u32 t, tile;
-    if (key == 0)
+    u32 t;
+    u32 tile;
+    u16 fr;
+    glyph += base;
+    if (glyph == 0)
         return 0;
-    t = gUnk_02002000[key];
+    t = gUnk_02002000[glyph];
     if (t != 0xFFFF) {
         tile = t;
         gUnk_02002800[tile]++;
         return tile;
     }
-    if (gUnk_03002504 != t) {
+    fr = (*(vu16 *)&gUnk_03002504);
+    if (fr != 0xFFFF) {
         tile = gUnk_03002504;
         gUnk_03002504 = gUnk_02002800[tile];
     } else {
-        u16 free = gUnk_03002504;
-        if (gUnk_03002500 == free)
+        if (gUnk_03002500 == 0xFFFF)
             return 0;
         tile = gUnk_03002500;
         gUnk_03002500 = gUnk_02002800[tile];
-        gUnk_02002800[tile + 1] = free;
+        gUnk_02002800[tile + 1] = t;
         gUnk_03002504 = tile + 1;
     }
     gUnk_02002800[tile] = 1;
-    gUnk_02002000[key] = tile;
-    gUnk_02003600[tile] = key;
+    gUnk_02002000[glyph] = tile;
+    gUnk_02003600[tile] = glyph;
     CpuFastSet(gfx + g * 32, (u8 *)0x06000000 + tile * 32, 8);
     return tile;
 }
@@ -542,24 +555,28 @@ output_burst:
     }
 }
 
-/* ---- MultiSioRecvDataCheck 08003A9C ---- register allocation (the ROM spills i - 1) */
+/* ---- MultiSioRecvDataCheck 08003A9C ---- 8 aligned-diff ops (2026-11-03, was 95). `p = NULL` at the top is the
+ * ROM's r8 zero; `fn` local gives its order; the u16 temp and q fix the checksum loop. Left: the spill reload for
+ * i - 1 takes r7 here and r1 in the ROM, so ours can inherit p from r1 and drops `mov r1, r8`. */
 u32 sub_08003A9C(void *recvp)
 {
     s32 checkSum;
     u8 syncRecvFlag;
     s32 i, ii;
-    struct MultiSioPacket *p;
+    u32 (*fn)(void) = MultiSioRecvBufChange;
+    struct MultiSioPacket *p = NULL;
 
-    syncRecvFlag = MultiSioRecvBufChange();
+    syncRecvFlag = fn();
     Ms.recvSuccessFlags = 0;
     Ms.loadSuccessFlag = 0;
     if (syncRecvFlag) {
         for (i = 3; i >= 0; i--) {
             u32 zero;
+            u16 *q;
             p = &((struct MultiSioPacket *)Ms.recvCheckBufp)[i];
             checkSum = 0;
-            for (ii = 0; ii < sizeof(struct MultiSioPacket) / 2 - 2; ii++)
-                checkSum += ((u16 *)p)[ii];
+            for (ii = 0, q = (u16 *)p; ii < sizeof(struct MultiSioPacket) / 2 - 2; ii++)
+                { u16 v = *q++; checkSum += v; }
             if ((s16)checkSum == -13) {
                 Ms.recvSuccessFlags |= 1 << i;
                 Ms.downloadSuccessFlags |= p->downloadSuccessFlag << i;
@@ -583,6 +600,7 @@ u32 sub_08003A9C(void *recvp)
     }
     return Ms.recvSuccessFlags;
 }
+
 /* ==== Session 2026-10-24: the rest of region A (bg scroll, OAM sort, link screens) ==== */
 
 /* ---- Bg_DrawLevelScreen 08001720 ---- same structure; 784 vs 768 bytes. The ROM keeps more on the
@@ -719,7 +737,7 @@ void sub_08003DEC(u8 idx, s16 x, s16 y, u8 z) /* the ROM zero-extends x and y (u
     }
 }
 
-/* ---- Link_SerialIntr 08003298 ---- 23 aligned-diff ops with OPT="-fno-gcse -fno-strict-aliasing" (28 before;
+/* ---- Link_SerialIntr 08003298 ---- 23 aligned-diff ops (28 before;
  * the ROM reloads unk0 after each u16 store into bufs[n], i.e. no type-based aliasing). 2026-10-28: reading
  * unk0 into `idx` and taking `p = &gUnk_03000D38` only for the second loop (the ROM's `adds r3, r0, #0`
  * copy, `ldr r0, [r3, #8]` in loop 2). Writing loop 1 with two pointers set inside an `if (n--)` guard
@@ -764,7 +782,8 @@ void sub_08003298(void)
     gUnk_030058A0 = 0;
 }
 
-/* ---- Link_Main 080034A4 ---- 3 diff lines: in `gUnk_03000D38.unk4 = 2` the ROM moves the
+/* ---- Link_Main 080034A4 ---- 14 aligned-diff ops with the default flags, 3 with OPT=-fno-gcse-no-const (the ROM's
+ * value-then-address order needs the address hoisted, see docs/region_a.md, 2026-11-03). Those 3 diff lines: in `gUnk_03000D38.unk4 = 2` the ROM moves the
  * hoisted constant 2 (r8) to r0 and the address to r1, this build the other way round. Tried a
  * pointer, a key local, an extra else, u32 started. 2026-10-25: the RTL shows CSE replacing the
  * constant with the loop-hoisted HImode 2 from `gUnk_03000D12 & 2` (pseudo 88), so insn 534 is

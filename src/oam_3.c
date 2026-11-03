@@ -42,8 +42,8 @@ extern u32 gUnk_03000910, gUnk_03000914;
 #define REG_TM3CNT (*(vu32 *)0x0400010C)
 #define REG_IF (*(vu16 *)0x04000202)
 
-/* Oam_Flush: copies the used list to OAM, hides the entries left over from last frame. Matches with
- * -fno-gcse (the ROM reloads &gUnk_03001264 for the last store) and with the pointer set to OAM and
+/* Oam_Flush: copies the used list to OAM, hides the entries left over from last frame. The ROM
+ * reloads &gUnk_03001264 for the last store (no PRE of pool constants). Matches with the pointer set to OAM and
  * then advanced, which keeps the 0x07000000 constant inside the loop. */
 void sub_08003D54(void)
 {

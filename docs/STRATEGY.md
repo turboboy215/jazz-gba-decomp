@@ -47,6 +47,29 @@ adds `-fdelete-dead-after-reload`, which skips that check; vsprintf matches with
 stays byte-identical with it on, so the Makefile and the tools pass it for all C. Both findings say
 the ROM's compiler was a GCC snapshot from before those Cygnus changes, not pret's exact tree.
 
+**Three more differences, game code only (2026-11-03).** GAX keeps stock gcse and strict aliasing and no
+giv fix: 8 of its matched functions break with the first two flags, so Shin'en's library really was
+built separately. The Makefile keeps them in `GAMEFLAGS`, which objects.mk empties for GAX.
+* **`-fgcse-no-const`**: gcse's PRE leaves constant pool loads alone, except symbol+offset ones
+  (`_ctype_+1` in simple_strtoul must still be PRE'd). Our patch adds the check to `want_to_gcse_p`.
+  This replaces the per-object `nogcse` flavour: all 8 of those objects match without `-fno-gcse`, and
+  expressions like `key * 2` are still PRE'd, which `-fno-gcse` could not give (Glyph_Alloc's `mov ip, r1`
+  before the `cmp` is PRE's copy at the end of a block).
+* **`-fno-strict-aliasing`**: nothing matched depends on strict aliasing, and the link code needs it off.
+* **`-fcombine-givs-fix`**: pret's `combine_givs` subtracts from its benefit table with the sort position
+  `j` instead of the giv index `i` (fixed in later gcc). With the bug Link_Exchange gets two recv givs.
+
+Tested and **ruled out** the same day, each against all matched functions: no if/else block swap in
+jump.c (15 matched functions break), refs not weighted by loop depth (19 break), dropping conditional
+address givs and PRE of only `gUnk_03000D38` (nothing breaks, nothing improves), `-fno-gcse-no-const` for
+everything (the nogcse objects break). The rule behind `-fgcse-no-const` is only a fit: Link_SerialIntr
+and Link_Main still show a PRE-like copy of `&gUnk_03000D38` that it does not reproduce.
+
+**How to test a compiler idea (minutes, worth doing).** Build `make -C gcc old -j1` (parallel make fails)
+in a patched pret/agbcc tree, then compile every `src/*.c` with `CC1=.../old_agbcc` and compare each
+function's asm against `build/src/*.s`: a real difference has to keep all matched functions identical.
+A getenv switch in the compiler makes the experiment one line; turn it into a flag if it holds up.
+
 libgcc in this ROM is built **without interworking** (`mov pc, lr`). newlib is ordinary.
 
 C++? Many tiny out-of-line accessors (`strh r1,[r0,#8]; bx lr`) look like C++ methods, but there is no
@@ -117,6 +140,9 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-11-03: three compiler flags for game code (above), `nogcse` flavour retired. Link_Exchange,
+  Glyph_Free, Obj_Create match; region A 178/190, 11 near misses. MultiSioRecvDataCheck 95 to 8,
+  Sprite_Init 39 to 9.
 - 2026-10-24: region A finished in C: Link_Session and Link_HandshakeIntr (nogcse) match;
   Bg_UpdateScroll, Bg_DrawLevelScreen, Oam_SetPosSorted, Link_SendClientData, Link_Exchange,
   Link_SerialIntr, Link_Main as near misses (38 in total). `Link_Main` showed that the "orphaned

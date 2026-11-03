@@ -19,10 +19,9 @@ Link_SendClientData (they need `-fno-merge-blocks`, now the default, see `docs/S
 closer: VramMap_Alloc (44 to 2 aligned-diff ops), Link_SerialIntr (28 to 23 with
 `OPT="-fno-gcse -fno-strict-aliasing"`).
 
-**The OAM/Obj manager is `-fno-gcse` code.** Oam_Flush and Obj_InitAll only match with it, and
-Oam_Init, Oam_Free, Obj_FreeSlot and Obj_Update get much closer (62, 72, 54, 46 aligned-diff ops
-with gcse; 7, 27, 25, 20 without; Oam_Init, Oam_Free and Obj_FreeSlot now match). Check every remaining near miss in `08003CF4-08004848` with
-`OPT=-fno-gcse` first. Scores per function: `python3 tools/nm_explode.py` writes one
+**There are no compiler flavours in region A any more (2026-11-03).** What looked like `-fno-gcse` library
+code is one compiler that keeps PRE away from constant pool loads, see `docs/STRATEGY.md`. Mentions of
+`-fno-gcse` and `nogcse` below are history. Scores per function: `python3 tools/nm_explode.py` writes one
 `work/ADDR_Name.c` per near miss, then `Q=1 [OPT=...] python3 tools/adiff.py ADDR work/ADDR_Name.c`;
 `python3 tools/nm_replace.py ADDR [file.c]` replaces (or with no file, deletes) one section of
 `src/nonmatching/region_a.c`.
@@ -271,3 +270,26 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
     has the base in r2. The `!visible` arm has the same pattern and matches, so the difference is which
     reg reload spills in block 8 (in the ROM r2 is probably spilled and the base re-allocated to r3).
     Rewriting the `|= 0x400`, the `attr1` statement or the operand orders did not change it.
+* **Findings of 2026-11-03** (Glyph_Free, Obj_Create, Link_Exchange, MultiSioRecvDataCheck):
+  * **`--x` on a u16 creates a HImode -1 pseudo** (`(set (reg:HI) (const_int 65535))`). CSE then reuses it for
+    every later 0xFFFF, so the constant loads early, before the test. Write it through a wider temp:
+    `u32 v = t[i] - 1; t[i] = v; if ((u16)v != 0) return;` (Glyph_Free, 45 to 17).
+  * **A store through a mask index**: `t[e = x & 0xFFFE] = y; z = e;` puts the table load before the mask.
+  * **jump.c swaps `if (c) { fail; return 0; } rest; return 1;`** in its second round ("if (foo) bar; else
+    break"): the fail block ends up last and the test inverted. It needs a jump at the end of the rest,
+    so fall through instead: `ret = 1; out: return ret;` with `ret = 0; goto out;` in the fail block
+    (Obj_Create). Only the last fail block needs it. Many matched functions need the swap, so it is real.
+  * **`-dg` shows the allocation order** (`;; 11 regs to allocate: ...`). When two pseudos are swapped, compute
+    `floor_log2(refs) * refs / live_length` from the `-dl` lines. Obj_Create's `id` lost to `pp` by 0.71 to 0.72.
+    Call-result temps (`u8 oa = f(); x = oa;`) add one insn to the live length of whatever crosses them
+    and vanish after local-alloc, so they tune priorities without changing the code.
+  * **Operand grouping of `|`**: `(a << 13) | (0x200 | sz)`, not `(a << 13) | 0x200 | sz`, gave Obj_Create's
+    `orrs r1, r2; orrs r1, r0`.
+  * **`p = NULL` at the top of a function** is a common source of an early zero register that also feeds
+    `x = 0` stores (MultiSioRecvDataCheck, r8). Locals initialised in the declaration run in declaration
+    order, so a call target local before it gives `ldr r0, =f; movs r1, #0` (`u32 (*fn)(void) = f;`).
+  * **A `mov rX, ...` right before a `cmp`, after the constant load**, is PRE's copy at the end of a
+    block (`insert_insn_end_bb`), not a source assignment.
+  * **Reload round-robin**: MultiSioRecvDataCheck's last 8 ops, Link_Main and Obj_Update are all which spill
+    register a reload takes (`last_spill_reg`). Nothing found yet. Link_Main is 14 ops by default and 3 with
+    `OPT=-fno-gcse-no-const`: the ROM stores value then address, as if the address were hoisted.
