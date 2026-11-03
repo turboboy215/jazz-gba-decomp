@@ -4,7 +4,7 @@ import os,re,sys
 os.makedirs("work",exist_ok=True)
 src=open('src/nonmatching/region_a.c').read().split('\n')
 idx=[i for i,l in enumerate(src) if re.match(r'/\* ---- \w+ [0-9A-F]{8}',l)]
-pre='\n'.join(src[:idx[0]])
+pre=re.sub(r'\A/\*.*?\*/\n','','\n'.join(src[:idx[0]]),flags=re.S)  # the header comment says 'asm', which add_funcs.py rejects
 for k,i in enumerate(idx):
     j=idx[k+1] if k+1<len(idx) else len(src)
     m=re.match(r'/\* ---- (\w+) ([0-9A-F]{8})',src[i])

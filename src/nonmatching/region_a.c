@@ -313,38 +313,6 @@ u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
     return tile;
 }
 
-/* ---- Glyph_Free 08004CA0 ---- register allocation; 0xFFFF loaded late */
-void sub_08004CA0(u32 cell)
-{
-    u32 t = cell & 0x3FF;
-    u32 buddy, prev, cur;
-    if (t == 0)
-        return;
-    if (--gUnk_02002800[t] != 0)
-        return;
-    gUnk_02002000[gUnk_02003600[t]] |= 0xFFFF;
-    gUnk_02003600[t] |= 0xFFFF;
-    buddy = t ^ 1;
-    if (gUnk_02003600[buddy] == 0xFFFF) {
-        prev = 0xFFFF;
-        cur = gUnk_03002504;
-        while (cur != buddy) {
-            prev = cur;
-            cur = gUnk_02002800[cur];
-        }
-        if (prev == 0xFFFF)
-            gUnk_03002504 = gUnk_02002800[cur];
-        else
-            gUnk_02002800[prev] = gUnk_02002800[cur];
-        t &= 0xFFFE;
-        gUnk_02002800[t] = gUnk_03002500;
-        gUnk_03002500 = t;
-    } else {
-        gUnk_02002800[t] = gUnk_03002504;
-        gUnk_03002504 = t;
-    }
-}
-
 /* ---- MultiBootMain 080023EC ---- pokeemerald src/multiboot.c MultiBootMain; this ROM keeps &mp->probe_target_bit in a fresh register per case (older library build) */
 int sub_080023EC(struct MultiBootParam *mp)
 {
