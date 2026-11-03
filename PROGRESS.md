@@ -36,3 +36,4 @@
 - 2026-10-31: Oam_Init (08003CF4). code decompiled to C: 21320 / 228100 bytes (9.35%); rate 56 bytes/hour; ETA 2027-04-03 02:11
 - 2026-11-02: Map_IsTileBit10 (08000898). code decompiled to C: 21356 / 228100 bytes (9.36%); rate 49 bytes/hour; ETA 2027-04-27 16:41
 - 2026-11-02: Obj_FreeSlot (080045FC). code decompiled to C: 21444 / 228100 bytes (9.40%); rate 49 bytes/hour; ETA 2027-04-26 22:15
+- 2026-11-02: Oam_Free (08003F00). code decompiled to C: 21556 / 228100 bytes (9.45%); rate 49 bytes/hour; ETA 2027-04-25 22:15

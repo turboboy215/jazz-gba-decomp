@@ -18,6 +18,7 @@
 08003790 08003A9C c multi_sio_1 nogcse
 08003C1C 08003CF4 c multi_sio_2
 08003CF4 08003DEC c oam_3 nogcse
+08003F00 08003F70 c oam_1 nogcse
 08003F70 080040C8 c oam_2
 080040C8 0800436C c sio32_multi_load nogcse
 0800436C 08004408 c obj_1 nogcse

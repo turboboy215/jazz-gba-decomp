@@ -92,7 +92,7 @@ sub_08004408:
 	cmp r2, r0
 	bne .L080044D0
 	ldrb r0, [r1, #1]
-	bl Oam_Free
+	bl sub_08003F00
 	ldr r0, [r5, #0]
 	ldrb r0, [r0, #0]
 	bl sub_080045FC

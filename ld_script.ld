@@ -34,6 +34,7 @@ SECTIONS
         build/src/multi_sio_2.o(.text .rodata .data);
         build/src/oam_3.o(.text .rodata .data);
         build/asm/code_08003DEC.o(.text .rodata .data);
+        build/src/oam_1.o(.text .rodata .data);
         build/src/oam_2.o(.text .rodata .data);
         build/src/sio32_multi_load.o(.text .data);
         build/src/obj_1.o(.text .rodata .data);

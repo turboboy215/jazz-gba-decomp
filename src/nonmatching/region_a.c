@@ -59,39 +59,6 @@ extern const char gUnk_083D335C[]; /* "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" */
 #define LARGE   64
 #define do_div(n, base) ({ int __res; __res = ((unsigned long)n) % (unsigned)base; n = ((unsigned long)n) / (unsigned)base; __res; })
 
-/* ---- Oam_Free 08003F00 ---- 16 aligned-diff ops with OPT=-fno-gcse (27 before 2026-10-31). With the base
- * in a local and the test written `b[j].next == idx`, jump.c keeps the ROM's `b test` loop entry (the
- * exit code is too long to copy) and loop.c hoists the base. Left: the ROM computes idx * 8 into one
- * register in both arms of `j == idx` (r1) and reuses it after the merge; here the loop recomputes
- * e = &b[j] at the step and idx * 8 is recomputed after the loop. A u32 `o = idx * 8` local, gcse on,
- * and do-while forms were tried (see docs/region_a.md). */
-void sub_08003F00(u8 idx)
-{
-    u8 j = gOamUsedHead_03001260;
-    struct OamEntry *e;
-    if (idx == 255)
-        return;
-    if (j == idx)
-        gOamUsedHead_03001260 = gOamBuffer_03000E58[idx].next;
-    else {
-        struct OamEntry *b = gOamBuffer_03000E58;
-        while (j != 255) {
-            if (b[j].next == idx) {
-                e = &b[j];
-                e->next = b[idx].next;
-                break;
-            }
-            e = &b[j];
-            j = e->next;
-        }
-    }
-    e = &gOamBuffer_03000E58[idx];
-    e->attr0 = 0x200;
-    e->unk7 = 0;
-    e->next = gOamFreeHead_0300125C;
-    gOamFreeHead_0300125C = idx;
-}
-
 /* ---- Obj_Create 08004408 ---- */
 u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
 {
