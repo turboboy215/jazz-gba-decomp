@@ -37,7 +37,7 @@ def check(code, addr, end=None, rodata=None):
 def compiles(code):
     pp = subprocess.run(["arm-none-eabi-cpp", "-nostdinc", "-I", "include", "-I", "tools/agbcc/include", "-"],
                         input=code, capture_output=True, text=True)
-    cc = subprocess.run(["tools/agbcc/bin/old_agbcc", "-mthumb-interwork", "-O2", "-fhex-asm", "-fno-merge-blocks", "-fdelete-dead-after-reload", "-o", "/dev/null"],
+    cc = subprocess.run(["tools/agbcc/bin/old_agbcc", "-mthumb-interwork", "-O2", "-fhex-asm", "-fno-merge-blocks", "-fdelete-dead-after-reload", "-fgcse-no-const", "-fno-strict-aliasing", "-o", "/dev/null"],
                         input=pp.stdout, capture_output=True, text=True)
     return pp.returncode == 0 and cc.returncode == 0 and "error" not in cc.stderr
 
@@ -98,8 +98,7 @@ def main(path):
     # compiler flavour of this integration (old_agbcc / -O1 / default); never extend a file built differently
     opt = os.environ.get("OPT", "")
     # -fprologue-bugfix is global and old_agbcc output equals it, so only -O1 / no-interwork remain
-    flav = "o1" if "-O1" in opt else ("noiw" if "-mno-thumb-interwork" in opt else
-                                      ("nogcse" if "-fno-gcse" in opt else ""))
+    flav = "o1" if "-O1" in opt else ("noiw" if "-mno-thumb-interwork" in opt else "")
     file_flav = {}
     if os.path.exists("splits.txt"):
         for l in open("splits.txt"):

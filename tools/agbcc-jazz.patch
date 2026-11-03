@@ -1,6 +1,8 @@
---- a/gcc/flags.h	2026-10-31 11:36:46.422702698 -0700
-+++ b/gcc/flags.h	2026-10-31 11:36:03.898507813 -0700
-@@ -457,3 +457,9 @@
+diff --git a/gcc/flags.h b/gcc/flags.h
+index 39e998e..8e06630 100755
+--- a/gcc/flags.h
++++ b/gcc/flags.h
+@@ -457,3 +457,12 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -10,9 +12,14 @@
 +
 +/* Nonzero if jump.c's delete_computation also deletes dead feeders after reload.  */
 +extern int flag_delete_dead_after_reload;
---- a/gcc/flow.c	2026-10-31 11:36:46.422702698 -0700
-+++ b/gcc/flow.c	2026-10-31 11:30:14.574328403 -0700
-@@ -3820,7 +3820,7 @@
++
++/* Nonzero if gcse must leave constant pool loads alone, except symbol+offset ones.  */
++extern int flag_gcse_no_const;
+diff --git a/gcc/flow.c b/gcc/flow.c
+index 08db64d..6022d74 100755
+--- a/gcc/flow.c
++++ b/gcc/flow.c
+@@ -3820,7 +3820,7 @@ merge_blocks (f)
       the effort to try and maintain all the data structures that have
       to be preserved after that point.  Most of the benefits come from
       the first couple passes anyway.  */
@@ -21,9 +28,36 @@
      return;
  
    /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
---- a/gcc/jump.c	2026-10-31 11:36:46.422702698 -0700
-+++ b/gcc/jump.c	2026-10-31 11:36:03.897807175 -0700
-@@ -3648,7 +3648,7 @@
+diff --git a/gcc/gcse.c b/gcc/gcse.c
+index 9c82ab6..4327fb1 100755
+--- a/gcc/gcse.c
++++ b/gcc/gcse.c
+@@ -1208,6 +1208,20 @@ want_to_gcse_p (x)
+     case CALL:
+       return 0;
+ 
++    case SYMBOL_REF:
++    case LABEL_REF:
++    case CONST:
++      if (flag_gcse_no_const)
++        return 0;
++      break;
++
++    case MEM:
++      if (flag_gcse_no_const && GET_CODE (XEXP (x, 0)) == SYMBOL_REF
++          && CONSTANT_POOL_ADDRESS_P (XEXP (x, 0))
++          && GET_CODE (get_pool_constant (XEXP (x, 0))) != CONST)
++        return 0;
++      break;
++
+     default:
+       break;
+     }
+diff --git a/gcc/jump.c b/gcc/jump.c
+index 60e6fce..19e01a5 100755
+--- a/gcc/jump.c
++++ b/gcc/jump.c
+@@ -3648,7 +3648,7 @@ delete_computation (insn)
  #endif
  
   /* CYGNUS LOCAL amylaar / gcc/13233 */
@@ -32,9 +66,11 @@
   /* END CYGNUS LOCAL */
    for (note = REG_NOTES (insn); note; note = next)
      {
---- a/gcc/toplev.c	2026-10-31 11:36:46.438417946 -0700
-+++ b/gcc/toplev.c	2026-10-31 11:36:03.899516549 -0700
-@@ -591,6 +591,12 @@
+diff --git a/gcc/toplev.c b/gcc/toplev.c
+index ac8e21b..827c762 100755
+--- a/gcc/toplev.c
++++ b/gcc/toplev.c
+@@ -591,6 +591,15 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -44,15 +80,20 @@
 +/* Undo Cygnus gcc/13233 in delete_computation (-fdelete-dead-after-reload).  */
 +int flag_delete_dead_after_reload = 0;
 +
++/* Nonzero if gcse must leave constant pool loads alone, except symbol+offset ones.  */
++int flag_gcse_no_const = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +738,10 @@
+@@ -732,6 +741,12 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
 +    {"merge-blocks", &flag_merge_blocks, 1,
 +     "Run the basic block merging pass (off to match some GBA games)"},
++    {"gcse-no-const", &flag_gcse_no_const, 1,
++     "Keep gcse away from constant pool loads, except symbol+offset (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER

@@ -2,7 +2,7 @@
 # tools/exitcount.sh file.c FUNC: for each loop entered by a jump to its test, count the insns of the
 # exit code jump.c would copy (duplicate_loop_exit_test refuses above 30, or on a label, call or loop note).
 cd "$(dirname "$0")/.."
-arm-none-eabi-cpp -nostdinc -I include -I tools/agbcc/include $1 > build/ec.i && (cd build && ../tools/agbcc/bin/old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload $OPT -dr ec.i -o /dev/null) && python3 - $2 <<'PY'
+arm-none-eabi-cpp -nostdinc -I include -I tools/agbcc/include $1 > build/ec.i && (cd build && ../tools/agbcc/bin/old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing $OPT -dr ec.i -o /dev/null) && python3 - $2 <<'PY'
 import re,sys
 t=open('build/ec.i.rtl').read()
 i=t.find(';; Function '+sys.argv[1]); t=t[i:]; j=t.find(';; Function ',10); t=t[:j] if j>0 else t

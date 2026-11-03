@@ -10,6 +10,8 @@ CC1     := tools/agbcc/bin/old_agbcc
 CPP     := $(PREFIX)cpp
 ASFLAGS := -mcpu=arm7tdmi -I include
 CFLAGS  := -mthumb-interwork -Wimplicit -Wparentheses -O2 -fhex-asm -fno-merge-blocks -fdelete-dead-after-reload
+# Game code only: the GAX library was built with stock gcse and strict aliasing (objects.mk empties this)
+GAMEFLAGS := -fgcse-no-const -fno-strict-aliasing
 # jump tables to .rodata (region A and game code); GAX keeps them inline (objects.mk sets JTBL := true)
 JTBL    := python3 tools/jtbl.py
 
@@ -40,7 +42,7 @@ $(BUILD)/%.o: %.s asm/macros.inc | check-baserom
 
 $(BUILD)/src/%.o: src/%.c | check-baserom
 	@mkdir -p $(dir $@)
-	$(CPP) -nostdinc -I include -I tools/agbcc/include -MMD -MP -MF $(BUILD)/src/$*.d -MT $@ $< | $(CC1) $(CFLAGS) -o $(BUILD)/src/$*.s
+	$(CPP) -nostdinc -I include -I tools/agbcc/include -MMD -MP -MF $(BUILD)/src/$*.d -MT $@ $< | $(CC1) $(CFLAGS) $(GAMEFLAGS) -o $(BUILD)/src/$*.s
 	$(JTBL) $(BUILD)/src/$*.s
 	@printf '\t.align 2, 0\n' >> $(BUILD)/src/$*.s
 	$(AS) $(ASFLAGS) -o $@ $(BUILD)/src/$*.s
@@ -60,4 +62,4 @@ clean:
 nonmatching:
 	@mkdir -p $(BUILD)/nonmatching
 	$(CPP) -nostdinc -I include -I tools/agbcc/include src/gax/nonmatching.c | tools/agbcc/bin/agbcc $(CFLAGS) -fprologue-bugfix -o $(BUILD)/nonmatching/gax.s
-	$(CPP) -nostdinc -I include -I tools/agbcc/include src/nonmatching/region_a.c | tools/agbcc/bin/old_agbcc $(CFLAGS) -o $(BUILD)/nonmatching/region_a.s
+	$(CPP) -nostdinc -I include -I tools/agbcc/include src/nonmatching/region_a.c | tools/agbcc/bin/old_agbcc $(CFLAGS) $(GAMEFLAGS) -o $(BUILD)/nonmatching/region_a.s
