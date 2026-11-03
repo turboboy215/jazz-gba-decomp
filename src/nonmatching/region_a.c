@@ -96,7 +96,8 @@ u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
 /* ---- Obj_Update 080046DC ---- 20 aligned-diff ops with OPT=-fno-gcse (27 before). 2026-10-26: the size/shape
  * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
  * loads o->oam before the table address as the ROM does. Left: the last three statements get the
- * table address in r2 and the ldrh temp in r3; the ROM has them the other way round. */
+ * table address in r2 and the ldrh temp in r3; the ROM has them the other way round. 2026-11-02: the ldrh
+ * temps are reloads; see docs/region_a.md, "Register-only leftovers", for what was tried. */
 void sub_080046DC(struct Obj *o)
 {
     struct OamEntry *e;
@@ -734,8 +735,8 @@ void sub_08001720(struct ResBank *b, int layer, int x, int y)
     }
 }
 
-/* ---- Oam_SetPosSorted 08003DEC ---- 284 vs 276 bytes. Same unlink loop as Oam_Free (08003F00,
- * also a near miss). The ROM keeps &gOamUsedHead in r5 and idx*8 in r3 for the whole function and
+/* ---- Oam_SetPosSorted 08003DEC ---- 284 vs 276 bytes. Unlink loop like Oam_Free (08003F00, matched
+ * 2026-11-02 with a goto loop and `offset + base` sums; tried here with `o = idx * 8` and sums: 91 ops). The ROM keeps &gOamUsedHead in r5 and idx*8 in r3 for the whole function and
  * puts y << 24 back into y's register; this build needs one more callee-saved register.
  * -fno-gcse gives the right size (276) but worse allocation. */
 void sub_08003DEC(u8 idx, s16 x, s16 y, u8 z) /* the ROM zero-extends x and y (u16); obj.h keeps s16 for the matching caller Obj_Update */
@@ -924,7 +925,9 @@ void sub_08003298(void)
  * a store of (subreg:QI 88) through the REG_EQUIV address; reload gives the address the first
  * reload reg. The ROM looks like a real copy insn (value pseudo local in r0). Casts on the key
  * test, -fno-gcse/-fno-strict-aliasing and agbcc do not change it. The multiboot master sends the client image:
- * header at 080053A0 (masterp), 0x13F40 bytes from 08005460, palette 4/4. */
+ * header at 080053A0 (masterp), 0x13F40 bytes from 08005460, palette 4/4.
+ * 2026-11-02: both are reloads; the address reload is numbered first, so it takes r0 (round-robin
+ * spill regs). Reload analysis and more failed tries: docs/region_a.md, "Register-only leftovers". */
 void sub_080034A4(void)
 {
     u32 started;

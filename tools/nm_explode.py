@@ -1,6 +1,7 @@
 """tools/nm_explode.py: split src/nonmatching/region_a.c into work/ADDR_Name.c files (shared preamble + one function each)
 so tools/adiff.py / check_func.py can run on each near miss. Prints ADDR Name per file."""
-import re,sys
+import os,re,sys
+os.makedirs("work",exist_ok=True)
 src=open('src/nonmatching/region_a.c').read().split('\n')
 idx=[i for i,l in enumerate(src) if re.match(r'/\* ---- \w+ [0-9A-F]{8}',l)]
 pre='\n'.join(src[:idx[0]])

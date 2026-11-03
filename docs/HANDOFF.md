@@ -95,33 +95,35 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-10-31):** 9.35% of live code is in C; `make compare` passes.
+**State (2026-11-02):** 9.45% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 172/190 byte-matching, 17 near misses with
+* Region A (`080002E0-080053A0`): **every function is in C**. 175/190 byte-matching, 14 near misses with
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-10-31 matched **vsprintf** (new flag `-fdelete-dead-after-reload`, see above),
-  **VramMap_Alloc** (the inner search is a `goto` loop: no loop-depth weighting, so global.c allocates
-  `i` before `j`) and **Oam_Init** (loop.c budget: a constant kept in a multiply-set variable). Tricks and open problems are at the end of `docs/region_a.md` (new: goto loops and
-  register priority, Oam_Free's `b test` shape, the loop.c invariant budget worked through for Oam_Init).
+  2026-11-02 matched **Map_IsTileBit10** (signed `> 0` test of a zero-extended byte temp keeps jump.c's
+  store-flag away; Map_GetTile called as returning int), **Obj_FreeSlot** and **Oam_Free** (the
+  "loop entered from an else" problem: a hand-written goto loop plus element addresses written as
+  `offset + base` integer sums; Oam_Free's shared `idx * 8` is a variable set in both arms). All in
+  `docs/region_a.md`'s matching notes. Link_Main and Obj_Update were analysed down to reload register
+  choice (notes there, under "Register-only leftovers"); neither moved.
   Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
   `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 17). Score them with
-   `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c` (add
-   `OPT=-fno-gcse` for `08003CF4-08004848`). Aligned diff ops (2026-10-31): Link_Main 3, Map_IsTileBit10 6,
-   Oam_Free 16 (nogcse), Obj_Update 20 (nogcse), Link_SerialIntr 23
-   (`OPT="-fno-gcse -fno-strict-aliasing"`), Obj_FreeSlot 25 (nogcse; try Oam_Free's new shape), then the
-   35+ group (Link_Exchange 38, Sprite_Init 39, Obj_Create 43, Glyph_Alloc 53, number 59, ...). Still
-   unattacked with the 2026-10-28/31 tricks: the 35+ group. Leads:
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 14). Score them with
+   `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c`
+   (add `OPT=-fno-gcse` for `08003CF4-08004848`). Aligned diff ops (2026-11-02): Link_Main 3 (reload
+   order, hard), Obj_Update 20 (nogcse; reload spill choice, hard), Link_SerialIntr 23
+   (`OPT="-fno-gcse -fno-strict-aliasing"`), then the 35+ group (Link_Exchange 38, Sprite_Init 39,
+   Obj_Create 43 nogcse, Glyph_Alloc 42, Glyph_Free 45, number 59, Sprite_Draw 71, Oam_SetPosSorted 94
+   nogcse, MultiSioRecvDataCheck 95, MultiBootMain 100, Bg_DrawLevelScreen 337). Leads:
+   * Try the 2026-11-02 tricks on the 35+ group: goto loops where the ROM has a `b test` loop with no
+     copied test; `offset + base` integer sums where an add's operand order (and with it global.c's
+     register preference) is reversed; a variable set in both arms for a value reused after a merge.
    * Constants the ROM keeps inside a loop: a variable assigned twice (Oam_Init); check with
      `tools/loopinfo.sh`.
-   * Map_IsTileBit10: jump.c's store-flag conversion of `r = 0; if (t & 0x400) r = 1;` must not happen
-     (note in the source).
-   * Link_Main: one store's reload order (value r0 / address r1); the RTL is otherwise the same.
    * When a near miss is only register order, check `-dl` refs/live lengths against global.c's priority
      before trying source shuffles.
 2. **Finish GAX matching** (scores above): start with GAXSync_render (7). GAX keeps its jump tables inline

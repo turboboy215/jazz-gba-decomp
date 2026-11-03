@@ -6,8 +6,8 @@ link. It is linked first, before the game objects. What follows it (`080053A0-08
 Single Pak multiboot client image that `Link_Main` sends to the other GBAs, a separate program
 (see `docs/rom_map.md`).
 
-**Status (2026-10-28):** every function is written in C. 169 of 190 are byte-matching (13,340 of
-20,672 bytes); 20 are near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
+**Status (2026-11-02):** every function is written in C. 175 of 190 are byte-matching; 14 are
+near-miss C in `src/nonmatching/region_a.c` (`make nonmatching`), each
 with a note on what is left; `MultiBootWaitCycles` stays hand-written asm. Every function has a
 name in `names.txt`. (The three functions at `08005480-080055E0` counted before belong to the
 client image, so the total went from 193 to 190.) Matched 2026-10-25: Sio32MultiLoadMain,
@@ -21,7 +21,7 @@ closer: VramMap_Alloc (44 to 2 aligned-diff ops), Link_SerialIntr (28 to 23 with
 
 **The OAM/Obj manager is `-fno-gcse` code.** Oam_Flush and Obj_InitAll only match with it, and
 Oam_Init, Oam_Free, Obj_FreeSlot and Obj_Update get much closer (62, 72, 54, 46 aligned-diff ops
-with gcse; 7, 27, 25, 20 without). Check every remaining near miss in `08003CF4-08004848` with
+with gcse; 7, 27, 25, 20 without; Oam_Init, Oam_Free and Obj_FreeSlot now match). Check every remaining near miss in `08003CF4-08004848` with
 `OPT=-fno-gcse` first. Scores per function: `python3 tools/nm_explode.py` writes one
 `work/ADDR_Name.c` per near miss, then `Q=1 [OPT=...] python3 tools/adiff.py ADDR work/ADDR_Name.c`;
 `python3 tools/nm_replace.py ADDR [file.c]` replaces (or with no file, deletes) one section of
@@ -216,15 +216,28 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
 * **Block order and `merge_blocks`**: if the ROM keeps a block in place and branches over it (an early
   `return` inside a loop, a `goto found` with the target after a `return`) where our build moves the
   block next to its only predecessor, that was merge_blocks. It is off now (`-fno-merge-blocks`).
-* **Open problem, loops entered from an `else`** (Oam_Free, Obj_FreeSlot): the ROM loop is entered by
-  `ldr base; b test` and laid out step, test, body. stmt.c's expand_end_loop moves the test and the body
-  up to the `break` to the loop bottom (as the ROM shows), but then jump.c's
-  `duplicate_loop_exit_test` copies that exit code in front of the loop, and loop.c sees "multiple
-  entry points" and hoists nothing. The copy is refused only if the exit code has a CODE_LABEL, a call,
-  a LOOP_BEG/LOOP_CONT note or more than 30 insns at expand time; ours have 25 and 27
-  (`tools/exitcount.sh file.c sub_ADDR` counts them). So the original body was probably longer before
-  CSE, or had a label in it. A statement expression with a local in the test stops the copy but adds a
-  store-flag. (Old note: jump.c threads the else branch into the rotated loop's test.)
+* **Loops entered from an `else`, `ldr base; b test` (Oam_Free, Obj_FreeSlot: solved 2026-11-02).** The ROM
+  loop is laid out step, test, body, with no copy of the test in front of it. A C `while`/`for` gets
+  its exit code copied in front by jump.c's `duplicate_loop_exit_test` (it refuses only above 30 insns,
+  or on a label, call or loop note; `tools/exitcount.sh` counts them). What matches is a hand-written
+  **goto loop** (no loop notes, so no copy): `b = base; goto test; next: j = *e; test: if (j == 255)
+  goto out; e = ...; if (*e != id) goto next; *e = ...; out:`. Two more things were needed:
+  * write the element addresses as **integer sums `offset + base`**, `e = (u8 *)((u32)j + (u32)b)`.
+    The ROM's `adds r1, r0, r2` is (plus j b); `&b[j]` gives (plus b j). global.c's set_preference
+    takes the *first* operand of a PLUS, so the operand order also decides which pseudo inherits the
+    destination's register preference (with `&b[j]` the base took r0 instead of j).
+  * a value the ROM computes in **both arms of an if and reuses after the merge** (Oam_Free's
+    `lsls r1, r3, #3`) is a variable set in both arms. In the arm that already has the array access,
+    set it after the access (`head = buf[idx].next; o = idx * 8;`): CSE turns the second `idx * 8`
+    into a reuse of the first, so the order of the base load and the shift stays.
+* **jump.c store-flag on `r = 0; if (x & bit) r = 1;` (Map_IsTileBit10, solved 2026-11-02).** The first
+  jump pass and the one at the end of CSE turn this into `negs; lsrs #31` whenever the condition is
+  EQ/NE (emit_store_flag has no other trick on Thumb). Keep the branch with a **signed `> 0` test of a
+  zero-extended temporary**: `m = (u8)((t & 0x400) >> 8); if (m > 0) r = 1;`. The tree folder cannot
+  prove `m > 0` is `m != 0` for a variable, so jump.c leaves GT alone, and combine only turns it into
+  NE later (nonzero_bits of the zero-extend). A `> 0` on the expression itself is folded to `!= 0` at
+  tree level. The ROM also does no `lsls/lsrs #16` of Map_GetTile's u16 result: the caller saw it as
+  returning `int` (probably no prototype in scope); we call it through `(int (*)(u32, u32))`.
 * **Loop counter allocated after the loop-invariant index (goto loops, 2026-10-31).** global.c allocates
   pseudos by priority, `log2(refs) * refs / live_length`, and flow counts each ref weighted by loop
   depth. A short inner counter `j` used only in an inner loop outranks the outer index `i` and takes the
@@ -235,10 +248,6 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   `ands`/`cmp`): two identical arms (e.g. `va_arg(args, int)` and `va_arg(args, unsigned int)`)
   cross-jumped after reload, and jump.c deleted the compare and its dead feeder. Needs
   `-fdelete-dead-after-reload` (default now; vsprintf).
-* **Oam_Free's `b test` loop shape** (2026-10-31): with a base local (`b = gOamBuffer`) and the test
-  written `if (b[j].next == idx)` the exit code is long enough that jump.c keeps the ROM's `b test`
-  entry and loop.c hoists the base. Left (16 ops): the ROM computes `idx * 8` in both arms of the
-  `j == idx` test and reuses it after the merge, which neither flavour does here (see the note).
 * **Loop invariant budget (Oam_Init, solved 2026-10-31).** move_movables moves an invariant if
   `threshold * savings * lifetime >= insn_count` (`threshold` = 26 without a call, minus 3 after each
   move, fresh in the `-frerun-loop-opt` pass). `tools/loopinfo.sh file.c` prints each pass's insn count
@@ -249,4 +258,16 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
   The order of `j = 0x07000000` before `e = ...` set the registers (a decomp-permuter find).
   **When the ROM keeps a constant in a loop that this build hoists, put it in a variable that is
   assigned twice.**
-* **Register-only leftovers** (Obj_Update, Link_Main, VramMap_Alloc's i/j swap): see each note.
+* **Register-only leftovers** (Obj_Update, Link_Main): see each note. 2026-11-02 analysis:
+  * Link_Main: the value and address of `unk4 = 2` are both reloads (the value is the HImode 2 in r8,
+    the address the loop-hoisted `&gUnk_03000D38`, spilled with a REG_EQUIV). reload1.c gives spill
+    regs round-robin in `reload_reg_class_lower` order (class, then reload number); both are LO_REGS
+    and the address reload is pushed first (find_reloads_address in the operand pre-scan), so the
+    address takes r0. The ROM's value-in-r0 means its value was either not a reload (a real QImode copy
+    pseudo, local-alloc'd to r0, that combine did not merge) or numbered first. Casts, volatile, a
+    pointer, a `u8` temp, `(u16)`/`(s16)` and rewriting the `else if` chain did not change it.
+  * Obj_Update: the ldrh temps of the last three statements are reloads; the shared base pseudo is
+    global. The ROM's base is in r3 and its mosaic constant 0x400 in r2 (copied to the ior's r0); ours
+    has the base in r2. The `!visible` arm has the same pattern and matches, so the difference is which
+    reg reload spills in block 8 (in the ROM r2 is probably spilled and the base re-allocated to r3).
+    Rewriting the `|= 0x400`, the `attr1` statement or the operand orders did not change it.
