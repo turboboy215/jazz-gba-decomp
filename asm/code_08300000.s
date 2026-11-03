@@ -30714,7 +30714,7 @@ sub_0830F78C:
 	cmp r0, #0
 	beq .L0830F7BC
 	ldrh r0, [r4, #0]
-	bl Glyph_Free
+	bl sub_08004CA0
 	b .L0830F7C2
 .L0830F7BC:
 	ldrh r0, [r4, #0]

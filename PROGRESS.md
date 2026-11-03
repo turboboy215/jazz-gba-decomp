@@ -38,3 +38,4 @@
 - 2026-11-02: Obj_FreeSlot (080045FC). code decompiled to C: 21444 / 228100 bytes (9.40%); rate 49 bytes/hour; ETA 2027-04-26 22:15
 - 2026-11-02: Oam_Free (08003F00). code decompiled to C: 21556 / 228100 bytes (9.45%); rate 49 bytes/hour; ETA 2027-04-25 22:15
 - 2026-11-03: Link_Exchange (08002F64). code decompiled to C: 22044 / 228100 bytes (9.66%); rate 49 bytes/hour; ETA 2027-04-28 06:53
+- 2026-11-03: Glyph_Free (08004CA0). code decompiled to C: 22252 / 228100 bytes (9.76%); rate 49 bytes/hour; ETA 2027-04-26 12:01

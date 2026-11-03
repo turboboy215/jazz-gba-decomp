@@ -44,7 +44,7 @@ SECTIONS
         build/src/obj_4.o(.text .rodata .data);
         build/src/text_1.o(.text .rodata .data);
         build/asm/code_08004BD0.o(.text .rodata .data);
-        build/src/text_2.o(.text .rodata .data);
+        build/src/text_3.o(.text .rodata .data);
         build/src/vsprintf_1.o(.text .rodata .data);
         build/asm/code_08004F38.o(.text .rodata .data);
         build/src/vsprintf_3.o(.text .data);
