@@ -1,8 +1,8 @@
 diff --git a/gcc/flags.h b/gcc/flags.h
-index 39e998e..8e06630 100755
+index 39e998e..27dbc8d 100755
 --- a/gcc/flags.h
 +++ b/gcc/flags.h
-@@ -457,3 +457,12 @@ extern int flag_fixed_debug_line_info;
+@@ -457,3 +457,15 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -15,6 +15,9 @@ index 39e998e..8e06630 100755
 +
 +/* Nonzero if gcse must leave constant pool loads alone, except symbol+offset ones.  */
 +extern int flag_gcse_no_const;
++
++/* Nonzero if combine_givs indexes can_combine by the combined giv (i), not by the sort position (j).  */
++extern int flag_combine_givs_fix;
 diff --git a/gcc/flow.c b/gcc/flow.c
 index 08db64d..6022d74 100755
 --- a/gcc/flow.c
@@ -66,11 +69,24 @@ index 60e6fce..19e01a5 100755
   /* END CYGNUS LOCAL */
    for (note = REG_NOTES (insn); note; note = next)
      {
+diff --git a/gcc/loop.c b/gcc/loop.c
+index 68a3347..184621b 100755
+--- a/gcc/loop.c
++++ b/gcc/loop.c
+@@ -6932,7 +6932,7 @@ restart:
+ 	  for (j = 0; j < giv_count; ++j)
+ 	    {
+ 	      int m = stats[j].giv_number;
+-	      if (can_combine[m*giv_count + j])
++	      if (can_combine[m*giv_count + (flag_combine_givs_fix ? i : j)])
+ 		{
+ 		  /* Remove additional weight for being reused.  */
+ 		  stats[j].total_benefit -= 3 + 
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index ac8e21b..827c762 100755
+index ac8e21b..a6732d1 100755
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
-@@ -591,6 +591,15 @@ int flag_fixed_debug_line_info = 0;
+@@ -591,6 +591,18 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -83,10 +99,13 @@ index ac8e21b..827c762 100755
 +/* Nonzero if gcse must leave constant pool loads alone, except symbol+offset ones.  */
 +int flag_gcse_no_const = 0;
 +
++/* Nonzero if combine_givs indexes can_combine by the combined giv (i), not by the sort position (j).  */
++int flag_combine_givs_fix = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +741,12 @@ lang_independent_options f_options[] =
+@@ -732,6 +744,14 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
@@ -94,6 +113,8 @@ index ac8e21b..827c762 100755
 +     "Run the basic block merging pass (off to match some GBA games)"},
 +    {"gcse-no-const", &flag_gcse_no_const, 1,
 +     "Keep gcse away from constant pool loads, except symbol+offset (matches Jazz game code)"},
++    {"combine-givs-fix", &flag_combine_givs_fix, 1,
++     "Use the right index when combine_givs updates its benefit table (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER

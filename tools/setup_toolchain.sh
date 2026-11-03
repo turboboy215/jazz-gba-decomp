@@ -16,7 +16,7 @@ want=$(sha1sum tools/agbcc-jazz.patch | cut -d' ' -f1)
 if [ -n "$1" ] && [ -f "$1" ]; then
     rm -rf tools/agbcc
     tar -xzf "$1" -C tools
-    if [ "$(cat tools/agbcc/PATCH_SHA1 2>/dev/null)" = "$want" ] && tools/agbcc/bin/old_agbcc -fdelete-dead-after-reload -fno-merge-blocks -fgcse-no-const -o /dev/null /dev/null 2>/dev/null; then
+    if [ "$(cat tools/agbcc/PATCH_SHA1 2>/dev/null)" = "$want" ] && tools/agbcc/bin/old_agbcc -fdelete-dead-after-reload -fno-merge-blocks -fgcse-no-const -fcombine-givs-fix -o /dev/null /dev/null 2>/dev/null; then
         echo "toolchain: prebuilt agbcc unpacked (patch $want)"
         exit 0
     fi
