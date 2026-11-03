@@ -24,8 +24,6 @@ SECTIONS
         build/asm/code_080029DC.o(.text .rodata .data);
         build/src/multiboot_3.o(.text .rodata .data);
         build/src/link_2.o(.text .rodata .data);
-        build/asm/code_08002F64.o(.text .rodata .data);
-        build/src/link_3.o(.text .rodata .data);
         build/asm/code_08003298.o(.text .rodata .data);
         build/src/link_4.o(.text .rodata .data);
         build/asm/code_080034A4.o(.text .rodata .data);

@@ -6,6 +6,8 @@
 #include "oam.h"
 #include "sprite.h"
 #include "obj.h"
+#include "text.h"
+#include "multi_sio.h"
 
 void sub_08004914(int x, int y, const char *s);
 void sub_083186FC(void);
@@ -94,9 +96,6 @@ u8 sub_08002BAC(int mode)
         return 1;
     return 0;
 }
-
-#include "text.h"
-#include "multi_sio.h"
 
 u32 sub_08002C04(int baud)
 {
@@ -208,4 +207,131 @@ void sub_08002F28(void)
     sub_08002A30(0);
     gUnk_03000D38.unk4 = 0;
     gUnk_03000D38.unk5 = 255;
+}
+
+void sub_08002F64(struct LinkPacket *send, struct LinkPacket *recv)
+{
+    int n = gUnk_03000D38.unk4;
+    u32 ok;
+    u32 i;
+
+    LINK_SEND(0) = send->data[0];
+    LINK_SEND(1) = send->data[1];
+    LINK_SEND(2) = send->data[2];
+    LINK_SEND(3) = send->data[3];
+    LINK_SEND(4) = send->data[4];
+    LINK_SEND(5) = send->data[5];
+    LINK_SEND(6) = send->data[6];
+    LINK_SEND(7) = send->data[7];
+    ok = 1;
+    while (n--) {
+        recv[n].data[0] = LINK_RECV(n, 0);
+        recv[n].data[1] = LINK_RECV(n, 1);
+        recv[n].data[2] = LINK_RECV(n, 2);
+        recv[n].data[3] = LINK_RECV(n, 3);
+        recv[n].data[4] = LINK_RECV(n, 4);
+        recv[n].data[5] = LINK_RECV(n, 5);
+        recv[n].data[6] = LINK_RECV(n, 6);
+        recv[n].data[7] = LINK_RECV(n, 7);
+    }
+    if (sub_0800347C() == 0 && (u16)(REG_SIOCNT & 4) != sub_0800347C())
+        ok = 0;
+    for (i = 0; i < ((u32 (*)(void))sub_0800314C)(); i++) { /* the ROM does not truncate this result */
+        switch (i) {
+        case 0:
+            if (recv[0].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 1:
+            if (recv[1].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 2:
+            if (recv[2].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        case 3:
+            if (recv[3].data[0] == 0xFFFF)
+                ok = 0;
+            break;
+        }
+    }
+    if (ok == 1)
+        gUnk_03005894 = 0;
+    else
+        gUnk_03005894++;
+    if (gUnk_03005894 >= 120) {
+        sub_08316F10(1, 192, 10);
+        while (sub_08316F50() != 0)
+            sub_0831A54C();
+        sub_08004D70();
+        sub_08001A6C();
+        *(vu16 *)0x04000050 = 0;
+        *(vu16 *)0x04000008 = 0x1F01;
+        *(vu16 *)0x04000000 = 0x1140;
+        sub_08004A1C();
+        *(vu16 *)0x05000000 = 0x6A80;
+        sub_0800436C();
+        sub_0831A54C();
+        sub_08004914(0, 6, gUnk_083D31A0);
+        sub_08004914(0, 13, gUnk_083D31C0);
+        sub_08004914(0, 14, gUnk_083D31E0);
+        for (;;)
+            ;
+    }
+    if (gUnk_03000D38.unk0 == -1) {
+        u8 *t = gUnk_03000D38.unkC;
+        gUnk_03000D38.unkC = gUnk_03000D38.unk10;
+        gUnk_03000D38.unk10 = t;
+        if (gUnk_03000D38.unk5 == 0) {
+            REG_SIOCNT |= 0x80;
+            *(vu16 *)0x0400010E = 0xC0;
+        }
+    }
+}
+
+#define REG_TM3CNT (*(vu32 *)0x0400010C)
+#define REG_IF (*(vu16 *)0x04000202)
+
+u8 sub_0800314C(void) { return gUnk_03000D38.unk4; }
+
+s8 sub_08003158(void) { return gUnk_03000D38.unk5; }
+
+void sub_08003168(void)
+{
+    gUnk_0300589C = 0;
+    gUnk_030058A0 = 0;
+    if ((u16)(REG_SIOCNT & 4) == 0)
+        *(vu16 *)0x0400010E = 0;
+    if (!(REG_SIOCNT & 0x40)) {
+        if (REG_SIOMULTI(0) == 0xDEAD)
+            gUnk_0300589C++;
+        if (REG_SIOMULTI(1) == 0xDEAD)
+            gUnk_0300589C++;
+        if (REG_SIOMULTI(2) == 0xDEAD)
+            gUnk_0300589C++;
+        if (REG_SIOMULTI(3) == 0xDEAD)
+            gUnk_0300589C++;
+        if (REG_SIOMULTI(0) == 20) {
+            gUnk_03000D38.unk5 = (REG_SIOCNT >> 4) & 3;
+            gUnk_03000D38.unk4 = gUnk_0300589C + 1;
+        }
+    }
+    REG_SIODATA8 = 0xDEAD;
+    if (gUnk_0300589C > 1) {
+        if (!(REG_SIOCNT & 4)) {
+            sub_08004914(5, 15, gUnk_083D3200);
+            if (gUnk_03000D12 & 8) {
+                REG_SIODATA8 = 20;
+                REG_SIOCNT |= 0x80;
+                *(vu16 *)0x0400010E = 0xC0;
+            } else if (!(REG_SIOCNT & 4)) {
+                REG_SIOCNT |= 0x80;
+                *(vu16 *)0x0400010E = 0xC0;
+            }
+        }
+    } else if (!(REG_SIOCNT & 4)) {
+        REG_SIOCNT |= 0x80;
+        *(vu16 *)0x0400010E = 0xC0;
+    }
 }

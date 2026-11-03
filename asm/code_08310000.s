@@ -7695,7 +7695,7 @@ sub_08313D78:
 	bl sub_0831342C
 	ldr r0, [pc, #32]
 	ldr r1, [pc, #36]
-	bl Link_Exchange
+	bl sub_08002F64
 	ldr r0, [pc, #32]
 	ldr r0, [r0, #0]
 	cmp r0, #120
@@ -8000,7 +8000,7 @@ sub_08313D78:
 	bl sub_0831342C
 	ldr r0, [pc, #52]
 	ldr r1, [pc, #52]
-	bl Link_Exchange
+	bl sub_08002F64
 	cmp r4, #6
 	bhi .L083140D6
 	bl sub_08313524
