@@ -56,7 +56,7 @@ sub_08004408:
 	cmp r0, #255
 	bne .L08004478
 	ldrb r0, [r1, #0]
-	bl Obj_FreeSlot
+	bl sub_080045FC
 	mov r2, r9
 	str r2, [r5, #0]
 	movs r0, #0
@@ -95,7 +95,7 @@ sub_08004408:
 	bl Oam_Free
 	ldr r0, [r5, #0]
 	ldrb r0, [r0, #0]
-	bl Obj_FreeSlot
+	bl sub_080045FC
 	mov r0, r9
 	str r0, [r5, #0]
 	movs r0, #0

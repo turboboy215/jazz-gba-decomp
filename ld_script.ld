@@ -39,7 +39,7 @@ SECTIONS
         build/src/obj_1.o(.text .rodata .data);
         build/asm/code_08004408.o(.text .rodata .data);
         build/src/obj_2.o(.text .rodata .data);
-        build/asm/code_080045FC.o(.text .rodata .data);
+        build/src/obj_5.o(.text .rodata .data);
         build/src/obj_3.o(.text .rodata .data);
         build/asm/code_080046DC.o(.text .rodata .data);
         build/src/obj_4.o(.text .rodata .data);

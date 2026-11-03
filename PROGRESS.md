@@ -35,3 +35,4 @@
 - 2026-10-31: vsprintf (08005100, with the new -fdelete-dead-after-reload flag), VramMap_Alloc (08003FBC). code decompiled to C: 21224 / 228100 bytes (9.30%); rate 56 bytes/hour; ETA 2027-04-03 18:09
 - 2026-10-31: Oam_Init (08003CF4). code decompiled to C: 21320 / 228100 bytes (9.35%); rate 56 bytes/hour; ETA 2027-04-03 02:11
 - 2026-11-02: Map_IsTileBit10 (08000898). code decompiled to C: 21356 / 228100 bytes (9.36%); rate 49 bytes/hour; ETA 2027-04-27 16:41
+- 2026-11-02: Obj_FreeSlot (080045FC). code decompiled to C: 21444 / 228100 bytes (9.40%); rate 49 bytes/hour; ETA 2027-04-26 22:15

@@ -126,36 +126,6 @@ u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
     return 1;
 }
 
-/* ---- Obj_FreeSlot 080045FC ---- 25 aligned-diff ops with OPT=-fno-gcse. Same loop problem as Oam_Free:
- * the ROM loop is entered by `ldr base; b test` (step block, test, body; no copy of the test). Here
- * jump.c's duplicate_loop_exit_test copies the exit code (test + if + store + break, which
- * stmt.c's expand_end_loop moved to the loop bottom) in front of the loop, so loop.c sees
- * "multiple entry points". It refuses only if the exit code has a CODE_LABEL, a call, a
- * LOOP_BEG/LOOP_CONT note, or more than LOOP_TEST_THRESHOLD (30) insns; this version has 25 at
- * expand time (tools/exitcount.sh prints the count). So the original body was probably longer at expand time (more
- * RTL that CSE later removes), or had a label inside. A statement expression with a local in
- * the test (`({ u8 t = j; t != 255; })`) stops the copy and gives the ROM layout (19 ops), but
- * turns the test into a store-flag that leaves 255 in a register. */
-void sub_080045FC(u8 id)
-{
-    u32 h = gObjUsedHead_030022EC;
-    u8 j = gObjUsedHead_030022EC;
-    if (id == 255)
-        return;
-    if (h == id)
-        gObjUsedHead_030022EC = gObjNext_03002268[id];
-    else {
-        for (; j != 255; j = gObjNext_03002268[j]) {
-            if (gObjNext_03002268[j] == id) {
-                gObjNext_03002268[j] = gObjNext_03002268[id];
-                break;
-            }
-        }
-    }
-    gObjNext_03002268[id] = gObjFreeHead_030022E8;
-    gObjFreeHead_030022E8 = id;
-}
-
 /* ---- Obj_Update 080046DC ---- 20 aligned-diff ops with OPT=-fno-gcse (27 before). 2026-10-26: the size/shape
  * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
  * loads o->oam before the table address as the ROM does. Left: the last three statements get the
