@@ -59,40 +59,6 @@ extern const char gUnk_083D335C[]; /* "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" */
 #define LARGE   64
 #define do_div(n, base) ({ int __res; __res = ((unsigned long)n) % (unsigned)base; n = ((unsigned long)n) / (unsigned)base; __res; })
 
-/* ---- Obj_Create 08004408 ---- */
-u8 sub_08004408(struct Obj **pp, int w, int h, int is8bpp, const void *gfx)
-{
-    u8 id = sub_080045D4();
-    if (id == 255) {
-        *pp = NULL;
-        return 0;
-    }
-    *pp = &gObjs_03001668[id];
-    sub_0800481C(*pp);
-    (*pp)->id = id;
-    (*pp)->gfx = gfx;
-    (*pp)->w = w;
-    (*pp)->h = h;
-    (*pp)->is8bpp = is8bpp;
-    (*pp)->oam = sub_08003DC0();
-    if ((*pp)->oam == 255) {
-        sub_080045FC((*pp)->id);
-        *pp = NULL;
-        return 0;
-    }
-    *(u32 *)&gOamBuffer_03000E58[(*pp)->oam] = (is8bpp << 13) | 0x200 | sub_08004654(w, h);
-    (*pp)->tile = sub_08003FBC(w, h, gfx, is8bpp);
-    if ((*pp)->tile == 0xFFFF) {
-        sub_08003F00((*pp)->oam);
-        sub_080045FC((*pp)->id);
-        *pp = NULL;
-        return 0;
-    }
-    gOamBuffer_03000E58[(*pp)->oam].attr2 &= 0xFC00;
-    gOamBuffer_03000E58[(*pp)->oam].attr2 |= (*pp)->tile & 0x3FF;
-    return 1;
-}
-
 /* ---- Obj_Update 080046DC ---- 20 aligned-diff ops with OPT=-fno-gcse (27 before). 2026-10-26: the size/shape
  * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
  * loads o->oam before the table address as the ROM does. Left: the last three statements get the
