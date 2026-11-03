@@ -10,9 +10,7 @@ SECTIONS
         build/src/sprite_1.o(.text .rodata .data);
         build/asm/code_08000408.o(.text .rodata .data);
         build/src/sprite_2.o(.text .rodata .data);
-        build/src/map_1.o(.text .rodata .data);
-        build/asm/code_08000898.o(.text .rodata .data);
-        build/src/map_2.o(.text .data);
+        build/src/map_1.o(.text .data);
         build/src/actor.o(.text .rodata .data);
         build/src/resbank_1.o(.text .rodata .data);
         build/asm/code_08001720.o(.text .rodata .data);
@@ -72,7 +70,7 @@ SECTIONS
         build/src/gax/fx_08319F30.o(.text .rodata .data);
         build/asm/code_08319F88.o(.text .rodata .data);
         build/asm/rodata.o(.text .rodata .data);
-        build/src/map_2.o(.rodata);
+        build/src/map_1.o(.rodata);
         build/asm/rodata_083D1D80.o(.text .rodata .data);
         build/src/font.o(.rodata);
         build/asm/rodata_083D2038.o(.text .rodata .data);

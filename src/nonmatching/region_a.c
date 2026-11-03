@@ -59,25 +59,6 @@ extern const char gUnk_083D335C[]; /* "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" */
 #define LARGE   64
 #define do_div(n, base) ({ int __res; __res = ((unsigned long)n) % (unsigned)base; n = ((unsigned long)n) / (unsigned)base; __res; })
 
-/* ---- Map_IsTileBit10 08000898 ---- 6 ops. The ROM keeps `r = 0; if (t & 0x400) r = 1;` as a branch; this
- * build turns it into a store-flag (negs/lsrs #31) in the first jump pass (jump.c, "x = a; if (...) x = b"
- * with a == 0 found by reg_set_last and b a power of two). That transform is skipped when the previous
- * value of r is not a constant (reg_set_last stops at a CODE_LABEL, or returns a register): the original
- * probably had a label or a non-constant init between. Tried 2026-10-31: early returns (5 ops, no
- * store-flag but no r register), ternaries, `&&`, do/while(0), switch, `== 0x400`, `>> 10 & 1`, a u16/u32
- * temp. */
-u8 sub_08000898(u32 x, int y)
-{
-    u8 r;
-    if (y > 0) {
-        r = 0;
-        if (sub_08000850(x, y) & 0x400)
-            r = 1;
-    } else
-        r = 0;
-    return r;
-}
-
 /* ---- Oam_Free 08003F00 ---- 16 aligned-diff ops with OPT=-fno-gcse (27 before 2026-10-31). With the base
  * in a local and the test written `b[j].next == idx`, jump.c keeps the ROM's `b test` loop entry (the
  * exit code is too long to copy) and loop.c hoists the base. Left: the ROM computes idx * 8 into one
