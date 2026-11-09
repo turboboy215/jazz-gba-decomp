@@ -555,52 +555,6 @@ output_burst:
     }
 }
 
-/* ---- MultiSioRecvDataCheck 08003A9C ---- 8 aligned-diff ops (2026-11-03, was 95). `p = NULL` at the top is the
- * ROM's r8 zero; `fn` local gives its order; the u16 temp and q fix the checksum loop. Left: the spill reload for
- * i - 1 takes r7 here and r1 in the ROM, so ours can inherit p from r1 and drops `mov r1, r8`. */
-u32 sub_08003A9C(void *recvp)
-{
-    s32 checkSum;
-    u8 syncRecvFlag;
-    s32 i, ii;
-    u32 (*fn)(void) = MultiSioRecvBufChange;
-    struct MultiSioPacket *p = NULL;
-
-    syncRecvFlag = fn();
-    Ms.recvSuccessFlags = 0;
-    Ms.loadSuccessFlag = 0;
-    if (syncRecvFlag) {
-        for (i = 3; i >= 0; i--) {
-            u32 zero;
-            u16 *q;
-            p = &((struct MultiSioPacket *)Ms.recvCheckBufp)[i];
-            checkSum = 0;
-            for (ii = 0, q = (u16 *)p; ii < sizeof(struct MultiSioPacket) / 2 - 2; ii++)
-                { u16 v = *q++; checkSum += v; }
-            if ((s16)checkSum == -13) {
-                Ms.recvSuccessFlags |= 1 << i;
-                Ms.downloadSuccessFlags |= p->downloadSuccessFlag << i;
-                sub_0831A52C(p->data, (u8 *)recvp + i * 16, 0x04000000 | (16 / 4));
-            }
-            zero = 0;
-            sub_0831A52C(&zero, p->data, 0x05000000 | (16 / 4));
-        }
-    }
-    Ms.recvFlagsHistory |= Ms.recvSuccessFlags;
-    Ms.connectedFlags |= Ms.recvFlagsHistory;
-    if (Ms.recvSuccessFlags & 1) {
-        if (Ms.type == 8) {
-            if ((Ms.recvSuccessFlags & 3) && Ms.recvSuccessFlags == Ms.connectedFlags)
-                Ms.loadEnable = 1;
-            if ((Ms.downloadSuccessFlags & 0xE) == (Ms.connectedFlags & 0xE))
-                Ms.loadSuccessFlag = 1;
-        } else
-            Ms.loadSuccessFlag = p->loadSuccessFlag;
-        Ms.loadRequest = p->loadRequest;
-    }
-    return Ms.recvSuccessFlags;
-}
-
 /* ==== Session 2026-10-24: the rest of region A (bg scroll, OAM sort, link screens) ==== */
 
 /* ---- Bg_DrawLevelScreen 08001720 ---- same structure; 784 vs 768 bytes. The ROM keeps more on the
