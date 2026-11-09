@@ -28,7 +28,7 @@ SECTIONS
         build/src/link_4.o(.text .rodata .data);
         build/asm/code_080034A4.o(.text .rodata .data);
         build/src/multi_sio_1.o(.text .rodata .data);
-        build/asm/code_08003A9C.o(.text .rodata .data);
+        build/src/multi_sio_3.o(.text .rodata .data);
         build/src/multi_sio_2.o(.text .rodata .data);
         build/src/oam_3.o(.text .rodata .data);
         build/asm/code_08003DEC.o(.text .rodata .data);

@@ -40,3 +40,4 @@
 - 2026-11-03: Link_Exchange (08002F64). code decompiled to C: 22044 / 228100 bytes (9.66%); rate 49 bytes/hour; ETA 2027-04-28 06:53
 - 2026-11-03: Glyph_Free (08004CA0). code decompiled to C: 22252 / 228100 bytes (9.76%); rate 49 bytes/hour; ETA 2027-04-26 12:01
 - 2026-11-03: Obj_Create (08004408). code decompiled to C: 22508 / 228100 bytes (9.87%); rate 50 bytes/hour; ETA 2027-04-24 07:54
+- 2026-11-09: MultiSioRecvDataCheck (08003A9C). code decompiled to C: 22892 / 228100 bytes (10.04%); rate 39 bytes/hour; ETA 2027-06-19 05:18
