@@ -1,8 +1,8 @@
 diff --git a/gcc/flags.h b/gcc/flags.h
-index 39e998e..d80419f 100755
+index 39e998e..6568c8b 100755
 --- a/gcc/flags.h
 +++ b/gcc/flags.h
-@@ -457,3 +457,18 @@ extern int flag_fixed_debug_line_info;
+@@ -457,3 +457,21 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -21,6 +21,9 @@ index 39e998e..d80419f 100755
 +
 +/* Nonzero if gcse inserts PRE copies in front of a block's final register copy.  */
 +extern int flag_gcse_insert_before_copy;
++
++/* Nonzero if loop.c leaves the insns of givs found past a loop exit unreduced.  */
++extern int flag_giv_keep_after_exit;
 diff --git a/gcc/flow.c b/gcc/flow.c
 index 08db64d..6022d74 100755
 --- a/gcc/flow.c
@@ -88,10 +91,101 @@ index 60e6fce..19e01a5 100755
    for (note = REG_NOTES (insn); note; note = next)
      {
 diff --git a/gcc/loop.c b/gcc/loop.c
-index 68a3347..184621b 100755
+index 68a3347..dd8b058 100755
 --- a/gcc/loop.c
 +++ b/gcc/loop.c
-@@ -6932,7 +6932,7 @@ restart:
+@@ -216,6 +216,36 @@ static int loops_enclosed;
+    A pseudo has valid regscan info if its number is < max_reg_before_loop.  */
+ int max_reg_before_loop;
+ 
++/* -fgiv-keep-after-exit: the insns of givs found past a jump out of the loop
++   (and not executed every iteration) are not rewritten to use the reduced
++   register; the givs still take part in combining and in the reduction order.
++   Matches the Jazz Jackrabbit compiler (Sprite_Init).  */
++static int exit_seen;
++static int *keep_uids, n_keep_uids, max_keep_uids;
++
++static void
++note_keep_giv (insn)
++     rtx insn;
++{
++  if (n_keep_uids == max_keep_uids)
++    {
++      max_keep_uids = max_keep_uids ? 2 * max_keep_uids : 64;
++      keep_uids = (int *) xrealloc (keep_uids, max_keep_uids * sizeof (int));
++    }
++  keep_uids[n_keep_uids++] = INSN_UID (insn);
++}
++
++static int
++keep_giv_p (insn)
++     rtx insn;
++{
++  int k;
++  for (k = 0; k < n_keep_uids; k++)
++    if (keep_uids[k] == INSN_UID (insn))
++      return 1;
++  return 0;
++}
++
+ /* This obstack is used in product_cheap_p to allocate its rtl.  It
+    may call gen_reg_rtx which, in turn, may reallocate regno_reg_rtx.
+    If we used the same obstack that it did, we would be deallocating
+@@ -4278,6 +4308,8 @@ strength_reduce (scan_start, end, loop_top, insn_count,
+ 
+   not_every_iteration = 0;
+   loop_depth = 0;
++  exit_seen = 0;
++  n_keep_uids = 0;
+   p = scan_start;
+   while (1)
+     {
+@@ -4348,6 +4380,8 @@ strength_reduce (scan_start, end, loop_top, insn_count,
+ 	      record_giv (v, p, src_reg, dest_reg, mult_val, add_val, benefit,
+ 			  DEST_REG, not_every_iteration, NULL, loop_start,
+ 			  loop_end);
++	      if (flag_giv_keep_after_exit && not_every_iteration && exit_seen)
++		note_keep_giv (p);
+ 
+ 	    }
+ 	}
+@@ -4357,8 +4391,12 @@ strength_reduce (scan_start, end, loop_top, insn_count,
+       /* This resulted in worse code on a VAX 8600.  I wonder if it
+ 	 still does.  */
+       if (GET_CODE (p) == INSN)
+-	find_mem_givs (PATTERN (p), p, not_every_iteration, loop_start,
+-		       loop_end);
++	{
++	  find_mem_givs (PATTERN (p), p, not_every_iteration, loop_start,
++			 loop_end);
++	  if (flag_giv_keep_after_exit && not_every_iteration && exit_seen)
++	    note_keep_giv (p);
++	}
+ #endif
+ 
+       /* Update the status of whether giv can derive other givs.  This can
+@@ -4394,6 +4432,8 @@ strength_reduce (scan_start, end, loop_top, insn_count,
+ 
+ 	  if (! label)
+ 	    not_every_iteration = 1;
++	  else
++	    exit_seen = 1;
+ 	}
+ 
+       else if (GET_CODE (p) == NOTE)
+@@ -4805,7 +4845,10 @@ strength_reduce (scan_start, end, loop_top, insn_count,
+ 	    v->new_reg = replace_rtx (v->new_reg,
+ 				      v->same->dest_reg, v->same->new_reg);
+ 
+-	  if (v->giv_type == DEST_ADDR)
++	  if (flag_giv_keep_after_exit && keep_giv_p (v->insn))
++	    /* Leave the insn computing the giv from the biv.  */
++	    ;
++	  else if (v->giv_type == DEST_ADDR)
+ 	    /* Store reduced reg as the address in the memref where we found
+ 	       this giv.  */
+ 	    validate_change (v->insn, v->location, v->new_reg, 0);
+@@ -6932,7 +6975,7 @@ restart:
  	  for (j = 0; j < giv_count; ++j)
  	    {
  	      int m = stats[j].giv_number;
@@ -101,10 +195,10 @@ index 68a3347..184621b 100755
  		  /* Remove additional weight for being reused.  */
  		  stats[j].total_benefit -= 3 + 
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index ac8e21b..c6fc9fe 100755
+index ac8e21b..ae4cc2b 100755
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
-@@ -591,6 +591,21 @@ int flag_fixed_debug_line_info = 0;
+@@ -591,6 +591,24 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -123,10 +217,13 @@ index ac8e21b..c6fc9fe 100755
 +/* Nonzero if gcse inserts PRE copies in front of a block's final register copy.  */
 +int flag_gcse_insert_before_copy = 0;
 +
++/* Nonzero if loop.c leaves the insns of givs found past a loop exit unreduced.  */
++int flag_giv_keep_after_exit = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +747,16 @@ lang_independent_options f_options[] =
+@@ -732,6 +750,18 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
@@ -138,6 +235,8 @@ index ac8e21b..c6fc9fe 100755
 +     "Use the right index when combine_givs updates its benefit table (matches Jazz game code)"},
 +    {"gcse-insert-before-copy", &flag_gcse_insert_before_copy, 1,
 +     "Insert PRE copies in front of a block's final register copy (matches Jazz game code)"},
++    {"giv-keep-after-exit", &flag_giv_keep_after_exit, 1,
++     "Leave the insns of givs found past a loop exit unreduced (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER
