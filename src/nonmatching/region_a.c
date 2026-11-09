@@ -167,7 +167,9 @@ char *sub_08004F38(char *str, long num, int base, int size, int precision, int t
     return str;
 }
 
-/* ---- Sprite_Draw 08000408 ---- same structure; register allocation (ROM keeps i in r8 and &objs[i], i*4 on the stack) */
+/* ---- Sprite_Draw 08000408 ---- 78 aligned-diff ops with -fgiv-keep-after-exit (2026-11-09, 71 before it): same structure;
+ * register allocation (ROM keeps i in r8 and &objs[i], i*4 on the stack). The first loop's `ldmia r4!` did not come from
+ * a pointer, a `*o++` temp or an `ob` local (78-81). The `0x3FFF` arm recomputes `i*4 + 52 + s` like Sprite_Init's else. */
 u32 sub_08000408(struct Sprite *s)
 {
     struct Anim *a = sub_08000644(s);

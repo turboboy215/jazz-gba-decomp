@@ -42,3 +42,4 @@
 - 2026-11-03: Obj_Create (08004408). code decompiled to C: 22508 / 228100 bytes (9.87%); rate 50 bytes/hour; ETA 2027-04-24 07:54
 - 2026-11-09: MultiSioRecvDataCheck (08003A9C). code decompiled to C: 22892 / 228100 bytes (10.04%); rate 39 bytes/hour; ETA 2027-06-19 05:18
 - 2026-11-09: Sprite_Init (080002E0). code decompiled to C: 23176 / 228100 bytes (10.16%); rate 39 bytes/hour; ETA 2027-06-16 05:37
+- 2026-11-09: two compiler flags for game code (-fgcse-insert-before-copy, -fgiv-keep-after-exit); region A 180/190 matching, 9 near misses. code decompiled to C: 23176 / 228100 bytes (10.16%)

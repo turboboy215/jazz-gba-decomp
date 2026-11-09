@@ -14,7 +14,7 @@ jazz.gba: OK
 | | |
 |---|---|
 | Target ROM | `Jazz Jackrabbit (U).gba`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0` |
-| Compiler | pret `old_agbcc` `-O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix` (identified by matching; see `docs/STRATEGY.md`) |
+| Compiler | pret `old_agbcc` `-O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit` (identified by matching; see `docs/STRATEGY.md`) |
 | Progress | `make progress` (C bytes / live code bytes; the multiboot client image is excluded) |
 
 This repository contains **no ROM data**. Bring your own copy.

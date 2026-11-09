@@ -290,6 +290,16 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
     order, so a call target local before it gives `ldr r0, =f; movs r1, #0` (`u32 (*fn)(void) = f;`).
   * **A `mov rX, ...` right before a `cmp`, after the constant load**, is PRE's copy at the end of a
     block (`insert_insn_end_bb`), not a source assignment.
-  * **Reload round-robin**: MultiSioRecvDataCheck's last 8 ops, Link_Main and Obj_Update are all which spill
-    register a reload takes (`last_spill_reg`). Nothing found yet. Link_Main is 14 ops by default and 3 with
-    `OPT=-fno-gcse-no-const`: the ROM stores value then address, as if the address were hoisted.
+  * **Reload round-robin** (superseded 2026-11-09): MultiSioRecvDataCheck's last ops were PRE placement, not
+    reload (see below). Link_Main and Obj_Update have no PRE insertions at all (`-dG`: 0 insns created), so
+    theirs is something else. Link_Main is 14 ops by default and 3 with `OPT=-fno-gcse-no-const`: the ROM
+    stores value then address, as if the address were hoisted.
+* **Findings of 2026-11-09** (MultiSioRecvDataCheck, Sprite_Init; two compiler flags, `docs/STRATEGY.md`):
+  * **Before blaming reload, find who created the insn.** A pseudo with a high uid (`insn 533`) came from a
+    later pass: `-dG` prints `PRE/HOIST: end of bb N, insn 533`, `-dL` prints moved invariants and reduced givs.
+    The register it gets often follows from *where* it was inserted.
+  * **A pointer loop vs an indexed loop decides the order of setup insns.** A source pointer (`q = p`) is set
+    where written; a giv from `p[ii]` is initialised by loop.c after everything else before the loop.
+    (For MultiSioRecvDataCheck the pointer form was right; the compiler flag fixed the order.)
+  * **Givs after an in-loop `return`** keep their own computation (`-fgiv-keep-after-exit`): write the plain
+    array access there (`s->objs[i] = NULL`), not a hand-made address.

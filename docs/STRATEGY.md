@@ -70,6 +70,25 @@ in a patched pret/agbcc tree, then compile every `src/*.c` with `CC1=.../old_agb
 function's asm against `build/src/*.s`: a real difference has to keep all matched functions identical.
 A getenv switch in the compiler makes the experiment one line; turn it into a flag if it holds up.
 
+**Two more differences, game code only (2026-11-09).** Both found by reading the dumps of a near miss
+(`-dG` gcse, `-dL` loop, `-dg` greg) instead of guessing at reload, and both keep every matched function identical:
+* **`-fgcse-insert-before-copy`** (gcse.c `insert_insn_end_bb`): when a block ends in a register-to-register
+  copy, PRE puts its new insn **in front of** that copy, not after it. MultiSioRecvDataCheck's
+  `subs r1, r4, #1; str r1, [sp, #4]; mov r1, r8` is PRE's `i - 1` placed before `q = p`; after the copy,
+  r1 is busy and reload takes r7. This was the "reload round-robin" lead; reload itself is stock
+  (no-round-robin and reversed spill order both break 16-20 functions).
+* **`-fgiv-keep-after-exit`** (loop.c `strength_reduce`): givs found past a jump out of the loop (an
+  in-loop `return`/`break`) and not run every iteration still take part in combining and in the
+  reduction order, but their own insns are not rewritten to the reduced register. Sprite_Init's `else`
+  arm recomputes `s->objs + i*4` from `i` (`lsls r0, r4, #2; adds r1, r5, #0; adds r1, #52`) while the
+  other arm uses the reduced registers; with the plain `s->objs[i] = NULL` it matches. A narrower rule
+  (register givs only) and a skip-the-giv rule were also clean on the matched set; skipping gets 4 ops
+  because the giv order changes. Keep this in mind if a later function disagrees.
+
+Ruled out on 2026-11-09: reload without round-robin (`i = -1` in `allocate_reload_reg`, 16 break), spill_regs
+in reverse order (20 break), PRE inserting before *any* final insn (1 breaks), `-fno-gcse-no-const` again
+with the new flags (12 break).
+
 libgcc in this ROM is built **without interworking** (`mov pc, lr`). newlib is ordinary.
 
 C++? Many tiny out-of-line accessors (`strh r1,[r0,#8]; bx lr`) look like C++ methods, but there is no
@@ -140,6 +159,9 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-11-09: two compiler flags for game code (`-fgcse-insert-before-copy`, `-fgiv-keep-after-exit`, above).
+  MultiSioRecvDataCheck and Sprite_Init match; region A 180/190, 9 near misses; 10.16% of live code in C.
+  The "reload round-robin" lead was PRE placement; reload is stock.
 - 2026-11-03: three compiler flags for game code (above), `nogcse` flavour retired. Link_Exchange,
   Glyph_Free, Obj_Create match; region A 178/190, 11 near misses. MultiSioRecvDataCheck 95 to 8,
   Sprite_Init 39 to 9.
