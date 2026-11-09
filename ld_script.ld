@@ -6,9 +6,8 @@ SECTIONS
     .text : {
         build/asm/header.o(.text .rodata .data);
         build/asm/crt0.o(.text .rodata .data);
+        build/src/sprite_3.o(.text .rodata .data);
         build/asm/code_08000000.o(.text .rodata .data);
-        build/src/sprite_1.o(.text .rodata .data);
-        build/asm/code_08000408.o(.text .rodata .data);
         build/src/sprite_2.o(.text .rodata .data);
         build/src/map_1.o(.text .data);
         build/src/actor.o(.text .rodata .data);

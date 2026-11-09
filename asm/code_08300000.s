@@ -13379,7 +13379,7 @@ sub_08306EBC:
 	ldr r1, [pc, #40]
 	adds r0, r4, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldrb r0, [r7, #0]
 	cmp r0, #0
 	beq .L08306F16
@@ -13658,7 +13658,7 @@ sub_083070F8:
 	ldr r1, [pc, #56]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #44]
@@ -13766,7 +13766,7 @@ sub_083071BC:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13802,7 +13802,7 @@ sub_08307200:
 	ldr r1, [pc, #28]
 	movs r2, #1
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13869,7 +13869,7 @@ sub_0830727C:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13905,7 +13905,7 @@ sub_083072C0:
 	ldr r1, [pc, #28]
 	movs r2, #1
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -13972,7 +13972,7 @@ sub_0830733C:
 	ldr r1, [pc, #28]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #16]
@@ -14097,7 +14097,7 @@ sub_083073FC:
 	adds r0, r4, #0
 	adds r1, r5, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r6, #0
 	adds r1, #212
 	ldr r0, [pc, #48]
@@ -14400,7 +14400,7 @@ sub_083075D4:
 	ldrb r2, [r2, #1]
 .L0830766C:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830768C
 	cmp r6, #72
 	lsrs r7, r3, #32
@@ -14413,7 +14413,7 @@ sub_083075D4:
 	ldr r2, [pc, #64]
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830768C:
 	adds r1, r4, #0
 	adds r1, #212
@@ -14691,7 +14691,7 @@ sub_0830784C:
 	movs r2, #7
 .L083078A0:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
 	movs r2, #1
@@ -14727,7 +14727,7 @@ sub_0830784C:
 	movs r2, #1
 .L083078E8:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830790A
 	.2byte 0xd530 @ bpl.n 0x8307954
 	lsrs r3, r1, #32
@@ -14742,7 +14742,7 @@ sub_0830784C:
 	ldr r1, [pc, #28]
 	movs r2, #7
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830790A:
 	adds r1, r4, #0
 	adds r1, #212
@@ -15046,7 +15046,7 @@ sub_08307B5C:
 	ldr r1, [pc, #56]
 	movs r2, #2
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15163,7 +15163,7 @@ sub_08307C30:
 	ldr r1, [pc, #56]
 	movs r2, #7
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15304,7 +15304,7 @@ sub_08307D04:
 	adds r0, #100
 	ldr r1, [pc, #56]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #220
 	ldr r0, [pc, #48]
@@ -15945,7 +15945,7 @@ sub_083081B0:
 	ldr r1, [pc, #24]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L08308214:
 	add sp, #4
 	pop {r4, r5, r6}
@@ -16058,7 +16058,7 @@ sub_0830826C:
 	adds r0, r4, #0
 	adds r1, r5, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldr r0, [sp, #0]
 	adds r0, #100
 	movs r1, #1
@@ -16627,7 +16627,7 @@ sub_083086D4:
 	ldr r1, [pc, #32]
 	adds r2, r6, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldr r0, [sp, #0]
 	strh r6, [r0, #12]
 .L08308756:
@@ -17238,7 +17238,7 @@ sub_08308BA4:
 	adds r2, #226
 	ldrb r2, [r2, #0]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r1, r4, #0
 	adds r1, #212
 	ldr r0, [pc, #20]
@@ -17499,7 +17499,7 @@ sub_08308D38:
 	ldrh r2, [r4, #10]
 .L08308E26:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L08308E44
 	movs r0, r0
 	ldr r0, [r0, #0]
@@ -17511,7 +17511,7 @@ sub_08308D38:
 	ldrh r2, [r4, #10]
 	adds r2, #2
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L08308E44:
 	pop {r4, r5, r6}
 	pop {r0}
@@ -17930,7 +17930,7 @@ sub_08309130:
 	ldr r1, [pc, #32]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r0, r7, #0
 	adds r0, #46
 	strb r6, [r0, #0]
@@ -18159,7 +18159,7 @@ sub_08309320:
 	ldr r1, [pc, #60]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldr r0, [r5, #52]
 	ldr r1, [r5, #56]
 	movs r2, #1
@@ -18220,7 +18220,7 @@ sub_08309320:
 	adds r2, #1
 	adds r0, r4, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L083093DA
 	movs r5, #12
 	lsls r0, r0, #12
@@ -18234,7 +18234,7 @@ sub_08309320:
 	lsls r2, r0, #1
 	adds r0, r4, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L083093DA:
 	ldr r0, [pc, #48]
 	ldr r0, [r0, #0]
@@ -18817,7 +18817,7 @@ sub_0830983C:
 	ldr r1, [pc, #136]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830986A:
 	ldrb r0, [r5, #0]
 	cmp r0, #1
@@ -18827,7 +18827,7 @@ sub_0830983C:
 	ldr r1, [pc, #116]
 	movs r2, #2
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830987E:
 	ldrb r0, [r5, #0]
 	cmp r0, #2
@@ -18837,7 +18837,7 @@ sub_0830983C:
 	ldr r1, [pc, #96]
 	movs r2, #4
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L08309892:
 	ldrb r0, [r5, #0]
 	cmp r0, #3
@@ -18847,7 +18847,7 @@ sub_0830983C:
 	ldr r1, [pc, #76]
 	movs r2, #6
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L083098A6:
 	ldrb r5, [r5, #0]
 	cmp r5, #4
@@ -18857,7 +18857,7 @@ sub_0830983C:
 	ldr r1, [pc, #56]
 	movs r2, #8
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L083098BA:
 	ldr r0, [r4, #52]
 	ldr r1, [r4, #56]
@@ -19058,7 +19058,7 @@ sub_08309A04:
 	ldr r1, [pc, #40]
 	movs r2, #7
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	movs r0, #192
 	lsls r0, r0, #8
 	str r0, [r4, #52]
@@ -19258,7 +19258,7 @@ sub_08309B90:
 	adds r0, r4, #0
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r0, r4, #0
 	movs r1, #1
 	bl sub_0800078C
@@ -19297,7 +19297,7 @@ sub_08309BE0:
 	ldr r1, [pc, #44]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	mov r0, sp
 	bl sub_08309CB0
 	lsls r0, r0, #24
@@ -29178,7 +29178,7 @@ sub_0830E93C:
 	movs r2, #7
 .L0830EB22:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830EB3C
 	movs r0, r0
 	sub sp, #320
@@ -29189,7 +29189,7 @@ sub_0830E93C:
 	movs r2, #1
 .L0830EB36:
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830EB3C:
 	movs r0, #88
 	adds r1, r7, #0
@@ -29222,7 +29222,7 @@ sub_0830E93C:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830EB9C
 	movs r0, r0
 	sub sp, #320
@@ -29232,7 +29232,7 @@ sub_0830E93C:
 	ldr r1, [pc, #228]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830EB9C:
 	movs r0, #88
 	adds r1, r7, #0
@@ -29598,7 +29598,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	ldr r1, [pc, #20]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830EED0
 	subs r4, #4
 	lsls r0, r0, #12
@@ -29616,7 +29616,7 @@ sub_0830ECF4:
 	adds r0, r5, #0
 	ldr r1, [pc, #12]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830EED0:
 	adds r0, r5, #0
 	mov r1, r8
@@ -29634,7 +29634,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #12]
 	movs r2, #7
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830EF08
 	movs r0, r0
 	sub sp, #320
@@ -29644,7 +29644,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #52]
 	movs r2, #1
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830EF08:
 	adds r0, r5, #0
 	mov r1, sl
@@ -29674,7 +29674,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830EF60
 	movs r0, r0
 	sub sp, #320
@@ -29684,7 +29684,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #216]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830EF60:
 	adds r0, r5, #0
 	ldr r1, [sp, #332]
@@ -30044,7 +30044,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	ldr r1, [pc, #20]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830F288
 	subs r4, #4
 	lsls r0, r0, #12
@@ -30062,7 +30062,7 @@ sub_0830F0AC:
 	adds r0, r5, #0
 	ldr r1, [pc, #12]
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830F288:
 	adds r0, r5, #0
 	mov r1, r8
@@ -30080,7 +30080,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #12]
 	movs r2, #7
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830F2C0
 	movs r0, r0
 	sub sp, #320
@@ -30090,7 +30090,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #52]
 	movs r2, #1
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830F2C0:
 	adds r0, r5, #0
 	mov r1, sl
@@ -30120,7 +30120,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #12]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	b .L0830F318
 	movs r0, r0
 	sub sp, #320
@@ -30130,7 +30130,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #216]
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L0830F318:
 	adds r0, r5, #0
 	ldr r1, [sp, #440]
@@ -30830,13 +30830,13 @@ sub_0830F840:
 	adds r0, r5, #0
 	movs r2, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	ldr r4, [pc, #92]
 	ldr r1, [pc, #96]
 	adds r0, r4, #0
 	movs r2, #1
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r0, r5, #0
 	bl sub_0800060C
 	adds r0, r4, #0
@@ -31757,7 +31757,7 @@ sub_0830FFD4:
 	adds r0, r4, #0
 	movs r2, #15
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	cmp r5, #16
 	bne .L08310028
 	adds r0, r4, #0
@@ -31790,7 +31790,7 @@ sub_0830FFD4:
 	adds r0, r4, #0
 	movs r2, #4
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 	adds r0, r4, #0
 	movs r1, #8
 	bl sub_0800075C
@@ -31806,7 +31806,7 @@ sub_0830FFD4:
 	ldr r1, [pc, #92]
 	adds r2, r5, #0
 	movs r3, #0
-	bl Sprite_Init
+	bl sub_080002E0
 .L08310070:
 	ldr r0, [pc, #76]
 	bl sub_08000604
