@@ -1,8 +1,8 @@
 diff --git a/gcc/flags.h b/gcc/flags.h
-index 39e998e..27dbc8d 100755
+index 39e998e..d80419f 100755
 --- a/gcc/flags.h
 +++ b/gcc/flags.h
-@@ -457,3 +457,15 @@ extern int flag_fixed_debug_line_info;
+@@ -457,3 +457,18 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -18,6 +18,9 @@ index 39e998e..27dbc8d 100755
 +
 +/* Nonzero if combine_givs indexes can_combine by the combined giv (i), not by the sort position (j).  */
 +extern int flag_combine_givs_fix;
++
++/* Nonzero if gcse inserts PRE copies in front of a block's final register copy.  */
++extern int flag_gcse_insert_before_copy;
 diff --git a/gcc/flow.c b/gcc/flow.c
 index 08db64d..6022d74 100755
 --- a/gcc/flow.c
@@ -32,7 +35,7 @@ index 08db64d..6022d74 100755
  
    /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
 diff --git a/gcc/gcse.c b/gcc/gcse.c
-index 9c82ab6..4327fb1 100755
+index 9c82ab6..7a962ec 100755
 --- a/gcc/gcse.c
 +++ b/gcc/gcse.c
 @@ -1208,6 +1208,20 @@ want_to_gcse_p (x)
@@ -56,6 +59,21 @@ index 9c82ab6..4327fb1 100755
      default:
        break;
      }
+@@ -4310,6 +4324,14 @@ insert_insn_end_bb (expr, bb, pre)
+       if (BLOCK_HEAD (bb) == insn)
+         BLOCK_HEAD (bb) = new_insn;
+     }
++  /* -fgcse-insert-before-copy: if the block ends with a register copy,
++     insert in front of it (the Jazz Jackrabbit compiler did this).  */
++  else if (flag_gcse_insert_before_copy
++	   && GET_CODE (insn) == INSN && insn != BLOCK_HEAD (bb)
++	   && single_set (insn)
++	   && GET_CODE (SET_DEST (single_set (insn))) == REG
++	   && GET_CODE (SET_SRC (single_set (insn))) == REG)
++    new_insn = emit_insn_before (pat, insn);
+   else
+     {
+       new_insn = emit_insn_after (pat, insn);
 diff --git a/gcc/jump.c b/gcc/jump.c
 index 60e6fce..19e01a5 100755
 --- a/gcc/jump.c
@@ -83,10 +101,10 @@ index 68a3347..184621b 100755
  		  /* Remove additional weight for being reused.  */
  		  stats[j].total_benefit -= 3 + 
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index ac8e21b..a6732d1 100755
+index ac8e21b..c6fc9fe 100755
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
-@@ -591,6 +591,18 @@ int flag_fixed_debug_line_info = 0;
+@@ -591,6 +591,21 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -102,10 +120,13 @@ index ac8e21b..a6732d1 100755
 +/* Nonzero if combine_givs indexes can_combine by the combined giv (i), not by the sort position (j).  */
 +int flag_combine_givs_fix = 0;
 +
++/* Nonzero if gcse inserts PRE copies in front of a block's final register copy.  */
++int flag_gcse_insert_before_copy = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +744,14 @@ lang_independent_options f_options[] =
+@@ -732,6 +747,16 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
@@ -115,6 +136,8 @@ index ac8e21b..a6732d1 100755
 +     "Keep gcse away from constant pool loads, except symbol+offset (matches Jazz game code)"},
 +    {"combine-givs-fix", &flag_combine_givs_fix, 1,
 +     "Use the right index when combine_givs updates its benefit table (matches Jazz game code)"},
++    {"gcse-insert-before-copy", &flag_gcse_insert_before_copy, 1,
++     "Insert PRE copies in front of a block's final register copy (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER

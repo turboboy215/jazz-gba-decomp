@@ -1,7 +1,7 @@
 #!/bin/sh
 # Build pret/agbcc with tools/agbcc-jazz.patch and install it into tools/agbcc.
 # Usage: sh tools/build_agbcc.sh [agbcc source dir, default /tmp/agbcc]
-# The patch only adds four flags, used for Jazz C (see docs/STRATEGY.md):
+# The patch only adds five flags, used for Jazz C (see docs/STRATEGY.md):
 #   -fno-merge-blocks           skip the Cygnus merge_blocks pass (flow.c)
 #   -fdelete-dead-after-reload  let jump.c's delete_computation delete dead feeder insns after
 #                               reload, i.e. undo the Cygnus gcc/13233 change (vsprintf)
@@ -9,6 +9,8 @@
 #                               game code only, see docs/STRATEGY.md
 #   -fcombine-givs-fix          loop.c combine_givs: use the right index when it updates its benefit
 #                               table (game code only, Link_Exchange)
+#   -fgcse-insert-before-copy   gcse.c insert_insn_end_bb: put a PRE copy in front of a block's final
+#                               register copy, not after it (game code only, MultiSioRecvDataCheck)
 # Without the flags the compilers behave exactly as pret's.
 set -e
 J=$(cd "$(dirname "$0")/.." && pwd)
