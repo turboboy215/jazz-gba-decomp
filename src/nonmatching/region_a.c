@@ -167,42 +167,6 @@ char *sub_08004F38(char *str, long num, int base, int size, int precision, int t
     return str;
 }
 
-/* ---- Sprite_Init 080002E0 ---- 9 aligned-diff ops (2026-11-03, was 39): allocation is right (i*4 in sl, anim spilled).
- * Left: the ROM's `else` store recomputes i*4 and s+52 (`lsls r0, r4, #2; adds r1, r5, #0; adds r1, #52`), here it
- * combines with the &objs[i] giv in r6. Hiding the multiply from loop.c moved i*4 to r7 and lost the allocation (37 ops);
- * a user pointer biv for &objs[i], and dropping conditional address givs in the compiler, did not help.
- * Note the original bug (the failure loop clears objs[i], not objs[j]). */
-u32 sub_080002E0(struct Sprite *s, struct AnimBank *bank, int anim, int frame)
-{
-    struct Anim *a = sub_0800079C(bank, anim);
-    u32 i, j;
-    s->bank = bank;
-    s->tick = 0;
-    s->flag1 = 0;
-    sub_08000680(s, anim);
-    sub_0800065C(s, frame);
-    sub_08000730(s, ANIM_DEFAULT);
-    sub_08000738(s, ANIM_DEFAULT);
-    sub_08000734(s, ANIM_DEFAULT);
-    sub_0800075C(s, ANIM_DEFAULT);
-    sub_08000604(s);
-    for (i = 0; i < a->layerCount; i++) {
-        if (sub_080007AC(bank, anim, frame, i)->gfx != 0x3FFF) {
-            struct CelGfx *g = sub_080007CC(bank, anim, frame, i);
-            if (!sub_08004408(&s->objs[i], g->w, g->h, g->is8bpp, g->data)) {
-                for (j = i; j < SPRITE_MAX_LAYERS; j++)
-                    s->objs[i] = NULL;
-                sub_080005D4(s);
-                return 0;
-            }
-        } else
-            *(struct Obj **)((u8 *)s->objs + i * 4) = NULL;
-    }
-    for (; i < SPRITE_MAX_LAYERS; i++)
-        s->objs[i] = NULL;
-    return 1;
-}
-
 /* ---- Sprite_Draw 08000408 ---- same structure; register allocation (ROM keeps i in r8 and &objs[i], i*4 on the stack) */
 u32 sub_08000408(struct Sprite *s)
 {
