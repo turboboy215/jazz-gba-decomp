@@ -23041,7 +23041,7 @@ sub_0830BAAC:
 	ldrb r0, [r0, #0]
 	cmp r0, #0
 	bne .L0830BADC
-	bl Link_Main
+	bl sub_080034A4
 	ldr r1, [pc, #28]
 	movs r0, #2
 	ldrh r1, [r1, #0]
