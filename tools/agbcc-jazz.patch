@@ -44,10 +44,10 @@ index 08db64d..6022d74 100755
  
    /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
 diff --git a/gcc/gcse.c b/gcc/gcse.c
-index 9c82ab6..46c5b9c 100755
+index 9c82ab6..a0a5cc2 100755
 --- a/gcc/gcse.c
 +++ b/gcc/gcse.c
-@@ -1193,6 +1193,38 @@ static int *reg_last_set;
+@@ -1193,6 +1193,54 @@ static int *reg_last_set;
  /* Perform a quick check whether X, the source of a set, is something
     we want to consider for GCSE.  */
  
@@ -83,10 +83,26 @@ index 9c82ab6..46c5b9c 100755
 +  return depth;
 +}
 +
++static sbitmap *pre_optimal;
++static sbitmap *pre_redundant;
++
++/* Nonzero if PRE would insert expression INDX in a block that is not inside a loop.  */
++static int
++insert_outside_loop_p (indx)
++     int indx;
++{
++  int bb;
++  for (bb = 0; bb < n_basic_blocks; bb++)
++    if (TEST_BIT (pre_optimal[bb], indx) && ! TEST_BIT (pre_redundant[bb], indx)
++	&& insn_loop_depth (BLOCK_END (bb)) == 0)
++      return 1;
++  return 0;
++}
++
  static int
  want_to_gcse_p (x)
       rtx x;
-@@ -1208,6 +1240,19 @@ want_to_gcse_p (x)
+@@ -1208,6 +1256,19 @@ want_to_gcse_p (x)
      case CALL:
        return 0;
  
@@ -106,7 +122,23 @@ index 9c82ab6..46c5b9c 100755
      default:
        break;
      }
-@@ -4310,6 +4355,14 @@ insert_insn_end_bb (expr, bb, pre)
+@@ -4072,12 +4133,9 @@ static sbitmap *comp;
+ /* Nonzero for expressions that are locally anticipatable in the block.  */
+ static sbitmap *antloc;
+ 
+-/* Nonzero for expressions where this block is an optimal computation
+-   point.  */
+-static sbitmap *pre_optimal;
+-
+-/* Nonzero for expressions which are redundant in a particular block.  */
+-static sbitmap *pre_redundant;
++/* pre_optimal: expressions for which this block is an optimal computation
++   point; pre_redundant: expressions which are redundant in the block
++   (declared above).  */
+ 
+ static sbitmap *temp_bitmap;
+ 
+@@ -4310,6 +4368,14 @@ insert_insn_end_bb (expr, bb, pre)
        if (BLOCK_HEAD (bb) == insn)
          BLOCK_HEAD (bb) = new_insn;
      }
@@ -121,17 +153,19 @@ index 9c82ab6..46c5b9c 100755
    else
      {
        new_insn = emit_insn_after (pat, insn);
-@@ -4536,7 +4589,12 @@ pre_delete ()
+@@ -4536,7 +4602,14 @@ pre_delete ()
  	      rtx set;
  	      int bb = BLOCK_NUM (insn);
  
 -	      if (TEST_BIT (temp_bitmap[bb], indx))
 +	      /* -fgcse-const-in-loops: constant pool loads (left alone by
-+		 -fgcse-no-const) are only made redundant inside a loop.  */
++		 -fgcse-no-const) are only made redundant inside a loop, and
++		 only if every insertion PRE needs for them is inside a loop too.  */
 +	      if (TEST_BIT (temp_bitmap[bb], indx)
 +		  && ! (flag_gcse_no_const && flag_gcse_const_in_loops
 +			&& const_pool_load_p (expr->expr)
-+			&& insn_loop_depth (insn) == 0))
++			&& (insn_loop_depth (insn) == 0
++			    || insert_outside_loop_p (indx))))
  		{
  		  set = single_set (insn);
  		  if (! set)
