@@ -89,6 +89,27 @@ Ruled out on 2026-11-09: reload without round-robin (`i = -1` in `allocate_reloa
 in reverse order (20 break), PRE inserting before *any* final insn (1 breaks), `-fno-gcse-no-const` again
 with the new flags (12 break).
 
+**Two more, game code only (2026-11-10), both found on Link_Main** (matched with them; every other matched
+function is unchanged with either flag):
+* **`-fgcse-const-in-loops`** (gcse.c `pre_delete`): `-fgcse-no-const` was only a fit. The ROM's PRE does
+  handle constant pool loads, but only when the redundant load is inside a loop **and** every insertion PRE
+  needs is inside a loop too. Link_Main's `&gUnk_0300589C` after the player-count loop gets three copies
+  inside that loop (end of bb 2, 3, 4). They vanish later, but at loop.c time they make the inner loop 3 insns
+  longer, and a register used in an inner loop lives to that loop's end: `&gUnk_03000E0C`'s lifetime goes
+  28 → 31, enough for pass 1 to move it (`7 * 2 * 31 >= 2 * 210`), which leaves pass 2 the budget to hoist
+  `&gUnk_03000D38` (`13 * 3 * 5 >= 189`). The plain rule (loop depth of the redundant load only) is also
+  clean on the matched set but puts Oam_SetPosSorted's near miss at 120 (from 108): its insertions land in
+  bb 0/1, outside the loop.
+* **`-fold-base-reg-class`** (thumb.h `MODE_BASE_REG_CLASS`): byte/halfword addresses reload into
+  BASE_REGS like every other mode. pret's thumb.h gives QImode/HImode addresses LO_REGS, the value's own
+  class, so reloads sort by number and the address (pushed first) takes the first spill reg. With BASE_REGS
+  (class 4 > LO_REGS 2) `reload_reg_class_lower` puts the value first: Link_Main's `mov r0, r8; ldr r1, =x;
+  strb r0, [r1, #4]`. MODE_BASE_REG_CLASS looks like one of the later Cygnus changes.
+
+Ruled out on 2026-11-10: full Morel-Renvoise PRE (egcs 1.1's `compute_pre_ppinout`) instead of LCM
+(21 break even with `-fgcse-no-const`); PRE of constant pool loads only where they are partially available
+(11 break).
+
 libgcc in this ROM is built **without interworking** (`mov pc, lr`). newlib is ordinary.
 
 C++? Many tiny out-of-line accessors (`strh r1,[r0,#8]; bx lr`) look like C++ methods, but there is no

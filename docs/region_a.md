@@ -303,3 +303,23 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
     (For MultiSioRecvDataCheck the pointer form was right; the compiler flag fixed the order.)
   * **Givs after an in-loop `return`** keep their own computation (`-fgiv-keep-after-exit`): write the plain
     array access there (`s->objs[i] = NULL`), not a hand-made address.
+* **Findings of 2026-11-10** (Link_Main matched; two compiler flags, `docs/STRATEGY.md`). Supersedes the
+  Link_Main notes under "Register-only leftovers" above:
+  * **Loop budget arithmetic, exact.** move_movables moves an invariant if `threshold * savings * lifetime >=
+    insn_count`, or `>= 2 * insn_count` when the reg was already moved by an inner loop (the dump says
+    "halved since already moved", but it is the count that doubles). `threshold` starts at 13 with a call in
+    the loop (26 without) and drops by 3 per move; pass 2 starts fresh. **A register used inside an inner loop
+    lives to that inner loop's end**, so its lifetime grows with every insn in the inner loop, even ones
+    that vanish later (PRE copies).
+  * **When an invariant the ROM hoists stays "not desirable", work the numbers**: list the pass-1/pass-2
+    movables with `tools/loopinfo.sh`, see which earlier move spent the budget, then ask what would have
+    changed the insn count or lifetime. Link_Main needed 3 more insns in the player-count loop, which turned
+    out to be PRE's copies of `&gUnk_0300589C` (a compiler rule, not source). A local holding the constant
+    1 (`one = 1` before the loop) or a pointer to `gUnk_03000E0C` also freed the budget, but changed other
+    code: a sign the compiler, not the source, was off.
+  * **Value-vs-address reload order** for a byte/halfword store follows the address reload's class: with
+    `-fold-base-reg-class` the value is allocated first.
+  * Glyph_Alloc: the ROM's else arm stores `r7` (the loaded free-list head, the same 0xFFFF) into
+    `list[tile + 1]`, and compares against `r0`, a copy of it. So the head is a real u16 local that lives into
+    the else arm, compared through a zero-extended copy. Storing `fr` instead of `t` alone scores 25; the
+    first block's registers (address in r2, t in r3) suggest something else is live in r0 there too.

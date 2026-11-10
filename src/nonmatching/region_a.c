@@ -223,7 +223,8 @@ u32 sub_08000408(struct Sprite *s)
  * ip is PRE (right with -fgcse-no-const); `glyph += base` reuses the parameter. The first read of the list head is
  * volatile-like (`ldrh r7; adds r0, r7`, then a real reload). Left: the ROM keeps both r7 (loaded value, stored to
  * list[tile + 1]) and r0 (copy, compared) live into the else arm; here CSE leaves one, so one register less is used
- * and g, gfx, key*2 land one register lower. */
+ * and g, gfx, key*2 land one register lower. 2026-11-10: the stored value in the else arm is r7, the loaded
+ * head (== 0xFFFF), not t; `= fr` scores 25 alone, see docs/region_a.md. */
 u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
 {
     u16 g = glyph;

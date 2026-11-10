@@ -37,12 +37,13 @@ with `git bundle create jazz-decomp.bundle --all`.
 
 * ROM `AJJE`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0`, 4 MiB.
 * **Compiler: `old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const
-  -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit`** for game code (the
+  -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops
+  -fold-base-reg-class`** for game code (the
   default in Makefile and all tools). All but `-fno-strict-aliasing` come from our patch
   (`tools/agbcc-jazz.patch`); stock pret agbcc rejects them. The ROM's
   compiler was a GCC snapshot from before several Cygnus changes. Details in `docs/STRATEGY.md`, including how
   to test a new compiler idea in minutes. **When a near miss resists, suspect the compiler:** that found
-  all seven flags. **GAX needs `agbcc -fprologue-bugfix`** with only the first two (splits.txt flavour `bugfix`,
+  all nine flags. **GAX needs `agbcc -fprologue-bugfix`** with only the first two (splits.txt flavour `bugfix`,
   objects.mk empties `GAMEFLAGS`); several GAX functions don't match with `old_agbcc`, and it breaks with the new flags.
 * Code regions: A `080002E0-08012974` (live library `…-080053A0`, then the **Single Pak multiboot
   client image** `080053A0-080193A0`, a separate program with its own GAX copy that `Link_Main`
@@ -94,35 +95,37 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-09):** 10.16% of live code is in C; `make compare` passes.
+**State (2026-11-10):** 10.49% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 180/190 byte-matching, 9 near misses with
+* Region A (`080002E0-080053A0`): **every function is in C**. 181/190 byte-matching, 8 near misses with
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-11-09: two more compiler differences (`-fgcse-insert-before-copy`, `-fgiv-keep-after-exit`, see
-  `docs/STRATEGY.md`), matched **MultiSioRecvDataCheck** and **Sprite_Init**. The "reload spill order" lead was
-  wrong: it was where gcse's PRE inserts its copy. Method notes in `docs/region_a.md` ("Findings of 2026-11-09").
-  Subsystems, the Tournament link flow, globals, matching notes: `docs/region_a.md`. Headers
-  `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
+  2026-11-10: two more compiler differences (`-fgcse-const-in-loops`, `-fold-base-reg-class`, see
+  `docs/STRATEGY.md`) matched **Link_Main**. Method (loop budget arithmetic, inner-loop lifetimes):
+  `docs/region_a.md` "Findings of 2026-11-10". Subsystems, the Tournament link flow, globals, matching
+  notes: `docs/region_a.md`. Headers `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 * Compiler experiments: `docs/STRATEGY.md` "How to test a compiler idea". In practice: clone pret/agbcc,
   `git apply tools/agbcc-jazz.patch`, `make -C gcc old -j1` (under a minute), add a getenv switch, compile
   every `src/*.c` (game code) with it, run `tools/jtbl.py` on each `.s`, and compare per function with
   `build/src/*.s` (ignore the Makefile's trailing `.align 2, 0`). Any changed function rules the idea out.
+  Regenerate the patch with `git diff > tools/agbcc-jazz.patch` in that tree, then `sh tools/setup_toolchain.sh`
+  rebuilds (~10 min) and writes a new prebuilt archive to copy back.
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 9). Score them with
+1. **Region A near misses** (`src/nonmatching/region_a.c`, 8). Score them with
    `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c`. Aligned diff ops
-   (2026-11-09): Link_Main 14 (3 with `OPT=-fno-gcse-no-const`), Obj_Update 20, Link_SerialIntr 23, Glyph_Alloc 23,
-   number 57, Sprite_Draw 78, MultiBootMain 100, Oam_SetPosSorted 108, Bg_DrawLevelScreen 249. Leads:
-   * Read the dumps first (`-dG`, `-dL`, `-dg`, see `docs/region_a.md`): both 2026-11-09 matches were found that way.
-   * Link_Main and Obj_Update have **no** PRE insertions, so their register swaps have another cause.
-   * Link_SerialIntr's PRE-shaped copies of `&gUnk_03000D38` are not produced even with `-fno-gcse-no-const`
-     and the new flags (still 23), so the copy comes from somewhere else (cse? loop?).
+   (2026-11-10): Obj_Update 20, Link_SerialIntr 23, Glyph_Alloc 23, number 57, Sprite_Draw 80 (78 before
+   `-fold-base-reg-class`, a stack-spill shuffle), MultiBootMain 100, Oam_SetPosSorted 108, Bg_DrawLevelScreen 249.
+   Leads:
+   * Read the dumps first (`-dG`, `-dL`, `-dg`, see `docs/region_a.md`): all three recent matches were found that way.
+   * Obj_Update has no PRE insertions, so its register swap has another cause. A 40-minute permuter run found nothing.
+   * Link_SerialIntr's PRE-shaped copies of `&gUnk_03000D38` still don't appear with `-fgcse-const-in-loops`
+     (still 23). Check where they would come from now that PRE of constants in loops is known to be real.
+   * Glyph_Alloc: see its 2026-11-10 note (the else arm stores the loaded head, r7). A permuter run found nothing.
    * Sprite_Draw: its `0x3FFF` arm recomputes `i*4 + 52 + s` like Sprite_Init's else; the first loop's `ldmia`
      resisted the obvious rewrites.
-   * Glyph_Alloc needs two live registers holding 0xFFFF in the else arm.
    * Re-try old "tried and failed" notes in `src/nonmatching/region_a.c`: most predate the new flags.
 2. **Finish GAX matching** (scores above): start with GAXSync_render (7). GAX keeps its jump tables inline
    (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
