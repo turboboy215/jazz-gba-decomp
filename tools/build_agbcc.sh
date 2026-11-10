@@ -1,7 +1,7 @@
 #!/bin/sh
 # Build pret/agbcc with tools/agbcc-jazz.patch and install it into tools/agbcc.
 # Usage: sh tools/build_agbcc.sh [agbcc source dir, default /tmp/agbcc]
-# The patch only adds six flags, used for Jazz C (see docs/STRATEGY.md):
+# The patch only adds eight flags, used for Jazz C (see docs/STRATEGY.md):
 #   -fno-merge-blocks           skip the Cygnus merge_blocks pass (flow.c)
 #   -fdelete-dead-after-reload  let jump.c's delete_computation delete dead feeder insns after
 #                               reload, i.e. undo the Cygnus gcc/13233 change (vsprintf)
@@ -13,6 +13,10 @@
 #                               register copy, not after it (game code only, MultiSioRecvDataCheck)
 #   -fgiv-keep-after-exit       loop.c strength_reduce: givs found past a jump out of the loop (and not
 #                               run every iteration) keep their own insns (game code only, Sprite_Init)
+#   -fgcse-const-in-loops       with -fgcse-no-const, still PRE constant pool loads whose redundant
+#                               occurrence is inside a loop (game code only, Link_Main)
+#   -fold-base-reg-class        reload QImode/HImode addresses into BASE_REGS like other modes, i.e. no
+#                               MODE_BASE_REG_CLASS split in thumb.h (game code only, Link_Main)
 # Without the flags the compilers behave exactly as pret's.
 set -e
 J=$(cd "$(dirname "$0")/.." && pwd)

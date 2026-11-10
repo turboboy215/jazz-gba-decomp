@@ -30,7 +30,7 @@ if VERSION and VERSION != "metabee":
         if _m:
             ALIASES[_m.group(1)] = int(_m.group(2), 16)  # library code moved with the version
 
-CFLAGS = ["-mthumb-interwork", "-Wimplicit", "-Wparentheses", "-O2", "-fhex-asm", "-fno-merge-blocks", "-fdelete-dead-after-reload"] + ([] if "-fprologue-bugfix" in os.environ.get("OPT", "") else ["-fgcse-no-const", "-fno-strict-aliasing", "-fcombine-givs-fix", "-fgcse-insert-before-copy", "-fgiv-keep-after-exit"])  # keep in sync with Makefile
+CFLAGS = ["-mthumb-interwork", "-Wimplicit", "-Wparentheses", "-O2", "-fhex-asm", "-fno-merge-blocks", "-fdelete-dead-after-reload"] + ([] if "-fprologue-bugfix" in os.environ.get("OPT", "") else ["-fgcse-no-const", "-fno-strict-aliasing", "-fcombine-givs-fix", "-fgcse-insert-before-copy", "-fgiv-keep-after-exit", "-fgcse-const-in-loops", "-fold-base-reg-class"])  # keep in sync with Makefile
 
 
 def run(cmd, **kw):

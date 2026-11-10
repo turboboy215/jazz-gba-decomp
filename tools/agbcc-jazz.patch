@@ -1,8 +1,8 @@
 diff --git a/gcc/flags.h b/gcc/flags.h
-index 39e998e..6568c8b 100755
+index 39e998e..a13ceda 100755
 --- a/gcc/flags.h
 +++ b/gcc/flags.h
-@@ -457,3 +457,21 @@ extern int flag_fixed_debug_line_info;
+@@ -457,3 +457,27 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -24,6 +24,12 @@ index 39e998e..6568c8b 100755
 +
 +/* Nonzero if loop.c leaves the insns of givs found past a loop exit unreduced.  */
 +extern int flag_giv_keep_after_exit;
++
++/* Nonzero if gcse still PREs constant pool loads inside loops under -fgcse-no-const.  */
++extern int flag_gcse_const_in_loops;
++
++/* Nonzero if QImode/HImode addresses reload into BASE_REGS (no MODE_BASE_REG_CLASS split).  */
++extern int flag_old_base_reg_class;
 diff --git a/gcc/flow.c b/gcc/flow.c
 index 08db64d..6022d74 100755
 --- a/gcc/flow.c
@@ -38,10 +44,49 @@ index 08db64d..6022d74 100755
  
    /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
 diff --git a/gcc/gcse.c b/gcc/gcse.c
-index 9c82ab6..7a962ec 100755
+index 9c82ab6..46c5b9c 100755
 --- a/gcc/gcse.c
 +++ b/gcc/gcse.c
-@@ -1208,6 +1208,20 @@ want_to_gcse_p (x)
+@@ -1193,6 +1193,38 @@ static int *reg_last_set;
+ /* Perform a quick check whether X, the source of a set, is something
+    we want to consider for GCSE.  */
+ 
++/* Nonzero if X is a load from the constant pool of something other than a
++   symbol+offset CONST (what -fgcse-no-const keeps away from gcse).  */
++
++static int
++const_pool_load_p (x)
++     rtx x;
++{
++  return (GET_CODE (x) == MEM && GET_CODE (XEXP (x, 0)) == SYMBOL_REF
++	  && CONSTANT_POOL_ADDRESS_P (XEXP (x, 0))
++	  && GET_CODE (get_pool_constant (XEXP (x, 0))) != CONST);
++}
++
++/* Loop nesting depth of INSN, from the LOOP_BEG/LOOP_END notes before it.  */
++
++static int
++insn_loop_depth (insn)
++     rtx insn;
++{
++  rtx p;
++  int depth = 0;
++
++  for (p = get_insns (); p != NULL_RTX && p != insn; p = NEXT_INSN (p))
++    if (GET_CODE (p) == NOTE)
++      {
++	if (NOTE_LINE_NUMBER (p) == NOTE_INSN_LOOP_BEG)
++	  depth++;
++	else if (NOTE_LINE_NUMBER (p) == NOTE_INSN_LOOP_END)
++	  depth--;
++      }
++  return depth;
++}
++
+ static int
+ want_to_gcse_p (x)
+      rtx x;
+@@ -1208,6 +1240,19 @@ want_to_gcse_p (x)
      case CALL:
        return 0;
  
@@ -53,16 +98,15 @@ index 9c82ab6..7a962ec 100755
 +      break;
 +
 +    case MEM:
-+      if (flag_gcse_no_const && GET_CODE (XEXP (x, 0)) == SYMBOL_REF
-+          && CONSTANT_POOL_ADDRESS_P (XEXP (x, 0))
-+          && GET_CODE (get_pool_constant (XEXP (x, 0))) != CONST)
++      if (flag_gcse_no_const && ! flag_gcse_const_in_loops
++          && const_pool_load_p (x))
 +        return 0;
 +      break;
 +
      default:
        break;
      }
-@@ -4310,6 +4324,14 @@ insert_insn_end_bb (expr, bb, pre)
+@@ -4310,6 +4355,14 @@ insert_insn_end_bb (expr, bb, pre)
        if (BLOCK_HEAD (bb) == insn)
          BLOCK_HEAD (bb) = new_insn;
      }
@@ -77,6 +121,20 @@ index 9c82ab6..7a962ec 100755
    else
      {
        new_insn = emit_insn_after (pat, insn);
+@@ -4536,7 +4589,12 @@ pre_delete ()
+ 	      rtx set;
+ 	      int bb = BLOCK_NUM (insn);
+ 
+-	      if (TEST_BIT (temp_bitmap[bb], indx))
++	      /* -fgcse-const-in-loops: constant pool loads (left alone by
++		 -fgcse-no-const) are only made redundant inside a loop.  */
++	      if (TEST_BIT (temp_bitmap[bb], indx)
++		  && ! (flag_gcse_no_const && flag_gcse_const_in_loops
++			&& const_pool_load_p (expr->expr)
++			&& insn_loop_depth (insn) == 0))
+ 		{
+ 		  set = single_set (insn);
+ 		  if (! set)
 diff --git a/gcc/jump.c b/gcc/jump.c
 index 60e6fce..19e01a5 100755
 --- a/gcc/jump.c
@@ -194,11 +252,27 @@ index 68a3347..dd8b058 100755
  		{
  		  /* Remove additional weight for being reused.  */
  		  stats[j].total_benefit -= 3 + 
+diff --git a/gcc/thumb.h b/gcc/thumb.h
+index 9911f76..394907b 100755
+--- a/gcc/thumb.h
++++ b/gcc/thumb.h
+@@ -470,8 +470,10 @@ enum reg_class
+ 
+ #define BASE_REG_CLASS BASE_REGS
+ 
++extern int flag_old_base_reg_class;
+ #define MODE_BASE_REG_CLASS(MODE) 		\
+-    ((MODE) != QImode && (MODE) != HImode 	\
++    (flag_old_base_reg_class			\
++     || ((MODE) != QImode && (MODE) != HImode)	\
+      ? BASE_REGS : LO_REGS)
+ 
+ #define INDEX_REG_CLASS LO_REGS
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index ac8e21b..ae4cc2b 100755
+index ac8e21b..d5bbb9c 100755
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
-@@ -591,6 +591,24 @@ int flag_fixed_debug_line_info = 0;
+@@ -591,6 +591,32 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -220,10 +294,18 @@ index ac8e21b..ae4cc2b 100755
 +/* Nonzero if loop.c leaves the insns of givs found past a loop exit unreduced.  */
 +int flag_giv_keep_after_exit = 0;
 +
++/* Nonzero if gcse still PREs the constant pool loads that -fgcse-no-const leaves alone
++   when the redundant load is inside a loop.  */
++int flag_gcse_const_in_loops = 0;
++
++/* Nonzero if QImode/HImode addresses reload into BASE_REGS like every other mode
++   (before thumb.h's MODE_BASE_REG_CLASS).  */
++int flag_old_base_reg_class = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +750,18 @@ lang_independent_options f_options[] =
+@@ -732,6 +758,22 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
@@ -237,6 +319,10 @@ index ac8e21b..ae4cc2b 100755
 +     "Insert PRE copies in front of a block's final register copy (matches Jazz game code)"},
 +    {"giv-keep-after-exit", &flag_giv_keep_after_exit, 1,
 +     "Leave the insns of givs found past a loop exit unreduced (matches Jazz game code)"},
++    {"gcse-const-in-loops", &flag_gcse_const_in_loops, 1,
++     "With -fgcse-no-const, still PRE constant pool loads inside loops (matches Jazz game code)"},
++    {"old-base-reg-class", &flag_old_base_reg_class, 1,
++     "Reload byte/halfword addresses into BASE_REGS, not LO_REGS (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER
