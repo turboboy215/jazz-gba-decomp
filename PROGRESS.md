@@ -45,3 +45,4 @@
 - 2026-11-09: two compiler flags for game code (-fgcse-insert-before-copy, -fgiv-keep-after-exit); region A 180/190 matching, 9 near misses. code decompiled to C: 23176 / 228100 bytes (10.16%)
 - 2026-11-10: Link_Main (080034A4). code decompiled to C: 23924 / 228100 bytes (10.49%); rate 38 bytes/hour; ETA 2027-06-20 01:57
 - 2026-11-10: two compiler flags for game code (-fgcse-const-in-loops, -fold-base-reg-class); region A 181/190 matching, 8 near misses. code decompiled to C: 23924 / 228100 bytes (10.49%)
+- 2026-11-11: no new match. local-alloc's 3-qty hand sort (compares qty numbers, real in the ROM's compiler) explains Obj_Update's register rotation; tools/qtys.sh + tools/agbcc-ladebug.patch, tools/dumps.sh. code decompiled to C: 23924 / 228100 bytes (10.49%)

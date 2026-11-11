@@ -117,6 +117,12 @@ RTTI, no vtable-shaped tables found yet, and `__main` / `__do_global_ctors` run 
 the code as C until proven otherwise. old_agbcc has no C++ front end. If C++ shows up, the plan is
 to write equivalent C (method → function taking `this`); that usually produces identical code.
 
+**Ruled out (2026-11-11): local-alloc's 3-qty sort.** `block_alloc` sorts exactly 3 quantities by comparing
+qty numbers instead of `qty_order[]` slots, so the order is not by priority. It looks like a bug worth
+fixing, but the ROM's compiler had it too: qsort for the priority sort changes 12 matched files (qsort for
+the suggestion sort changes none). Keep it. `tools/agbcc-ladebug.patch` (env `LA_DEBUG`, no code change)
+and `tools/qtys.sh` print the order; see `docs/region_a.md` "Findings of 2026-11-11".
+
 ## ROM structure findings
 
 See `docs/rom_map.md`. In short:

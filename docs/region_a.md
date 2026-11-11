@@ -323,3 +323,30 @@ pool, so Ghidra missed them. They are now listed in `starts.txt`: `08001A40`, `0
     `list[tile + 1]`, and compares against `r0`, a copy of it. So the head is a real u16 local that lives into
     the else arm, compared through a zero-extended copy. Storing `fr` instead of `t` alone scores 25; the
     first block's registers (address in r2, t in r3) suggest something else is live in r0 there too.
+* **Findings of 2026-11-11** (no new match; local-alloc's quantity order, `tools/qtys.sh`):
+  * **A block with exactly 3 local quantities is not sorted by priority.** `block_alloc` hand-sorts 2 and 3
+    qtys, but its `case 3:` calls `qty_compare (0, 1)` / `(1, 2)` on qty *numbers*, not on `qty_order[]`
+    slots, and falls into `case 2:`, which repeats `qty_compare (0, 1)` and undoes the first swap. So 3 qtys
+    come out `[0,1,2]`, `[2,1,0]` (q2 > q1 and q1 > q0) or `[0,2,1]` (only q2 > q1), whatever q0's priority.
+    2 qtys and 4+ qtys (qsort) are sorted properly. **This is the ROM's compiler too:** replacing either sort
+    with qsort changes 12 matched files (the suggestion sort changes none). `tools/qtys.sh file.c [BLOCK]`
+    prints each block's qtys in allocation order with refs, birth/death, priority and the hard reg.
+  * **Use: when a block's locals are a register rotation of the ROM's, count its qtys.** If the ROM's
+    assignment is impossible for the 3-qty order above, the original block had a different number of qtys
+    (a different source shape), and no reload or operand-order tweak will fix it.
+  * **Obj_Update**: block 10 (the `attr1 |= hflip << 12 | vflip << 13` statement) has 3 qtys: address
+    (pri 8333), value (15000), `vflip << 13` (10000). The ROM's registers (value r0, vflip r1, address r2,
+    which also pushes the global base to r3 in blocks 8-10) need the order value, vflip, address: impossible
+    for 3 qtys, right for qsort. Variants that make a 4th qty in that block fix every register:
+    `*&...attr1` through a `u16 *` (7 ops, but adds `base + 2`) and `(o->hflip << 12 & 0x1000)` (10 ops,
+    an extra `ands`). So the ROM's block 10 had a 4th quantity that leaves no code: look for a source form
+    whose extra pseudo is deleted later (a no-op copy given the same reg, a dead set removed after reload,
+    `-fdelete-dead-after-reload`). Block 8 must stay at 3 qtys (its order is the buggy `[0,1,2]`).
+    Not it: return type `int`/`u16` with `return ... |= ...` (the copy to r0 makes the value a suggested-reg
+    qty and allocates it first, but adds a zero-extend: 24); redundant masks (`& 0xFFFF`, `& 0xFFFFF`, ...)
+    fold away before local-alloc; u8/u32/int temps, casts, operand orders, a `struct OamEntry *` temp (3 qtys).
+  * **Glyph_Alloc**: `s16 fr` compared as `fr != t` (or `u16 fr; s16 f = fr; f != t`), storing `fr`, scores
+    16: it reproduces the ROM's `r7` = head / `r0` = copy split in the else arm, but adds a sign extension
+    and is always true, so it is a shape hint, not a fix. Pointer locals for `gUnk_02002000`/`gUnk_02002800`
+    are much worse (36-77). The ROM reloads `0x02002000` at both uses and does not tie the block-2 address to
+    it, which looks like a long-lived pseudo for that base that got no hard reg.

@@ -63,7 +63,9 @@ extern const char gUnk_083D335C[]; /* "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" */
  * mask is 0x01FF00FF (keeps only x and y; the old 0x3FFF3FFF was wrong), and `*(gOamBuffer + o->oam)`
  * loads o->oam before the table address as the ROM does. Left: the last three statements get the
  * table address in r2 and the ldrh temp in r3; the ROM has them the other way round. 2026-11-02: the ldrh
- * temps are reloads; see docs/region_a.md, "Register-only leftovers", for what was tried. */
+ * temps are reloads; see docs/region_a.md, "Register-only leftovers", for what was tried. 2026-11-11: the
+ * real cause is local-alloc's 3-qty sort in the last statement's block; the ROM's block had a 4th qty
+ * (docs/region_a.md, "Findings of 2026-11-11"). */
 void sub_080046DC(struct Obj *o)
 {
     struct OamEntry *e;
@@ -224,7 +226,8 @@ u32 sub_08000408(struct Sprite *s)
  * volatile-like (`ldrh r7; adds r0, r7`, then a real reload). Left: the ROM keeps both r7 (loaded value, stored to
  * list[tile + 1]) and r0 (copy, compared) live into the else arm; here CSE leaves one, so one register less is used
  * and g, gfx, key*2 land one register lower. 2026-11-10: the stored value in the else arm is r7, the loaded
- * head (== 0xFFFF), not t; `= fr` scores 25 alone, see docs/region_a.md. */
+ * head (== 0xFFFF), not t; `= fr` scores 25 alone, see docs/region_a.md. 2026-11-11: `s16 fr` with
+ * `fr != t` and `= fr` gives the r7/r0 split (16) but is always true: a hint only (docs/region_a.md). */
 u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
 {
     u16 g = glyph;

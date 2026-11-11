@@ -88,6 +88,8 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
 | `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
 | `python3 tools/vadiff.py ADDR file.c` | like variants.py, but prints the aligned-diff count per variant (each written to `build/vad_N.c`) |
+| `sh tools/dumps.sh file.c [dir]` | keep the RTL dumps (`DUMPS=gGlLc` default: greg, gcse, lreg, loop, combine) in `build/dumps` |
+| `LA_CC1=... sh tools/qtys.sh file.c [BLOCK]` | local-alloc's qtys per block in allocation order (needs a debug old_agbcc built with `tools/agbcc-ladebug.patch`, 10 s, see the script) |
 | `OPT=... sh tools/loopinfo.sh file.c` | loop.c's insn count per pass and which invariants it moves or calls "not desirable" (see the Oam_Init budget note in `docs/region_a.md`) |
 | `sh tools/exitcount.sh file.c sub_ADDR` | insns in a loop's exit code at expand time (jump.c copies it in front of the loop unless > 30, a label, a call or a loop note) |
 
@@ -95,7 +97,7 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-10):** 10.49% of live code is in C; `make compare` passes.
+**State (2026-11-11):** 10.49% of live code is in C; `make compare` passes.
 * GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
   The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
@@ -103,7 +105,9 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
   2026-11-10: two more compiler differences (`-fgcse-const-in-loops`, `-fold-base-reg-class`, see
   `docs/STRATEGY.md`) matched **Link_Main**. Method (loop budget arithmetic, inner-loop lifetimes):
-  `docs/region_a.md` "Findings of 2026-11-10". Subsystems, the Tournament link flow, globals, matching
+  `docs/region_a.md` "Findings of 2026-11-10". 2026-11-11 (no new match): local-alloc hand-sorts blocks with
+  exactly 3 qtys wrongly, and so did the ROM's compiler; that explains Obj_Update's register rotation
+  (`tools/qtys.sh`, "Findings of 2026-11-11"). Subsystems, the Tournament link flow, globals, matching
   notes: `docs/region_a.md`. Headers `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
 * Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
 * Compiler experiments: `docs/STRATEGY.md` "How to test a compiler idea". In practice: clone pret/agbcc,
@@ -120,10 +124,13 @@ Next, in order:
    `-fold-base-reg-class`, a stack-spill shuffle), MultiBootMain 100, Oam_SetPosSorted 108, Bg_DrawLevelScreen 249.
    Leads:
    * Read the dumps first (`-dG`, `-dL`, `-dg`, see `docs/region_a.md`): all three recent matches were found that way.
-   * Obj_Update has no PRE insertions, so its register swap has another cause. A 40-minute permuter run found nothing.
+   * Obj_Update: its last statement's block has 3 local qtys and the ROM's registers need 4+ (qsort order).
+     Find the source form that adds a qty without adding code (`docs/region_a.md`, 2026-11-11, lists what
+     was ruled out). For any register rotation inside a block, run `tools/qtys.sh` first.
    * Link_SerialIntr's PRE-shaped copies of `&gUnk_03000D38` still don't appear with `-fgcse-const-in-loops`
      (still 23). Check where they would come from now that PRE of constants in loops is known to be real.
-   * Glyph_Alloc: see its 2026-11-10 note (the else arm stores the loaded head, r7). A permuter run found nothing.
+   * Glyph_Alloc: see its notes (the else arm stores the loaded head, r7; `s16 fr` reproduces the r7/r0 split
+     but is wrong C). Also check why the ROM rematerialises `0x02002000` and doesn't tie the block-2 address.
    * Sprite_Draw: its `0x3FFF` arm recomputes `i*4 + 52 + s` like Sprite_Init's else; the first loop's `ldmia`
      resisted the obvious rewrites.
    * Re-try old "tried and failed" notes in `src/nonmatching/region_a.c`: most predate the new flags.

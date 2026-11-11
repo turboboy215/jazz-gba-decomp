@@ -1,0 +1,19 @@
+--- a/gcc/local-alloc.c	2026-11-11 11:46:08.054714699 -0800
++++ b/gcc/local-alloc.c	2026-11-11 11:46:08.056195458 -0800
+@@ -1405,6 +1405,16 @@
+ 	}
+     }
+ 
++  if (getenv ("LA_DEBUG"))
++    for (i = 0; i < next_qty; i++)
++      {
++        int r; q = qty_order[i];
++        fprintf (stderr, "b%d q%d regs", b, q);
++        for (r = qty_first_reg[q]; r >= 0; r = reg_next_in_qty[r]) fprintf (stderr, " %d", r);
++        fprintf (stderr, " refs %d birth %d death %d pri %d sugg %d/%d -> %d\n", qty_n_refs[q], qty_birth[q], qty_death[q],
++                 qty_death[q] > qty_birth[q] ? (int)(((double)(floor_log2 (qty_n_refs[q]) * qty_n_refs[q] * qty_size[q]) / (qty_death[q] - qty_birth[q])) * 10000) : -1,
++                 qty_phys_num_sugg[q], qty_phys_num_copy_sugg[q], qty_phys_reg[q]);
++      }
+   /* Now propagate the register assignments
+      to the pseudo regs belonging to the qtys.  */
+ 
