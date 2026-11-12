@@ -97,9 +97,9 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-11):** 10.49% of live code is in C; `make compare` passes.
-* GAX 3.01: 38/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`).
-  The other 5 are in `src/gax/nonmatching.c` (2026-10-31 scores with the current flags: GAXSync_render 7,
+**State (2026-11-12):** 10.58% of live code is in C; `make compare` passes.
+* GAX 3.01: 39/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`;
+  GAXSync_render matched 2026-11-12). The other 4 are in `src/gax/nonmatching.c` (2026-10-31 scores:
   GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
 * Region A (`080002E0-080053A0`): **every function is in C**. 181/190 byte-matching, 8 near misses with
   notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
@@ -134,7 +134,10 @@ Next, in order:
    * Sprite_Draw: its `0x3FFF` arm recomputes `i*4 + 52 + s` like Sprite_Init's else; the first loop's `ldmia`
      resisted the obvious rewrites.
    * Re-try old "tried and failed" notes in `src/nonmatching/region_a.c`: most predate the new flags.
-2. **Finish GAX matching** (scores above): start with GAXSync_render (7). GAX keeps its jump tables inline
+2. **Finish GAX matching** (scores above): next GAXFx_render (42; try the GAXSync_render tricks in
+   `docs/gax.md`: second player pointer, and reading a field into a typed temp to pin the order of a copy).
+   Score a GAX function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py`
+   on a work file holding `#include "gax.h"` plus the function. GAX keeps its jump tables inline
    (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
 3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the

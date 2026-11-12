@@ -59,7 +59,6 @@ SECTIONS
         build/asm/code_08317CD8.o(.text .rodata .data);
         build/src/gax/gax_083185D0.o(.text .rodata .data);
         build/src/gax/sync_0831928C.o(.text .rodata .data);
-        build/asm/code_083192C0.o(.text .rodata .data);
         build/src/gax/tracker_0831938C.o(.text .rodata .data);
         build/asm/code_08319C60.o(.text .rodata .data);
         build/src/gax/fx_08319F30.o(.text .rodata .data);

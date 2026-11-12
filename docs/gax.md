@@ -39,14 +39,13 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 | `gax_08317518.c` | 08317518-083175A8 | `GAX_code2ram` |
 | `gax_083177CC.c` | 083177CC-08317CD8 | `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
 | `gax_083185D0.c` | 083185D0-0831928C | `GAX2_jingle` ... `GAX_stop` (the whole public API, assert screen, `GAX_clear_mem`) |
-| `sync_0831928C.c` | 0831928C-083192C0 | `GAXSync_open` |
+| `sync_0831928C.c` | 0831928C-0831938C | `GAXSync_open`, `GAXSync_render` |
 | `tracker_0831938C.c` | 0831938C-08319C60 | `GAXOutput_render/open/stream`, `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
 | `fx_08319F30.c` | 08319F30-08319F88 | `GAXFx_open` |
-| `nonmatching.c` | (not linked) | the 5 functions below, as equivalent C (`make nonmatching` compiles it) |
+| `nonmatching.c` | (not linked) | the 4 functions below, as equivalent C (`make nonmatching` compiles it) |
 
-* **Still asm** (C written, not yet matching; register allocation / stack layout differences only;
-  `GAXSync_render` is 6 instructions off):
-  `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes), `GAXSync_render` (083192C0),
+* **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
+  `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes),
   `GAXTracker_generate_audio` (08319C60), `GAXFx_render` (08319F88). The decomp-permuter setup works
   (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`); see "Matching notes".
 * The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
@@ -160,7 +159,7 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, 
 | 083191AC | `GAX_set_fx_volume` | sure | C | `AgbMain` calls `(-1, vol)` |
 | 08319214 | `GAX_stop` | sure | C | |
 | 0831928C | `GAXSync_open` | sure | C | sync.o signature |
-| 083192C0 | `GAXSync_render` | sure | nm | step/pattern sequencer |
+| 083192C0 | `GAXSync_render` | sure | C | step/pattern sequencer |
 | 0831938C | `GAXOutput_render` | sure | C | channels before/after reverb, FX, reverb call |
 | 08319518 | `GAXOutput_open` | sure | C | |
 | 08319520 | `GAXOutput_stream` | sure | C | clear, render, then the ARM render routine |
@@ -207,16 +206,19 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, 
 * `GAX_ASSERT` has inline asm for HuffUnComp that saves r0/r1 into r7/r8 (and clobbers r7 without saving
   it, as in Crash XS); `p` is a `register ... asm("r0")` variable.
 * `irq_state` is `volatile` (GAX_irq re-reads it).
-* `GAXSync_render` gets within 6 instructions once most of the body goes through a *second pointer* to
-  the player (`new_var = player` after the first two loads): CSE then treats the early and late reads
-  of `speed_buf` as different, which is what the ROM shows. Worth trying on `GAXFx_render` too, where
+* `GAXSync_render` (matched 2026-11-12) needs most of the body to go through a *second pointer* to
+  the player (`p = player` after the first two loads): CSE then treats the early and late reads
+  of `speed_buf` as different, which is what the ROM shows. The last 6 instructions came from the
+  step block: one `speed_timer = t - 1` store (two stores put the u8 store's zero constant before the
+  `subs`), then `step` read into an `int` through `(s16)` *before* `speed = t` (a plain `p->step >= n`
+  or an `s16` temp lets the copy float above the `ldrsh`). Worth trying on `GAXFx_render` too, where
   the ROM re-reads `fxfreq` after the `unknown_delay` check.
 * `GAX2_fx`'s defaults need the reference decomp's temporaries; `GAX2_init_volboost` needs chained
   assignments with `asm_base - (start - label)` offsets.
 
 ## Plan for the GAX part of the decomp
 
-1. Match the last 5 functions (permuter, or more source-shape guessing; the `nonmatching.c` versions are
+1. Match the last 4 functions (permuter, or more source-shape guessing; the `nonmatching.c` versions are
    the starting point). Then merge the per-range files into one file per original object
    (`gax.c`, `sync.c`, `output.c`, `tracker.c`).
 2. Move the GAX rodata (strings, `GAX_table`, `GAX_freqtable`, `GAX_vibtable`, font) out of
