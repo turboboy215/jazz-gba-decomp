@@ -123,6 +123,11 @@ Next, in order:
 4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the
    MultiSio/Sio32 IRQ handlers (`030004EC`, `030005F8`).
+6. **Renaming pass (later; the user wants it after the steps above, 2026-11-15).** C still uses
+   `sub_ADDR` / `gUnk_ADDR`; `names.txt` holds the names (asm aliases only). Apply the `[sure]` names
+   first with `tools/rename.py` (it also records data names in `symbols.txt`), then `[likely]` ones the
+   user confirms; struct `unk` fields with the skill's `name-fields-*` workflows. Names don't change
+   bytes, so `make compare` must still pass.
 5. Data: level-record struct, tilemap format (now partly known: `struct CellMap` + 16x16 metatiles,
    see `docs/region_a.md`), palette CLUT mapping, what the 11 client data blocks hold.
 
