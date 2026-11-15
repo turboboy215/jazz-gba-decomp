@@ -10,8 +10,8 @@ What the game shows from power-on to the main menu, as observed by the user on h
 | 2 | Purple Jaleco logo | `Boot_LogoScreens` `08312864` (three resource-bank screens, each faded in and out with `Fade_Start`/`Fade_IsBusy`; keys can skip) |
 | 3 | Epic Games logo on black | `Boot_LogoScreens` (2nd screen) |
 | 4 | Animated Game Titan / Shin'en logo, "DEVELOPED BY" / "MUSIC + SOUND BY" (part of the graphics), blue gradient | `Boot_LogoScreens` (3rd screen; `Bg_UpdateScroll` calls = the animation/gradient?) |
-| 5 | Title: light blue background, BG image of Jazz, large title logo that "zooms out" after a few seconds | `Title_Init` `0830A638` (BG layers + 11 `Sprite`s for the logo), then the frame loop `Scene_WaitFrame` `0830A06C` |
-| 6 | Menu with 4 options (NEW GAME, CONTINUE, SETTINGS, TOURNAMENT); selecting plays a "swish" sound | `Menu_DrawFrame` `0830A3B4` (`GAX_fx` = the swish, "@Select" / "%Back" footer), `MainMenu` `0830AAA8` |
+| 5 | Title: light blue background, BG image of Jazz, large title logo that "zooms out" after a few seconds | `Title_Init` `0830A638` (BG layers + 11 `Sprite`s for the logo), then the intro animation `Title_IntroAnim` `0830A06C` (logo shown 60 frames, animated 60, BG2 scrolls 95) |
+| 6 | Menu with 4 options (NEW GAME, CONTINUE, SETTINGS, TOURNAMENT); selecting plays a "swish" sound | `Menu_SlideIn` `0830A3B4` (`GAX_fx(28)` = the swish; slides the title and items in over 31 frames with the "@Select" / "%Back" footer), `MainMenu` `0830AAA8` |
 | 7 | "New game" → "SELECT A SAVE FILE" with three files and a B-button icon with "BACK" | `MainMenu` (strings `083DB3A0` " NEW GAME ", `083DB428` " SELECT A SAVE FILE ", `083DB384` " %Back"; `%` is the B-button glyph, `@` the A-button glyph) |
 
 The four main-menu options are NEW GAME, CONTINUE, SETTINGS and TOURNAMENT (the strings `MainMenu`

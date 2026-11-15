@@ -313,8 +313,6 @@
 08312730 Boot_LegalScreen                # [sure] prints the Epic/Jaleco trademark text (083DF104-083DF2xx); first screen after AgbMain's GAX init (spacelevel)
 08312864 Boot_LogoScreens                # [sure] (order confirmed by the user) three ResBank screens with fade in/out (6 Fade_Start + Fade_IsBusy waits, ReadKeys skip): Jaleco, Epic Games, Game Titan/Shin'en
 0830A638 Title_Init                      # [likely] title screen: BG layers + 11 sprites (title logo), palette fade, reads the volume settings; plays spacelevel (docs/songs.md)
-0830A06C Scene_WaitFrame                 # [likely] per-frame update: sprites, Obj_UpdateAll, Bg_UpdateScroll, Link_Exchange in multiplayer, VBlankIntrWait
-0830A3B4 Menu_DrawFrame                  # [likely] plays the menu sound (GAX_fx), prints the menu title and the "@Select" / "%Back" footer (@/% = A/B button glyphs)
 0830AAA8 MainMenu                        # [sure] "MAIN MENU", NEW GAME / CONTINUE / SETTINGS / TOURNAMENT, "SELECT A SAVE FILE"; AgbMain's last call (never returns)
 08316F10 Fade_Start                      # [sure] REG_BLDCNT = mode | 0x3F (0x80 brighten, 0xC0 darken), step = 0x110000 / frames
 08316F50 Fade_IsBusy                     # [likely] nonzero while the fade counter at 0x03005A4C is below 0x110000
@@ -322,3 +320,11 @@
 083126F0 Boot_InitHardware                # [sure] WAITCNT=0x4014, InitInterrupts, IE=VBlank|GamePak, DISPSTAT VBlank IRQ, IME=1
 083167F8 Volume_ScaleMusic                # [likely] settings value * 14, max 256: AgbMain passes it to GAX_set_music_volume
 08316810 Volume_ScaleFx                   # [likely] settings value * 186 / 8, max 256: AgbMain passes it to GAX_set_fx_volume
+0830A020 Link_WaitPlayers                 # [likely] prints "Waiting for players..." while no partner is connected (link state +5 == -1); B clears it and returns 0
+0830A06C Title_IntroAnim                  # [likely] title intro: blend on, logo sprite shown 60 frames, animated 60 frames, then BG2 scrolls 95 frames; sets gTitleScrolled
+0830A140 Title_SkipIntro                  # [likely] jumps the title logo to its last frame and BG2 to its scrolled position (5 x -95)
+0830A1B0 Title_ScrollIn                   # [likely] 25 frames: title logo slides in from the left while BG2/BG1 scroll
+0830A274 Title_ScrollOut                  # [likely] 25 frames: title logo slides out while BG2/BG1 scroll back
+0830A324 Title_SkipOut                    # [likely] Title_ScrollOut without waiting for VBlank (5 steps)
+0830A3B4 Menu_SlideIn                     # [likely] plays fx 28 (unless sub_08309FF4), hides the cursor, slides the menu title/items in over 31 frames, with "@Select"/"%Back" when there is a previous menu
+0830A4AC Menu_SlideOut                    # [likely] plays fx 29, hides the menu sprites, slides the menu title/items out over 31 frames
