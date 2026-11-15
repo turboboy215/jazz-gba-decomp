@@ -385,6 +385,8 @@ b8 GAX2_init(GAXParams *params);
 void GAX_set_music_volume(s32 ch, u32 vol);
 void GAX_set_fx_volume(s32 fxch, u32 vol);
 u32 GAX_fx(u32 fxid);
+void GAX_pause_music(void);
+void GAX_resume_music(void);
 void GAXOutput_open(GAX_player *player);
 void GAXTracker_open(GAX_channel *ch);
 void GAXSync_open(GAX_player *player);

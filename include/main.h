@@ -32,7 +32,10 @@ void sub_08312730(void);
 void sub_08312864(void);
 void sub_0830A638(void);
 void sub_0830A06C(void);
-void sub_0830A3B4(void);
+void sub_0830A3B4(void);   /* Menu_SlideIn */
+void sub_0830A4AC(void);   /* Menu_SlideOut */
+void sub_0830A274(void);   /* Title_ScrollOut */
+void sub_0830A1B0(void);   /* Title_ScrollIn */
 void sub_0830AAA8(void);
 
 
@@ -126,5 +129,19 @@ void sub_0830BA54(void);
 void sub_0830BB74(void);
 void sub_0830BFAC(void);
 void sub_08001A8C(struct ResBank *b);   /* Bg_InitControl */
+
+/* the menu pages, built at run time, back to back from 02005C00 (0x1B4 bytes each); separate globals:
+   the ROM loads each address from the pool. Names from MainMenu's Back chain and the Menu_Open* functions. */
+extern struct Menu gMenuMain_02005C00, gMenuLevelSelect_02005DB4, gMenuDifficulty_02005F68, gMenuTournament_0200611C, gMenuMultiPak_020062D0, gMenuSinglePak_02006484, gMenuNewGame_02006638, gMenuContinue_020067EC, gMenuMultiPakSettings_020069A0, gMenuSinglePakSettings_02006B54, gMenuSettings_02006D08, gMenuLevelSettings_02006EBC, gMenu12_02007070, gMenu13_02007224;
+extern u8 gTournament_030059BC;      /* 1 while in the TOURNAMENT (link) menus */
+extern u8 gCheatUnlocked_030059BD;
+extern u16 gKeyHistory_03003A1C[12];  /* last 12 key presses, oldest first */
+extern const u16 gCheatCodes_083DB338[1][12];   /* one 12-key cheat code */
+void *memcpy(void *d, const void *s, u32 n);
+void sub_080034A4(void);   /* Link_Main */
+void sub_0830C5C0(void);
+void sub_0830CD64(void);
+void sub_0830D948(void);
+void sub_0830DBFC(void);
 
 #endif

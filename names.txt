@@ -328,3 +328,18 @@
 0830A324 Title_SkipOut                    # [likely] Title_ScrollOut without waiting for VBlank (5 steps)
 0830A3B4 Menu_SlideIn                     # [likely] plays fx 28 (unless sub_08309FF4), hides the cursor, slides the menu title/items in over 31 frames, with "@Select"/"%Back" when there is a previous menu
 0830A4AC Menu_SlideOut                    # [likely] plays fx 29, hides the menu sprites, slides the menu title/items out over 31 frames
+08309F28 Menu_CheckCheats                 # [likely] shifts each key press into a 12-entry history and compares it with the two 12-key codes at 083DB338; code 0 on the MAIN MENU adds an item once (gCheatUnlocked); plays fx 7
+08309FF4 IsTournament                     # [likely] returns gTournament (030059BC: set by Menu_OpenSinglePak, cleared by Menu_LeaveTournament)
+0830B634 Menu_OpenNewGame                 # [likely] NEW GAME page (gMenus[6]): shows the 3 save-file sprites and draws each slot (sub_0830C5C0)
+0830B704 Menu_OpenLevelSelect             # [likely] LEVEL SELECT page (gMenus[1]), back to MAIN MENU
+0830B740 Menu_OpenDifficulty              # [likely] SELECT DIFFICULTY page (gMenus[2], from NEW GAME): cursor on 1, shows difficulty sprite 1
+0830B7E0 Menu_OpenContinue                # [likely] CONTINUE page (gMenus[7]): draws each save slot (sub_0830CD64), shows the 3 save-file sprites
+0830B898 Menu_LeaveTournament             # [likely] clears gTournament, Link_Close, pauses the music, back to the TOURNAMENT page (gMenus[3])
+0830B8E4 Menu_Open12                      # [likely] opens gMenus[12] from the current page (sub_0830D948 fills it), shows sprite 020075E4
+0830B94C Menu_OpenSettings                # [likely] SETTINGS page (gMenus[10]), sub_0830DBFC fills it
+0830B9A4 Menu_OpenLevelSettings           # [likely] LEVEL SETTINGS page (gMenus[11]), back to LEVEL SELECT
+0830B9FC Menu_OpenMultiPakSettings        # [likely] MULTI-PAK SETTINGS page (gMenus[8]), back to MULTI-PAK
+0830BA54 Menu_OpenSinglePakSettings       # [likely] SINGLE-PAK SETTINGS page (gMenus[9]), back to SINGLE-PAK
+0830BAAC Menu_OpenSinglePak               # [likely] TOURNAMENT -> SINGLE-PAK (gMenus[5]): runs Link_Main first (B cancels), re-inits GAX without a song, pauses the music, sets gTournament
+0830BFAC Menu_OpenMain                    # [likely] back to the MAIN MENU (gMenus[0]): scrolls the title back in, resumes the music when leaving the TOURNAMENT page
+0830BFF8 Menu_Open13                      # [likely] opens gMenus[13], back to MULTI-PAK
