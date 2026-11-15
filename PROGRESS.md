@@ -48,3 +48,4 @@
 - 2026-11-11: no new match. local-alloc's 3-qty hand sort (compares qty numbers, real in the ROM's compiler) explains Obj_Update's register rotation; tools/qtys.sh + tools/agbcc-ladebug.patch, tools/dumps.sh. code decompiled to C: 23924 / 228100 bytes (10.49%)
 - 2026-11-12: GAXSync_render (083192C0). code decompiled to C: 24128 / 228100 bytes (10.58%); rate 36 bytes/hour; ETA 2027-07-05 03:13
 - 2026-11-15: region B started from AgbMain: boot, title, menu pages, cheat check, save code (41 functions; MainMenu, Save_Init, Save_Format near misses). code decompiled to C: 30580 / 228100 bytes (13.41%); rate 41 bytes/hour; ETA 2027-06-02 05:34
+- 2026-11-15: GAX code reorganised by original module (gax_1-3.c, sync.c, output.c, tracker_1-2.c; asm/gax/; public gax.h + gax_internal.h). No code change: make compare OK.

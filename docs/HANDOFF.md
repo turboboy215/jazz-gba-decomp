@@ -82,7 +82,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `python3 tools/progress.py` | % of live code in C |
 | `python3 tools/gax_songs.py` | song + level table dump → `docs/songs_generated.md` |
 | `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/check_func.py f.c ADDR` | check a GAX function |
-| `make nonmatching` | compile `src/gax/nonmatching.c` (not linked) |
+| `make nonmatching` | compile the near misses: `src/gax/nonmatching/*.c`, `src/nonmatching/region_*.c` (not linked) |
 | `python3 tools/xref_rom.py OTHER.gba` | find Jazz functions in another ROM (masked patterns) |
 | `RODATA=TABLE python3 tools/check_func.py f.c ADDR` | function with a `switch` whose jump table is at TABLE (also compares the table) |
 | `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
@@ -99,21 +99,18 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 **State (2026-11-15):** 13.41% of live code is in C; `make compare` passes. Region B started: the
 boot path, title, menu pages and save code are in C (`docs/region_b.md`). GAX: 39/43 (GAXSync_render
-matched 2026-11-12). Region A as before (`docs/region_a.md`).
+matched 2026-11-12), reorganised by original module 2026-11-15. Region A as before (`docs/region_a.md`).
 
 Next, in order:
 
-1. **GAX (user's choice for the next session, 2026-11-15).** First **reorganise the GAX audio code**: the
-   user asked for it. Today `src/gax/` is split by address (`gax_08317518.c`, `gax_083177CC.c`,
-   `gax_083185D0.c`, `sync_0831928C.c`, `tracker_0831938C.c`, `fx_08319F30.c`, plus `nonmatching.c`),
-   and the file names don't say what is inside (`tracker_0831938C.c` starts with GAXOutput). Propose a
-   layout to the user before moving anything (e.g. one file per original GAX module: gax, sync, output,
-   tracker, fx, following the official names in `docs/gax.md`); the asm near misses sit between C parts,
-   so some modules stay split (`_1`, `_2`) until they match. Then finish GAX matching: GAXFx_render (42;
-   try the GAXSync_render tricks in `docs/gax.md`), GAX2_calc_mem (45), GAXTracker_generate_audio (87),
-   GAX2_init (417). Score a GAX function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3
-   tools/adiff.py` on a work file holding `#include "gax.h"` plus the function. GAX keeps its jump tables
-   inline (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
+1. **GAX matching.** The code was reorganised on 2026-11-15 by original module (`docs/gax.md`, "Layout":
+   `src/gax/gax_1-3.c`, `sync.c`, `output.c`, `tracker_1-2.c`; near misses in `asm/gax/` and
+   `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Next: GAXFx_render
+   (42; try the GAXSync_render tricks in `docs/gax.md`), GAX2_calc_mem (45), GAXTracker_generate_audio (87),
+   GAX2_init (417). When one matches, merge its module's parts (`docs/gax.md`, "Plan"). Score a GAX
+   function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py` on a work file
+   holding `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline (jtbl.py is
+   skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
 2. **Region B**: continue from the menus. Next: the save-slot drawers `0830C5C0` (NEW GAME) and
    `0830CD64` (CONTINUE), the page fillers `0830D948`, `0830DBFC`, who builds the menu pages, `0830AE38`,
    `0830AF0C` (1012), `0830B318` (774), `0830BB74` (MULTI/SINGLE-PAK), `08312CA4`; then the claim queue.

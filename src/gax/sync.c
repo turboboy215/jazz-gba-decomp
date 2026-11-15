@@ -1,4 +1,8 @@
-#include "gax.h"
+/*
+ * GAX 3.01 sync.c, 0831928C-0831938C (built with agbcc -fprologue-bugfix; docs/gax.md).
+ * GAXSync_open, GAXSync_render: step/pattern sequencing.
+ */
+#include "gax_internal.h"
 
 void GAXSync_open(GAX_player *player)
 {

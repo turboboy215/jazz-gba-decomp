@@ -1,4 +1,8 @@
-#include "gax.h"
+/*
+ * GAX 3.01 gax.c (part 2 of 3), 083177CC-08317CD8 (built with agbcc -fprologue-bugfix; docs/gax.md).
+ * GAX2_new, GAX2_init_volboost/_song/_soundhw, GAX_open. Followed by GAX2_init (asm/gax/GAX2_init.s, C in nonmatching/gax.c).
+ */
+#include "gax_internal.h"
 
 void GAX2_new(GAXParams *params)
 {

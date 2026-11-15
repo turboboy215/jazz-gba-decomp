@@ -150,8 +150,8 @@ See `docs/rom_map.md`. In short:
 ## Inline asm exception
 
 GAX's DMA stop sequence `mov r3, r3; nop; nop; nop` comes from inline asm in Shin'en's own
-source and can't come from C. `include/gax.h` wraps it as `GAX_DMA_DELAY()`, and integration of such files
-uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. It is used in `src/gax/gax_083185D0.c` (GAX_pause 08318FF8, GAX_stop 08319214).
+source and can't come from C. `include/gax_internal.h` wraps it as `GAX_DMA_DELAY()`, and integration of such files
+uses `ALLOW_ASM=1 tools/integrate_one.sh ...`. It is used in `src/gax/gax_3.c` (GAX_pause 08318FF8, GAX_stop 08319214).
 
 ## Work order (recommended)
 
@@ -178,7 +178,7 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 - memcpy=0831A570, memset=0831A5D4, strcmp=0831A62C, strlen=0831A68C, strncpy=0831A6D8,
   `__divsi3`=0831A820, `__udivsi3`=0831AD00, `__umodsi3`=0831AD78, `_call_via_r0`=0831A7E4
   (there is no `__modsi3`: signed `%` should be checked when first seen).
-- GAX work RAM pointer: `gGAXRam_03000B0C` (`include/gax.h`).
+- GAX work RAM pointer: `gGAXRam_03000B0C` (`include/gax_internal.h`).
 - Interrupt table: `IntrTable` at `0300585C`, `SetIntrHandler` = `08001FC8`.
 - Region A functions are tiny accessors on a few struct types (sprite/animation objects).
   Prototypes take `int` for narrow arguments. Struct layouts and globals: `docs/region_a.md`

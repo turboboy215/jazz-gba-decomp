@@ -27,22 +27,35 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 
 ## Decompilation status (2026-10-20)
 
-**38 of 43 functions are in C and byte-matching**; the build is `jazz.gba: OK`.
+**39 of 43 functions are in C and byte-matching**; the build is `jazz.gba: OK`.
 
 * **Compiler: `agbcc -fprologue-bugfix`** for every GAX file (splits.txt flavour `bugfix`, which now also
   switches `CC1` to `agbcc`). `old_agbcc` gets several GAX functions wrong (e.g. `GAX2_new_fx`), so the
   library was built separately from the game code, the same way Crash XS's GAX was.
-* C files (`src/gax/`), one per contiguous matched range:
+* **Layout (2026-11-15): one file per original GAX object**, as in Shin'en's library and the
+  shinen-gax-decomp project (`gax.c`, `sync.c`, `output.c`, `tracker.c`, `output_asm.s`,
+  `tracker_asm.s`; the signature hits below confirm the same order in this ROM). A module that still has
+  an asm near miss inside it is split into numbered parts around it; when the near miss matches, its
+  parts merge (e.g. `gax_1.c` + `GAX2_calc_mem` + `gax_2.c`). Headers: `include/gax.h` is the public
+  API the game calls; `include/gax_internal.h` (registers, song/player/channel structs, `GAX_RAM`,
+  internal functions) is for `src/gax/` only.
 
 | File | Range | Contents |
 |---|---|---|
-| `gax_08317518.c` | 08317518-083175A8 | `GAX_code2ram` |
-| `gax_083177CC.c` | 083177CC-08317CD8 | `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
-| `gax_083185D0.c` | 083185D0-0831928C | `GAX2_jingle` ... `GAX_stop` (the whole public API, assert screen, `GAX_clear_mem`) |
-| `sync_0831928C.c` | 0831928C-0831938C | `GAXSync_open`, `GAXSync_render` |
-| `tracker_0831938C.c` | 0831938C-08319C60 | `GAXOutput_render/open/stream`, `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
-| `fx_08319F30.c` | 08319F30-08319F88 | `GAXFx_open` |
-| `nonmatching.c` | (not linked) | the 4 functions below, as equivalent C (`make nonmatching` compiles it) |
+| `src/gax/gax_1.c` | 08317518-083175A8 | gax.c: `GAX_code2ram` |
+| `asm/gax/GAX2_calc_mem.s` | 083175A8-083177CC | gax.c: `GAX2_calc_mem` (near miss) |
+| `src/gax/gax_2.c` | 083177CC-08317CD8 | gax.c: `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
+| `asm/gax/GAX2_init.s` | 08317CD8-083185D0 | gax.c: `GAX2_init` (near miss) |
+| `src/gax/gax_3.c` | 083185D0-0831928C | gax.c: `GAX2_jingle` ... `GAX_stop` (most of the public API, assert screen, `GAX_clear_mem`) |
+| `src/gax/sync.c` | 0831928C-0831938C | sync.c: `GAXSync_open`, `GAXSync_render` |
+| `src/gax/output.c` | 0831938C-08319584 | output.c: `GAXOutput_render`, `GAXOutput_open`, `GAXOutput_stream` |
+| `src/gax/tracker_1.c` | 08319584-08319C60 | tracker.c: `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
+| `asm/gax/GAXTracker_generate_audio.s` | 08319C60-08319F30 | tracker.c: `GAXTracker_generate_audio` (near miss) |
+| `src/gax/tracker_2.c` | 08319F30-08319F88 | tracker.c: `GAXFx_open` |
+| `asm/gax/GAXFx_render.s` | 08319F88-0831A100 | tracker.c: `GAXFx_render` (near miss) |
+| `asm/gax/output_asm.s` | 0831A100-0831A3E8 | ARM: `GAXOutput_render_asm`, `_lowpass_asm`, `_reverb_asm` (copied to RAM) |
+| `asm/gax/tracker_asm.s` | 0831A3E8-0831A528 | ARM: `GAX_umulhi`, `GAXTracker_asm`, `GAXTracker_pingpong_asm` (copied to RAM) |
+| `src/gax/nonmatching/gax.c`, `tracker.c` | (not linked) | the 4 near misses as equivalent C, by module (`make nonmatching` compiles them) |
 
 * **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
   `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes),
@@ -125,7 +138,7 @@ is not linked, though its assert string is.
 ## Functions (live copy)
 
 Confidence: **sure** means proven by an assert string or exact structure; **likely** means call-graph/order
-evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, ROM still from asm.
+evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatching/`, ROM still from asm (`asm/gax/`).
 
 | Address | Name | Conf. | Status | Evidence / notes |
 |---|---|---|---|---|
@@ -218,9 +231,10 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `nonmatching.c`, 
 
 ## Plan for the GAX part of the decomp
 
-1. Match the last 4 functions (permuter, or more source-shape guessing; the `nonmatching.c` versions are
-   the starting point). Then merge the per-range files into one file per original object
-   (`gax.c`, `sync.c`, `output.c`, `tracker.c`).
+1. Match the last 4 functions (permuter, or more source-shape guessing; the `src/gax/nonmatching/`
+   versions are the starting point). As each matches, merge its module's numbered parts into one file
+   (`gax_1.c` + `gax_2.c` + `gax_3.c` -> `gax.c`; `tracker_1.c` + `tracker_2.c` -> `tracker.c`): one
+   splits.txt line, `tools/split.py`, `make compare`.
 2. Move the GAX rodata (strings, `GAX_table`, `GAX_freqtable`, `GAX_vibtable`, font) out of
    `asm/rodata.s` into C. The names are already in `symbols.txt`.
 3. Port matched 3.01 functions back to the 3.05A decomp project as documentation of the older revision.

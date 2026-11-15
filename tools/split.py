@@ -394,6 +394,11 @@ def main(verify):
     for f in os.listdir("asm"):
         if f.endswith(".s") and "asm/" + f not in keep and not re.match(r"header_\w+\.s$", f):  # keep other versions' headers
             os.remove("asm/" + f)
+    for d in os.listdir("asm"):  # named asm files in subfolders (splits.txt "asm gax/NAME")
+        if os.path.isdir("asm/" + d):
+            for f in os.listdir("asm/" + d):
+                if f.endswith(".s") and "asm/%s/%s" % (d, f) not in keep:
+                    os.remove("asm/%s/%s" % (d, f))
     o = ["build/" + re.sub(r"\.[cs]$", ".o", f) for f, _ in objs if not f.startswith("rodata:")]
     # C files whose .rodata is placed separately (splits.txt kind "rodata"): code entry gets .text/.data only
     ro_files = {"build/" + re.sub(r"\.c$", ".o", f[7:]) for f, _ in objs if f.startswith("rodata:")}

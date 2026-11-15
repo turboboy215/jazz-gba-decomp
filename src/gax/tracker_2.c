@@ -1,4 +1,8 @@
-#include "gax.h"
+/*
+ * GAX 3.01 tracker.c (part 2 of 2), 08319F30-08319F88 (built with agbcc -fprologue-bugfix; docs/gax.md).
+ * GAXFx_open. Followed by GAXFx_render (asm/gax/GAXFx_render.s, C in nonmatching/tracker.c); the ARM resampler is asm/gax/tracker_asm.s.
+ */
+#include "gax_internal.h"
 
 void GAXFx_open(GAX_FX_channel *fxch)
 {

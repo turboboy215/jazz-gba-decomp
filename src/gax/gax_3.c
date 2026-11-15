@@ -1,4 +1,8 @@
-#include "gax.h"
+/*
+ * GAX 3.01 gax.c (part 3 of 3), 083185D0-0831928C (built with agbcc -fprologue-bugfix; docs/gax.md).
+ * GAX2_jingle .. GAX_stop: playback control, fx, volume, the assert screen.
+ */
+#include "gax_internal.h"
 
 b8 GAX2_jingle(const void *jingle)
 {

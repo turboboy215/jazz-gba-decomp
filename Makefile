@@ -61,6 +61,7 @@ clean:
 # GAX functions decompiled but not yet matching (not linked): make sure they still compile
 nonmatching:
 	@mkdir -p $(BUILD)/nonmatching
-	$(CPP) -nostdinc -I include -I tools/agbcc/include src/gax/nonmatching.c | tools/agbcc/bin/agbcc $(CFLAGS) -fprologue-bugfix -o $(BUILD)/nonmatching/gax.s
+	$(CPP) -nostdinc -I include -I tools/agbcc/include src/gax/nonmatching/gax.c | tools/agbcc/bin/agbcc $(CFLAGS) -fprologue-bugfix -o $(BUILD)/nonmatching/gax.s
+	$(CPP) -nostdinc -I include -I tools/agbcc/include src/gax/nonmatching/tracker.c | tools/agbcc/bin/agbcc $(CFLAGS) -fprologue-bugfix -o $(BUILD)/nonmatching/gax_tracker.s
 	$(CPP) -nostdinc -I include -I tools/agbcc/include src/nonmatching/region_a.c | tools/agbcc/bin/old_agbcc $(CFLAGS) $(GAMEFLAGS) -o $(BUILD)/nonmatching/region_a.s
 	$(CPP) -nostdinc -I include -I tools/agbcc/include src/nonmatching/region_b.c | tools/agbcc/bin/old_agbcc $(CFLAGS) $(GAMEFLAGS) -o $(BUILD)/nonmatching/region_b.s
