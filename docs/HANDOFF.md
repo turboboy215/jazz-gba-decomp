@@ -97,53 +97,32 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-12):** 10.58% of live code is in C; `make compare` passes.
-* GAX 3.01: 39/43 functions in byte-matching C (`src/gax/`, built with `agbcc -fprologue-bugfix`;
-  GAXSync_render matched 2026-11-12). The other 4 are in `src/gax/nonmatching.c` (2026-10-31 scores:
-  GAX2_calc_mem 45, GAXFx_render 42, GAXTracker_generate_audio 87, GAX2_init 417). Details: `docs/gax.md`.
-* Region A (`080002E0-080053A0`): **every function is in C**. 181/190 byte-matching, 8 near misses with
-  notes in `src/nonmatching/region_a.c`, `MultiBootWaitCycles` stays asm.
-  2026-11-10: two more compiler differences (`-fgcse-const-in-loops`, `-fold-base-reg-class`, see
-  `docs/STRATEGY.md`) matched **Link_Main**. Method (loop budget arithmetic, inner-loop lifetimes):
-  `docs/region_a.md` "Findings of 2026-11-10". 2026-11-11 (no new match): local-alloc hand-sorts blocks with
-  exactly 3 qtys wrongly, and so did the ROM's compiler; that explains Obj_Update's register rotation
-  (`tools/qtys.sh`, "Findings of 2026-11-11"). Subsystems, the Tournament link flow, globals, matching
-  notes: `docs/region_a.md`. Headers `include/{sprite,map,actor,resbank,system,link,multi_sio,oam,obj,text}.h`.
-* Rodata split is done: switch tables can live in C (splits.txt kind `rodata`).
-* Compiler experiments: `docs/STRATEGY.md` "How to test a compiler idea". In practice: clone pret/agbcc,
-  `git apply tools/agbcc-jazz.patch`, `make -C gcc old -j1` (under a minute), add a getenv switch, compile
-  every `src/*.c` (game code) with it, run `tools/jtbl.py` on each `.s`, and compare per function with
-  `build/src/*.s` (ignore the Makefile's trailing `.align 2, 0`). Any changed function rules the idea out.
-  Regenerate the patch with `git diff > tools/agbcc-jazz.patch` in that tree, then `sh tools/setup_toolchain.sh`
-  rebuilds (~10 min) and writes a new prebuilt archive to copy back.
+**State (2026-11-15):** 13.41% of live code is in C; `make compare` passes. Region B started: the
+boot path, title, menu pages and save code are in C (`docs/region_b.md`). GAX: 39/43 (GAXSync_render
+matched 2026-11-12). Region A as before (`docs/region_a.md`).
 
 Next, in order:
-1. **Region A near misses** (`src/nonmatching/region_a.c`, 8). Score them with
-   `python3 tools/nm_explode.py` then `Q=1 python3 tools/adiff.py ADDR work/ADDR_Name.c`. Aligned diff ops
-   (2026-11-10): Obj_Update 20, Link_SerialIntr 23, Glyph_Alloc 23, number 57, Sprite_Draw 80 (78 before
-   `-fold-base-reg-class`, a stack-spill shuffle), MultiBootMain 100, Oam_SetPosSorted 108, Bg_DrawLevelScreen 249.
-   Leads:
-   * Read the dumps first (`-dG`, `-dL`, `-dg`, see `docs/region_a.md`): all three recent matches were found that way.
-   * Obj_Update: its last statement's block has 3 local qtys and the ROM's registers need 4+ (qsort order).
-     Find the source form that adds a qty without adding code (`docs/region_a.md`, 2026-11-11, lists what
-     was ruled out). For any register rotation inside a block, run `tools/qtys.sh` first.
-   * Link_SerialIntr's PRE-shaped copies of `&gUnk_03000D38` still don't appear with `-fgcse-const-in-loops`
-     (still 23). Check where they would come from now that PRE of constants in loops is known to be real.
-   * Glyph_Alloc: see its notes (the else arm stores the loaded head, r7; `s16 fr` reproduces the r7/r0 split
-     but is wrong C). Also check why the ROM rematerialises `0x02002000` and doesn't tie the block-2 address.
-   * Sprite_Draw: its `0x3FFF` arm recomputes `i*4 + 52 + s` like Sprite_Init's else; the first loop's `ldmia`
-     resisted the obvious rewrites.
-   * Re-try old "tried and failed" notes in `src/nonmatching/region_a.c`: most predate the new flags.
-2. **Finish GAX matching** (scores above): next GAXFx_render (42; try the GAXSync_render tricks in
-   `docs/gax.md`: second player pointer, and reading a field into a typed temp to pin the order of a copy).
-   Score a GAX function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py`
-   on a work file holding `#include "gax.h"` plus the function. GAX keeps its jump tables inline
-   (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
-3. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
+
+1. **GAX (user's choice for the next session, 2026-11-15).** First **reorganise the GAX audio code**: the
+   user asked for it. Today `src/gax/` is split by address (`gax_08317518.c`, `gax_083177CC.c`,
+   `gax_083185D0.c`, `sync_0831928C.c`, `tracker_0831938C.c`, `fx_08319F30.c`, plus `nonmatching.c`),
+   and the file names don't say what is inside (`tracker_0831938C.c` starts with GAXOutput). Propose a
+   layout to the user before moving anything (e.g. one file per original GAX module: gax, sync, output,
+   tracker, fx, following the official names in `docs/gax.md`); the asm near misses sit between C parts,
+   so some modules stay split (`_1`, `_2`) until they match. Then finish GAX matching: GAXFx_render (42;
+   try the GAXSync_render tricks in `docs/gax.md`), GAX2_calc_mem (45), GAXTracker_generate_audio (87),
+   GAX2_init (417). Score a GAX function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3
+   tools/adiff.py` on a work file holding `#include "gax.h"` plus the function. GAX keeps its jump tables
+   inline (jtbl.py is skipped for the `bugfix` flavour and for `OPT=-fprologue-bugfix`).
+2. **Region B**: continue from the menus. Next: the save-slot drawers `0830C5C0` (NEW GAME) and
+   `0830CD64` (CONTINUE), the page fillers `0830D948`, `0830DBFC`, who builds the menu pages, `0830AE38`,
+   `0830AF0C` (1012), `0830B318` (774), `0830BB74` (MULTI/SINGLE-PAK), `08312CA4`; then the claim queue.
+   Near misses in `src/nonmatching/region_b.c`.
+3. Region A near misses (`docs/region_a.md`): Obj_Update needs a 4th local-alloc qty in its last block
+   (`tools/qtys.sh`); Glyph_Alloc's notes.
+4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
    lookup and BG streaming routines reached through the veneers at `0831AE38-0831AEA8`, and the
    MultiSio/Sio32 IRQ handlers (`030004EC`, `030005F8`).
-4. Region B game code via the claim queue, starting from `AgbMain`. The boot/title/menu functions
-   are mapped to what the user sees in `docs/boot_sequence.md` (`0830AAA8` is `MainMenu`).
 5. Data: level-record struct, tilemap format (now partly known: `struct CellMap` + 16x16 metatiles,
    see `docs/region_a.md`), palette CLUT mapping, what the 11 client data blocks hold.
 

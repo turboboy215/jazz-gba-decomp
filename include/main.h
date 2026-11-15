@@ -144,4 +144,37 @@ void sub_0830CD64(void);
 void sub_0830D948(void);
 void sub_0830DBFC(void);
 
+/* ---- save data: a 0x200-byte image of the 4 Kbit EEPROM (64 blocks of 8 bytes) ---- */
+struct SaveSlot {               /* 0x20 bytes, 4 of them after the 8-byte "turtles" magic */
+    u8 brightness;              /* +0x00 gBrightness_02007567 */
+    u8 fxVolume;                /* +0x01 */
+    u8 musicVolume;             /* +0x02 */
+    u8 unk3;                    /* +0x03 02007561 */
+    u8 unk4;                    /* +0x04 02007566 */
+    u8 pad5;
+    u16 unk6;                   /* +0x06 030058F0 */
+    u8 unk8[6];                 /* +0x08 030034E4 */
+    u8 unkE;                    /* +0x0E 030028EC */
+    u8 unkF;                    /* +0x0F 0300250C + 0x5C */
+    u8 unk10;                   /* +0x10 Save_StoreSlot's 2nd argument */
+    u8 unk11;                   /* +0x11 030034DC */
+    u16 unk12[5];               /* +0x12 sub_082FB834(0, 1..5) */
+    u8 pad1C[4];
+};
+extern struct SaveSlot gSaveSlots_030044E4[4];
+extern u8 gUnk_02007561, gUnk_02007566;
+extern u16 gUnk_030058F0;
+extern u8 gUnk_0300250C[];
+extern u8 gUnk_030034E4[6];
+extern u8 gUnk_030028EC;
+extern u16 gUnk_030034DC;
+extern u8 gUnk_03005874[];
+extern u8 gSaveExtra_030046CC[16];
+u16 sub_082FB834(int a, int b);
+void sub_0831715C(int type);           /* EEPROM: select the type (4 = 4 Kbit?) */
+void sub_083171C4(int a, void *b);     /* EEPROM: timer/DMA setup? */
+u16 sub_083173DC(u16 block, u8 *src);  /* EEPROM: write one 8-byte block */
+u16 sub_08317324(u16 block, u8 *dst);  /* EEPROM: read one 8-byte block */
+void sub_08315010(u32 n);              /* busy-wait n iterations */
+
 #endif

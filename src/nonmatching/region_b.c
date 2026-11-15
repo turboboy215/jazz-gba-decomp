@@ -125,3 +125,23 @@ void sub_0830AAA8(void)
                          gCurMenu_0200756C->items[i].label);
     }
 }
+
+/* ---- Save_Format 0831522C ---- 4 diff ops: the same first-loop problem as Save_Init (whose body is
+ * this function's, minus the final writes; inlining a static copy into Save_Init is worse: 13-24). */
+void sub_0831522C(void)
+{
+    u32 i, j, k;
+    u8 *dd;
+    const char *src;
+    char c;
+
+    for (i = 0; i <= 0x1FF; i++)
+        gSaveBuf_030044DC[i] = 0;
+    for (j = 0, dd = gSaveBuf_030044DC, src = gSaveMagic_083DF9BC; j <= 7; j++) {
+        c = *src++;
+        *dd++ = c;
+    }
+    for (k = 0; k <= 3; k++)
+        sub_0831502C(k);
+    sub_083151B4();
+}

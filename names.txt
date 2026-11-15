@@ -343,3 +343,12 @@
 0830BAAC Menu_OpenSinglePak               # [likely] TOURNAMENT -> SINGLE-PAK (gMenus[5]): runs Link_Main first (B cancels), re-inits GAX without a song, pauses the music, sets gTournament
 0830BFAC Menu_OpenMain                    # [likely] back to the MAIN MENU (gMenus[0]): scrolls the title back in, resumes the music when leaving the TOURNAMENT page
 0830BFF8 Menu_Open13                      # [likely] opens gMenus[13], back to MULTI-PAK
+08315010 Save_Delay                       # [likely] busy-waits n loop iterations (1000 between EEPROM blocks)
+08315020 Save_GetSlot                     # [likely] &gSaveSlots[i] (0x20-byte slots after the "turtles" magic)
+0831502C Save_ResetSlot                   # [likely] default settings for a save slot: brightness 0, fx/music volume 10, ...
+0831506C Save_StoreSlot                   # [likely] copies the current settings and progress into save slot i
+08315128 Save_CheckMagic                  # [likely] 1 if the save buffer starts with the 8 bytes of "turtles"
+083151B4 Save_Write                       # [likely] writes the 0x200-byte save buffer to EEPROM, 64 blocks of 8 bytes
+083151F0 Save_Read                        # [likely] reads the 0x200-byte save buffer from EEPROM, 64 blocks of 8 bytes
+08315278 Save_WriteExtra                  # [likely] writes the 16 bytes at 030046CC to EEPROM blocks 62-63
+083152BC Save_GetExtra                    # [likely] returns the 16-byte buffer Save_WriteExtra writes (030046CC)
