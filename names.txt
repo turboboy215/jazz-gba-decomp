@@ -319,3 +319,6 @@
 08316F10 Fade_Start                      # [sure] REG_BLDCNT = mode | 0x3F (0x80 brighten, 0xC0 darken), step = 0x110000 / frames
 08316F50 Fade_IsBusy                     # [likely] nonzero while the fade counter at 0x03005A4C is below 0x110000
 08004164 Sio32MultiLoadMain               # [sure] SA2 sio32_multi_load.c Sio32MultiLoadMain (state machine, 0x4000-byte block)
+083126F0 Boot_InitHardware                # [sure] WAITCNT=0x4014, InitInterrupts, IE=VBlank|GamePak, DISPSTAT VBlank IRQ, IME=1
+083167F8 Volume_ScaleMusic                # [likely] settings value * 14, max 256: AgbMain passes it to GAX_set_music_volume
+08316810 Volume_ScaleFx                   # [likely] settings value * 186 / 8, max 256: AgbMain passes it to GAX_set_fx_volume

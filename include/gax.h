@@ -378,6 +378,12 @@ extern struct GAX_RAM *gGAXRam_03000B0C;
 #define GAXFx_render         sub_08319F88
 
 void GAX_ASSERT(const char *fn, const char *msg);
+
+/* public API used by the game (region B) */
+void GAX2_new(GAXParams *params);
+b8 GAX2_init(GAXParams *params);
+void GAX_set_music_volume(s32 ch, u32 vol);
+void GAX_set_fx_volume(s32 fxch, u32 vol);
 void GAXOutput_open(GAX_player *player);
 void GAXTracker_open(GAX_channel *ch);
 void GAXSync_open(GAX_player *player);
