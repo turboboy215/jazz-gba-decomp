@@ -49,6 +49,9 @@ void sub_080012F4(struct ResBank *b, u8 slot, u8 i);
 void *sub_08001A30(struct ResBank *b, int i);
 u8 *sub_08001A40(struct ResBank *b, int i);
 void sub_08001A48(struct ResBank *b, int i, u8 *src);
+void sub_08001314(struct ResBank *b, u8 slot, void *tiles);       /* ResBank_SetTileset */
+void sub_08001404(struct ResBank *b, int layer, int dx, int dy);  /* Bg_UpdateScroll */
+void sub_08001720(struct ResBank *b, int layer, int x, int y);    /* Bg_DrawLevelScreen */
 void sub_08001A6C(void);
 u32 *sub_08001B40(struct ResBank *b, int i);
 void *sub_08001B50(struct ResBank *b, int i, int j);

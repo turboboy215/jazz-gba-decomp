@@ -12,7 +12,7 @@ struct Font {
     u8 type;                 /* +1 0: BG tiles with palette bits, else via IWRAM 0831AE48 */
     u16 unk2;                /* +2 */
     const void *gfx;         /* +4 */
-    u32 unk8;
+    const u16 *pal;          /* +8 16-colour palette (Boot_LegalScreen copies it to BG palette 15) */
     u32 (*map)(u8 c);        /* +0xC character -> glyph index (08001C88 / 08001D0C) */
 };
 

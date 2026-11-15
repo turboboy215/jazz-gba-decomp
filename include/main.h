@@ -35,4 +35,19 @@ void sub_0830A06C(void);
 void sub_0830A3B4(void);
 void sub_0830AAA8(void);
 
+
+/* Boot_LegalScreen text (rodata; '|' is the font's (R) glyph, '*' the (C) glyph?) */
+extern struct Font gFont_083D2048;
+extern const char gStr_083DF104[], gStr_083DF124[], gStr_083DF140[], gStr_083DF160[], gStr_083DF180[],
+    gStr_083DF198[], gStr_083DF1B4[], gStr_083DF1D4[], gStr_083DF1F0[], gStr_083DF210[], gStr_083DF228[],
+    gStr_083DF244[], gStr_083DF260[];
+
+/* Boot_LogoScreens: the BG resource bank (same object as map.h's gUnk_0300398C, a struct Map view) */
+struct ResBank;
+struct ResHeader;
+extern struct ResBank gBgBank_0300398C;
+struct SlotCfg { u8 a, b, c, d; };   /* the 4 bytes ResBank_SetSlot copies into slots[i] */
+extern struct ResHeader gRes_08043230, gRes_080448A0, gRes_08043D20;   /* Jaleco, Epic, Game Titan/Shin'en */
+extern u8 gTiles_0821A090[], gTiles_0821F2E0[], gTiles_082259C0[], gTiles_08228DD0[], gTiles_08229260[];
+
 #endif
