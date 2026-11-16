@@ -60,7 +60,7 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
   (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`; since 2026-11-16
   `tools/permuter_compile.sh` leaves out the game-code flags for `-fprologue-bugfix`, as check_func does);
   see "Matching notes". `GAX2_calc_mem` matched 2026-11-16. Scores (aligned-diff ops, 2026-11-16):
-  `GAXTracker_generate_audio` 86 (was 87, frame layout now right), `GAX2_init` 417.
+  `GAXTracker_generate_audio` 86 (was 87, frame layout now right), `GAX2_init` 355 (was 417; see its comment in `src/gax/nonmatching/gax.c`).
 * The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
 
 ## Version history (from the official manual)

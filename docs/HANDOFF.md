@@ -98,26 +98,22 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-16):** 13.85% of live code is in C; `make compare` passes. No new match this session:
-GAX near misses improved (GAX2_calc_mem 45 → 21 aligned-diff ops, GAXTracker_generate_audio 87 → 86 with
-the right frame layout); the cause of most GAX register differences is now known (GCSE's PRE hoisting into
-loop preheaders, `docs/gax.md` "Matching notes"). Region B and region A as on 2026-11-15
-(`docs/region_b.md`, `docs/region_a.md`).
+**State (2026-11-16, session 2):** 14.06% of live code is in C; `make compare` passes. **GAX2_calc_mem
+matched** (block-local table pointer + counter per rate search, byte-offset lookup; `docs/gax.md`), and
+`gax_1.c` now spans 08317518-08317CD8 (old `gax_3.c` renamed `gax_2.c`). GAX2_init 417 -> 355 aligned-diff
+ops, including a semantic fix (no fx_data -> fx_mixing_rate = mixing_rate). Region B and region A as on
+2026-11-15 (`docs/region_b.md`, `docs/region_a.md`).
 
 Next, in order:
 
-1. **GAX matching.** Layout by original module (`docs/gax.md`, "Layout": `src/gax/gax_1-3.c`, `sync.c`,
-   `output.c`, `tracker_1-2.c`; near misses in `asm/gax/` and `src/gax/nonmatching/`; public
-   `include/gax.h`, internals `include/gax_internal.h`). **Read the two new PRE notes in `docs/gax.md`
-   first** ("GCSE's PRE hoists anything anticipatable into a loop preheader", "several registers holding
-   one constant"): check `-dG` dumps for `PRE/HOIST` lines before guessing at source shapes.
-   GAX2_calc_mem (21): only the `GAX_table` copies in the two rate searches are left (which of r5/r9/r3
-   each use gets); the empty `asm` in it is a stand-in for an unknown kill of `size` (find the natural
-   construct if one exists; it doesn't block a match, GAX files already build with `ALLOW_ASM=1`).
-   GAXTracker_generate_audio (86): spill choice (`is_fx * 4` to sp+40) and two cross-jumped stores, notes
-   in `docs/gax.md`. GAX2_init (417). When one matches, merge its module's parts (`docs/gax.md`, "Plan").
-   Score with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py ADDR work.c` on a
-   file holding `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline.
+1. **GAX matching.** Layout by original module (`docs/gax.md`, "Layout"; near misses in `asm/gax/` and
+   `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Read the PRE notes
+   and the GAX2_calc_mem note in `docs/gax.md` first. GAX2_init (355): its comment in
+   `src/gax/nonmatching/gax.c` lists what's open; work top-down, the first ~95 instructions now match.
+   GAXTracker_generate_audio (86): spill choice (`is_fx * 4` to sp+40) and two cross-jumped stores.
+   When one matches, merge its module's parts. Score with
+   `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py ADDR work.c` on a file holding
+   `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline.
 2. **Region B**: continue from the menus. Next: the save-slot drawers `0830C5C0` (NEW GAME) and
    `0830CD64` (CONTINUE), the page fillers `0830D948`, `0830DBFC`, who builds the menu pages, `0830AE38`,
    `0830AF0C` (1012), `0830B318` (774), `0830BB74` (MULTI/SINGLE-PAK), `08312CA4`; then the claim queue.

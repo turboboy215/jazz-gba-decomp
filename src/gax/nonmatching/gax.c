@@ -10,6 +10,13 @@
 #include "gax_internal.h"
 
 /* ---- GAX2_init (08317CD8) ---- */
+/*
+ * 355 aligned-diff ops (was 417, 2026-11-16). Changes: the fx_mixing_rate default is an if/else into
+ * a local; `song` is loaded once and used for the default-song compare; the rate searches use their own
+ * index `n`; and a real semantic fix: with no fx_data the ROM sets fx_mixing_rate = mixing_rate.
+ * Open: the explicit zero-extend (lsls/lsrs) of fx_mixing_rate before the != compare, GAX_ram address
+ * register, scratch_mem/size arithmetic order, and the rest of the body (size is 44 bytes short).
+ */
 
 extern const u8 GAX_default_song[];
 extern const u16 GAX_table[13 * 2];
@@ -40,6 +47,7 @@ b8 GAX2_init(GAXParams *params)
     u32 zero;
     u32 rev;
     u32 size;
+    u32 n, rate;
 
     GAX_ram = (struct GAX_RAM *)params->workmem;
     if (params->song_data == NULL)
@@ -47,38 +55,43 @@ b8 GAX2_init(GAXParams *params)
     fx_data = params->fx_data;
     if (fx_data == NULL)
         params->fx_channels = 0;
+    song = params->song_data;
     if (params->mixing_rate == 0xFFFF)
-        params->mixing_rate = ((const GAXSongData *)params->song_data)->mixing_rate;
+        params->mixing_rate = song->mixing_rate;
     if (params->fx_mixing_rate == 0xFFFF && fx_data != NULL) {
-        u16 r = ((const GAXSongData *)params->song_data)->fx_mixing_rate;
-        if (r == 0)
+        u16 r;
+        if (song->fx_mixing_rate)
+            r = song->fx_mixing_rate;
+        else
             r = params->mixing_rate;
         params->fx_mixing_rate = r;
     }
     if (params->fx_channels == 0xFFFF)
-        params->fx_channels = ((const GAXSongData *)params->song_data)->fx_channels;
+        params->fx_channels = song->fx_channels;
     if (params->volume == 0xFFFF)
         params->volume = 255;
 
     for (j = 0; j < 13; j++)
         if (GAX_table[j * 2] >= params->mixing_rate) {
-            i = j;
+            n = j;
             goto found1;
         }
-    i = 12;
+    n = 12;
 found1:
-    params->mixing_rate = GAX_table[i * 2];
+    params->mixing_rate = GAX_table[n * 2];
     if (fx_data != NULL) {
-        for (j = 0; j < 13; j++)
-            if (GAX_table[j * 2] >= params->fx_mixing_rate) {
-                i = j;
-                goto found2;
-            }
-        i = 12;
-    found2:
-        params->fx_mixing_rate = GAX_table[i * 2];
+    for (j = 0; j < 13; j++)
+        if (GAX_table[j * 2] >= params->fx_mixing_rate) {
+            n = j;
+            goto found2;
+        }
+    n = 12;
+found2:
+        params->fx_mixing_rate = GAX_table[n * 2];
+    } else {
+        params->fx_mixing_rate = params->mixing_rate;
     }
-    if ((const u8 *)params->song_data == GAX_default_song)
+    if ((const u8 *)song == GAX_default_song)
         params->mixing_rate = params->fx_mixing_rate;
     if (params->fx_mixing_rate != params->mixing_rate && (params->flags & (GAX_HALFRATE_FX | GAX_FX_REVERB))) {
         if (params->debug)
