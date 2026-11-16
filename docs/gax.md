@@ -59,7 +59,10 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 * **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
   `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes),
   `GAXTracker_generate_audio` (08319C60). The decomp-permuter setup works
-  (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`); see "Matching notes".
+  (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`; since 2026-11-16
+  `tools/permuter_compile.sh` leaves out the game-code flags for `-fprologue-bugfix`, as check_func does);
+  see "Matching notes". Scores (aligned-diff ops, 2026-11-16): `GAX2_calc_mem` 21 (was 45),
+  `GAXTracker_generate_audio` 86 (was 87, frame layout now right), `GAX2_init` 417.
 * The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
 
 ## Version history (from the official manual)
@@ -234,6 +237,25 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatch
   swapped registers, compare their `refs`/`live_length` in the `-dg` dump (`tools/prio.sh`), and
   try a `do { } while (0)` around the code that should weigh more.** A `const` pointer for `ch`
   instead of the `#define ch (&fx->fxch)` macro breaks the allocation.
+* **GCSE's PRE hoists anything anticipatable into a loop preheader** (2026-11-16). This agbcc's LCM is
+  node-based (`lcm.c`, Muchnick) and computes delayedness as a least fixpoint, so delay never passes a
+  loop header: an expression that every path computes later (a `params->` load, `size + 0x8C`) gets
+  inserted at the end of the block in front of the *first* loop on the way, with a copy into a new
+  "reaching" pseudo. `-dG` shows it as `PRE/HOIST: end of bb N ... copying expression E`. The ROM has the
+  `params->fx_mixing_rate/fx_channels/fx_data/flags` loads hoisted that way in `GAX2_calc_mem`, but not
+  `size + 0x8C`. To keep an expression in place, one of its operands must be set somewhere between the
+  loop and the use (an empty `asm("" : "+r"(x))` works and emits nothing). Same mechanism explains the
+  loads hoisted above `GAXTracker_generate_audio`'s shift loop.
+* PRE also explains *several registers holding one constant*: the first computing insn keeps its own
+  pseudo and gets a copy into the reaching reg after it; later occurrences become copies of the reaching
+  reg. In `GAX2_calc_mem` the ROM has `GAX_table` in r5 (found1), r9 (reaching) and r3 (loop 2), which
+  needs `table = GAX_table` before the first search and a mix of `table` / `GAX_table` uses
+  (`src/gax/nonmatching/gax.c`).
+* `GAXTracker_generate_audio`: `freq = (s32)GAX_freqtable[pitch] >> shift` (asrs); `step` lives in an
+  expand-time stack slot at sp+0 *below* `args` (sp+4), which a `volatile s32 step` declared first
+  reproduces (frame 44 bytes like the ROM); `args.src` is written and read through `args`, the other
+  fields through `a`. Left: which values spill (the ROM spills `is_fx * 4` to sp+40 and keeps `is_fx` in
+  sl) and the two pingpong-branch stores of `wave_position` that our build cross-jumps into one.
 * `GAX2_fx`'s defaults need the reference decomp's temporaries; `GAX2_init_volboost` needs chained
   assignments with `asm_base - (start - label)` offsets.
 

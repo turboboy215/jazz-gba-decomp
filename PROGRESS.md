@@ -50,3 +50,4 @@
 - 2026-11-15: region B started from AgbMain: boot, title, menu pages, cheat check, save code (41 functions; MainMenu, Save_Init, Save_Format near misses). code decompiled to C: 30580 / 228100 bytes (13.41%); rate 41 bytes/hour; ETA 2027-06-02 05:34
 - 2026-11-15: GAX code reorganised by original module (gax_1-3.c, sync.c, output.c, tracker_1-2.c; asm/gax/; public gax.h + gax_internal.h). No code change: make compare OK.
 - 2026-11-15: GAXFx_render (08319F88). code decompiled to C: 30944 / 223460 bytes (13.85%); rate 42 bytes/hour; ETA 2027-05-27 21:48
+- 2026-11-16: no new match. GAX2_calc_mem 45 -> 21 aligned-diff ops (GCSE PRE hoisting into loop preheaders explained, docs/gax.md), GAXTracker_generate_audio 87 -> 86 (frame layout); permuter_compile.sh drops game flags for GAX. code decompiled to C: 30944 / 223460 bytes (13.85%)

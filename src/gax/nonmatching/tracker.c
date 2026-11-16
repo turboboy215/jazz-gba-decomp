@@ -29,13 +29,13 @@ typedef struct MixArgs {
 } MixArgs;
 b8 GAXTracker_generate_audio(GAX_channel *ch, GAX_player *player, GAXSongData *song, b8 is_fx)
 {
+    volatile s32 step;  /* the ROM keeps step in a stack slot at sp+0, below args (sp+4) */
     GAX_instrument *ins = ch->instrument;
     const GAX_wave *wave;
     s32 pitch;
     s32 freq;
     u32 vol;
     u32 vb;
-    s32 step;
     b8 looped;
     s32 end;
     MixArgs args;
@@ -68,7 +68,7 @@ b8 GAXTracker_generate_audio(GAX_channel *ch, GAX_player *player, GAXSongData *s
             pitch += 384;
             shift++;
         }
-        freq = GAX_freqtable[pitch] >> shift;
+        freq = (s32)GAX_freqtable[pitch] >> shift;  /* asrs in the ROM */
     }
     volenv = ch->volenv_volume;
     wavevol = ch->wave_volume;
@@ -101,10 +101,10 @@ b8 GAXTracker_generate_audio(GAX_channel *ch, GAX_player *player, GAXSongData *s
         end = (ch->modulate_position + ch->instrument->wave_params[ch->waveslot_idx].mod_size) << 11;
         a->loop_len = ch->instrument->wave_params[ch->waveslot_idx].mod_size << 11;
     }
-    a->src = wave->data + (end >> 11);
+    args.src = wave->data + (end >> 11);  /* str/ldr [sp, #4], not through a */
     a->pos = ch->wave_position - end;
     if (!looped && !ch->enable_modulation)
-        a->loop_len = (a->src - ((const GAX_wave *)song->waveform_data)->data) << 11;
+        a->loop_len = (args.src - ((const GAX_wave *)song->waveform_data)->data) << 11;
     if (!ch->enable_modulation && looped && ch->instrument->wave_params[ch->waveslot_idx].pingpong) {
         a->step *= ch->wave_direction;
         ((void (*)(MixArgs *))GAX_ram->gax_pingpong_asm)(a);

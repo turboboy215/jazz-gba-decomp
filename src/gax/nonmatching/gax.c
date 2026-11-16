@@ -19,6 +19,18 @@ extern u8 GAXOutput_reverb_asm_0831A2EC[], GAXOutput_reverb_asm_end_0831A3E8[];
 extern u8 GAXTracker_asm_0831A3FC[], GAXTracker_asm_end_0831A470[];
 extern u8 GAXTracker_pingpong_asm_0831A470[], GAXTracker_pingpong_asm_end_0831A528[];
 
+/*
+ * 21 aligned-diff ops left (was 45), all register choices around the GAX_table pointer in the two
+ * rate searches; size and order now match. What changed (2026-11-16):
+ *  - `table = GAX_table` before the first search, the first loop and found1 read GAX_table, found2
+ *    reads `table`: GCSE's PRE then gives the ROM's three copies of the table address (r5, r9, r3).
+ *  - the FX default is a `?:` (load before the `fxrate = rate` copy).
+ *  - max() is `fxrate < rate ? rate : fxrate`.
+ *  - `size + 0x8C` goes through its own temporary, and something must make `size` non-transparent
+ *    between the loops and that add: without it GCSE's LCM hoists `size + 0x8C` into the first loop's
+ *    preheader (node-based LCM can't delay past a loop). The empty asm below is a stand-in for
+ *    whatever the original had there; it emits nothing.
+ */
 void GAX2_calc_mem(GAXParams *params)
 {
     u32 size = 0;
@@ -30,7 +42,6 @@ void GAX2_calc_mem(GAXParams *params)
     u32 i, j;
     u32 differ = 0;
     const u16 *table;
-
     if (params->song_data == NULL)
         params->song_data = GAX_default_song;
     if (params->mixing_rate == 0xFFFF) {
@@ -40,6 +51,7 @@ void GAX2_calc_mem(GAXParams *params)
         rate = params->mixing_rate;
         song = params->song_data;
     }
+    table = GAX_table;
     for (j = 0; j < 13; j++) {
         if (GAX_table[j * 2] >= rate) {
             i = j;
@@ -50,9 +62,7 @@ void GAX2_calc_mem(GAXParams *params)
 found1:
     rate = GAX_table[i * 2];
     if (params->fx_mixing_rate == 0xFFFF) {
-        fxrate = rate;
-        if (song->fx_mixing_rate)
-            fxrate = song->fx_mixing_rate;
+        fxrate = song->fx_mixing_rate ? song->fx_mixing_rate : rate;
     } else {
         fxrate = params->fx_mixing_rate;
     }
@@ -64,7 +74,7 @@ found1:
     }
     i = 12;
 found2:
-    fxrate = GAX_table[i * 2];
+    fxrate = table[i * 2];
     if ((const u8 *)song == GAX_default_song)
         rate = fxrate;
     if (fxrate != rate)
@@ -73,19 +83,19 @@ found2:
         fxch = song->fx_channels;
     else
         fxch = params->fx_channels;
+    asm("" : "+r"(size));
     if (params->fx_data == NULL) {
         fxch = 0;
         params->fx_channels = 0;
     }
-    size += 0x8C;
-    size += GAX_ALIGN(fxch, 4);
+    { u32 t = size + 0x8C; size = t + GAX_ALIGN(fxch, 4); }
     size += fxch * sizeof(GAX_FX_channel);
     if (params->flags & GAX_SPEECH)
         size += 0x7A4;
     size += 8;
     if (differ)
         size += 8;
-    size += ((((fxrate > rate) ? fxrate : rate) * 1000 / 59727) + 4) * 2;
+    size += ((((fxrate < rate) ? rate : fxrate) * 1000 / 59727) + 4) * 2;
     size += (rate * 1000 / 59727) * 2;
     if (differ)
         size += (fxrate * 1000 / 59727) * 2;
