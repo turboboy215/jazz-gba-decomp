@@ -1,6 +1,7 @@
 	.include "asm/macros.inc"
 	.syntax unified
 	.text
+	.incbin "baserom.gba", 0x31a0f4, 0xc
 
 @ GAXOutput_render_asm: [sure] ARM mixer (s16 mix buffer -> s8 output); GAX2_init stores its RAM copy at GAX_ram+0x68
 	.arm

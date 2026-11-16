@@ -49,3 +49,4 @@
 - 2026-11-12: GAXSync_render (083192C0). code decompiled to C: 24128 / 228100 bytes (10.58%); rate 36 bytes/hour; ETA 2027-07-05 03:13
 - 2026-11-15: region B started from AgbMain: boot, title, menu pages, cheat check, save code (41 functions; MainMenu, Save_Init, Save_Format near misses). code decompiled to C: 30580 / 228100 bytes (13.41%); rate 41 bytes/hour; ETA 2027-06-02 05:34
 - 2026-11-15: GAX code reorganised by original module (gax_1-3.c, sync.c, output.c, tracker_1-2.c; asm/gax/; public gax.h + gax_internal.h). No code change: make compare OK.
+- 2026-11-15: GAXFx_render (08319F88). code decompiled to C: 30944 / 223460 bytes (13.85%); rate 42 bytes/hour; ETA 2027-05-27 21:48

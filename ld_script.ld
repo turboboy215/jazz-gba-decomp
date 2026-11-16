@@ -81,7 +81,6 @@ SECTIONS
         build/src/gax/tracker_1.o(.text .rodata .data);
         build/asm/gax/GAXTracker_generate_audio.o(.text .rodata .data);
         build/src/gax/tracker_2.o(.text .rodata .data);
-        build/asm/gax/GAXFx_render.o(.text .rodata .data);
         build/asm/gax/output_asm.o(.text .rodata .data);
         build/asm/gax/tracker_asm.o(.text .rodata .data);
         build/asm/code_0831A528.o(.text .rodata .data);

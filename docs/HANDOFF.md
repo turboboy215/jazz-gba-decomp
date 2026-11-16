@@ -87,6 +87,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `RODATA=TABLE python3 tools/check_func.py f.c ADDR` | function with a `switch` whose jump table is at TABLE (also compares the table) |
 | `//@ ADDR Name rodata=TABLE # ...` / `end=ADDR` | batch_check section options: jump table address / function followed by data |
 | `tools/jtbl.py file.s` | run by the Makefile and check_func: moves agbcc's inline jump tables to `.rodata` |
+| `sh tools/prio.sh file.c [MINREG]` | global-alloc refs / live length / priority per pseudo: why two values got swapped registers (`GAX=1 CC1=... OPT=-fprologue-bugfix` for GAX) |
 | `python3 tools/vadiff.py ADDR file.c` | like variants.py, but prints the aligned-diff count per variant (each written to `build/vad_N.c`) |
 | `sh tools/dumps.sh file.c [dir]` | keep the RTL dumps (`DUMPS=gGlLc` default: greg, gcse, lreg, loop, combine) in `build/dumps` |
 | `LA_CC1=... sh tools/qtys.sh file.c [BLOCK]` | local-alloc's qtys per block in allocation order (needs a debug old_agbcc built with `tools/agbcc-ladebug.patch`, 10 s, see the script) |
@@ -97,16 +98,17 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-15):** 13.41% of live code is in C; `make compare` passes. Region B started: the
-boot path, title, menu pages and save code are in C (`docs/region_b.md`). GAX: 39/43 (GAXSync_render
-matched 2026-11-12), reorganised by original module 2026-11-15. Region A as before (`docs/region_a.md`).
+**State (2026-11-15, later):** 13.85% of live code is in C; `make compare` passes. Region B started: the
+boot path, title, menu pages and save code are in C (`docs/region_b.md`). GAX: 40/43 (GAXFx_render
+matched 2026-11-15; `tracker_2.c` now ends at `0831A0F4`), reorganised by original module 2026-11-15. Region A as before (`docs/region_a.md`).
 
 Next, in order:
 
 1. **GAX matching.** The code was reorganised on 2026-11-15 by original module (`docs/gax.md`, "Layout":
    `src/gax/gax_1-3.c`, `sync.c`, `output.c`, `tracker_1-2.c`; near misses in `asm/gax/` and
-   `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Next: GAXFx_render
-   (42; try the GAXSync_render tricks in `docs/gax.md`), GAX2_calc_mem (45), GAXTracker_generate_audio (87),
+   `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Next: GAX2_calc_mem (45;
+   try the GAXFx_render tricks in `docs/gax.md`: a temp to force a re-read, loads hoisted into locals,
+   `do { } while (0)` to re-weight register priorities, checked with `tools/prio.sh`), GAXTracker_generate_audio (87),
    GAX2_init (417). When one matches, merge its module's parts (`docs/gax.md`, "Plan"). Score a GAX
    function with `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py` on a work file
    holding `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline (jtbl.py is

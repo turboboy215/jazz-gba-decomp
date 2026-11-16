@@ -49,9 +49,8 @@
 0831938C 08319584 c gax/output bugfix
 08319584 08319C60 c gax/tracker_1 bugfix
 08319C60 08319F30 asm gax/GAXTracker_generate_audio
-08319F30 08319F88 c gax/tracker_2 bugfix
-08319F88 0831A100 asm gax/GAXFx_render
-0831A100 0831A3E8 asm gax/output_asm
+08319F30 0831A0F4 c gax/tracker_2 bugfix
+0831A0F4 0831A3E8 asm gax/output_asm
 0831A3E8 0831A528 asm gax/tracker_asm
 0831AEB4 083D1D5C asm rodata
 083D1D5C 083D1D80 rodata map_1

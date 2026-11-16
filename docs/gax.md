@@ -25,9 +25,9 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
     **GPLv3**: use it as reference, don't copy code into this repo. Its 2.x engine is structured
     differently (handler layouts), so it helps with idioms more than with code.
 
-## Decompilation status (2026-10-20)
+## Decompilation status (2026-11-15)
 
-**39 of 43 functions are in C and byte-matching**; the build is `jazz.gba: OK`.
+**40 of 43 functions are in C and byte-matching**; the build is `jazz.gba: OK`.
 
 * **Compiler: `agbcc -fprologue-bugfix`** for every GAX file (splits.txt flavour `bugfix`, which now also
   switches `CC1` to `agbcc`). `old_agbcc` gets several GAX functions wrong (e.g. `GAX2_new_fx`), so the
@@ -51,15 +51,14 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 | `src/gax/output.c` | 0831938C-08319584 | output.c: `GAXOutput_render`, `GAXOutput_open`, `GAXOutput_stream` |
 | `src/gax/tracker_1.c` | 08319584-08319C60 | tracker.c: `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
 | `asm/gax/GAXTracker_generate_audio.s` | 08319C60-08319F30 | tracker.c: `GAXTracker_generate_audio` (near miss) |
-| `src/gax/tracker_2.c` | 08319F30-08319F88 | tracker.c: `GAXFx_open` |
-| `asm/gax/GAXFx_render.s` | 08319F88-0831A100 | tracker.c: `GAXFx_render` (near miss) |
-| `asm/gax/output_asm.s` | 0831A100-0831A3E8 | ARM: `GAXOutput_render_asm`, `_lowpass_asm`, `_reverb_asm` (copied to RAM) |
+| `src/gax/tracker_2.c` | 08319F30-0831A0F4 | tracker.c: `GAXFx_open`, `GAXFx_render` |
+| `asm/gax/output_asm.s` | 0831A0F4-0831A3E8 | 12 bytes of `0x00FF00FF` filler, then ARM: `GAXOutput_render_asm`, `_lowpass_asm`, `_reverb_asm` (copied to RAM) |
 | `asm/gax/tracker_asm.s` | 0831A3E8-0831A528 | ARM: `GAX_umulhi`, `GAXTracker_asm`, `GAXTracker_pingpong_asm` (copied to RAM) |
-| `src/gax/nonmatching/gax.c`, `tracker.c` | (not linked) | the 4 near misses as equivalent C, by module (`make nonmatching` compiles them) |
+| `src/gax/nonmatching/gax.c`, `tracker.c` | (not linked) | the 3 near misses as equivalent C, by module (`make nonmatching` compiles them) |
 
 * **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
   `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes),
-  `GAXTracker_generate_audio` (08319C60), `GAXFx_render` (08319F88). The decomp-permuter setup works
+  `GAXTracker_generate_audio` (08319C60). The decomp-permuter setup works
   (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`); see "Matching notes".
 * The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
 
@@ -184,7 +183,7 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatch
 | 08319AE4 | `GAXTracker_process_frame` | sure | C | envelope, vibrato, modulation, slides, tone portamento |
 | 08319C60 | `GAXTracker_generate_audio` | sure | nm | pitch → frequency, volume, calls the ARM resampler |
 | 08319F30 | `GAXFx_open` | sure | C | |
-| 08319F88 | `GAXFx_render` | sure | nm | FX trigger + same per-frame path as tracker channels |
+| 08319F88 | `GAXFx_render` | sure | C | FX trigger + same per-frame path as tracker channels |
 
 **ARM routines** (hand-written, kept as asm). `GAX2_init` copies them into the work memory with
 `GAX_code2ram`; `GAX2_calc_mem` sizes them from the same start/end pairs:
@@ -224,8 +223,17 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatch
   of `speed_buf` as different, which is what the ROM shows. The last 6 instructions came from the
   step block: one `speed_timer = t - 1` store (two stores put the u8 store's zero constant before the
   `subs`), then `step` read into an `int` through `(s16)` *before* `speed = t` (a plain `p->step >= n`
-  or an `s16` temp lets the copy float above the `ldrsh`). Worth trying on `GAXFx_render` too, where
-  the ROM re-reads `fxfreq` after the `unknown_delay` check.
+  or an `s16` temp lets the copy float above the `ldrsh`).
+* `GAXFx_render` (matched 2026-11-15) needed three things. (1) The ROM re-reads `fxfreq` after the
+  `unknown_delay` check: CSE carries the condition's value across that join unless the body reads it
+  into its own `u8 freq` (and tests `freq`). (2) `GAX_ram` and `fx_data` are loaded *before* the
+  `if (instr)` test, into locals (`ram`, `data`; `instr` is a `u32`). (3) The note block
+  (`freq == 1` / `freq > 1`) sits in a `do { } while (0)`. Without it, global-alloc's priorities for
+  the `&fxfreq` (7 refs / 120 insns) and `&fxid` (4 / 66) address pseudos nearly tie and `&fxid` wins
+  r7; the loop doubles the weight of the refs inside it. **General trick: when two pseudos land in
+  swapped registers, compare their `refs`/`live_length` in the `-dg` dump (`tools/prio.sh`), and
+  try a `do { } while (0)` around the code that should weigh more.** A `const` pointer for `ch`
+  instead of the `#define ch (&fx->fxch)` macro breaks the allocation.
 * `GAX2_fx`'s defaults need the reference decomp's temporaries; `GAX2_init_volboost` needs chained
   assignments with `asm_base - (start - label)` offsets.
 
