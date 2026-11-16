@@ -72,10 +72,8 @@ SECTIONS
         build/src/code_083167F8.o(.text .rodata .data);
         build/asm/code_08316824.o(.text .rodata .data);
         build/src/gax/gax_1.o(.text .rodata .data);
-        build/asm/gax/GAX2_calc_mem.o(.text .rodata .data);
-        build/src/gax/gax_2.o(.text .rodata .data);
         build/asm/gax/GAX2_init.o(.text .rodata .data);
-        build/src/gax/gax_3.o(.text .rodata .data);
+        build/src/gax/gax_2.o(.text .rodata .data);
         build/src/gax/sync.o(.text .rodata .data);
         build/src/gax/output.o(.text .rodata .data);
         build/src/gax/tracker_1.o(.text .rodata .data);

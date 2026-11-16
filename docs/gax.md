@@ -42,11 +42,9 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 
 | File | Range | Contents |
 |---|---|---|
-| `src/gax/gax_1.c` | 08317518-083175A8 | gax.c: `GAX_code2ram` |
-| `asm/gax/GAX2_calc_mem.s` | 083175A8-083177CC | gax.c: `GAX2_calc_mem` (near miss) |
-| `src/gax/gax_2.c` | 083177CC-08317CD8 | gax.c: `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
+| `src/gax/gax_1.c` | 08317518-08317CD8 | gax.c: `GAX_code2ram`, `GAX2_calc_mem`, `GAX2_new`, `GAX2_init_volboost`, `GAX2_init_song`, `GAX2_init_soundhw`, `GAX_open` |
 | `asm/gax/GAX2_init.s` | 08317CD8-083185D0 | gax.c: `GAX2_init` (near miss) |
-| `src/gax/gax_3.c` | 083185D0-0831928C | gax.c: `GAX2_jingle` ... `GAX_stop` (most of the public API, assert screen, `GAX_clear_mem`) |
+| `src/gax/gax_2.c` | 083185D0-0831928C | gax.c: `GAX2_jingle` ... `GAX_stop` (most of the public API, assert screen, `GAX_clear_mem`) |
 | `src/gax/sync.c` | 0831928C-0831938C | sync.c: `GAXSync_open`, `GAXSync_render` |
 | `src/gax/output.c` | 0831938C-08319584 | output.c: `GAXOutput_render`, `GAXOutput_open`, `GAXOutput_stream` |
 | `src/gax/tracker_1.c` | 08319584-08319C60 | tracker.c: `GAXTracker_open/render/process_step/process_perflist/process_envelope/process_frame` |
@@ -54,14 +52,14 @@ Jazz Jackrabbit links Shin'en's **GAX Sound Engine 3.01** as a prebuilt library 
 | `src/gax/tracker_2.c` | 08319F30-0831A0F4 | tracker.c: `GAXFx_open`, `GAXFx_render` |
 | `asm/gax/output_asm.s` | 0831A0F4-0831A3E8 | 12 bytes of `0x00FF00FF` filler, then ARM: `GAXOutput_render_asm`, `_lowpass_asm`, `_reverb_asm` (copied to RAM) |
 | `asm/gax/tracker_asm.s` | 0831A3E8-0831A528 | ARM: `GAX_umulhi`, `GAXTracker_asm`, `GAXTracker_pingpong_asm` (copied to RAM) |
-| `src/gax/nonmatching/gax.c`, `tracker.c` | (not linked) | the 3 near misses as equivalent C, by module (`make nonmatching` compiles them) |
+| `src/gax/nonmatching/gax.c`, `tracker.c` | (not linked) | the 2 near misses as equivalent C, by module (`make nonmatching` compiles them) |
 
 * **Still asm** (C written, not yet matching; register allocation / stack layout differences only):
-  `GAX2_calc_mem` (083175A8), `GAX2_init` (08317CD8, 2,296 bytes),
+  `GAX2_init` (08317CD8, 2,296 bytes),
   `GAXTracker_generate_audio` (08319C60). The decomp-permuter setup works
   (`OPT=-fprologue-bugfix python3 tools/permute.py ADDR file.c SECONDS`; since 2026-11-16
   `tools/permuter_compile.sh` leaves out the game-code flags for `-fprologue-bugfix`, as check_func does);
-  see "Matching notes". Scores (aligned-diff ops, 2026-11-16): `GAX2_calc_mem` 21 (was 45),
+  see "Matching notes". `GAX2_calc_mem` matched 2026-11-16. Scores (aligned-diff ops, 2026-11-16):
   `GAXTracker_generate_audio` 86 (was 87, frame layout now right), `GAX2_init` 417.
 * The ARM routines that `GAX2_init` copies to RAM stay asm (they are hand-written ARM in the original).
 
@@ -145,7 +143,7 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatch
 | Address | Name | Conf. | Status | Evidence / notes |
 |---|---|---|---|---|
 | 08317518 | `GAX_code2ram` | sure | C | "GAX2_INIT"/"OUT OF MEMORY" + CpuSet; copies ARM blocks to RAM |
-| 083175A8 | `GAX2_calc_mem` | sure | nm | manual name; **not called by Jazz** |
+| 083175A8 | `GAX2_calc_mem` | sure | C | manual name; **not called by Jazz** |
 | 083177CC | `GAX2_new` | sure | C | "GAX2_NEW"/"PARAMS ARG IS NULL" |
 | 08317874 | `GAX2_init_volboost` | sure | C | patches two ARM instructions of the tracker RAM copy per volume level |
 | 08317970 | `GAX2_init_song` | sure | C | allocates player + channels, copies the reverb setup |
@@ -248,9 +246,15 @@ evidence. **C** = byte-matching C in `src/gax/`; **nm** = C in `src/gax/nonmatch
   loads hoisted above `GAXTracker_generate_audio`'s shift loop.
 * PRE also explains *several registers holding one constant*: the first computing insn keeps its own
   pseudo and gets a copy into the reaching reg after it; later occurrences become copies of the reaching
-  reg. In `GAX2_calc_mem` the ROM has `GAX_table` in r5 (found1), r9 (reaching) and r3 (loop 2), which
-  needs `table = GAX_table` before the first search and a mix of `table` / `GAX_table` uses
-  (`src/gax/nonmatching/gax.c`).
+  reg. In `GAX2_calc_mem` the ROM has `GAX_table` in r5 (found1), r9 (reaching) and r3 (loop 2).
+* **`GAX2_calc_mem` matched** (2026-11-16) once each rate search became its own block
+  `{ const u16 *t = GAX_table; u32 k; for (k...) if (t[k * 2] >= rate) { i = k; goto found; } i = 12;
+  found: i *= 4; rate = *(const u16 *)((const u8 *)t + i); }`. It reads like an inlined helper or a
+  macro: a block-local table pointer per search gives the three `GAX_table` registers, a block-local
+  counter fixes the counter/pointer swap in loop 1, and the byte offset (`i *= 4`) puts the table first
+  in the `add` (`t[i * 2]` gives `add r0, r0, rT`). The empty `asm("" : "+r"(size))` sits *inside*
+  `if (params->fx_data == NULL)`: `size` only has to be non-transparent on that one path. Try this
+  block shape for `GAX2_init`'s four searches too.
 * `GAXTracker_generate_audio`: `freq = (s32)GAX_freqtable[pitch] >> shift` (asrs); `step` lives in an
   expand-time stack slot at sp+0 *below* `args` (sp+4), which a `volatile s32 step` declared first
   reproduces (frame 44 bytes like the ROM); `args.src` is written and read through `args`, the other

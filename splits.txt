@@ -40,11 +40,9 @@
 083151B4 0831522C c code_083151B4
 08315278 083152C4 c code_08315278
 083167F8 08316824 c code_083167F8
-08317518 083175A8 c gax/gax_1 bugfix
-083175A8 083177CC asm gax/GAX2_calc_mem
-083177CC 08317CD8 c gax/gax_2 bugfix
+08317518 08317CD8 c gax/gax_1 bugfix
 08317CD8 083185D0 asm gax/GAX2_init
-083185D0 0831928C c gax/gax_3 bugfix
+083185D0 0831928C c gax/gax_2 bugfix
 0831928C 0831938C c gax/sync bugfix
 0831938C 08319584 c gax/output bugfix
 08319584 08319C60 c gax/tracker_1 bugfix
