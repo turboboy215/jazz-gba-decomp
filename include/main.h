@@ -36,6 +36,8 @@ void sub_0830A3B4(void);   /* Menu_SlideIn */
 void sub_0830A4AC(void);   /* Menu_SlideOut */
 void sub_0830A274(void);   /* Title_ScrollOut */
 void sub_0830A1B0(void);   /* Title_ScrollIn */
+void sub_0830A140(void);   /* Title_SkipIntro */
+void sub_0830A324(void);   /* Title_SkipOut */
 void sub_0830AAA8(void);
 
 
@@ -155,6 +157,14 @@ void sub_0830C5C0(void);
 void sub_0830CD64(void);
 void sub_0830D948(void);
 void sub_0830DBFC(void);
+void sub_08313D78(u8 level, u16 a);
+/* Link_GetUnk4 (player count?) as region B's callers see it: they don't truncate the u8 result */
+#define LINK_GETUNK4() (((u32 (*)(void))sub_0800314C)())
+void sub_0830E93C(void);   /* link result screen (2 players?) */
+void sub_0830ECF4(void);   /* link result screen (3 players?) */
+void sub_0830F0AC(void);   /* link result screen (4 players?) */
+extern const char gStr_083DB494[];   /* "Press Start to Play A Rematch" */
+extern const char gStr_083DB4B4[];   /* "Press % to Select a New Level" */
 
 /* ---- save data: a 0x200-byte image of the 4 Kbit EEPROM (64 blocks of 8 bytes) ---- */
 struct SaveSlot {               /* 0x20 bytes, 4 of them after the 8-byte "turtles" magic */
