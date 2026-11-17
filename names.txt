@@ -364,3 +364,7 @@
 0830E7E0 Menu_ToggleBigGun                # [likely] link settings item: toggles item flag gItemOn[4] ("Big Gun") and rewrites the label
 0830E854 Menu_ToggleHealth                # [likely] link settings item: toggles item flag gItemOn[5] ("Health") and rewrites the label
 0830E8C8 Menu_ToggleCarrotGrenades        # [likely] link settings item: toggles item flag gItemOn[6] ("Carrot Grenades") and rewrites the label
+0830D378 Menu_ChangeMultiPakLevel         # [likely] MULTI-PAK item "Level:": Left/Right(A) pick one of 11 link levels (0200755D); levels 4-6, 9, 10 show a "#" (locked) mark unless the matching Save_GetExtra byte is set
+0830D668 Menu_ChangeSinglePakLevel        # [likely] SINGLE-PAK item "Level:": Left/Right(A) pick one of 4 levels (0200755F); 3 and 4 show "#" unless Save_GetExtra()[0]/[1] is set
+0830D7C0 Menu_ChangePlayMode              # [likely] link menu item "Play:": Left/Right(A) pick Battle (0) or Capture The Flag (1) in 0200755E
+0830D884 Menu_ChangeGameMode              # [likely] link settings item "Mode:": Left/Right(A) pick Battle (0) or Capture The Flag (1) in 02007560

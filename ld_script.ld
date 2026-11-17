@@ -61,6 +61,10 @@ SECTIONS
         build/src/code_0830C034.o(.text .data);
         build/src/code_0830C4FC.o(.text .data);
         build/asm/code_0830C5C0.o(.text .rodata .data);
+        build/src/code_0830D378.o(.text .data);
+        build/src/code_0830D668.o(.text .data);
+        build/src/code_0830D7C0.o(.text .data);
+        build/src/code_0830D884.o(.text .data);
         build/src/code_0830D948.o(.text .data);
         build/src/code_0830DAB4.o(.text .data);
         build/asm/code_0830DBFC.o(.text .rodata .data);
@@ -112,6 +116,10 @@ SECTIONS
         build/src/code_0830C034.o(.rodata);
         build/src/code_0830C4FC.o(.rodata);
         build/asm/rodata_083DB8B8.o(.text .rodata .data);
+        build/src/code_0830D378.o(.rodata);
+        build/src/code_0830D668.o(.rodata);
+        build/src/code_0830D7C0.o(.rodata);
+        build/src/code_0830D884.o(.rodata);
         build/src/code_0830D948.o(.rodata);
         build/src/code_0830DAB4.o(.rodata);
         build/asm/rodata_083DC070.o(.text .rodata .data);
