@@ -143,6 +143,9 @@ extern u8 gLevelSel_02007558;      /* LEVEL SELECT: level index 0-23 */
 extern u8 gCharacter_02007559;     /* LEVEL SELECT: 0 Jazz, 1 Zoe */
 char *strcpy(char *d, const char *s);
 extern u8 gUnk_0200755C;
+extern u16 gMaxFrags_02007564;      /* link settings: frag limit, 5-25 */
+extern u8 gRadar_02007569;          /* link settings: radar on/off */
+extern u8 gItemOn_02007578[7];      /* link settings: weapon/pickup on-off flags (Machine Gun ... Carrot Grenades) */
 void sub_08312398(u32 level);
 void sub_0830C5C0(void);
 void sub_0830CD64(void);

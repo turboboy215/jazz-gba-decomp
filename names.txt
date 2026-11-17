@@ -354,3 +354,13 @@
 083152BC Save_GetExtra                    # [likely] returns the 16-byte buffer Save_WriteExtra writes (030046CC)
 0830C034 Menu_ChangeLevel                 # [likely] LEVEL SELECT item: Left/Right change gLevelSel (0-23) and rewrite the label; A sets the key mapping from 02007561, fades out, runs the level (sub_08312398) and returns to the title/main menu
 0830C4FC Menu_ChangeCharacter             # [likely] LEVEL SELECT item: Left/Right(A) toggle gCharacter (0 Jazz, 1 Zoe) and rewrite the item label
+0830D948 Menu_ChangeControls              # [likely] controls page item: Left/Right(A) change the control configuration (02007561, 0-3), rewrite the label and show the matching frame of the button-layout sprite 020075E4
+0830DAB4 Menu_ChangeMaxFrags              # [likely] link settings item: Left/Right(A) change the frag limit (02007564: 5-25 in steps of 5) and rewrite the label
+0830E3E8 Menu_ToggleRadar                 # [likely] link settings item: toggles the radar flag 02007569 and rewrites the label
+0830E610 Menu_ToggleMachineGun            # [likely] link settings item: toggles item flag gItemOn[0] ("Machine Gun") and rewrites the label
+0830E684 Menu_ToggleRicochetGun           # [likely] link settings item: toggles item flag gItemOn[1] ("Ricochet Gun") and rewrites the label
+0830E6F8 Menu_ToggleFlamethrower          # [likely] link settings item: toggles item flag gItemOn[2] ("Flamethrower") and rewrites the label
+0830E76C Menu_ToggleRocketLauncher        # [likely] link settings item: toggles item flag gItemOn[3] ("Rocket Launcher") and rewrites the label
+0830E7E0 Menu_ToggleBigGun                # [likely] link settings item: toggles item flag gItemOn[4] ("Big Gun") and rewrites the label
+0830E854 Menu_ToggleHealth                # [likely] link settings item: toggles item flag gItemOn[5] ("Health") and rewrites the label
+0830E8C8 Menu_ToggleCarrotGrenades        # [likely] link settings item: toggles item flag gItemOn[6] ("Carrot Grenades") and rewrites the label
