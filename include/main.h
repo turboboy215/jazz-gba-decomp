@@ -139,6 +139,11 @@ extern u16 gKeyHistory_03003A1C[12];  /* last 12 key presses, oldest first */
 extern const u16 gCheatCodes_083DB338[1][12];   /* one 12-key cheat code */
 void *memcpy(void *d, const void *s, u32 n);
 void sub_080034A4(void);   /* Link_Main */
+extern u8 gLevelSel_02007558;      /* LEVEL SELECT: level index 0-23 */
+extern u8 gCharacter_02007559;     /* LEVEL SELECT: 0 Jazz, 1 Zoe */
+char *strcpy(char *d, const char *s);
+extern u8 gUnk_0200755C;
+void sub_08312398(u32 level);
 void sub_0830C5C0(void);
 void sub_0830CD64(void);
 void sub_0830D948(void);

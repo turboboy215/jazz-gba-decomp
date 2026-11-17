@@ -1,8 +1,8 @@
 diff --git a/gcc/flags.h b/gcc/flags.h
-index 39e998e..a13ceda 100755
+index 39e998e..1399907 100755
 --- a/gcc/flags.h
 +++ b/gcc/flags.h
-@@ -457,3 +457,27 @@ extern int flag_fixed_debug_line_info;
+@@ -457,3 +457,32 @@ extern int flag_fixed_debug_line_info;
  
  /* Nonzero if prologue bug should be fixed.  */
  extern int flag_prologue_bugfix;
@@ -30,6 +30,11 @@ index 39e998e..a13ceda 100755
 +
 +/* Nonzero if QImode/HImode addresses reload into BASE_REGS (no MODE_BASE_REG_CLASS split).  */
 +extern int flag_old_base_reg_class;
++
++/* Nonzero if gcse cprop starts its "altered" sets empty (GCC 2.95 behaviour).  */
++extern int flag_cprop_fix;
++extern int flag_cprop_const_fix;
++extern int flag_cprop_single_set;
 diff --git a/gcc/flow.c b/gcc/flow.c
 index 08db64d..6022d74 100755
 --- a/gcc/flow.c
@@ -44,10 +49,35 @@ index 08db64d..6022d74 100755
  
    /* ??? This does not work when EH is enabled.  The g++.eh/spec2.C test
 diff --git a/gcc/gcse.c b/gcc/gcse.c
-index 9c82ab6..a0a5cc2 100755
+index 9c82ab6..1897c11 100755
 --- a/gcc/gcse.c
 +++ b/gcc/gcse.c
-@@ -1193,6 +1193,54 @@ static int *reg_last_set;
+@@ -989,6 +989,8 @@ free_gcse_mem ()
+    looks at the expr hash table; if nonzero this routine looks at
+    the set hash table.  */
+  
++static int cprop_altered_starts_empty;
++
+ static void
+ compute_local_properties (transp, comp, antloc, setp)
+      sbitmap *transp;
+@@ -1001,7 +1003,14 @@ compute_local_properties (transp, comp, antloc, setp)
+   
+   /* Initialize any bitmaps that were passed in.  */
+   if (transp)
+-    sbitmap_vector_ones (transp, n_basic_blocks);
++    {
++      /* -fcprop-fix: for cprop (SETP) the vector is "absaltered", which starts
++	 empty (as in GCC 2.95); without it, availability never crosses a block.  */
++      if (setp && (flag_cprop_fix || cprop_altered_starts_empty))
++	sbitmap_vector_zero (transp, n_basic_blocks);
++      else
++	sbitmap_vector_ones (transp, n_basic_blocks);
++    }
+   if (comp)
+     sbitmap_vector_zero (comp, n_basic_blocks);
+   if (antloc)
+@@ -1193,6 +1202,54 @@ static int *reg_last_set;
  /* Perform a quick check whether X, the source of a set, is something
     we want to consider for GCSE.  */
  
@@ -102,7 +132,7 @@ index 9c82ab6..a0a5cc2 100755
  static int
  want_to_gcse_p (x)
       rtx x;
-@@ -1208,6 +1256,19 @@ want_to_gcse_p (x)
+@@ -1208,6 +1265,19 @@ want_to_gcse_p (x)
      case CALL:
        return 0;
  
@@ -122,7 +152,86 @@ index 9c82ab6..a0a5cc2 100755
      default:
        break;
      }
-@@ -4072,12 +4133,9 @@ static sbitmap *comp;
+@@ -3440,6 +3510,12 @@ static sbitmap *cprop_absaltered;
+ static sbitmap *cprop_avin;
+ static sbitmap *cprop_avout;
+ 
++/* -fcprop-const-fix: a second, correct availability solution (the "altered"
++   sets start empty), used only for sets of a register to a CONST_INT.  */
++static sbitmap *cprop_absaltered2;
++static sbitmap *cprop_avin2;
++static sbitmap *cprop_avout2;
++
+ /* Allocate vars used for copy/const propagation.
+    N_BLOCKS is the number of basic blocks.
+    N_SETS is the number of sets.  */
+@@ -3453,6 +3529,9 @@ alloc_cprop_mem (n_blocks, n_sets)
+ 
+   cprop_avin = sbitmap_vector_alloc (n_blocks, n_sets);
+   cprop_avout = sbitmap_vector_alloc (n_blocks, n_sets);
++  cprop_absaltered2 = sbitmap_vector_alloc (n_blocks, n_sets);
++  cprop_avin2 = sbitmap_vector_alloc (n_blocks, n_sets);
++  cprop_avout2 = sbitmap_vector_alloc (n_blocks, n_sets);
+ }
+ 
+ /* Free vars used by copy/const propagation.  */
+@@ -3464,6 +3543,9 @@ free_cprop_mem ()
+   free (cprop_absaltered);
+   free (cprop_avin);
+   free (cprop_avout);
++  free (cprop_absaltered2);
++  free (cprop_avin2);
++  free (cprop_avout2);
+ }
+ 
+ /* For each block, compute whether X is transparent.
+@@ -3653,6 +3735,30 @@ compute_cprop_data ()
+ {
+   compute_local_properties (cprop_absaltered, cprop_pavloc, NULL, 1);
+   compute_cprop_avinout ();
++  if (flag_cprop_const_fix)
++    {
++      int bb, changed = 1;
++
++      cprop_altered_starts_empty = 1;
++      compute_local_properties (cprop_absaltered2, cprop_pavloc, NULL, 1);
++      cprop_altered_starts_empty = 0;
++      sbitmap_zero (cprop_avin2[0]);
++      sbitmap_vector_ones (cprop_avout2, n_basic_blocks);
++      while (changed)
++	{
++	  changed = 0;
++	  for (bb = 0; bb < n_basic_blocks; bb++)
++	    {
++	      if (bb != 0)
++		sbitmap_intersect_of_predecessors (cprop_avin2[bb],
++						   cprop_avout2, bb, s_preds);
++	      changed |= sbitmap_union_of_diff (cprop_avout2[bb],
++						cprop_pavloc[bb],
++						cprop_avin2[bb],
++						cprop_absaltered2[bb]);
++	    }
++	}
++    }
+ }
+ 
+ /* Copy/constant propagation.  */
+@@ -3785,6 +3891,14 @@ find_avail_set (regno, insn)
+     {
+       if (TEST_BIT (cprop_avin[BLOCK_NUM (insn)], set->bitmap_index))
+ 	break;
++      if (flag_cprop_const_fix
++	  && GET_CODE (SET_SRC (set->expr)) == CONST_INT
++	  && (! flag_cprop_single_set
++	      || (regno >= FIRST_PSEUDO_REGISTER
++		  && reg_set_table[regno] != NULL
++		  && reg_set_table[regno]->next == NULL))
++	  && TEST_BIT (cprop_avin2[BLOCK_NUM (insn)], set->bitmap_index))
++	break;
+       set = next_set (regno, set);
+     }
+ 
+@@ -4072,12 +4186,9 @@ static sbitmap *comp;
  /* Nonzero for expressions that are locally anticipatable in the block.  */
  static sbitmap *antloc;
  
@@ -138,7 +247,7 @@ index 9c82ab6..a0a5cc2 100755
  
  static sbitmap *temp_bitmap;
  
-@@ -4310,6 +4368,14 @@ insert_insn_end_bb (expr, bb, pre)
+@@ -4310,6 +4421,14 @@ insert_insn_end_bb (expr, bb, pre)
        if (BLOCK_HEAD (bb) == insn)
          BLOCK_HEAD (bb) = new_insn;
      }
@@ -153,7 +262,7 @@ index 9c82ab6..a0a5cc2 100755
    else
      {
        new_insn = emit_insn_after (pat, insn);
-@@ -4536,7 +4602,14 @@ pre_delete ()
+@@ -4536,7 +4655,14 @@ pre_delete ()
  	      rtx set;
  	      int bb = BLOCK_NUM (insn);
  
@@ -303,10 +412,10 @@ index 9911f76..394907b 100755
  
  #define INDEX_REG_CLASS LO_REGS
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index ac8e21b..d5bbb9c 100755
+index ac8e21b..545cfbb 100755
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
-@@ -591,6 +591,32 @@ int flag_fixed_debug_line_info = 0;
+@@ -591,6 +591,37 @@ int flag_fixed_debug_line_info = 0;
  /* Fix prologue bug in new compiler.  */
  int flag_prologue_bugfix = 0;
  
@@ -336,10 +445,15 @@ index ac8e21b..d5bbb9c 100755
 +   (before thumb.h's MODE_BASE_REG_CLASS).  */
 +int flag_old_base_reg_class = 0;
 +
++/* Nonzero if gcse cprop starts its "altered" sets empty (GCC 2.95 behaviour).  */
++int flag_cprop_fix = 0;
++int flag_cprop_const_fix = 0;
++int flag_cprop_single_set = 0;
++
  typedef struct
  {
      char *string;
-@@ -732,6 +758,22 @@ lang_independent_options f_options[] =
+@@ -732,6 +763,28 @@ lang_independent_options f_options[] =
       "Use hex instead of decimal in assembly output"},
      {"fix-debug-line", &flag_fixed_debug_line_info, 1,
       "Generate fixed DWARF line info"},
@@ -357,6 +471,12 @@ index ac8e21b..d5bbb9c 100755
 +     "With -fgcse-no-const, still PRE constant pool loads inside loops (matches Jazz game code)"},
 +    {"old-base-reg-class", &flag_old_base_reg_class, 1,
 +     "Reload byte/halfword addresses into BASE_REGS, not LO_REGS (matches Jazz game code)"},
++    {"cprop-const-fix", &flag_cprop_const_fix, 1,
++     "Let gcse constant (not copy) propagation cross basic blocks (matches Jazz game code)"},
++    {"cprop-single-set", &flag_cprop_single_set, 1,
++     "With -fcprop-const-fix, only for registers set once in the function"},
++    {"cprop-fix", &flag_cprop_fix, 1,
++     "Let gcse constant/copy propagation cross basic blocks, as in GCC 2.95 (matches Jazz game code)"},
 +    {"delete-dead-after-reload", &flag_delete_dead_after_reload, 1,
 +     "Let jump.c delete dead feeder insns after reload (pre-Cygnus-13233 behaviour)"},
  #ifndef OLD_COMPILER

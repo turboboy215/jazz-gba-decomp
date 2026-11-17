@@ -8,4 +8,4 @@
 F=$(realpath "$1")
 R=$(cd "$(dirname "$0")/.." && pwd); cd "$R"
 CC=${LA_CC1:-/tmp/agbcc/gcc/old_agbcc}
-arm-none-eabi-cpp -nostdinc -I include -I tools/agbcc/include "$F" | LA_DEBUG=1 "$CC" -mthumb-interwork -O2 -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops -fold-base-reg-class $OPT -o /dev/null 2>&1 >/dev/null | grep "^b${2:-[0-9]*} "
+arm-none-eabi-cpp -nostdinc -I include -I tools/agbcc/include "$F" | LA_DEBUG=1 "$CC" -mthumb-interwork -O2 -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops -fold-base-reg-class -fcprop-const-fix -fcprop-single-set $OPT -o /dev/null 2>&1 >/dev/null | grep "^b${2:-[0-9]*} "

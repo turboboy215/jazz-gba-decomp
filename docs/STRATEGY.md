@@ -105,6 +105,18 @@ function is unchanged with either flag):
   class, so reloads sort by number and the address (pushed first) takes the first spill reg. With BASE_REGS
   (class 4 > LO_REGS 2) `reload_reg_class_lower` puts the value first: Link_Main's `mov r0, r8; ldr r1, =x;
   strb r0, [r1, #4]`. MODE_BASE_REG_CLASS looks like one of the later Cygnus changes.
+* **`-fcprop-const-fix -fcprop-single-set`** (gcse.c cprop, added 2026-11-16): in this EGCS snapshot
+  `compute_local_properties` starts cprop's "altered" sets full, so a `reg = const` set is only
+  "available" in the direct successors of its block (GCC 2.95 starts them empty). The game code needs a
+  constant to reach uses several blocks later: in `Menu_ChangeCharacter` (0830C4FC) the 0x1B0 offset of
+  `menu->cursor` is rematerialised (`movs rX, #216; lsls rX, #1`) in both switch cases; stock cprop only
+  does the first case and keeps a callee-saved register for the second. The flags give constant
+  propagation (not copy propagation: `Glyph_Free` 08004CA0 keeps a cross-block copy) a correct
+  availability solution, only for registers set once in the function (`Text_ParsePaletteTag` 08004B14
+  keeps `n = 0` in a register although it reaches `p = n + buf`). All 221 functions matched before the
+  flags still compile to the same code with them. The full fix (`-fcprop-fix`, kept in the patch for
+  experiments, not used) brings the SDK's `MultiBootMain` from 100 to 22 aligned-diff ops: worth a look
+  for the library code.
 
 Ruled out on 2026-11-10: full Morel-Renvoise PRE (egcs 1.1's `compute_pre_ppinout`) instead of LCM
 (21 break even with `-fgcse-no-const`); PRE of constant pool loads only where they are partially available

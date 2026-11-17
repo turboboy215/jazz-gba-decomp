@@ -38,7 +38,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 * ROM `AJJE`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0`, 4 MiB.
 * **Compiler: `old_agbcc -O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const
   -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops
-  -fold-base-reg-class`** for game code (the
+  -fold-base-reg-class -fcprop-const-fix -fcprop-single-set`** for game code (the
   default in Makefile and all tools). All but `-fno-strict-aliasing` come from our patch
   (`tools/agbcc-jazz.patch`); stock pret agbcc rejects them. The ROM's
   compiler was a GCC snapshot from before several Cygnus changes. Details in `docs/STRATEGY.md`, including how

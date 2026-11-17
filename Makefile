@@ -11,7 +11,7 @@ CPP     := $(PREFIX)cpp
 ASFLAGS := -mcpu=arm7tdmi -I include
 CFLAGS  := -mthumb-interwork -Wimplicit -Wparentheses -O2 -fhex-asm -fno-merge-blocks -fdelete-dead-after-reload
 # Game code only: the GAX library was built with stock gcse and strict aliasing (objects.mk empties this)
-GAMEFLAGS := -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops -fold-base-reg-class
+GAMEFLAGS := -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops -fold-base-reg-class -fcprop-const-fix -fcprop-single-set
 # jump tables to .rodata (region A and game code); GAX keeps them inline (objects.mk sets JTBL := true)
 JTBL    := python3 tools/jtbl.py
 

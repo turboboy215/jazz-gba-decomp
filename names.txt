@@ -352,3 +352,5 @@
 083151F0 Save_Read                        # [likely] reads the 0x200-byte save buffer from EEPROM, 64 blocks of 8 bytes
 08315278 Save_WriteExtra                  # [likely] writes the 16 bytes at 030046CC to EEPROM blocks 62-63
 083152BC Save_GetExtra                    # [likely] returns the 16-byte buffer Save_WriteExtra writes (030046CC)
+0830C034 Menu_ChangeLevel                 # [likely] LEVEL SELECT item: Left/Right change gLevelSel (0-23) and rewrite the label; A sets the key mapping from 02007561, fades out, runs the level (sub_08312398) and returns to the title/main menu
+0830C4FC Menu_ChangeCharacter             # [likely] LEVEL SELECT item: Left/Right(A) toggle gCharacter (0 Jazz, 1 Zoe) and rewrite the item label
