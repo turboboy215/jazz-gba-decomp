@@ -150,6 +150,7 @@ extern u16 gMaxFrags_02007564;      /* link settings: frag limit, 5-25 */
 extern u8 gRadar_02007569;          /* link settings: radar on/off */
 extern u8 gItemOn_02007578[7];      /* link settings: weapon/pickup on-off flags (Machine Gun ... Carrot Grenades) */
 void sub_08312398(u32 level);
+void sub_08306670(void);
 void sub_0830C5C0(void);
 void sub_0830CD64(void);
 void sub_0830D948(void);

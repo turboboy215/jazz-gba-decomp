@@ -12,6 +12,11 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   `IsTournament`, and every `Menu_Open*` page switch.
 * Save data (`08315010-083152C0`): `Save_Delay`, `Save_GetSlot`, `Save_ResetSlot`, `Save_StoreSlot`,
   `Save_CheckMagic`, `Save_Write`, `Save_Read`, `Save_WriteExtra`, `Save_GetExtra`.
+* Menu item callbacks (2026-11-16, all matching): `Menu_StartNewGame` (0830AE38), `Menu_ChangeLevel` and
+  `Menu_ChangeCharacter` (LEVEL SELECT, 0830C034-0830C5C0), and the settings/link items in
+  `src/code_0830D378.c` (0830D378-0830E93C): multi-pak and single-pak level, play/game mode, control
+  configuration, max frags, brightness, difficulty, music and SFX volume, radar, `Menu_Defaults`, and the
+  7 item toggles (Machine Gun ... Carrot Grenades).
 * Near misses: `MainMenu` (23 ops), `Save_Init` and `Save_Format` (4 ops each, same loop).
 
 ## Data structures found
@@ -37,6 +42,35 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
 * `0300398C` is used as a `struct ResBank` by the boot/title code (`gBgBank_0300398C`) and as a
   `struct Map` by map.h (`gUnk_0300398C`): same object, two views; unify when the struct is known.
 * `functions.csv` has a bogus start at `0830BF60` (inside `0830BE44`): skip it.
+
+## Menu item callbacks (how they are written)
+
+* An item callback reads `gUnk_03000D12` (new key presses): `& 0x20` (Left) decrements the setting,
+  `& 0x11` (Right or A; LEVEL SELECT uses `& 0x10`, A starts the level) increments it, each with
+  `GAX_fx(4)`; then `Text_ClearRect(item.x, item.y, 25, 0)` and a `switch` on the value whose cases are
+  `strcpy(gCurMenu->items[gCurMenu->cursor].label, " Literal text ")`. agbcc inlines the strcpy of a
+  literal as a word copy, cross-jumped into one tail.
+* **The strings must be literals in the C** (the inlined copy needs the length), so these files carry their
+  own `.rodata` (splits.txt kind `rodata`, `//@ ADDR Name rodata=ADDR` in batch files). The ROM's rodata
+  order is each function's strings followed by its jump table, in text order, and identical literals are
+  shared (`Prof. Lapen` twice in `Menu_ChangeLevel`; `Menu_Defaults` reuses the Brightness/Difficulty/
+  volume strings): the menu code is one translation unit, probably from `08309F28` on. A function that
+  reuses an earlier function's literals only matches inside the same C file (add it to the file by hand
+  and run `make compare`; a standalone check reports RODATA MISMATCH). add_funcs.py makes one file per
+  function when rodata is involved: merge neighbours by hand (edit splits.txt, `tools/split.py`).
+* These needed the new compiler flags `-fcprop-const-fix -fcprop-single-set` (`docs/STRATEGY.md`): the
+  0x1B0 offset of `cursor` is rematerialised in every case.
+* Settings variables: `02007558` level-select level (0-23), `02007559` character (0 Jazz, 1 Zoe),
+  `0200755D` multi-pak level (0-10), `0200755E` play mode, `0200755F` single-pak level (0-3), `02007560`
+  game mode (0 Battle, 1 Capture The Flag), `02007561` control configuration (0-3; 1 swaps A/B, 2 swaps
+  L/R, 3 both, see `Menu_StartNewGame`), `02007564` max frags (5-25), `02007566` difficulty (0-3),
+  `02007567` brightness (0-7), `02007569` radar, `02007578[7]` item on/off flags, `030059B4`/`030059B8`
+  music/SFX volume (0-11). `Save_GetExtra()` bytes 0-4 unlock the "#"-marked link levels.
+* Still asm: `MainMenu` (near miss), `0830AF0C`, `0830B318`, `0830BB74` (one function up to `0830BFAC`:
+  link start, "PLEASE WAIT" / "LINK ERROR" screens, receives the settings packet; the starts `0830BD38`,
+  `0830BE44`, `0830BF60` in functions.csv are bogus), the slot drawers `0830C5C0` / `0830CD64`, the three
+  link result screens `0830E93C` / `0830ECF4` / `0830F0AC` (940 bytes each, near-identical), `0830F464`,
+  `0830F5C8`; `0830F78C` on is another subsystem (BG tile cells, a text box at `0830F840`).
 
 ## Matching notes (region B so far)
 

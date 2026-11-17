@@ -54,3 +54,4 @@
 - 2026-11-16: GAX2_calc_mem (083175A8; gax_1.c now spans 08317518-08317CD8, gax_3.c -> gax_2.c). 
 - 2026-11-16: GAX2_init 417 -> 355 aligned-diff ops (fx_mixing_rate fallback when no fx_data was missing from the C).
 - 2026-11-16: new compiler flags -fcprop-const-fix -fcprop-single-set (docs/STRATEGY.md; rebuilt agbcc archive). Menu_ChangeLevel (0830C034), Menu_ChangeCharacter (0830C4FC) with their strings and jump table as C rodata. 
+- 2026-11-16: 24 menu item callbacks (0830AE38, 0830C034-0830C5C0, 0830D378-0830E93C). code decompiled to C: 38696 / 224008 bytes (17.27%); rate 50 bytes/hour; ETA 2027-04-20 03:25

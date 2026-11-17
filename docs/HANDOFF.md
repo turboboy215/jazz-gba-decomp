@@ -98,11 +98,12 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-16, session 2):** 14.06% of live code is in C; `make compare` passes. **GAX2_calc_mem
-matched** (block-local table pointer + counter per rate search, byte-offset lookup; `docs/gax.md`), and
-`gax_1.c` now spans 08317518-08317CD8 (old `gax_3.c` renamed `gax_2.c`). GAX2_init 417 -> 355 aligned-diff
-ops, including a semantic fix (no fx_data -> fx_mixing_rate = mixing_rate). Region B and region A as on
-2026-11-15 (`docs/region_b.md`, `docs/region_a.md`).
+**State (2026-11-16, session 2):** 17.3% of live code is in C; `make compare` passes. New compiler flags
+`-fcprop-const-fix -fcprop-single-set` (constant propagation across blocks; `docs/STRATEGY.md`), so
+**the prebuilt agbcc archive was rebuilt**: use the new `agbcc-prebuilt-linux-x64.tar.gz`. Region B: 24
+menu item callbacks matched (`docs/region_b.md`, "Menu item callbacks"). GAX: `GAX2_calc_mem` matched,
+`gax_1.c` spans 08317518-08317CD8 (old `gax_3.c` is `gax_2.c`), GAX2_init 417 -> 355 aligned-diff ops with a
+semantic fix (no fx_data -> fx_mixing_rate = mixing_rate). The new flags do not change GAX.
 
 Next, in order:
 
@@ -114,10 +115,11 @@ Next, in order:
    When one matches, merge its module's parts. Score with
    `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py ADDR work.c` on a file holding
    `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline.
-2. **Region B**: continue from the menus. Next: the save-slot drawers `0830C5C0` (NEW GAME) and
-   `0830CD64` (CONTINUE), the page fillers `0830D948`, `0830DBFC`, who builds the menu pages, `0830AE38`,
-   `0830AF0C` (1012), `0830B318` (774), `0830BB74` (MULTI/SINGLE-PAK), `08312CA4`; then the claim queue.
-   Near misses in `src/nonmatching/region_b.c`.
+2. **Region B**: the rest of the menus (list at the end of "Menu item callbacks" in `docs/region_b.md`):
+   `0830BB74` (to `0830BFAC`), the save-slot drawers `0830C5C0` / `0830CD64`, `0830AF0C`, `0830B318`, the
+   link result screens `0830E93C` / `0830ECF4` / `0830F0AC`, who builds the menu pages, `08312CA4`; then
+   the claim queue. Retry the near misses in `src/nonmatching/region_b.c` and `region_a.c` now that the
+   compiler changed (MultiBootMain goes 100 -> 22 with the unused full `-fcprop-fix`).
 3. Region A near misses (`docs/region_a.md`): Obj_Update needs a 4th local-alloc qty in its last block
    (`tools/qtys.sh`); Glyph_Alloc's notes.
 4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile
