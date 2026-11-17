@@ -105,7 +105,7 @@ menu item callbacks matched (`docs/region_b.md`, "Menu item callbacks"). GAX: `G
 `gax_1.c` spans 08317518-08317CD8 (old `gax_3.c` is `gax_2.c`), GAX2_init 417 -> 355 aligned-diff ops with a
 semantic fix (no fx_data -> fx_mixing_rate = mixing_rate). The new flags do not change GAX.
 
-Next, in order:
+Next (the user wants the region B menus finished first, item 2, then GAX, item 1):
 
 1. **GAX matching.** Layout by original module (`docs/gax.md`, "Layout"; near misses in `asm/gax/` and
    `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Read the PRE notes
