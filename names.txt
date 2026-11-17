@@ -368,3 +368,8 @@
 0830D668 Menu_ChangeSinglePakLevel        # [likely] SINGLE-PAK item "Level:": Left/Right(A) pick one of 4 levels (0200755F); 3 and 4 show "#" unless Save_GetExtra()[0]/[1] is set
 0830D7C0 Menu_ChangePlayMode              # [likely] link menu item "Play:": Left/Right(A) pick Battle (0) or Capture The Flag (1) in 0200755E
 0830D884 Menu_ChangeGameMode              # [likely] link settings item "Mode:": Left/Right(A) pick Battle (0) or Capture The Flag (1) in 02007560
+0830DBFC Menu_ChangeBrightness            # [likely] SETTINGS item: Left/Right(A) change gBrightness (0-7), reapply it to the BG, font and sprite palettes and rewrite the label
+0830DE2C Menu_ChangeDifficulty            # [likely] SETTINGS item: Left/Right(A) change the difficulty (02007566: 0 CAKEWALK, 1 NORMAL, 2 PRETTY HARD, 3 WAY TOO HARD) and rewrite the label
+0830DF38 Menu_ChangeMusicVolume           # [likely] SETTINGS item: Left/Right(A) change the music volume (0 = OFF, 1-11), apply it with GAX_set_music_volume(-1, Volume_ScaleMusic(v)) and rewrite the label
+0830E190 Menu_ChangeFxVolume              # [likely] SETTINGS item: Left/Right(A) change the sound-effect volume (0 = OFF, 1-11), apply it with GAX_set_fx_volume(-1, Volume_ScaleFx(v)) and rewrite the label
+0830E460 Menu_Defaults                    # [likely] "Defaults" item of the settings pages: brightness 0, SFX volume 10 and per page (by title) control config 1, difficulty NORMAL, music volume 10; rewrites labels, reapplies palettes and volumes
