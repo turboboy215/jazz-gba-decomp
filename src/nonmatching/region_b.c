@@ -312,12 +312,28 @@ void sub_0830AF0C(void)
     } while (again);
 }
 
-/* ---- Link_Results2 0830E93C ---- 96 diff ops (RODATA=083DC6A0, rodata "%d" matches): the block layout
- * matches with the frag-bar tail written twice (A/B share it through `goto draw`, C has its own copy), but
- * then loop.c strength-reduces `i + 2` / `i + 6` into r8/r9 (the ROM recomputes them with adds), the
- * bubble sort's inner loop is reversed into a down-counter with one pointer (the ROM keeps j against
- * `2 - a`, the 2 hoisted into sl, and three pointers: compare base, pairs[b-1], pairs[b]), and one more
- * spill slot (sub sp, #228). sub_0830ECF4 / sub_0830F0AC are the 3- and 4-player copies. */
+/* ---- Link_Results2 0830E93C ---- 83 diff ops (RODATA=083DC6A0, rodata "%d" matches). Two problems left:
+ * 1. Frag-bar loop: loop.c strength-reduces `i + 2` / `i + 6` into r8/r9 (the ROM recomputes them with
+ *    adds), which costs scale its r9 and pushes the pairs pointer onto the stack (one more spill slot, sub sp,
+ *    #228). Those givs have benefit 2 (2 copies x 2 - add_cost 2 x biv_count 1). The ROM loop must have had
+ *    biv_count 2 at loop time: `i++` written in both paths (A/B: `i++; continue;` in a loop with an empty
+ *    increment) gives benefit 0, and then everything up to the sort matches, *provided* a referenced label
+ *    sits between the C tail's last call and C's `i++` (flow puts a (use 0) after that call, which stops jump2's
+ *    cross-jump at the increments; without it the two tails merge into one). Probe: a `goto next` (next: in
+ *    front of C's i++) from a dummy test gives that exact layout (58 ops, all the rest in the sort/k loop).
+ *    The real source of that label is still unknown. A bigger loop does the same (asm("") x 80: 71 ops).
+ * 2. Sort: an inline swap helper and the literal 2 (not `n`) give the ROM's shape: j counts up against `2 - a`
+ *    (the 2 in sl), no loop reversal, the compare through one pointer and pairs[b] through its own. Still off:
+ *    the helper's x = &pairs[b - 1] is set twice (fp+192, then += b*8), so it is not a giv and is recomputed
+ *    (`add r0, sp, #192; adds r0, r0, r2`) instead of reduced to r4 = sp+200.
+ * sub_0830ECF4 / sub_0830F0AC are the 3- and 4-player copies. */
+static inline void FragPair_Swap(struct FragPair *x, struct FragPair *y)
+{
+    struct FragPair t = *x;
+    *x = *y;
+    *y = t;
+}
+
 void sub_0830E93C(void)
 {
     struct Sprite spr[2];
@@ -326,7 +342,7 @@ void sub_0830E93C(void)
     struct FragPair tmp;
     u16 scale;
     u32 i, k;
-    s32 a, b, n;
+    s32 a, b;
 
     GAX_stop_fx(-1);
     scale = gMaxFrags_02007564 / 5;
@@ -396,14 +412,10 @@ void sub_0830E93C(void)
         pairs[i].player = i;
         pairs[i].frags = gFrags_03005A0C[i];
     }
-    n = 2;
-    for (a = 0; a < n; a++) {
-        for (b = 1; b < n - a; b++) {
-            if (pairs[b - 1].frags > pairs[b].frags) {
-                tmp = pairs[b - 1];
-                pairs[b - 1] = pairs[b];
-                pairs[b] = tmp;
-            }
+    for (a = 0; a < 2; a++) {
+        for (b = 1; b < 2 - a; b++) {
+            if (pairs[b - 1].frags > pairs[b].frags)
+                FragPair_Swap(&pairs[b - 1], &pairs[b]);
         }
     }
     for (k = 0; k < 2; k++) {

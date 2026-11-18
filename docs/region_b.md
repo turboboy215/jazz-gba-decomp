@@ -23,7 +23,7 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   one rodata block `083DB59C-083DC6A0`** and it still matches: it is one translation unit in the original
   (the slot drawers share their "Stage N Level M" literals; the next function's "%d" sits at 083DC6A0).
 * Near misses: `MainMenu` (23 ops), `Save_Init` and `Save_Format` (4 ops each, same loop),
-  `Link_MultiPakStart` (0830AF0C, 43), `Link_ClientStart` (0830BB74, 34), `Link_Results2` (0830E93C, 96);
+  `Link_MultiPakStart` (0830AF0C, 43), `Link_ClientStart` (0830BB74, 34), `Link_Results2` (0830E93C, 83);
   what each needs is in its comment in `src/nonmatching/region_b.c`.
 
 ## Data structures found

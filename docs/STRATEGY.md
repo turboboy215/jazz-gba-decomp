@@ -198,6 +198,9 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-11-18: Link_Results2 96 to 83 ops. Its frag-bar loop needs two biv increments at loop time (giv
+  benefit 0) and a (use 0) after the C path's last call so jump2 cross-jumps only the increments (tip T430);
+  the sort takes an inline swap helper (T431).
 - 2026-11-09: two compiler flags for game code (`-fgcse-insert-before-copy`, `-fgiv-keep-after-exit`, above).
   MultiSioRecvDataCheck and Sprite_Init match; region A 180/190, 9 near misses; 10.16% of live code in C.
   The "reload round-robin" lead was PRE placement; reload is stock.

@@ -98,19 +98,19 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-17, session 3):** 19.2% of live code is in C; `make compare` passes. The compiler and the
-prebuilt agbcc archive are unchanged. Region B: `Link_PostMatch` (0830B318), `Menu_NewGameSlot` (0830C5C0),
 `Menu_ContinueSlot` (0830CD64) matched; **`0830C034-0830E93C` is one C file / one rodata block** (the
 original translation unit). Near misses added: `Link_MultiPakStart` 0830AF0C (43 ops), `Link_ClientStart`
-0830BB74 (34), `Link_Results2` 0830E93C (96). The link match flow is written up in `docs/region_b.md`
-("The link match flow"). `tools/jtbl.py` now keeps long jumps that agbcc's estimate makes long without the
-table (`docs/STRATEGY.md`, 2026-11-17). Retried all near misses with the current flags: no change;
-`MultiBootMain` is 19 ops with `OPT=-fcprop-fix` and `client_bit` read as volatile.
+0830BB74 (34), `Link_Results2` 0830E93C (now 83). The link match flow is written up in `docs/region_b.md`
+("The link match flow"). `tools/jtbl.py` keeps long jumps that agbcc's estimate makes long without the
+table (`docs/STRATEGY.md`, 2026-11-17). `MultiBootMain` is 19 ops with `OPT=-fcprop-fix` and `client_bit`
+read as volatile. Note: `tools/nm_replace.py` only edits `region_a.c` (hard-coded); for region B, replace the
+section by hand.
 
 Next (the user wants the region B menus finished first, then GAX):
 
 1. **Region B menus, the rest:** the three near misses above (each comment says what is open: all
-   register allocation / loop.c choices now). `Link_Results2` first: one match gives `0830ECF4` / `0830F0AC`
+   register allocation / loop.c choices now). `Link_Results2` first (find what references the label in front of
+   the C path's `i++`: try the shapes the comment lists, then the sort's `x`): one match gives `0830ECF4` / `0830F0AC`
    (3 and 4 players, same code). Its string "%d" is the menu TU's next literal (083DC6A0), so it belongs at the
    end of `code_0830C034.c` (its rodata extends that file's block). Then who builds the menu pages,
    `08312CA4`, `0830F464`, `0830F5C8`; then the claim queue. `0830AE38-0830B634` (Menu_StartNewGame,
