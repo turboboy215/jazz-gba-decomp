@@ -17,7 +17,14 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   `src/code_0830D378.c` (0830D378-0830E93C): multi-pak and single-pak level, play/game mode, control
   configuration, max frags, brightness, difficulty, music and SFX volume, radar, `Menu_Defaults`, and the
   7 item toggles (Machine Gun ... Carrot Grenades).
-* Near misses: `MainMenu` (23 ops), `Save_Init` and `Save_Format` (4 ops each, same loop).
+* 2026-11-17: `Link_PostMatch` (0830B318, single-pak rematch / new level screen, own file), and the save-file
+  items `Menu_NewGameSlot` (0830C5C0, "OVERWRITE EXISTING GAME?") and `Menu_ContinueSlot` (0830CD64, loads a
+  file's settings and starts its level). **`0830C034-0830E93C` is now one C file (`code_0830C034.c`) with
+  one rodata block `083DB59C-083DC6A0`** and it still matches: it is one translation unit in the original
+  (the slot drawers share their "Stage N Level M" literals; the next function's "%d" sits at 083DC6A0).
+* Near misses: `MainMenu` (23 ops), `Save_Init` and `Save_Format` (4 ops each, same loop),
+  `Link_MultiPakStart` (0830AF0C, 43), `Link_ClientStart` (0830BB74, 34), `Link_Results2` (0830E93C, 96);
+  what each needs is in its comment in `src/nonmatching/region_b.c`.
 
 ## Data structures found
 
@@ -66,11 +73,34 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   L/R, 3 both, see `Menu_StartNewGame`), `02007564` max frags (5-25), `02007566` difficulty (0-3),
   `02007567` brightness (0-7), `02007569` radar, `02007578[7]` item on/off flags, `030059B4`/`030059B8`
   music/SFX volume (0-11). `Save_GetExtra()` bytes 0-4 unlock the "#"-marked link levels.
-* Still asm: `MainMenu` (near miss), `0830AF0C`, `0830B318`, `0830BB74` (one function up to `0830BFAC`:
-  link start, "PLEASE WAIT" / "LINK ERROR" screens, receives the settings packet; the starts `0830BD38`,
-  `0830BE44`, `0830BF60` in functions.csv are bogus), the slot drawers `0830C5C0` / `0830CD64`, the three
-  link result screens `0830E93C` / `0830ECF4` / `0830F0AC` (940 bytes each, near-identical), `0830F464`,
-  `0830F5C8`; `0830F78C` on is another subsystem (BG tile cells, a text box at `0830F840`).
+* Still asm (2026-11-17): the near misses `MainMenu`, `Link_MultiPakStart` (0830AF0C), `Link_ClientStart`
+  (0830BB74, one function up to `0830BFAC`; the starts `0830BD38`, `0830BE44`, `0830BF60` in functions.csv
+  are bogus, check it with `END=0830BFAC`), `Link_Results2` (0830E93C) and its 3/4-player copies
+  `0830ECF4` / `0830F0AC` (same code, 3 and 4 bars; do them once 0830E93C matches), `0830F464`, `0830F5C8`;
+  `0830F78C` on is another subsystem (BG tile cells, a text box at `0830F840`).
+
+## The link match flow (2026-11-17)
+
+* Player 1 (`Link_MultiPakStart` 0830AF0C for multi-pak, `Link_PostMatch` 0830B318 for single-pak) refuses a
+  locked "#" level with `GAX_fx(6)` (`Save_GetExtra()` byte per level), applies the control configuration,
+  then exchanges `gLinkSend.data[] = {222, level, max frags, items bitmask (multi-pak) or player count,
+  play/game mode, radar}` until the partners echo 222 (multi-pak sends it 5 more times). Then, in a loop:
+  fade, `sub_08313D78(level, frags)` (plays the match), the result screen by player count
+  (`Link_GetUnk4()` 2/3/4 -> 0830E93C / 0830ECF4 / 0830F0AC), then "Press Start to Play A Rematch" /
+  "Press % to Select a New Level" blinking (bit 4 of a frame counter) while sending 120. Start (keys & 8)
+  resends the settings packet and loops; B sends 127 until echoed, then rebuilds the title and returns to the
+  MULTI-PAK / SINGLE-PAK menu.
+* Players 2-4 (`Link_ClientStart` 0830BB74, TOURNAMENT on a non-master GBA) open the session
+  (`Link_Session(3)` with `Link_WaitPlayers` as the wait callback), show "PLEASE WAIT" until player 1 sends
+  120 and then 222 (timeouts 120 / 60 frames, or `gUnk_030058A0 > 120`, end in the LINK ERROR screen:
+  "PLEASE TURN OFF ALL SYSTEMS AND TRY AGAIN", then a dead loop), take frags, play mode, item bits and radar
+  from the packet, and in the result loop show "PLEASE WAIT WHILE PLAYER 1 SELECTS A NEW LEVEL" once 127
+  arrives.
+* Result screen (`Link_Results2`): BG `gRes_08045A30` + tiles `08229930`, one frag-bar sprite per player
+  from `gAnims_0810B0D0` with frame `frags / (maxFrags / 5)` (+6 in game mode 1, 7 / 1 for a non-zero
+  count below one step), players sorted by frags (bubble sort of `struct FragPair {frags, player}`), each
+  bar revealed after 90 frames and the count printed with "%d" at column `11 * player + 9`, row 19.
+  `gFrags_03005A0C[4]` holds the frags.
 
 ## Matching notes (region B so far)
 
@@ -81,3 +111,15 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
 * A loop whose symbol address is reloaded every iteration is a hand-written goto loop
   (`Menu_CheckCheats`), as in region A.
 * Variable order matters for stack slots / init order: `u16 pressed = 0, held = 0;` (`Boot_LogoScreens`).
+* (2026-11-17) The link screens' main loop is `u8 again = 1; ... if (again) do { ... } while (again);`
+  with `again = 0` on the way out (`Link_PostMatch`): the ROM tests it at the top (`mov r0, r9; cmp`) and
+  keeps the loop invariants after that test. `while (again)` puts them before it.
+* Callers of `Link_GetUnk4` (u8 in link_2.c), `Link_Session` and `sub_0830A000` don't truncate the result:
+  `LINK_GETUNK4()`, `LINK_SESSION()`, `GAME_MODE()` in main.h cast the function to a u32 one. The switch on
+  the player count then compares unsigned (`bhi`).
+* A two-case switch whose compares go 0 then 1 but whose bodies are laid out 1 then 0 is
+  `switch (x) { case 1: ...; case 0: ...; }` (`Menu_NewGameSlot`'s YES/NO cursor).
+* `if (keys & 8) { } else if (keys & 2)` (two tests, reload of the keys) vs `!(keys & 8) && (keys & 2)`
+  (one combined test): the ROM has the first.
+* A loop that re-reads a global through a register copy of its address (`adds r2, r0, #0`, then
+  `ldrh r2, [r2]` at the bottom) has a local pointer assigned inside the body (`Link_ClientStart`).

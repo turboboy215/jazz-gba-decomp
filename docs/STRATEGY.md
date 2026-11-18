@@ -212,6 +212,11 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
   reloads struct fields after halfword stores, as if built with `-fno-strict-aliasing`.
   New `tools/disasm.py`. BG layer scroll/metatile format, `struct LinkPacket`, link flow documented.
 
+- 2026-11-17: `tools/jtbl.py` no longer shortens every `b<cc>; b @long jump` pair in a function whose
+  table it moved: agbcc estimates each literal-pool `.align 2` as 2 bytes, so a branch over many small
+  pools can be long even without the inline table (`Menu_NewGameSlot` 0830C5C0, 24 cases with one pool
+  each). `still_long()` recomputes that estimate without the table and keeps those long; all earlier files
+  are unchanged.
 - 2026-10-22: region A to 149/193 matching (actor collision, Bg_InitControl, link screen icons,
   font maps, Map_GetSlopeDir, sprintf, glyph cache init). Identified Nintendo libmultiboot
   (= pokeemerald multiboot.c) and MultiSio/Sio32MultiLoad (older than SA2's) in region A.

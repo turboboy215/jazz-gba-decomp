@@ -262,7 +262,7 @@ u32 sub_08004BD0(u32 glyph, const u8 *gfx, u32 base)
     return tile;
 }
 
-/* ---- MultiBootMain 080023EC ---- pokeemerald src/multiboot.c MultiBootMain; this ROM keeps &mp->probe_target_bit in a fresh register per case (older library build) */
+/* ---- MultiBootMain 080023EC ---- (2026-11-17: 19 ops with OPT=-fcprop-fix and client_bit read as volatile; plain -fcprop-fix: 22) pokeemerald src/multiboot.c MultiBootMain; this ROM keeps &mp->probe_target_bit in a fresh register per case (older library build) */
 int sub_080023EC(struct MultiBootParam *mp)
 {
     int i;

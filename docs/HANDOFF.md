@@ -75,7 +75,7 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `python3 tools/disasm.py START [END] [--arm]` | readable disassembly of a ROM range: literal values, names, string previews, pools as `.word` |
 | `python3 tools/check_func.py file.c ADDR` | compile one function and diff it against the ROM (env `CC1`, `OPT`, `END`, `EXTRA_INC`) |
 | `python3 tools/adiff.py ADDR file.c` | the same check as an aligned diff: only the real edits and their count (`Q=1`: count only) |
-| `python3 tools/nm_explode.py` | one `work/ADDR_Name.c` per near miss in `src/nonmatching/region_a.c` (check_func needs one function per file) |
+| `python3 tools/nm_explode.py [src/nonmatching/region_b.c]` | one `work/ADDR_Name.c` per near miss (default `region_a.c`; check_func needs one function per file) |
 | `python3 tools/nm_replace.py ADDR [file.c]` | replace that near miss's section (file starts with its `/* ---- Name ADDR ----` comment), or delete it after a match. Run it **after** `integrate_one.sh` reports `verified 1/1`: add_funcs rejects any file containing the word "asm", comments included |
 | `old_agbcc ... -dL file.i` | loop.c dump (`file.i.loop`): invariants moved / "not desirable", givs combined, "multiple entry points" |
 | `sh tools/integrate_one.sh ADDR file.c Name` | add to `src/`, `make compare`, commit (use `ALLOW_ASM=1` only for GAX's DMA delay asm) |
@@ -98,16 +98,26 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
-**State (2026-11-16, session 2):** 17.3% of live code is in C; `make compare` passes. New compiler flags
-`-fcprop-const-fix -fcprop-single-set` (constant propagation across blocks; `docs/STRATEGY.md`), so
-**the prebuilt agbcc archive was rebuilt**: use the new `agbcc-prebuilt-linux-x64.tar.gz`. Region B: 24
-menu item callbacks matched (`docs/region_b.md`, "Menu item callbacks"). GAX: `GAX2_calc_mem` matched,
-`gax_1.c` spans 08317518-08317CD8 (old `gax_3.c` is `gax_2.c`), GAX2_init 417 -> 355 aligned-diff ops with a
-semantic fix (no fx_data -> fx_mixing_rate = mixing_rate). The new flags do not change GAX.
+**State (2026-11-17, session 3):** 19.2% of live code is in C; `make compare` passes. The compiler and the
+prebuilt agbcc archive are unchanged. Region B: `Link_PostMatch` (0830B318), `Menu_NewGameSlot` (0830C5C0),
+`Menu_ContinueSlot` (0830CD64) matched; **`0830C034-0830E93C` is one C file / one rodata block** (the
+original translation unit). Near misses added: `Link_MultiPakStart` 0830AF0C (43 ops), `Link_ClientStart`
+0830BB74 (34), `Link_Results2` 0830E93C (96). The link match flow is written up in `docs/region_b.md`
+("The link match flow"). `tools/jtbl.py` now keeps long jumps that agbcc's estimate makes long without the
+table (`docs/STRATEGY.md`, 2026-11-17). Retried all near misses with the current flags: no change;
+`MultiBootMain` is 19 ops with `OPT=-fcprop-fix` and `client_bit` read as volatile.
 
-Next (the user wants the region B menus finished first, item 2, then GAX, item 1):
+Next (the user wants the region B menus finished first, then GAX):
 
-1. **GAX matching.** Layout by original module (`docs/gax.md`, "Layout"; near misses in `asm/gax/` and
+1. **Region B menus, the rest:** the three near misses above (each comment says what is open: all
+   register allocation / loop.c choices now). `Link_Results2` first: one match gives `0830ECF4` / `0830F0AC`
+   (3 and 4 players, same code). Its string "%d" is the menu TU's next literal (083DC6A0), so it belongs at the
+   end of `code_0830C034.c` (its rodata extends that file's block). Then who builds the menu pages,
+   `08312CA4`, `0830F464`, `0830F5C8`; then the claim queue. `0830AE38-0830B634` (Menu_StartNewGame,
+   0830AF0C, Link_PostMatch) and `0830B634.c` are probably the same TU too: the "Press Start..." strings at
+   083DB494 come right after `0830AF0C`'s turn in the rodata, and `Link_PostMatch` reuses them, so once
+   0830AF0C matches, merge 08309F28-0830C034 the same way and turn the gStr_ externs into literals.
+2. **GAX matching.** Layout by original module (`docs/gax.md`, "Layout"; near misses in `asm/gax/` and
    `src/gax/nonmatching/`; public `include/gax.h`, internals `include/gax_internal.h`). Read the PRE notes
    and the GAX2_calc_mem note in `docs/gax.md` first. GAX2_init (355): its comment in
    `src/gax/nonmatching/gax.c` lists what's open; work top-down, the first ~95 instructions now match.
@@ -115,11 +125,6 @@ Next (the user wants the region B menus finished first, item 2, then GAX, item 1
    When one matches, merge its module's parts. Score with
    `CC1=tools/agbcc/bin/agbcc OPT=-fprologue-bugfix python3 tools/adiff.py ADDR work.c` on a file holding
    `#include "gax_internal.h"` plus the function. GAX keeps its jump tables inline.
-2. **Region B**: the rest of the menus (list at the end of "Menu item callbacks" in `docs/region_b.md`):
-   `0830BB74` (to `0830BFAC`), the save-slot drawers `0830C5C0` / `0830CD64`, `0830AF0C`, `0830B318`, the
-   link result screens `0830E93C` / `0830ECF4` / `0830F0AC`, who builds the menu pages, `08312CA4`; then
-   the claim queue. Retry the near misses in `src/nonmatching/region_b.c` and `region_a.c` now that the
-   compiler changed (MultiBootMain goes 100 -> 22 with the unused full `-fcprop-fix`).
 3. Region A near misses (`docs/region_a.md`): Obj_Update needs a 4th local-alloc qty in its last block
    (`tools/qtys.sh`); Glyph_Alloc's notes.
 4. Disassemble the `.iwram` image (`083E085C`, VMA `03000000`) as an overlay. It has the map tile

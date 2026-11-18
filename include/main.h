@@ -162,6 +162,14 @@ void sub_08313D78(u32 level, u32 a);
 /* Link_GetUnk4 (player count?) as region B's callers see it: they don't truncate the u8 result */
 #define LINK_GETUNK4() (((u32 (*)(void))sub_0800314C)())
 void sub_0830E93C(void);   /* link result screen (2 players?) */
+extern u32 gFrags_03005A0C[4];       /* link match: frags per player */
+extern struct AnimBank gAnims_0810B0D0; /* result screen frag bars */
+extern struct ResHeader gRes_08045A30;  /* result screen background */
+extern u8 gTiles_08229930[];
+u8 sub_0830A000(void);
+/* sub_0830A000 (game mode) as the result screens see it: no truncation of the u8 result */
+#define GAME_MODE() (((u32 (*)(void))sub_0830A000)())
+struct FragPair { u32 frags; u32 player; };   /* result screens: sorted by frags (bubble sort) */
 void sub_0830ECF4(void);   /* link result screen (3 players?) */
 void sub_0830F0AC(void);   /* link result screen (4 players?) */
 /* Link_Session (08002C04, link_2.c) as region B sees it: the caller truncates to u8 */

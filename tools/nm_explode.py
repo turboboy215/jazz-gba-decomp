@@ -2,7 +2,7 @@
 so tools/adiff.py / check_func.py can run on each near miss. Prints ADDR Name per file."""
 import os,re,sys
 os.makedirs("work",exist_ok=True)
-src=open('src/nonmatching/region_a.c').read().split('\n')
+src=open(sys.argv[1] if len(sys.argv)>1 else 'src/nonmatching/region_a.c').read().split('\n')
 idx=[i for i,l in enumerate(src) if re.match(r'/\* ---- \w+ [0-9A-F]{8}',l)]
 pre=re.sub(r'\A/\*.*?\*/\n','','\n'.join(src[:idx[0]]),flags=re.S)  # the header comment says 'asm', which add_funcs.py rejects
 for k,i in enumerate(idx):
