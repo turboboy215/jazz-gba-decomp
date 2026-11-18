@@ -124,6 +124,7 @@ u8 sub_08309FF4(void);
 void sub_08309F28(void);
 void sub_0830B634(void);
 void sub_0830B704(void);
+void sub_0830B740(void);   /* Menu_OpenDifficulty */
 void sub_0830B94C(void);
 void sub_0830B9A4(void);
 void sub_0830B9FC(void);
@@ -150,19 +151,30 @@ extern u8 gUnk_0200755F;            /* SINGLE-PAK level, 0-3 */
 u8 *sub_083152BC(void);             /* Save_GetExtra */
 extern u16 gMaxFrags_02007564;      /* link settings: frag limit, 5-25 */
 extern u8 gRadar_02007569;          /* link settings: radar on/off */
-extern u8 gItemOn_02007578[7];      /* link settings: weapon/pickup on-off flags (Machine Gun ... Carrot Grenades) */
+extern u8 gItemOn_02007578[8];      /* link settings: weapon/pickup on-off flags (Machine Gun ... Carrot Grenades; [7] is sent too) */
 void sub_08312398(u32 level);
 void sub_08306670(void);
 void sub_0830C5C0(void);
 void sub_0830CD64(void);
 void sub_0830D948(void);
 void sub_0830DBFC(void);
-void sub_08313D78(u8 level, u16 a);
+void sub_08313D78(u32 level, u32 a);
 /* Link_GetUnk4 (player count?) as region B's callers see it: they don't truncate the u8 result */
 #define LINK_GETUNK4() (((u32 (*)(void))sub_0800314C)())
 void sub_0830E93C(void);   /* link result screen (2 players?) */
 void sub_0830ECF4(void);   /* link result screen (3 players?) */
 void sub_0830F0AC(void);   /* link result screen (4 players?) */
+/* Link_Session (08002C04, link_2.c) as region B sees it: the caller truncates to u8 */
+#define LINK_SESSION(baud) (((u8 (*)(int))sub_08002C04)(baud))
+u32 sub_08002C04(int baud);
+u32 sub_0830A020(void);   /* Link_WaitPlayers */
+extern u32 gUnk_030059C0, gUnk_030059C4;   /* blink counters of the client's "PLEASE WAIT" loops */
+extern const char gStr_083DB4F0[];   /* "PLEASE WAIT" */
+extern const char gStr_083DB4FC[];   /* "         LINK ERROR          " */
+extern const char gStr_083DB51C[];   /* " PLEASE TURN OFF ALL SYSTEMS " */
+extern const char gStr_083DB53C[];   /* "       AND TRY AGAIN         " */
+extern const char gStr_083DB55C[];   /* "  PLEASE WAIT WHILE PLAYER 1" */
+extern const char gStr_083DB57C[];   /* "     SELECTS A NEW LEVEL    " */
 extern const char gStr_083DB494[];   /* "Press Start to Play A Rematch" */
 extern const char gStr_083DB4B4[];   /* "Press % to Select a New Level" */
 
@@ -184,6 +196,9 @@ struct SaveSlot {               /* 0x20 bytes, 4 of them after the 8-byte "turtl
     u8 pad1C[4];
 };
 extern struct SaveSlot gSaveSlots_030044E4[4];
+struct SaveSlot *sub_08315020(u32 i);   /* Save_GetSlot */
+extern u8 gUnk_0200755A;            /* NEW GAME: chosen save slot */
+extern u8 gUnk_0200755B;            /* CONTINUE: chosen save slot */
 extern u8 gUnk_02007561, gUnk_02007566;
 extern u16 gUnk_030058F0;
 extern u8 gUnk_0300250C[];

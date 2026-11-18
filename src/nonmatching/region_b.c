@@ -145,3 +145,169 @@ void sub_0831522C(void)
         sub_0831502C(k);
     sub_083151B4();
 }
+
+/* ---- Link_MultiPakStart 0830AF0C ---- 43 diff ops (RODATA=083DB4D4): register allocation only. The ROM
+ * hoists &gCurMenu into sl for the outer loop and keeps the always-1 loop flag out of registers (its tests
+ * are `movs r0, #1; cmp r0, #0`, i.e. reload rematerialised a REG_EQUIV constant); here loop.c finds
+ * &gCurMenu "not desirable" (life 11 in a 233-insn loop) and the flag takes sl. Tried: flag as
+ * u8/int/register/volatile, set at the declaration or just before the loop, a dead `again = 0`, while vs
+ * if+do-while, the menu stores in either order. The nested `if (keys & 8) {} else if (keys & 2)` and the
+ * chained `gPrevMenu = gCurMenu = &gMenuMain` each brought it closer. The packet send appears 3 times:
+ * maybe an inline function in the original. */
+void sub_0830AF0C(void)
+{
+    u8 *extra = sub_083152BC();
+    u32 i;
+    u8 again = 1;
+
+    switch (gUnk_0200755D) {
+    case 4:
+        if (extra[2] == 0) {
+            GAX_fx(6);
+            return;
+        }
+        break;
+    case 5:
+        if (extra[3] == 0) {
+            GAX_fx(6);
+            return;
+        }
+        break;
+    case 6:
+        if (extra[4] == 0) {
+            GAX_fx(6);
+            return;
+        }
+        break;
+    case 9:
+        if (extra[0] == 0) {
+            GAX_fx(6);
+            return;
+        }
+        break;
+    case 10:
+        if (extra[1] == 0) {
+            GAX_fx(6);
+            return;
+        }
+        break;
+    }
+    sub_08002058();
+    switch (gUnk_02007561) {
+    case 1:
+        sub_08001FFC(1, 2);
+        sub_08001FFC(2, 1);
+        break;
+    case 2:
+        sub_08001FFC(8, 4);
+        sub_08001FFC(4, 8);
+        break;
+    case 3:
+        sub_08001FFC(1, 2);
+        sub_08001FFC(2, 1);
+        sub_08001FFC(8, 4);
+        sub_08001FFC(4, 8);
+        break;
+    }
+    while (gLinkRecv_03003BC4[0].data[0] != 222) {
+        gLinkSend_03003C04.data[0] = 222;
+        gLinkSend_03003C04.data[1] = gUnk_0200755D;
+        gLinkSend_03003C04.data[2] = gMaxFrags_02007564;
+        gLinkSend_03003C04.data[3] = gItemOn_02007578[0] | (gItemOn_02007578[1] << 1) | (gItemOn_02007578[2] << 2)
+            | (gItemOn_02007578[3] << 3) | (gItemOn_02007578[4] << 4) | (gItemOn_02007578[5] << 5)
+            | (gItemOn_02007578[6] << 6) | (gItemOn_02007578[7] << 7);
+        gLinkSend_03003C04.data[4] = gUnk_0200755E;
+        gLinkSend_03003C04.data[5] = gRadar_02007569;
+        sub_0831A54C();
+        sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    }
+    for (i = 0; i < 5; i++) {
+        gLinkSend_03003C04.data[0] = 222;
+        gLinkSend_03003C04.data[1] = gUnk_0200755D;
+        gLinkSend_03003C04.data[2] = gMaxFrags_02007564;
+        gLinkSend_03003C04.data[3] = gItemOn_02007578[0] | (gItemOn_02007578[1] << 1) | (gItemOn_02007578[2] << 2)
+            | (gItemOn_02007578[3] << 3) | (gItemOn_02007578[4] << 4) | (gItemOn_02007578[5] << 5)
+            | (gItemOn_02007578[6] << 6) | (gItemOn_02007578[7] << 7);
+        gLinkSend_03003C04.data[4] = gUnk_0200755E;
+        gLinkSend_03003C04.data[5] = gRadar_02007569;
+        sub_0831A54C();
+        sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    }
+    if (again) do {
+        sub_08316F10(1, 192, 30);
+        while (sub_08316F50())
+            sub_0831A54C();
+        sub_08313D78(gLinkRecv_03003BC4[0].data[1], gLinkRecv_03003BC4[0].data[2]);
+        switch (LINK_GETUNK4()) {
+        case 2:
+            sub_0830E93C();
+            break;
+        case 3:
+            sub_0830ECF4();
+            break;
+        case 4:
+            sub_0830F0AC();
+            break;
+        }
+        i = 0;
+        do {
+            sub_0831A54C();
+            i++;
+            if ((i & 31) > 16) {
+                sub_080049D4(0, 0, 30, 0);
+                sub_080049D4(0, 1, 30, 0);
+            } else {
+                sub_08004914(0, 0, gStr_083DB494);
+                sub_08004914(0, 1, gStr_083DB4B4);
+            }
+            sub_08002094(&gUnk_03000D10, &gUnk_03000D12);
+            gLinkSend_03003C04.data[0] = 120;
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        } while (!(gUnk_03000D12 & 10));
+        if (gUnk_03000D12 & 8) {
+        } else if (gUnk_03000D12 & 2) {
+            do {
+                gLinkSend_03003C04.data[0] = 127;
+                sub_0831A54C();
+                sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+            } while (gLinkRecv_03003BC4[0].data[0] != 127);
+            sub_08316F10(1, 192, 3);
+            while (sub_08316F50())
+                sub_0831A54C();
+            gUnk_03003F10 = 1;
+            sub_0830A638();
+            gPrevMenu_02007570 = gCurMenu_0200756C = &gMenuMain_02005C00;
+            sub_0830A140();
+            gTitleScrolled_02007574 = 0;
+            gPrevMenu_02007570 = &gMenuTournament_0200611C;
+            gCurMenu_0200756C = &gMenuMultiPak_020062D0;
+            sub_0830A324();
+            gCurMenu_0200756C->cursor = 0;
+            *(vu16 *)0x04000050 = 0x442;
+            *(vu16 *)0x04000052 = 0x303;
+            *(vu16 *)0x0400000A = 0x1E82;
+            sub_08000604(&gCursorSprite_02007580);
+            return;
+        }
+        do {
+            gLinkSend_03003C04.data[0] = 222;
+            gLinkSend_03003C04.data[1] = gUnk_0200755D;
+            gLinkSend_03003C04.data[2] = gMaxFrags_02007564;
+            gLinkSend_03003C04.data[3] = gItemOn_02007578[0] | (gItemOn_02007578[1] << 1) | (gItemOn_02007578[2] << 2)
+                | (gItemOn_02007578[3] << 3) | (gItemOn_02007578[4] << 4) | (gItemOn_02007578[5] << 5)
+                | (gItemOn_02007578[6] << 6) | (gItemOn_02007578[7] << 7);
+            gLinkSend_03003C04.data[4] = gUnk_0200755E;
+            gLinkSend_03003C04.data[5] = gRadar_02007569;
+            sub_0831A54C();
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        } while (gLinkRecv_03003BC4[0].data[0] != 222);
+        gItemOn_02007578[0] = gLinkRecv_03003BC4[0].data[3] & 1;
+        gItemOn_02007578[1] = (gLinkRecv_03003BC4[0].data[3] >> 1) & 1;
+        gItemOn_02007578[2] = (gLinkRecv_03003BC4[0].data[3] >> 2) & 1;
+        gItemOn_02007578[3] = (gLinkRecv_03003BC4[0].data[3] >> 3) & 1;
+        gItemOn_02007578[4] = (gLinkRecv_03003BC4[0].data[3] >> 4) & 1;
+        gItemOn_02007578[5] = (gLinkRecv_03003BC4[0].data[3] >> 5) & 1;
+        gItemOn_02007578[6] = (gLinkRecv_03003BC4[0].data[3] >> 6) & 1;
+        gItemOn_02007578[7] = (gLinkRecv_03003BC4[0].data[3] >> 7) & 1;
+    } while (again);
+}

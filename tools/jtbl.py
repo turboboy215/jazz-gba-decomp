@@ -101,12 +101,65 @@ def too_far(out):
     return bad
 
 
+INSN = re.compile(r"\s*[a-z]")
+
+
+def est_len(l):
+    """agbcc's length estimate for one line of its thumb output: every `.align 2` counts 2 bytes."""
+    t = l.split("@")[0].strip()
+    if not t or t.endswith(":"):
+        return 0
+    if t.startswith(".word"):
+        return 4
+    if t.startswith(".align"):
+        return 2
+    if t.startswith("."):
+        return 0
+    if re.match(r"bl\s", t):
+        return 4
+    return 2
+
+
+def still_long(moved):
+    """Long jumps the original compiler emitted even without the inline table: its estimated distance
+    (pool alignments counted as 2 bytes each) is out of range after the table is gone (0830C5C0)."""
+    keep = set()
+    text, inro = [], False   # lines outside the moved tables
+    for l in moved:
+        if l.strip() == ".section .rodata":
+            inro = True
+        text.append("" if inro else l)
+        if inro and l.strip() == ".text":
+            inro = False
+    moved = text
+    labels = {}
+    for k, l in enumerate(moved):
+        m = re.match(r"(\.L\w+):", l)
+        if m:
+            labels[m.group(1)] = k
+    for k, l in enumerate(moved):
+        m = re.match(r"\s*b(\w\w)\s+(\.LCB\d+)\s*$", l)
+        if not m or k + 2 >= len(moved):
+            continue
+        j = re.match(r"\s*b\s+(\.L\w+)\s*@long jump", moved[k + 1])
+        if not j or j.group(1) not in labels:
+            continue
+        t = labels[j.group(1)]
+        if t > k:   # forward: from the (shortened) branch at k to the label
+            d = sum(est_len(x) for x in moved[k + 1:t]) + 2
+        else:
+            d = -sum(est_len(x) for x in moved[t:k])
+        if not -252 <= d <= 254:
+            keep.add(k)
+    return keep
+
+
 def main(path):
     lines = open(path).read().split("\n")
     moved, tf = move_tables(lines)
     if not tf:
         return
-    skip = set()
+    skip = still_long(moved)
     while True:
         out, done = shorten(moved, skip)
         bad = too_far(out) if done else set()
