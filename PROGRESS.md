@@ -56,3 +56,4 @@
 - 2026-11-16: new compiler flags -fcprop-const-fix -fcprop-single-set (docs/STRATEGY.md; rebuilt agbcc archive). Menu_ChangeLevel (0830C034), Menu_ChangeCharacter (0830C4FC) with their strings and jump table as C rodata. 
 - 2026-11-16: 24 menu item callbacks (0830AE38, 0830C034-0830C5C0, 0830D378-0830E93C). code decompiled to C: 38696 / 224008 bytes (17.27%); rate 50 bytes/hour; ETA 2027-04-20 03:25
 - 2026-11-18: sub_0830BB74 (0830BB74). code decompiled to C: 44084 / 224008 bytes (19.68%); rate 54 bytes/hour; ETA 2027-04-06 12:25
+- 2026-11-19: no new match. Link_Results2 83 -> 45 aligned-diff ops: frag-bar loop matches (i++ in both paths + redundant else-if label, tip T434); the sort's swap pointer giv is open. code decompiled to C: 44084 / 224008 bytes (19.68%)

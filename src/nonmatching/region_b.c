@@ -312,21 +312,22 @@ void sub_0830AF0C(void)
     } while (again);
 }
 
-/* ---- Link_Results2 0830E93C ---- 83 diff ops (RODATA=083DC6A0, rodata "%d" matches). Two problems left:
- * 1. Frag-bar loop: loop.c strength-reduces `i + 2` / `i + 6` into r8/r9 (the ROM recomputes them with
- *    adds), which costs scale its r9 and pushes the pairs pointer onto the stack (one more spill slot, sub sp,
- *    #228). Those givs have benefit 2 (2 copies x 2 - add_cost 2 x biv_count 1). The ROM loop must have had
- *    biv_count 2 at loop time: `i++` written in both paths (A/B: `i++; continue;` in a loop with an empty
- *    increment) gives benefit 0, and then everything up to the sort matches, *provided* a referenced label
- *    sits between the C tail's last call and C's `i++` (flow puts a (use 0) after that call, which stops jump2's
- *    cross-jump at the increments; without it the two tails merge into one). Probe: a `goto next` (next: in
- *    front of C's i++) from a dummy test gives that exact layout (58 ops, all the rest in the sort/k loop).
- *    The real source of that label is still unknown. A bigger loop does the same (asm("") x 80: 71 ops).
- * 2. Sort: an inline swap helper and the literal 2 (not `n`) give the ROM's shape: j counts up against `2 - a`
- *    (the 2 in sl), no loop reversal, the compare through one pointer and pairs[b] through its own. Still off:
- *    the helper's x = &pairs[b - 1] is set twice (fp+192, then += b*8), so it is not a giv and is recomputed
- *    (`add r0, sp, #192; adds r0, r0, r2`) instead of reduced to r4 = sp+200.
- * sub_0830ECF4 / sub_0830F0AC are the 3- and 4-player copies. */
+/* ---- Link_Results2 0830E93C ---- 45 diff ops (RODATA=083DC6A0, rodata "%d" matches). Frag-bar loop and
+ * everything before it now match (2026-11-19, tip T434): `i++` in both paths (A/B: `i++; continue;`) gives the
+ * ROM's biv_count 2, and the zero case written as a redundant `else if (gFrags[i] == 0)` leaves a referenced label
+ * between its last call and its `i++` (the never-taken branch jumps there), which stops jump2's cross-jump at
+ * the increments. The pairs loop uses its own counter `j` (the ROM's r3). Still open:
+ * 1. Sort: the inline helper's x = &pairs[b - 1] is expanded as x = fp+192; x += b*8 (set twice, so not a giv;
+ *    the -8 is folded into the frame offset through get_inner_reference's bitpos), while y = &pairs[b] is
+ *    (b*8 + fp) + 200, a giv. The ROM reduced both (r4 = sp+200, r6 = sp+208) and did not combine them.
+ *    Tried: b - 1u, (u32)b - 1, b + -1, (pairs - 1)[b], pairs + (b - 1), &pairs[b] - 1, swap of p[0]/p[1],
+ *    index helper, const params (copied to a reg anyway, integrate.c process_reg_param), struct-copy macro
+ *    (one combined giv, loop reversed). A separate `c = b - 1` makes x a giv but then x and y combine into one
+ *    and the loop reverses (62).
+ * 2. Pairs loop: two insns scheduled differently (`ldr r4, =gFrags` / `adds r1, #8`).
+ * 3. k loop: register choice (ROM: 120 in r9, gLinkSend in sl, wait counter r4, k*8 in r7, k + 1 in r8);
+ *    probably follows from the sort's pseudos. Wait counter as `i` is best (j: 56, own var: 51).
+ * sub_0830ECF4 / sub_0830F0AC are the 3- and 4-player copies: try the frag-loop shape there. */
 static inline void FragPair_Swap(struct FragPair *x, struct FragPair *y)
 {
     struct FragPair t = *x;
@@ -341,7 +342,7 @@ void sub_0830E93C(void)
     struct SlotCfg cfg;
     struct FragPair tmp;
     u16 scale;
-    u32 i, k;
+    u32 i, j, k;
     s32 a, b;
 
     GAX_stop_fx(-1);
@@ -377,7 +378,7 @@ void sub_0830E93C(void)
         gLinkSend_03003C04.data[0] = 120;
         sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
     }
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 2;) {
         if (gFrags_03005A0C[i] / scale != 0) {
             if (GAME_MODE() == 1)
                 sub_080002E0(&spr[i], &gAnims_0810B0D0, gFrags_03005A0C[i] / scale + 6, 0);
@@ -396,7 +397,9 @@ void sub_0830E93C(void)
             sub_0800073C(&spr[i], 5, i + 6);
             sub_0800060C(&spr[i]);
             sub_08000408(&spr[i]);
-        } else {
+            i++;
+            continue;
+        } else if (gFrags_03005A0C[i] == 0) {
             if (GAME_MODE() == 1)
                 sub_080002E0(&spr[i], &gAnims_0810B0D0, 0, 0);
             else
@@ -407,10 +410,11 @@ void sub_0830E93C(void)
             sub_0800060C(&spr[i]);
             sub_08000408(&spr[i]);
         }
+        i++;
     }
-    for (i = 0; i < 2; i++) {
-        pairs[i].player = i;
-        pairs[i].frags = gFrags_03005A0C[i];
+    for (j = 0; j < 2; j++) {
+        pairs[j].player = j;
+        pairs[j].frags = gFrags_03005A0C[j];
     }
     for (a = 0; a < 2; a++) {
         for (b = 1; b < 2 - a; b++) {

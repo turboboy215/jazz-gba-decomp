@@ -98,6 +98,16 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
+**State (2026-11-19, session 6):** 19.7% of live code is in C (no new match); `make compare` passes; compiler and the
+prebuilt agbcc archive unchanged. Session 6 took **`Link_Results2` (0830E93C) from 83 to 45 ops**: the whole frag-bar
+loop and everything before it now match (tip T434). The label in front of the zero case's `i++` comes from a
+redundant `else if (gFrags[i] == 0)`, with `i++` written in both paths; the pairs loop has its own counter `j`.
+Open (its comment in `src/nonmatching/region_b.c` lists what was tried): the sort helper's `x = &pairs[b - 1]` is
+expanded as `fp+192` then `+= b*8` (set twice, so not a giv) while the ROM reduced it to its own register; a
+`c = b - 1` index makes it a giv but then x and y combine and the loop reverses. The k loop's register choice is
+probably a knock-on. Next look: loop.c `combine_givs_p` / `express_from` for why the ROM kept x and y apart.
+Scratch generators for this session's variant sweeps were not kept; `tools/vadiff.py` is enough.
+
 **State (2026-11-18, session 5):** 19.7% of live code is in C; `make compare` passes; compiler and the prebuilt
 agbcc archive unchanged. Session 5 matched **`Link_ClientStart` (0830BB74)**, now in `src/code_0830B634.c` (which
 runs 0830B634-0830C034 with `code_0830BFAC.c` joined in). Three fixes, all in `docs/region_b.md` and tips
@@ -123,8 +133,9 @@ section by hand.
 Next (the user wants the region B menus finished first, then GAX):
 
 1. **Region B menus, the rest:** the two near misses left (`Link_Results2`, `Link_MultiPakStart`) (each comment says what is open: all
-   register allocation / loop.c choices now). `Link_Results2` first (find what references the label in front of
-   the C path's `i++`: try the shapes the comment lists, then the sort's `x`): one match gives `0830ECF4` / `0830F0AC`
+   register allocation / loop.c choices now). `Link_Results2` first (45 ops; the frag loop is solved, the sort's `x`
+   is next, see its comment). The 3/4-player copies `0830ECF4` / `0830F0AC` can take the frag-loop shape now
+   (T434) even before the sort matches; one match gives both
    (3 and 4 players, same code). Its string "%d" is the menu TU's next literal (083DC6A0), so it belongs at the
    end of `code_0830C034.c` (its rodata extends that file's block). Then who builds the menu pages,
    `08312CA4`, `0830F464`, `0830F5C8`; then the claim queue. `0830AE38-0830B634` (Menu_StartNewGame,
