@@ -23,7 +23,7 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   one rodata block `083DB59C-083DC6A0`** and it still matches: it is one translation unit in the original
   (the slot drawers share their "Stage N Level M" literals; the next function's "%d" sits at 083DC6A0).
 * Near misses: `MainMenu` (23 ops), `Save_Init` and `Save_Format` (4 ops each, same loop),
-  `Link_MultiPakStart` (0830AF0C, 43), `Link_ClientStart` (0830BB74, 34), `Link_Results2` (0830E93C, 83);
+  `Link_MultiPakStart` (0830AF0C, 43), `Link_Results2` (0830E93C, 83) (`Link_ClientStart` 0830BB74 matched 2026-11-18);
   what each needs is in its comment in `src/nonmatching/region_b.c`.
 
 ## Data structures found
@@ -73,9 +73,9 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   L/R, 3 both, see `Menu_StartNewGame`), `02007564` max frags (5-25), `02007566` difficulty (0-3),
   `02007567` brightness (0-7), `02007569` radar, `02007578[7]` item on/off flags, `030059B4`/`030059B8`
   music/SFX volume (0-11). `Save_GetExtra()` bytes 0-4 unlock the "#"-marked link levels.
-* Still asm (2026-11-17): the near misses `MainMenu`, `Link_MultiPakStart` (0830AF0C), `Link_ClientStart`
-  (0830BB74, one function up to `0830BFAC`; the starts `0830BD38`, `0830BE44`, `0830BF60` in functions.csv
-  are bogus, check it with `END=0830BFAC`), `Link_Results2` (0830E93C) and its 3/4-player copies
+* `Link_ClientStart` (0830BB74) matched 2026-11-18 in `src/code_0830B634.c` (one function up to `0830BFAC`;
+  the starts `0830BD38`, `0830BE44`, `0830BF60` in functions.csv are bogus, check with `END=0830BFAC`).
+* Still asm: the near misses `MainMenu`, `Link_MultiPakStart` (0830AF0C), `Link_Results2` (0830E93C) and its 3/4-player copies
   `0830ECF4` / `0830F0AC` (same code, 3 and 4 bars; do them once 0830E93C matches), `0830F464`, `0830F5C8`;
   `0830F78C` on is another subsystem (BG tile cells, a text box at `0830F840`).
 
@@ -122,4 +122,10 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
 * `if (keys & 8) { } else if (keys & 2)` (two tests, reload of the keys) vs `!(keys & 8) && (keys & 2)`
   (one combined test): the ROM has the first.
 * A loop that re-reads a global through a register copy of its address (`adds r2, r0, #0`, then
-  `ldrh r2, [r2]` at the bottom) has a local pointer assigned inside the body (`Link_ClientStart`).
+  `ldrh r2, [r2]` at the bottom) has a local pointer assigned inside the body, after the value is loaded:
+  `v = gLinkRecv[0].data[0]; p = gLinkRecv; if (v != 120 && v != 222) n++; ... } while (p->data[0] != 222);`
+  (`Link_ClientStart`, T433).
+* (2026-11-18) Unpacking a bit mask into `u8` flags: item 0 as `R & 1`, items 1-7 through a `u16` temp
+  (`t = R >> k; g[k] = t & 1;`), so cse keeps item 0's constant apart and loop.c hoists the others' (T432).
+  `Link_ClientStart` also needed a `do { } while (0)` around `gMaxFrags = ...` to lift `gLinkRecv`'s
+  priority just above `sel` (0.2133 vs 0.2143 without it, `tools/prio.sh`); T412.
