@@ -98,9 +98,23 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
+**State (2026-11-18, session 5):** 19.7% of live code is in C; `make compare` passes; compiler and the prebuilt
+agbcc archive unchanged. Session 5 matched **`Link_ClientStart` (0830BB74)**, now in `src/code_0830B634.c` (which
+runs 0830B634-0830C034 with `code_0830BFAC.c` joined in). Three fixes, all in `docs/region_b.md` and tips
+T432/T433: the bit-mask unpacking (item 0 as `R & 1`, items 1-7 through a `u16` temp so cse keeps two
+constant classes), the second wait loop as `v = ...data[0]; p = gLinkRecv;`, and a `do { } while (0)` around
+`gMaxFrags = ...` that lifts gLinkRecv's global-alloc priority over `sel` (they were 0.2133 / 0.2143).
+Looked at `Link_MultiPakStart` after it: today's tricks don't apply (its comment has the REG_EQUIV flag problem).
+Session 4 worked only on `Link_Results2` (0830E93C): **96 to 83 ops**, and the cause of the
+rest is now known (its comment in `src/nonmatching/region_b.c` has the details, tips T430/T431 in
+`docs/matching_tips.md`). (1) The frag-bar loop needs biv_count 2 at loop time (two `i++`, cross-jumped into one
+later) plus a referenced label in front of the C path's `i++`; a dummy `goto next` proves it (58 ops, the whole
+first half then matches), but the natural source of that label is still open. (2) The sort matches its shape with
+an inline swap helper and literal 2s; only the helper's `x = &pairs[b - 1]` is not reduced (set twice).
+Session 3 (2026-11-17): Region B `Link_PostMatch` (0830B318), `Menu_NewGameSlot` (0830C5C0),
 `Menu_ContinueSlot` (0830CD64) matched; **`0830C034-0830E93C` is one C file / one rodata block** (the
 original translation unit). Near misses added: `Link_MultiPakStart` 0830AF0C (43 ops), `Link_ClientStart`
-0830BB74 (34), `Link_Results2` 0830E93C (now 83). The link match flow is written up in `docs/region_b.md`
+0830BB74 (matched in session 5), `Link_Results2` 0830E93C (now 83). The link match flow is written up in `docs/region_b.md`
 ("The link match flow"). `tools/jtbl.py` keeps long jumps that agbcc's estimate makes long without the
 table (`docs/STRATEGY.md`, 2026-11-17). `MultiBootMain` is 19 ops with `OPT=-fcprop-fix` and `client_bit`
 read as volatile. Note: `tools/nm_replace.py` only edits `region_a.c` (hard-coded); for region B, replace the
@@ -108,7 +122,7 @@ section by hand.
 
 Next (the user wants the region B menus finished first, then GAX):
 
-1. **Region B menus, the rest:** the three near misses above (each comment says what is open: all
+1. **Region B menus, the rest:** the two near misses left (`Link_Results2`, `Link_MultiPakStart`) (each comment says what is open: all
    register allocation / loop.c choices now). `Link_Results2` first (find what references the label in front of
    the C path's `i++`: try the shapes the comment lists, then the sort's `x`): one match gives `0830ECF4` / `0830F0AC`
    (3 and 4 players, same code). Its string "%d" is the menu TU's next literal (083DC6A0), so it belongs at the
