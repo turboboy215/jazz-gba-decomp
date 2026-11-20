@@ -1,0 +1,37 @@
+--- a/gcc/loop.c	2026-11-20 09:47:06.893914640 -0800
++++ b/gcc/loop.c	2026-11-20 09:43:32.848379805 -0800
+@@ -6749,7 +6749,33 @@
+ combine_givs_p (g1, g2)
+      struct induction *g1, *g2;
+ {
+-  rtx tem = express_from (g1, g2);
++  rtx tem;
++  {
++    char *e = getenv ("JZ_GIVLIFE");
++    if (e && g1->giv_type == DEST_REG && g2->giv_type == DEST_REG)
++      {
++        int f1 = uid_luid[REGNO_FIRST_UID (REGNO (g1->dest_reg))];
++        int l1 = uid_luid[REGNO_LAST_UID (REGNO (g1->dest_reg))];
++        int f2 = uid_luid[REGNO_FIRST_UID (REGNO (g2->dest_reg))];
++        int l2 = uid_luid[REGNO_LAST_UID (REGNO (g2->dest_reg))];
++        if (*e == '1' && (f2 < f1 || l2 > l1))
++          return NULL_RTX;
++        if (*e == '2' && (l2 < f1 || l1 < f2))
++          return NULL_RTX;
++        if (*e == '3' && ! (g1->no_const_addval && g2->no_const_addval))
++          return NULL_RTX;
++      }
++  }
++  tem = express_from (g1, g2);
++  {
++    char *e = getenv ("JZ_GIVLIFE");
++    if (e && *e == '4' && tem == g1->dest_reg
++        && ! (g1->mult_val == g2->mult_val && g1->add_val == g2->add_val))
++      tem = NULL_RTX;
++    if (e && *e == '5' && tem == g1->dest_reg && g1->giv_type == DEST_REG && g2->giv_type == DEST_REG
++        && ! (g1->mult_val == g2->mult_val && g1->add_val == g2->add_val))
++      tem = NULL_RTX;
++  }
+ 
+   /* If these givs are identical, they can be combined.  We use the results
+      of express_from because the addends are not in a canonical form, so

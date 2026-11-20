@@ -336,7 +336,8 @@ void sub_0830AF0C(void)
  * 2. Pairs loop: two insns scheduled differently (`ldr r4, =gFrags` / `adds r1, #8`).
  * 3. k loop: register choice (ROM: 120 in r9, gLinkSend in sl, wait counter r4, k*8 in r7, k + 1 in r8);
  *    probably follows from the sort's pseudos. Wait counter as `i` is best (j: 56, own var: 51).
- * sub_0830ECF4 / sub_0830F0AC are the 3- and 4-player copies: try the frag-loop shape there. */
+ * sub_0830ECF4 / sub_0830F0AC (Link_Results3/4, below) have byte-identical pairs and k loops: items 2 and 3 are
+ * not knock-ons of the sort (their sorts match), see their comments. */
 static inline void FragPair_Swap(struct FragPair *x, struct FragPair *y)
 {
     struct FragPair t = *x;
@@ -446,5 +447,236 @@ void sub_0830E93C(void)
             sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
         }
         sub_08004968(pairs[k].player * 11 + 9, 19, "%d", gFrags_03005A0C[pairs[k].player]);
+    }
+}
+
+/* ---- Link_Results3 0830ECF4 ---- 32 diff ops (RODATA=083DC6A0) with the giv-combine experiment compiler, 99 with
+ * the stock one (2026-11-20, session 8). Called from Link_PostMatch / Link_ClientStart for 3 players. Unlike
+ * Link_Results2 the frag-bar loop is a plain `for` with three full draw copies, and the ROM strength-reduces the
+ * sprite x three times (sl, r8, sp+332: one giv per path) while combining all nine &spr[i] givs into r5 and
+ * leaving i + 2 / i + 6 unreduced. Stock combine_givs_p merges identical givs, so it gets one x giv and reduced
+ * i + 2 / i + 6. The fit: only givs with a zero constant addend (no_const_addval) may be combined as identical
+ * (tools/agbcc-givcombine-test.patch, env JZ_GIVLIFE=3; every matched function unchanged, docs/STRATEGY.md). With
+ * it, everything up to the pairs loop and the whole sort match (x/y address givs *combined* here, unlike
+ * Link_Results2). Still open, both shared with Link_Results2 (its items 2 and 3, byte-identical code):
+ * 1. Pairs loop: `ldr r4, =gFrags` before `add r2, sp, #300`, and `adds r1, #8` right after its store.
+ *    Tried: statement order swapped (37), j <= 2, the loop on i (37), a FragPair pointer (41), *(gFrags + j).
+ * 2. k loop: ROM keeps 120 in r9, &gLinkSend in sl for the wait loop and a second &gLinkSend in r5 loaded in
+ *    front of the while loop (hoisted out of the while loop only); ours shares one pseudo (loop.c: the while
+ *    loop's load, life 4 in a 31-insn loop, is "not desirable" on the while pass, then "matches" the wait loop's
+ *    at k level). A `struct LinkPacket *lp` declared in the while body reproduces r5 (28 ops) but then the wait
+ *    loop's address is no longer hoisted, so it is not the source. Fix the move/match decision, not the regs. */
+void sub_0830ECF4(void)
+{
+    struct Sprite spr[3];
+    struct FragPair pairs[3];
+    struct SlotCfg cfg;
+    u16 scale;
+    u32 i, j, k;
+    s32 a, b;
+
+    GAX_stop_fx(-1);
+    scale = gMaxFrags_02007564 / 5;
+    sub_08001EBC(gPalette_020073D8, (u16 *)0x05000200, 0, 32);
+    gLinkSend_03003C04.data[0] = 120;
+    sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    sub_08004D70();
+    sub_08001A6C();
+    sub_08001280(&gBgBank_0300398C, &gRes_08045F00);
+    sub_080012C0(&gBgBank_0300398C, 0);
+    sub_080012F4(&gBgBank_0300398C, 1, 0);
+    sub_08001314(&gBgBank_0300398C, 1, gTiles_08229930);
+    cfg.a = 1;
+    cfg.b = 1;
+    cfg.c = 1;
+    cfg.d = 1;
+    sub_08001A48(&gBgBank_0300398C, 1, (u8 *)&cfg);
+    sub_08001720(&gBgBank_0300398C, 1, 0, 0);
+    sub_08001A8C(&gBgBank_0300398C);
+    *(vu16 *)0x04000008 = 0x1F00;
+    *(vu16 *)0x04000000 = 0x1F40;
+    sub_08001E60(gBrightness_02007567);
+    sub_08001EBC(sub_080012E4(&gBgBank_0300398C, 0), (u16 *)0x05000000, 0, 240);
+    sub_08001EBC(gFont_083D2048.pal, (u16 *)0x05000000, 240, 16);
+    sub_08001EBC(gPalette_020073D8, (u16 *)0x05000200, 0, 160);
+    sub_08004848(&gFont_083D2048, 31);
+    sub_08004880(15);
+    sub_0800436C();
+    sub_08316F10(0, 192, 30);
+    while (sub_08316F50()) {
+        sub_0831A54C();
+        gLinkSend_03003C04.data[0] = 120;
+        sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    }
+    for (i = 0; i < 3; i++) {
+        if (gFrags_03005A0C[i] / scale != 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, gFrags_03005A0C[i] / scale + 6, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, gFrags_03005A0C[i] / scale, 0);
+            sub_08000684(&spr[i], i * 72 + 40, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        } else if (gFrags_03005A0C[i] != 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 7, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 1, 0);
+            sub_08000684(&spr[i], i * 72 + 40, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        } else if (gFrags_03005A0C[i] == 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 0, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 0, 0);
+            sub_08000684(&spr[i], i * 72 + 40, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        }
+    }
+    for (j = 0; j < 3; j++) {
+        pairs[j].player = j;
+        pairs[j].frags = gFrags_03005A0C[j];
+    }
+    for (a = 0; a < 3; a++) {
+        for (b = 1; b < 3 - a; b++) {
+            if (pairs[b - 1].frags > pairs[b].frags) {
+                struct FragPair t = pairs[b - 1];
+                pairs[b - 1] = pairs[b];
+                pairs[b] = t;
+            }
+        }
+    }
+    for (k = 0; k < 3; k++) {
+        for (i = 0; i < 90; i++) {
+            sub_0831A54C();
+            gLinkSend_03003C04.data[0] = 120;
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        }
+        sub_08000604(&spr[pairs[k].player]);
+        while (sub_080006C4(&spr[pairs[k].player])) {
+            sub_0831A54C();
+            sub_08000408(&spr[pairs[k].player]);
+            sub_080043B4();
+            gLinkSend_03003C04.data[0] = 120;
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        }
+        sub_08004968(pairs[k].player * 9 + 5, 19, "%d", gFrags_03005A0C[pairs[k].player]);
+    }
+}
+
+/* ---- Link_Results4 0830F0AC ---- 32 diff ops (RODATA=083DC6A0) with the giv-combine experiment compiler, 99 with
+ * the stock one. Link_Results3 for 4 players (x = i * 56 + 32, text column player * 7 + 4, background
+ * gRes_08046400): the same two open items, so one fix gives both. */
+void sub_0830F0AC(void)
+{
+    struct Sprite spr[4];
+    struct FragPair pairs[4];
+    struct SlotCfg cfg;
+    u16 scale;
+    u32 i, j, k;
+    s32 a, b;
+
+    GAX_stop_fx(-1);
+    scale = gMaxFrags_02007564 / 5;
+    sub_08001EBC(gPalette_020073D8, (u16 *)0x05000200, 0, 32);
+    gLinkSend_03003C04.data[0] = 120;
+    sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    sub_08004D70();
+    sub_08001A6C();
+    sub_08001280(&gBgBank_0300398C, &gRes_08046400);
+    sub_080012C0(&gBgBank_0300398C, 0);
+    sub_080012F4(&gBgBank_0300398C, 1, 0);
+    sub_08001314(&gBgBank_0300398C, 1, gTiles_08229930);
+    cfg.a = 1;
+    cfg.b = 1;
+    cfg.c = 1;
+    cfg.d = 1;
+    sub_08001A48(&gBgBank_0300398C, 1, (u8 *)&cfg);
+    sub_08001720(&gBgBank_0300398C, 1, 0, 0);
+    sub_08001A8C(&gBgBank_0300398C);
+    *(vu16 *)0x04000008 = 0x1F00;
+    *(vu16 *)0x04000000 = 0x1F40;
+    sub_08001E60(gBrightness_02007567);
+    sub_08001EBC(sub_080012E4(&gBgBank_0300398C, 0), (u16 *)0x05000000, 0, 240);
+    sub_08001EBC(gFont_083D2048.pal, (u16 *)0x05000000, 240, 16);
+    sub_08001EBC(gPalette_020073D8, (u16 *)0x05000200, 0, 160);
+    sub_08004848(&gFont_083D2048, 31);
+    sub_08004880(15);
+    sub_0800436C();
+    sub_08316F10(0, 192, 30);
+    while (sub_08316F50()) {
+        sub_0831A54C();
+        gLinkSend_03003C04.data[0] = 120;
+        sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+    }
+    for (i = 0; i < 4; i++) {
+        if (gFrags_03005A0C[i] / scale != 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, gFrags_03005A0C[i] / scale + 6, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, gFrags_03005A0C[i] / scale, 0);
+            sub_08000684(&spr[i], i * 56 + 32, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        } else if (gFrags_03005A0C[i] != 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 7, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 1, 0);
+            sub_08000684(&spr[i], i * 56 + 32, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        } else if (gFrags_03005A0C[i] == 0) {
+            if (GAME_MODE() == 1)
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 0, 0);
+            else
+                sub_080002E0(&spr[i], &gAnims_0810B0D0, 0, 0);
+            sub_08000684(&spr[i], i * 56 + 32, 130, 40);
+            sub_0800075C(&spr[i], i + 2);
+            sub_0800073C(&spr[i], 5, i + 6);
+            sub_0800060C(&spr[i]);
+            sub_08000408(&spr[i]);
+        }
+    }
+    for (j = 0; j < 4; j++) {
+        pairs[j].player = j;
+        pairs[j].frags = gFrags_03005A0C[j];
+    }
+    for (a = 0; a < 4; a++) {
+        for (b = 1; b < 4 - a; b++) {
+            if (pairs[b - 1].frags > pairs[b].frags) {
+                struct FragPair t = pairs[b - 1];
+                pairs[b - 1] = pairs[b];
+                pairs[b] = t;
+            }
+        }
+    }
+    for (k = 0; k < 4; k++) {
+        for (i = 0; i < 90; i++) {
+            sub_0831A54C();
+            gLinkSend_03003C04.data[0] = 120;
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        }
+        sub_08000604(&spr[pairs[k].player]);
+        while (sub_080006C4(&spr[pairs[k].player])) {
+            sub_0831A54C();
+            sub_08000408(&spr[pairs[k].player]);
+            sub_080043B4();
+            gLinkSend_03003C04.data[0] = 120;
+            sub_08002F64(&gLinkSend_03003C04, gLinkRecv_03003BC4);
+        }
+        sub_08004968(pairs[k].player * 7 + 4, 19, "%d", gFrags_03005A0C[pairs[k].player]);
     }
 }

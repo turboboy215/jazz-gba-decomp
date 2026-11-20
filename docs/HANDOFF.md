@@ -98,6 +98,17 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
+**State (2026-11-20, session 8):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
+prebuilt archive unchanged. Moved to the 3/4-player copies, now named **`Link_Results3` (0830ECF4) /
+`Link_Results4` (0830F0AC)** and added as near misses at the end of `src/nonmatching/region_b.c` (99 ops each with
+the stock compiler). Their frag loop is a plain `for` with three draw copies, and the ROM reduces the x three
+times while combining the `&spr[i]` givs: a **compiler candidate** (identical givs combine only with a zero
+constant addend; `docs/STRATEGY.md`, tip T435) takes both to **32 ops** with every matched function unchanged. It
+is an env-switched test patch, not a flag: `tools/agbcc-givcombine-test.patch` on top of the jazz patch, build
+with `make -C gcc old -j1` (seconds), run with `JZ_GIVLIFE=3 CC1=<tree>/gcc/old_agbcc`. Everything through the sort
+then matches; what is left (pairs-loop schedule, k-loop `&gLinkSend` hoisting) is **byte-identical to Link_Results2's
+items 2 and 3**, so those are not knock-ons of its sort. One fix there gives three functions.
+
 **State (2026-11-19, session 7):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
 prebuilt archive unchanged. **ByteMatch progress tracking added:** `tools/objdiff_report.py` (rewritten: undecompiled
 asm gaps and GAX near misses count as unmatched, categories game/gax/lib, names from names.txt), committed function
@@ -142,12 +153,14 @@ section by hand.
 
 Next (the user wants the region B menus finished first, then GAX):
 
-1. **Region B menus, the rest:** the two near misses left (`Link_Results2`, `Link_MultiPakStart`) (each comment says what is open: all
-   register allocation / loop.c choices now). `Link_Results2` first (45 ops; the frag loop is solved, the sort's `x`
-   is next, see its comment). The 3/4-player copies `0830ECF4` / `0830F0AC` can take the frag-loop shape now
-   (T434) even before the sort matches; one match gives both
-   (3 and 4 players, same code). Its string "%d" is the menu TU's next literal (083DC6A0), so it belongs at the
-   end of `code_0830C034.c` (its rodata extends that file's block). Then who builds the menu pages,
+1. **Region B menus, the rest:** near misses `Link_Results2/3/4`, `Link_MultiPakStart` (each comment says what is
+   open). Start with **`Link_Results3`'s k loop** (its comment, item 2): the ROM hoists the while loop's
+   `&gLinkSend` out of the while loop only (r5) and the wait loop's out of the k loop (sl); find what loop.c
+   decision differs (`-dL` "not desirable" / "matches" lines; build the test compiler first, see State), then
+   the pairs-loop schedule (item 1). When Link_Results3 matches with the candidate, turn the candidate into a
+   flag (`-fcombine-givs-ncav` in agbcc-jazz.patch, new prebuilt archive, copy it back). The "%d" literal
+   (083DC6A0) is the menu TU's next string, so these belong at the end of `code_0830C034.c` (its rodata extends
+   that file's block). Then who builds the menu pages,
    `08312CA4`, `0830F464`, `0830F5C8`; then the claim queue. `0830AE38-0830B634` (Menu_StartNewGame,
    0830AF0C, Link_PostMatch) and `0830B634.c` are probably the same TU too: the "Press Start..." strings at
    083DB494 come right after `0830AF0C`'s turn in the rodata, and `Link_PostMatch` reuses them, so once

@@ -248,13 +248,13 @@ sub_0830AF0C:
 	beq .L0830B102
 	b .L0830B106
 .L0830B0F6:
-	bl sub_0830E93C
+	bl Link_Results2
 	b .L0830B106
 .L0830B0FC:
-	bl sub_0830ECF4
+	bl Link_Results3
 	b .L0830B106
 .L0830B102:
-	bl sub_0830F0AC
+	bl Link_Results4
 .L0830B106:
 	movs r4, #0
 	ldr r6, [pc, #40]

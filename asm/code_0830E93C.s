@@ -2,11 +2,14 @@
 	.syntax unified
 	.text
 
+@ Link_Results2: [sure] link result screen for 2 players: Link_PostMatch / Link_ClientStart call it when Link_GetUnk4 == 2; frag bars, bubble sort by frags, "%d" per player
 	.thumb
 	.align 1, 0
 	.global sub_0830E93C
 	.thumb_func
 sub_0830E93C:
+	.global Link_Results2
+	.thumb_set Link_Results2, sub_0830E93C
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -450,11 +453,14 @@ sub_0830E93C:
 	.4byte 0x03005A0C
 	.4byte 0x083DC6A0
 
+@ Link_Results3: [sure] the 3-player copy (Link_GetUnk4 == 3)
 	.thumb
 	.align 1, 0
 	.global sub_0830ECF4
 	.thumb_func
 sub_0830ECF4:
+	.global Link_Results3
+	.thumb_set Link_Results3, sub_0830ECF4
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9
@@ -896,11 +902,14 @@ sub_0830ECF4:
 	.4byte 0x03005A0C
 	.4byte 0x083DC6A0
 
+@ Link_Results4: [sure] the 4-player copy (Link_GetUnk4 == 4)
 	.thumb
 	.align 1, 0
 	.global sub_0830F0AC
 	.thumb_func
 sub_0830F0AC:
+	.global Link_Results4
+	.thumb_set Link_Results4, sub_0830F0AC
 	push {r4, r5, r6, r7, lr}
 	mov r7, sl
 	mov r6, r9

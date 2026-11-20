@@ -85,6 +85,18 @@ A getenv switch in the compiler makes the experiment one line; turn it into a fl
   (register givs only) and a skip-the-giv rule were also clean on the matched set; skipping gets 4 ops
   because the giv order changes. Keep this in mind if a later function disagrees.
 
+**Candidate, not a flag yet (2026-11-20): identical givs combine only with a zero constant addend.**
+Link_Results3/4 (0830ECF4 / 0830F0AC) strength-reduce the sprite x `i * 72 + 40` three times, once per
+path (three registers, all `+= 72`), while the nine `&spr[i]` givs (mult 100, addend fp) are combined into
+one register, and `i + 2` / `i + 6` are left unreduced. Stock `combine_givs_p` merges any identical givs. The
+fit: two givs are combined as identical only if both have `no_const_addval` (DEST_ADDR combining through
+express_from is unchanged). Built as `tools/agbcc-givcombine-test.patch` (on top of agbcc-jazz.patch; env
+`JZ_GIVLIFE=3` turns it on): `make compare` passes with every game object compiled by it, no near miss gets
+worse (Sprite_Draw 80 -> 76), Link_Results3/4 go 99 -> 32. Same test, ruled out: a lifetime rule (g2's life
+inside g1's, mode 1, or overlapping, mode 2) splits the `&spr[i]` givs; `==` on mult_val/add_val rtx objects
+(modes 4/5) breaks more. Make it a flag (`-fcombine-givs-ncav`, needs a new prebuilt archive) once a function
+matches with it; the real rule may be narrower. `tools/dumps.sh` honours `CC1` for such test compilers.
+
 Ruled out on 2026-11-09: reload without round-robin (`i = -1` in `allocate_reload_reg`, 16 break), spill_regs
 in reverse order (20 break), PRE inserting before *any* final insn (1 breaks), `-fno-gcse-no-const` again
 with the new flags (12 break).
@@ -198,6 +210,8 @@ with `tools/claim.py` → write C (start from `decomp/drafts/ADDR.c`) → `tools
 
 ## Log
 
+- 2026-11-20: Link_Results3/4 99 to 32 ops with the giv-combine candidate above (not a flag yet);
+  their remaining diffs are the pairs loop and k loop, byte-identical to Link_Results2's open items 2 and 3.
 - 2026-11-18: Link_Results2 96 to 83 ops. Its frag-bar loop needs two biv increments at loop time (giv
   benefit 0) and a (use 0) after the C path's last call so jump2 cross-jumps only the increments (tip T430);
   the sort takes an inline swap helper (T431).
