@@ -1,5 +1,9 @@
 # Jazz Jackrabbit (GBA) decompilation
 
+[![Code](https://bytematch.dev/turboboy215/jazz-gba-decomp.svg?label=Code&measure=matched_code_percent)](https://bytematch.dev/turboboy215/jazz-gba-decomp)
+[![Game code](https://bytematch.dev/turboboy215/jazz-gba-decomp.svg?label=Game%20code&measure=matched_code_percent&category=game)](https://bytematch.dev/turboboy215/jazz-gba-decomp)
+[![Functions](https://bytematch.dev/turboboy215/jazz-gba-decomp.svg?label=Functions&measure=matched_functions)](https://bytematch.dev/turboboy215/jazz-gba-decomp)
+
 A work-in-progress **matching decompilation** of *Jazz Jackrabbit* for the Game Boy Advance
 (USA, `AJJE`, Game Titan / Jaleco 2002, GAX audio by Shin'en), with labels and documentation
 and a planned native PC port.
@@ -15,7 +19,7 @@ jazz.gba: OK
 |---|---|
 | Target ROM | `Jazz Jackrabbit (U).gba`, SHA1 `9fb012b46350615cfa4dd0fc7d11fc21903d39e0` |
 | Compiler | pret `old_agbcc` `-O2 -mthumb-interwork -fno-merge-blocks -fdelete-dead-after-reload -fgcse-no-const -fno-strict-aliasing -fcombine-givs-fix -fgcse-insert-before-copy -fgiv-keep-after-exit -fgcse-const-in-loops -fold-base-reg-class -fcprop-const-fix -fcprop-single-set` (identified by matching; see `docs/STRATEGY.md`) |
-| Progress | `make progress` (C bytes / live code bytes; the multiboot client image is excluded) |
+| Progress | `make progress` (C bytes / live code bytes; the multiboot client image is excluded); tracked on [ByteMatch](https://bytematch.dev/turboboy215/jazz-gba-decomp) from the `AJJE_report` artifact of `.github/workflows/progress.yml` (`make report` builds the same report locally) |
 
 This repository contains **no ROM data**. Bring your own copy.
 

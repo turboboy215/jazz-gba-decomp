@@ -98,6 +98,16 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
+**State (2026-11-19, session 7):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
+prebuilt archive unchanged. **ByteMatch progress tracking added:** `tools/objdiff_report.py` (rewritten: undecompiled
+asm gaps and GAX near misses count as unmatched, categories game/gax/lib, names from names.txt), committed function
+table `tools/report_funcs.json` (refreshed automatically when the ROM is present; **commit it when `make report`
+says it changed**), `.github/workflows/progress.yml` (artifact `AJJE_report` on pushes to master), README badges.
+Current report: 19.42% code, 294/1231 functions (slightly below progress.py, which leaves the asm near misses out).
+`Link_Results2`: still 45; the sort's x problem is diagnosed further in its comment (why x isn't a giv, why every
+giv form combines x and y, and a failed express_from_1 compiler test). Next for it: find what kept the ROM's x/y
+address givs apart, or move on to `Link_MultiPakStart` / the 3-4 player copies.
+
 **State (2026-11-19, session 6):** 19.7% of live code is in C (no new match); `make compare` passes; compiler and the
 prebuilt agbcc archive unchanged. Session 6 took **`Link_Results2` (0830E93C) from 83 to 45 ops**: the whole frag-bar
 loop and everything before it now match (tip T434). The label in front of the zero case's `i++` comes from a

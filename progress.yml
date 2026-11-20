@@ -1,0 +1,26 @@
+# Publishes the objdiff progress report that ByteMatch (bytematch.dev) reads: artifact AJJE_report.
+# Needs no ROM: tools/objdiff_report.py works from splits.txt and the committed function table
+# tools/report_funcs.json. That the C really matches is checked locally with `make compare`.
+name: Progress report
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate objdiff report
+        run: python3 tools/objdiff_report.py -o report.json
+      - name: Upload progress report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AJJE_report
+          path: report.json

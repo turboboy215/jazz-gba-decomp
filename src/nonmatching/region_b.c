@@ -324,6 +324,15 @@ void sub_0830AF0C(void)
  *    index helper, const params (copied to a reg anyway, integrate.c process_reg_param), struct-copy macro
  *    (one combined giv, loop reversed). A separate `c = b - 1` makes x a giv but then x and y combine into one
  *    and the loop reverses (62).
+ *    Session 7 (2026-11-19): why x is not a giv: get_inner_reference folds the -8 into the base address, so
+ *    expand emits `x = fp+192` (invariant) then `x += b*8`, and loop.c sees a reg set twice whose first set is
+ *    not b-dependent. y is `y = b*8 + fp; y += 200`, a giv chain. Any form that starts from &pairs[b] or a
+ *    pointer sum ((u8 *)pairs + b*8 - 8, &(pairs + b)[-1], (u32)&pairs[b] - 8, ...) makes x a giv (add fp+192),
+ *    but then x's and y's four DEST_ADDR givs combine through express_from_1 (fp+192 vs fp+200 -> +8) and the
+ *    inner loop reverses: 62. Same 45 or worse: pairs + b - 1, (u8 *)pairs - 8 + b * 8, &pairs[(s32)(b - 1)],
+ *    &pairs[(u16)(b - 1)], args swapped, field-wise swap (54), explicit x/y locals (66-68), Swap3(p, i) (63).
+ *    Compiler test: express_from_1 without its PLUS/PLUS stripping loop keeps the three givs apart (as the ROM
+ *    does) but breaks sprite_3, so it is not the ROM's compiler. Open: what keeps x/y address givs apart.
  * 2. Pairs loop: two insns scheduled differently (`ldr r4, =gFrags` / `adds r1, #8`).
  * 3. k loop: register choice (ROM: 120 in r9, gLinkSend in sl, wait counter r4, k*8 in r7, k + 1 in r8);
  *    probably follows from the sort's pseudos. Wait counter as `i` is best (j: 56, own var: 51).
