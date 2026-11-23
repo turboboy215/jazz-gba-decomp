@@ -1,0 +1,26 @@
+Test patch (session 9, 2026-11-23), on top of agbcc-jazz.patch + agbcc-givcombine-test.patch.
+env JZ_DTD: delete_trivially_dead_insns before the first loop pass. Dump: loop.c prints the move threshold.
+Build: make -C gcc old -j1; run: JZ_GIVLIFE=3 JZ_DTD=1 CC1=<tree>/gcc/old_agbcc. See docs/STRATEGY.md.
+
+--- a/gcc/loop.c	2026-11-23 09:46:23.624257935 -0800
++++ b/gcc/loop.c	2026-11-23 09:46:22.850504652 -0800
+@@ -1840,7 +1840,7 @@
+ 	  regno = m->regno;
+ 
+ 	  if (loop_dump_stream)
+-	    fprintf (loop_dump_stream, "savings %d ", savings);
++	    fprintf (loop_dump_stream, "savings %d thr %d ", savings, threshold);
+ 
+ 	  if (moved_once[regno] && loop_dump_stream)
+ 	    fprintf (loop_dump_stream, "halved since already moved ");
+--- a/gcc/toplev.c	2026-11-23 09:46:23.621305990 -0800
++++ b/gcc/toplev.c	2026-11-23 09:46:22.849315637 -0800
+@@ -2940,6 +2940,8 @@
+         TIMEVAR
+             (loop_time,
+             {
++                if (getenv ("JZ_DTD"))
++                    delete_trivially_dead_insns(insns, max_reg_num());
+                 if (flag_rerun_loop_opt)
+                 {
+                     /* We only want to perform unrolling once.  */

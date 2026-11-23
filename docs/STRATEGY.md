@@ -97,6 +97,30 @@ inside g1's, mode 1, or overlapping, mode 2) splits the `&spr[i]` givs; `==` on 
 (modes 4/5) breaks more. Make it a flag (`-fcombine-givs-ncav`, needs a new prebuilt archive) once a function
 matches with it; the real rule may be narrower. `tools/dumps.sh` honours `CC1` for such test compilers.
 
+**Candidate, not a flag yet (2026-11-23): delete trivially dead insns before the first loop pass.** cse's
+`delete_trivially_dead_insns` runs right after cse, but some pseudos only die later (gcse/cprop rewrites their
+last use), and they then count as real insns in loop.c, which decides invariant moves with `threshold * savings *
+lifetime >= insn_count` (threshold 13 for a loop with calls, minus 3 per move). Link_Results3's while loop has
+a dead `fp+300` pair (from `pairs[k].player`, the +4 folded into fp+304), so its `&gLinkSend` (life 4) is "not
+desirable" at 7 * 4 = 28 < 31; the ROM moved it on that pass. `tools/agbcc-dtd-test.patch` (on top of the jazz
+and givcombine patches; env `JZ_DTD=1`) runs one more sweep before the first loop pass: `make compare` passes
+with every game object compiled by it, no near miss changes (with JZ_GIVLIFE=3). It also makes the loop dump
+print the threshold (`savings N thr T`). Alone it gives 29, so one more insn is missing; with a fakematch
+(`<< 24` on the u8 test) plus the wait loop counted by `j` the whole k loop of Link_Results3/4 matches (9 ops
+left, pairs loop only; Link_Results2 45 -> 22). Find the 28th insn before turning this into a flag.
+Same session, ruled out (each against the matched set): no `threshold -= 3` after plain (non move-insn) moves
+(link_2.c, resbank_1.c break); deleting flow.c's `(use (const_int 0))` nops before loop (7 files break; they
+count as insns, but other loops depend on them); two gcse passes (MAX_PASSES 2/3: no change). Moved-out insns
+of an inner loop are not movables again at the outer level on the same pass (that is how the ROM gets two
+`&gLinkSend` registers).
+**Pairs loop (Link_Results2/3/4), 2026-11-23:** the ROM's `adds r1, #8` right after `str j, [r1]` is the AUTO_INC_DEC
+placement in strength_reduce, which a DEST_ADDR giv only gets when it is not combined into a DEST_REG giv. The
+egcs combine_givs rule "a DEST_REG giv used once is not a combine target" (agbcc lacks it) gives the ROM's order
+(Link_Results3 6 ops, only j / &gFrags in swapped regs) but changes sub_08001314 (resbank_1.c; minimal set
+givs 108/176/272/403 in two passes, so it is a register-allocation knock-on). Restricted to givs whose addend
+is a pseudo it is clean, but only the player giv changes (7 ops; the frags giv, addend fp+300, stays combined
+and its init then comes after &gFrags's). Not kept in the patch; the rule that tells these loops apart is open.
+
 Ruled out on 2026-11-09: reload without round-robin (`i = -1` in `allocate_reload_reg`, 16 break), spill_regs
 in reverse order (20 break), PRE inserting before *any* final insn (1 breaks), `-fno-gcse-no-const` again
 with the new flags (12 break).

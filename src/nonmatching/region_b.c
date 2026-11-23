@@ -336,6 +336,8 @@ void sub_0830AF0C(void)
  * 2. Pairs loop: two insns scheduled differently (`ldr r4, =gFrags` / `adds r1, #8`).
  * 3. k loop: register choice (ROM: 120 in r9, gLinkSend in sl, wait counter r4, k*8 in r7, k + 1 in r8);
  *    probably follows from the sort's pseudos. Wait counter as `i` is best (j: 56, own var: 51).
+ *    Session 9 (2026-11-23): solved for Link_Results3 (its item 2): JZ_DTD compiler candidate + `<< 24` test +
+ *    wait loop on `j`. Here the same changes give 45 -> 22 (the sort is what is left).
  * sub_0830ECF4 / sub_0830F0AC (Link_Results3/4, below) have byte-identical pairs and k loops: items 2 and 3 are
  * not knock-ons of the sort (their sorts match), see their comments. */
 static inline void FragPair_Swap(struct FragPair *x, struct FragPair *y)
@@ -461,11 +463,28 @@ void sub_0830E93C(void)
  * Link_Results2). Still open, both shared with Link_Results2 (its items 2 and 3, byte-identical code):
  * 1. Pairs loop: `ldr r4, =gFrags` before `add r2, sp, #300`, and `adds r1, #8` right after its store.
  *    Tried: statement order swapped (37), j <= 2, the loop on i (37), a FragPair pointer (41), *(gFrags + j).
- * 2. k loop: ROM keeps 120 in r9, &gLinkSend in sl for the wait loop and a second &gLinkSend in r5 loaded in
- *    front of the while loop (hoisted out of the while loop only); ours shares one pseudo (loop.c: the while
- *    loop's load, life 4 in a 31-insn loop, is "not desirable" on the while pass, then "matches" the wait loop's
- *    at k level). A `struct LinkPacket *lp` declared in the while body reproduces r5 (28 ops) but then the wait
- *    loop's address is no longer hoisted, so it is not the source. Fix the move/match decision, not the regs. */
+ *    Session 9 (2026-11-23): `adds r1, #8` right after the store is loop.c's auto-inc placement, which only a
+ *    DEST_ADDR giv that is not combined into a DEST_REG giv gets. Ours combines the store's address giv (967)
+ *    into the single-use DEST_REG giv 965 (`j*8 + (fp+304)`), so the increment goes in front of the biv
+ *    increment. The egcs rule "a single-use DEST_REG giv is not a combine target" (missing in agbcc) gives the
+ *    ROM's order (6 ops left: j / &gFrags swap r3/r4), but breaks sub_08001314 (resbank_1.c, minimal set: givs
+ *    108/176/272/403 there). Narrowed to "the giv's addend is a pseudo" it is clean on the matched set but
+ *    only fixes the player giv (7 ops: the frags giv 975, addend fp+300, still combined, so its init comes after
+ *    &gFrags's). Not a flag yet; docs/STRATEGY.md (2026-11-23).
+ * 2. k loop: SOLVED in an experiment (session 9, 2026-11-23), three parts, all needed:
+ *    a. The ROM moves the while loop's &gLinkSend out of the while loop on loop pass 1 (then k level leaves it,
+ *       and only the wait loop's copy goes out of k: sl). Ours calls it "not desirable": threshold 13 drops by 3
+ *       per move (&pairs[k] then 100), and 7 * life 4 = 28 < 31 insns. Two of the 31 are a dead `fp+300` pair
+ *       (cse's dead-insn sweep runs before it dies): compiler candidate JZ_DTD (delete_trivially_dead_insns
+ *       before the first loop pass, tools/agbcc-dtd-test.patch, clean on the matched set) makes it 29.
+ *    b. One more insn has to go: the u8 test of sub_080006C4 expands to QI copy + ashift + lshiftrt + tst.
+ *       `while (((u32 (*)(struct Sprite *))sub_080006C4)(&spr[pairs[k].player]) << 24)` (a fakematch) saves
+ *       one and the while pass then moves &gLinkSend (r5 as in the ROM). The real cause of the 28th insn is
+ *       still open: return types s8/u16/u32+(u8), `!= 0`, `& 0xFF`, for(;;) all keep 29 or worse.
+ *    c. With a+b, `&gLinkSend` (refs 7, live 124) loses global-alloc to 120 (refs 7, live 122) and gets no
+ *       hard reg; the wait loop counted by `j` instead of `i` fixes the whole k loop (`for (j = 0; j < 90;
+ *       j++)`). With a+b+c only item 1 is left: 9 ops (JZ_GIVLIFE=3 JZ_DTD=1). Without a+b the `j` counter
+ *       is worse (46), so the source below still uses `i`. */
 void sub_0830ECF4(void)
 {
     struct Sprite spr[3];
@@ -574,7 +593,8 @@ void sub_0830ECF4(void)
 
 /* ---- Link_Results4 0830F0AC ---- 32 diff ops (RODATA=083DC6A0) with the giv-combine experiment compiler, 99 with
  * the stock one. Link_Results3 for 4 players (x = i * 56 + 32, text column player * 7 + 4, background
- * gRes_08046400): the same two open items, so one fix gives both. */
+ * gRes_08046400): the same two open items, so one fix gives both. Session 9: Link_Results3's k-loop experiment
+ * (wait loop on `j`, the `<< 24` test, JZ_DTD=1) takes this one to 9 ops too, the pairs loop only. */
 void sub_0830F0AC(void)
 {
     struct Sprite spr[4];

@@ -98,6 +98,19 @@ To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, the
 
 ## 4. State and next tasks (update this section every session)
 
+**State (2026-11-23, session 9):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
+prebuilt archive unchanged. **Link_Results3's k loop is solved in an experiment** (its comment, item 2): the ROM
+moves the while loop's `&gLinkSend` out of the while loop on loop pass 1 (r5), which needs the loop's insn count
+≤ 28 (threshold 13, -3 per move, life 4). New compiler candidate **`tools/agbcc-dtd-test.patch`** (on top of the
+jazz + givcombine patches, env `JZ_DTD=1`: one more dead-insn sweep before loop; clean on the matched set, also
+prints the move threshold in `-dL` dumps) removes 2 of the 3 extra insns; the third is only removed by a fakematch
+(`<< 24` on the u8 `sub_080006C4` test). With both plus the wait loop counted by `j`, Link_Results3 and Link_Results4
+are at **9 ops** (pairs loop only), Link_Results2 at 22. Pairs loop diagnosed (STRATEGY 2026-11-23): the ROM's
+`adds r1, #8` is the auto-inc placement of an uncombined address giv; the egcs "single-use DEST_REG giv is not a
+combine target" rule gives it but breaks resbank_1.c's sub_08001314. Near-miss sources are unchanged (still `i`,
+plain test; they score 32 with JZ_GIVLIFE=3 as before). Test compiler: patch a pret/agbcc clone with the three patches in
+order, `make -C gcc old -j1`.
+
 **State (2026-11-20, session 8):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
 prebuilt archive unchanged. Moved to the 3/4-player copies, now named **`Link_Results3` (0830ECF4) /
 `Link_Results4` (0830F0AC)** and added as near misses at the end of `src/nonmatching/region_b.c` (99 ops each with
@@ -154,11 +167,13 @@ section by hand.
 Next (the user wants the region B menus finished first, then GAX):
 
 1. **Region B menus, the rest:** near misses `Link_Results2/3/4`, `Link_MultiPakStart` (each comment says what is
-   open). Start with **`Link_Results3`'s k loop** (its comment, item 2): the ROM hoists the while loop's
-   `&gLinkSend` out of the while loop only (r5) and the wait loop's out of the k loop (sl); find what loop.c
-   decision differs (`-dL` "not desirable" / "matches" lines; build the test compiler first, see State), then
-   the pairs-loop schedule (item 1). When Link_Results3 matches with the candidate, turn the candidate into a
-   flag (`-fcombine-givs-ncav` in agbcc-jazz.patch, new prebuilt archive, copy it back). The "%d" literal
+   open). Link_Results3 (its comment, items 1 and 2) has two open questions, both with a test compiler: (a) the
+   28th insn: why the ROM's while loop is one insn shorter than ours after JZ_DTD (the u8 test's QI copy +
+   ashift + lshiftrt + tst is the suspect; `-dG`/`-dL` dumps of `work/` variants), and (b) the pairs-loop
+   combine rule: what separates Link_Results3's single-use DEST_REG givs 965/975 from resbank_1.c
+   sub_08001314's (108/176/272/403). When Link_Results3 matches, turn the candidates into flags
+   (`-fcombine-givs-ncav`, the dead-insn sweep, ...) in agbcc-jazz.patch, new prebuilt archive, copy it back;
+   Link_Results4 then needs the same source changes. The "%d" literal
    (083DC6A0) is the menu TU's next string, so these belong at the end of `code_0830C034.c` (its rodata extends
    that file's block). Then who builds the menu pages,
    `08312CA4`, `0830F464`, `0830F5C8`; then the claim queue. `0830AE38-0830B634` (Menu_StartNewGame,
