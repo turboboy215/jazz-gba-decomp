@@ -11,6 +11,8 @@
 #include "resbank.h"
 #include "gax.h"
 #include "main.h"
+#include "regionb.h"
+#include "pickup.h"
 
 /* ---- Save_Init 08315158 ---- 4 diff ops: the first loop's `buf + i` giv is "not worth while, 0 vs 7"
  * (OPT=-dL), so it stays indexed; the ROM strength-reduced it to a pointer whose init comes after the
@@ -699,4 +701,71 @@ void sub_0830F0AC(void)
         }
         sub_08004968(pairs[k].player * 7 + 4, 19, "%d", gFrags_03005A0C[pairs[k].player]);
     }
+}
+
+/* ---- Pickup_ClearAll 083142F8 ---- 7 diff ops: the ROM loads the array base and then adds 2 for
+ * `&p->active` (pool word 0300407C); every form tried folds base+2 into the pool constant
+ * (0300407E). The same loop with the field at offset 0 (Trigger_ClearAll) matches. */
+void sub_083142F8(void)
+{
+    s32 i;
+    for (i = 0; i != MAX_PICKUPS; i++)
+        gPickups_0300407C[i].active = 0;
+}
+
+/* ---- Pickup_Create 08314338 ---- RODATA=083DF6BC. Control flow matches up to the jump table. The ROM
+ * reads the two u8 stack arguments (`scored`, `a6`) with `add rX, sp, #N; ldrb rX, [rX]` and keeps a
+ * 12-byte frame; agbcc here loads them as words and narrows them, and `scored` gets two stack slots
+ * (16-byte frame). Probably a declaration difference for the u8 stack parameters. */
+u32 sub_08314338(s32 x, s32 y, u32 type, u8 a3, u16 secs, u8 scored, u8 a6, u16 id)
+{
+    struct Pickup *p;
+    if (!sub_08314310(&p))
+        return 0;
+    p->active = 1;
+    p->type = type;
+    p->x = x << 8;
+    p->y = y << 8;
+    p->z = 39;
+    p->unk3 = 1;
+    p->id = id;
+    p->unk4 = a3;
+    p->unk10 = secs * 60;
+    p->unk5 = a6;
+    p->unkC = 0;
+    if (scored) {
+        switch (type) {
+        case 3:
+        case 5:
+            p->score = 250;
+            break;
+        case 6:
+            p->score = 125;
+            break;
+        case 0:
+        case 7:
+            p->score = 100;
+            break;
+        case 9:
+            p->score = 75;
+            break;
+        case 10:
+            p->score = 200;
+            break;
+        case 1:
+        case 2:
+        case 4:
+        case 8:
+            p->score = 50;
+            break;
+        default:
+            p->score = 0;
+            break;
+        }
+        sub_080002E0(&p->sprite, &gUnk_081C00E0, p->type, 0);
+    } else {
+        p->score = scored;
+        sub_080002E0(&p->sprite, &gUnk_081F2130, p->type, 0);
+    }
+    return 1;
 }

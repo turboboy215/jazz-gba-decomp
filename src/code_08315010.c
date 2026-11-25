@@ -55,7 +55,7 @@ void sub_0831506C(u32 i, u8 v)
     s->unk4 = gUnk_02007566;
     s->unk3 = gUnk_02007561;
     s->unk6 = gUnk_030058F0;
-    s->unkF = gUnk_0300250C[92];
+    s->unkF = gPlayer_0300250C.unk5C;
     s->unk10 = v;
     for (j = 0, d = s->unk8, src = gUnk_030034E4; j <= 5; j++) {
         u8 c = *src++;

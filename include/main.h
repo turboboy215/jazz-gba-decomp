@@ -3,6 +3,7 @@
 /* main.h: region B boot / front end (docs/boot_sequence.md). */
 #include "global.h"
 #include "gax.h"
+#include "actor.h"
 
 void __main(void);
 
@@ -187,6 +188,9 @@ extern const char gStr_083DB57C[];   /* "     SELECTS A NEW LEVEL    " */
 extern const char gStr_083DB494[];   /* "Press Start to Play A Rematch" */
 extern const char gStr_083DB4B4[];   /* "Press % to Select a New Level" */
 
+/* ---- the player object (a struct Actor, actor.h) ---- */
+extern struct Actor gPlayer_0300250C;
+
 /* ---- save data: a 0x200-byte image of the 4 Kbit EEPROM (64 blocks of 8 bytes) ---- */
 struct SaveSlot {               /* 0x20 bytes, 4 of them after the 8-byte "turtles" magic */
     u8 brightness;              /* +0x00 gBrightness_02007567 */
@@ -210,7 +214,6 @@ extern u8 gUnk_0200755A;            /* NEW GAME: chosen save slot */
 extern u8 gUnk_0200755B;            /* CONTINUE: chosen save slot */
 extern u8 gUnk_02007561, gUnk_02007566;
 extern u16 gUnk_030058F0;
-extern u8 gUnk_0300250C[];
 extern u8 gUnk_030034E4[6];
 extern u8 gUnk_030028EC;
 extern u16 gUnk_030034DC;

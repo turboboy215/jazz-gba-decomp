@@ -24,6 +24,6 @@ git add -A src splits.txt asm ld_script.ld objects.mk progress_history.csv PROGR
 git commit -qm "Decompile $NAME ($ADDR)
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_014cUw9Vp1AqtZ6x6sUdMR5K"
+Claude-Session: https://claude.ai/code/session_014cUw9VhawyuAcPKXrRvUjD"
 git push -q || echo "push failed (commit kept locally)"
 echo "$P"

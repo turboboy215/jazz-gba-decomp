@@ -3671,7 +3671,7 @@ sub_08311C50:
 	asrs r1, r1, #8
 	adds r2, r7, #0
 	bl sub_08301BD8
-	bl sub_083142F8
+	bl Pickup_ClearAll
 	bl sub_082F8A04
 	bl sub_082EA27C
 	bl sub_08309C98

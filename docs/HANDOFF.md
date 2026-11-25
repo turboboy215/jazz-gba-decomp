@@ -29,7 +29,9 @@ over the clone. Optional: Ghidra 11.4.2 headless (GitHub release zip, JDK 21) to
 `decomp/drafts/` (gitignored). The command is in `docs/reference/STRATEGY.md`, and
 `tools/scripts/GbaSetup.py` is already adapted.
 
-**Delivering back:** commit in git, then copy changed files to the user's `jazz-decomp\` folder with
+**Delivering back:** commit in git, then copy changed files to **both** `jazz-decomp\` and `jazz-decomp-git\`
+(the user's GitHub Desktop clone, which they commit and push from; it has the real `Makefile` and `.github\`). List
+deleted or renamed files for the user to delete by hand (the bridge cannot delete). Copy them to the user's `jazz-decomp\` folder with
 the device bridge (max 50 per call; `Makefile` → `Makefile.txt`), and re-create `jazz-decomp.bundle`
 with `git bundle create jazz-decomp.bundle --all`.
 
@@ -92,11 +94,32 @@ with `git bundle create jazz-decomp.bundle --all`.
 | `sh tools/dumps.sh file.c [dir]` | keep the RTL dumps (`DUMPS=gGlLc` default: greg, gcse, lreg, loop, combine) in `build/dumps` |
 | `LA_CC1=... sh tools/qtys.sh file.c [BLOCK]` | local-alloc's qtys per block in allocation order (needs a debug old_agbcc built with `tools/agbcc-ladebug.patch`, 10 s, see the script) |
 | `OPT=... sh tools/loopinfo.sh file.c` | loop.c's insn count per pass and which invariants it moves or calls "not desirable" (see the Oam_Init budget note in `docs/region_a.md`) |
+| `python3 tools/lift.py --scan LO HI` / `tools/lift.py ADDR...` | draft C for straight-line Thumb functions (calls with constant args, global/pointer loads and stores, params, call results); unliftable ones are listed on stderr with the reason. `tools/lift_arity.txt` = known callee arities. Most of what it can do is done (session 10) |
+| `python3 tools/lift_decls.py work.c work.err` | prototypes/externs a draft uses that no `include/*.h` declares; **append** them to `include/regionb.h` (never regenerate that header: integrated code depends on it) |
+| `python3 tools/scripts/ghidra_drafts.py ...` then `python3 tools/clean_drafts.py` | Ghidra decompiler drafts for every asm function → `decomp/drafts/clean/ADDR.c` (pool values, names, a0..aN). Needs PyGhidra; setup lines at the top of the script (~2 min) |
 | `sh tools/exitcount.sh file.c sub_ADDR` | insns in a loop's exit code at expand time (jump.c copies it in front of the loop unless > 30, a label, a call or a loop note) |
 
 To name a function, add `ADDR Name # [sure|likely] evidence` to `names.txt`, then run `split.py`.
 
 ## 4. State and next tasks (update this section every session)
+
+**State (2026-11-24, session 10):** **31.0% of live code in C (was 19.7%)**, ByteMatch report 632/1282 functions;
+`make compare` passes; compiler and prebuilt archive unchanged. Changed approach: instead of compiler work on
+the Link_Results near misses, bulk-matched the easy region-B code. (1) `tools/lift.py` lifted **~310 straight-line
+functions** (the cutscene dialogue pages `082FB...-08301...`, scene helpers, setters) which `batch_check` verified;
+(2) by hand from Ghidra drafts: the **trigger system** `08312CA4-08313088` (16, `include/trigger.h`) and the **pickup
+pool** `0300407C` (5 + 2 near misses, `include/pickup.h`). New headers: `scene.h` (scene state 02007978, page
+callback 03005A40), `regionb.h` (drafted prototypes, sort into subsystems later), `trigger.h`, `pickup.h`.
+`struct Actor` (actor.h) gained fields; **the player `gPlayer_0300250C` is a `struct Actor`**; `030038CC` is a
+camera struct (`unk08/unk0C` = camera x/y, used by Pickup_DrawAll). ~20 missed starts added to `starts.txt`
+(empty `bx lr` functions after dialogue pages, trigger inits, camera setters). Tricks that worked, all new tips
+material: a shared `zero` variable (`a = zero = 0; b = zero;`) for one zero register used by stores of
+different widths; `u8 r; ... goto done; ... done: return r;` to put a search loop's found-block first;
+`&p->sprite` repeated at each call instead of a `struct Sprite *s` local (register order); `if (visible ||
+p->unk4) update; else free;` ordering follows the ROM's branch layout. Near misses added to
+`src/nonmatching/region_b.c`: Pickup_ClearAll 083142F8 (base+2 folding), Pickup_Create 08314338 (u8 stack args
+read with ldrb). `083073B8` stays asm: it returns GetFlag's value unnarrowed, but GetFlag is declared `u8`.
+Harmless: `section does not have enough alignment` assembler warnings from split asm files.
 
 **State (2026-11-23, session 9):** 19.7% of live code in C (no new match); `make compare` passes; compiler and
 prebuilt archive unchanged. **Link_Results3's k loop is solved in an experiment** (its comment, item 2): the ROM
@@ -164,7 +187,14 @@ table (`docs/STRATEGY.md`, 2026-11-17). `MultiBootMain` is 19 ops with `OPT=-fcp
 read as volatile. Note: `tools/nm_replace.py` only edits `region_a.c` (hard-coded); for region B, replace the
 section by hand.
 
-Next (the user wants the region B menus finished first, then GAX):
+Next (session 10 note: the user wants matched code; bulk work on the easy region-B functions paid off far
+more than the Link_Results compiler hunt, so keep going there first):
+
+0. **Region B with the Ghidra drafts** (regenerate them first, see the tools table; `decomp/drafts` is
+   gitignored). Work in clusters that share a struct: `0830F464`/`0830F5C8` (menu pages), `08314464`/`0831488C`
+   (pickup update/collect, `pickup.h`), the scene loop `083152C4-08316734` (`scene.h`), the object code in
+   `082E8470-08309F28` (many 38/36-byte pairs per object type: start with one type and reuse its struct).
+   Preamble for scratch files: `work/allh.c` style (every include/*.h except gax_internal.h, then regionb.h).
 
 1. **Region B menus, the rest:** near misses `Link_Results2/3/4`, `Link_MultiPakStart` (each comment says what is
    open). Link_Results3 (its comment, items 1 and 2) has two open questions, both with a test compiler: (a) the

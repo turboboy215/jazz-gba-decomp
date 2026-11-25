@@ -381,3 +381,25 @@
 0830BB74 Link_ClientStart                 # [likely] TOURNAMENT on players 2-4: opens the link session, "PLEASE WAIT" until player 1 sends 120 then 222 (timeouts end in the LINK ERROR screen), takes frags / play mode / item bits / radar from the packet, plays the match and shows the result screen; "PLEASE WAIT WHILE PLAYER 1 SELECTS A NEW LEVEL" after 127
 0830C5C0 Menu_NewGameSlot                 # [likely] NEW GAME save-file item: A on a used file asks "OVERWRITE EXISTING GAME?" (YES/NO), then opens SELECT DIFFICULTY; otherwise redraws the file's icon and "Stage N Level M" label from Save_GetSlot()->unk10
 0830CD64 Menu_ContinueSlot                # [likely] CONTINUE save-file item: A on a used file loads its settings (brightness, volumes, control configuration, difficulty), fades out and starts its level (sub_08312398(unk10)); otherwise redraws the file's icon and label
+08312CA4 Trigger_UpdateAnimHold           # [likely] animates a trigger's tiles: next frame each `delay` ticks, holds the last frame; frees the trigger when all four corners are off screen
+08312D88 Trigger_UpdateAnimLoop           # [likely] like Trigger_UpdateAnimHold but the animation loops
+08312E60 Trigger_Draw                     # [likely] draws the trigger's current frame (frees it when off screen)
+08312EF8 Trigger_SetAnimLoop              # [likely] restart and use Trigger_UpdateAnimLoop
+08312F08 Trigger_SetAnimHold              # [likely] restart and use Trigger_UpdateAnimHold
+08312F18 Trigger_InitFlagAnim             # [likely] frame/tick 0, callback 08312F54; if the flag already has its state, start on the last frame
+08312F54 Trigger_FlagAnim                 # [likely] animates while the flag has the trigger's state, else shows frame 0
+08312F80 Trigger_SetFlagFrame             # [likely] restart and use Trigger_FlagFrame
+08312F90 Trigger_FlagFrame                # [likely] frame = (flag has the trigger's state)
+08312FB8 Trigger_SetFlag1Frame            # [likely] use Trigger_Flag1Frame
+08312FC8 Trigger_Flag1Frame               # [likely] frame = GetFlag(1) != 0
+08312FEC Trigger_SetUntilFlag7            # [likely] use Trigger_UntilFlag7
+08312FFC Trigger_UntilFlag7               # [likely] drawn while flag 7 is clear
+08313018 Trigger_ClearAll                 # [likely] marks all 10 trigger slots free
+08313030 Trigger_Alloc                    # [likely] first free slot (checks 11, one past the array), 0 if none
+0831305C Trigger_UpdateAll                # [likely] calls each active trigger's callback
+08314310 Pickup_Alloc                     # [likely] first free pickup slot
+083149CC Pickup_UpdateAll                 # [likely] updates each active pickup; off screen (single player, not unk4) frees it and may mark it collected
+08314A3C Pickup_DrawAll                   # [likely] shows, animates and positions each active pickup relative to the camera (030038CC +8/+C)
+08314AC4 Pickup_FindById                  # [likely] the active pickup with this id
+083142F8 Pickup_ClearAll                  # [likely] marks the 8 pickup slots (0300407C) free
+08314338 Pickup_Create                    # [likely] allocates and fills a pickup; scored ones get 50-250 points by type

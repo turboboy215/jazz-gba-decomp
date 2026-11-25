@@ -18,3 +18,54 @@
 08004874  # region A
 08004B68  # region A: hex digit -> value
 08005384  # region A: sprintf (Ghidra started 2 bytes late at 08005386)
+082FBD08  # empty function (bx lr) after a dialogue page
+082FBD0C  # empty function (bx lr) after a dialogue page
+082FBD10  # empty function (bx lr) after a dialogue page
+082FBD14  # empty function (bx lr) after a dialogue page
+082FBD18  # empty function (bx lr) after a dialogue page
+082FBD1C  # empty function (bx lr) after a dialogue page
+082FBD20  # empty function (bx lr) after a dialogue page
+082FBDEC  # empty function (bx lr) after a dialogue page
+082FBDF0  # empty function (bx lr) after a dialogue page
+082FBDF4  # empty function (bx lr) after a dialogue page
+082FBDF8  # empty function (bx lr) after a dialogue page
+082FBDFC  # empty function (bx lr) after a dialogue page
+082FBE00  # empty function (bx lr) after a dialogue page
+082FBE04  # empty function (bx lr) after a dialogue page
+082FBE08  # empty function (bx lr) after a dialogue page
+082FF950  # empty function (bx lr) after a dialogue page
+082FF954  # empty function (bx lr) after a dialogue page
+082FF958  # empty function (bx lr) after a dialogue page
+082FF95C  # empty function (bx lr) after a dialogue page
+082FF960  # empty function (bx lr) after a dialogue page
+082FFA90  # empty function (bx lr) after a dialogue page
+082FFA94  # empty function (bx lr) after a dialogue page
+082FFA98  # empty function (bx lr) after a dialogue page
+082FFA9C  # empty function (bx lr) after a dialogue page
+082FFAA0  # empty function (bx lr) after a dialogue page
+082FFAA4  # empty function (bx lr) after a dialogue page
+082FFAA8  # empty function (bx lr) after a dialogue page
+082FFAAC  # empty function (bx lr) after a dialogue page
+082FFAB0  # empty function (bx lr) after a dialogue page
+082FFAB4  # empty function (bx lr) after a dialogue page
+082FFAB8  # empty function (bx lr) after a dialogue page
+082FFABC  # empty function (bx lr) after a dialogue page
+083013A8  # empty function (bx lr) after a dialogue page
+083013AC  # empty function (bx lr) after a dialogue page
+083013B0  # empty function (bx lr) after a dialogue page
+083013B4  # empty function (bx lr) after a dialogue page
+083013B8  # empty function (bx lr) after a dialogue page
+083013BC  # empty function (bx lr) after a dialogue page
+083013C0  # empty function (bx lr) after a dialogue page
+083013C4  # empty function (bx lr) after a dialogue page
+083013C8  # empty function (bx lr) after a dialogue page
+082FC648  # empty function (bx lr) after a dialogue page
+082FC64C  # empty function (bx lr) after a dialogue page
+08301E58  # camera-limit setter (030038CC +0x1C)
+08301E64  # camera-limit setter (030038CC +0x24)
+08301E70  # camera-limit reset
+08312EF8  # trigger init: tick/frame 0 + callback
+08312F08  # trigger init: tick/frame 0 + callback
+08312F80  # trigger init: tick/frame 0 + callback
+08312FB8  # trigger init: tick/frame 0 + callback
+08312FEC  # trigger init: tick/frame 0 + callback

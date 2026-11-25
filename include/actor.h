@@ -12,12 +12,33 @@ struct Actor {
     u8 unk2[0x2E - 2];
     u8 unk2E;               /* +0x2E */
     u8 unk2F;               /* +0x2F */
-    u8 unk30[0x34 - 0x30];
+    u8 unk30;               /* +0x30 */
+    u8 unk31[3];
     s32 x;                  /* +0x34 24.8 fixed point */
     s32 y;                  /* +0x38 */
-    u8 unk3C[0x64 - 0x3C];
+    u8 unk3C[4];
+    s32 unk40;              /* +0x40 (added to x by sub_08307EE0: x velocity?) */
+    s32 unk44;              /* +0x44 (added to y: y velocity?) */
+    s32 unk48;              /* +0x48 */
+    u8 unk4C[0x5A - 0x4C];
+    u16 unk5A;              /* +0x5A */
+    u8 unk5C;               /* +0x5C (saved in SaveSlot.unkF for the player) */
+    u8 unk5D[3];
+    u8 *unk60;              /* +0x60 */
     struct Sprite sprite;   /* +0x64 */
-    u8 unkC8[0xF8 - 0xC8];
+    u8 unkC8[0xE2 - 0xC8];
+    u8 unkE2;               /* +0xE2 */
+    u8 unkE3[3];
+    u8 unkE6;               /* +0xE6 */
+    u8 unkE7;
+    s32 unkE8;              /* +0xE8 */
+    u16 unkEC;              /* +0xEC */
+    u8 unkEE[2];
+    s32 unkF0;              /* +0xF0 */
+    u8 unkF4;               /* +0xF4 */
+    u8 unkF5;               /* +0xF5 */
+    u8 unkF6;               /* +0xF6 */
+    u8 unkF7;
 };
 
 /* Smaller object with a single-layer sprite (Actor_HitShot 08000ECC / Actor_HitShot2 0800104C;

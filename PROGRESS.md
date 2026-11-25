@@ -8,6 +8,7 @@
 - 2026-10-15: GAX_resume_music (083190F0). code decompiled to C: 360 / 228980 bytes (0.16%); rate 3271 bytes/hour; ETA 2026-10-18 14:36
 - 2026-10-15: GAX_stop (08319214). code decompiled to C: 480 / 228980 bytes (0.21%); rate 4347 bytes/hour; ETA 2026-10-17 21:16
 
+- 2026-11-24: session 10: ~350 region B functions (lifted dialogue pages and helpers, trigger system, pickups). code decompiled to C: 69416 / 224008 bytes (30.99%)
 ## Asm exceptions (kept as asm on purpose)
 - `asm/header.s`: cartridge header (logo incbin)
 - `asm/crt0.s`: Frohwein crt0 + ARM IRQ dispatcher (to be disassembled by hand)
