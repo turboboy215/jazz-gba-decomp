@@ -128,7 +128,7 @@ sub_0830E93C:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl Fade_Start
+	bl sub_08316F10
 	add r0, sp, #200
 	mov r8, r0
 	mov r1, sp
@@ -174,7 +174,7 @@ sub_0830E93C:
 	ldr r1, [pc, #68]
 	bl sub_08002F64
 .L0830EAB0:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L0830EAA0
 	movs r7, #0
@@ -579,7 +579,7 @@ sub_0830ECF4:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl Fade_Start
+	bl sub_08316F10
 	movs r0, #152
 	lsls r0, r0, #1
 	add r0, sp
@@ -623,7 +623,7 @@ sub_0830ECF4:
 	ldr r1, [pc, #80]
 	bl sub_08002F64
 .L0830EE64:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L0830EE54
 	movs r7, #0
@@ -1028,7 +1028,7 @@ sub_0830F0AC:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #30
-	bl Fade_Start
+	bl sub_08316F10
 	movs r0, #202
 	lsls r0, r0, #1
 	add r0, sp
@@ -1072,7 +1072,7 @@ sub_0830F0AC:
 	ldr r1, [pc, #80]
 	bl sub_08002F64
 .L0830F21C:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L0830F20C
 	movs r7, #0

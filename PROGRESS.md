@@ -9,6 +9,7 @@
 - 2026-10-15: GAX_stop (08319214). code decompiled to C: 480 / 228980 bytes (0.21%); rate 4347 bytes/hour; ETA 2026-10-17 21:16
 
 - 2026-11-24: session 10: ~350 region B functions (lifted dialogue pages and helpers, trigger system, pickups). code decompiled to C: 69416 / 224008 bytes (30.99%)
+- 2026-11-26: session 11: ~140 region B functions (code families via tools/cluster.py: LCG copies, shot helpers, warp fades, level screen setups; AgbEEPROM at -O1; Fade_*). code decompiled to C: 81972 / 224008 bytes (36.59%)
 ## Asm exceptions (kept as asm on purpose)
 - `asm/header.s`: cartridge header (logo incbin)
 - `asm/crt0.s`: Frohwein crt0 + ARM IRQ dispatcher (to be disassembled by hand)

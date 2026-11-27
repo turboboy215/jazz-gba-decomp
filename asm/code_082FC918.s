@@ -11,12 +11,12 @@ sub_082FC918:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl Fade_Start
+	bl sub_08316F10
 	b .L082FC92A
 .L082FC926:
 	bl VBlankIntrWait
 .L082FC92A:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L082FC926
 	movs r0, #1

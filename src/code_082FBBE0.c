@@ -158,3 +158,25 @@ void sub_082FBE08(void)
 {
 
 }
+
+void sub_082FBE0C(void)
+{
+    u8 *extra;
+    s32 zero;
+    sub_08316F10(1, 0xC0, 60);
+    while (sub_08316F50())
+        sub_0831A54C();
+    sub_083100D4(1);
+    sub_08305E54();
+    if (gUnk_0200755C < 4) {
+        extra = sub_083152BC();
+        if (extra[3] == 0)
+            extra[3] = 1;
+    }
+    sub_08311C50(19, 0);
+    gUnk_03000D14 = zero = 0;
+    gUnk_03000D1C = zero;
+    gPlayer_0300250C.unk40 = zero;
+    gPlayer_0300250C.unk44 = zero;
+    sub_08316F10(0, 0xC0, 60);
+}

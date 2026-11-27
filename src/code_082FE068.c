@@ -170,3 +170,25 @@ void sub_082FE540(void)
     sub_083164C8(8);
     sub_08316500(sub_082FE5A0);
 }
+
+void sub_082FE5A0(void)
+{
+    u8 *extra;
+    s32 zero;
+    sub_08316F10(1, 0xC0, 30);
+    while (sub_08316F50())
+        sub_0831A54C();
+    sub_083100D4(1);
+    sub_083043E4();
+    if (gUnk_0200755C < 4) {
+        extra = sub_083152BC();
+        if (extra[0] == 0)
+            extra[0] = 1;
+    }
+    sub_08311C50(4, 0);
+    gUnk_03000D14 = zero = 0;
+    gUnk_03000D1C = zero;
+    gPlayer_0300250C.unk40 = zero;
+    gPlayer_0300250C.unk44 = zero;
+    sub_08316F10(0, 0xC0, 60);
+}

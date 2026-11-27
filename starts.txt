@@ -69,3 +69,4 @@
 08312F80  # trigger init: tick/frame 0 + callback
 08312FB8  # trigger init: tick/frame 0 + callback
 08312FEC  # trigger init: tick/frame 0 + callback
+083171A0  # EepromTimerIntr (only reached through a pointer)

@@ -299,8 +299,8 @@ void sub_08314E98(void);
 void sub_08314F04(void);
 void sub_08314F54(void);
 void sub_08314FC0(void);
-void sub_08316098(s32, s32, s32, s32);
-void sub_083160FC(s32, s32, s32, s32, s32);
+u32 sub_08316098(s32, s32, s32, s32);
+u32 sub_083160FC(s32, s32, s32, s32, s32);
 void sub_08316308(s32, s32, s32, s32);
 void sub_083166A4(void);
 void sub_08316734(void);
@@ -533,5 +533,61 @@ extern s32 gUnk_030059D8;
 void sub_08301E58(s32 a0);
 void sub_08301E64(s32 a0);
 void sub_08301E70(void);
+
+
+/* Fade_* (08316F10-08317090): BLDCNT/BLDY brightness fades */
+extern u8 gFadeDir_03005840;
+extern u32 gFadeLevel_03005A4C;
+extern u32 gFadeStep_0300583C;
+extern const s8 gShakeTable_083DFAE8[4];
+extern u8 gShakeCount_03005A50;
+u32 __udivsi3(u32, u32);
+void sub_08316FA8(s32 dir, s32 mode, u32 frames);   /* Fade_Run */
+void sub_08317074(void);
+s32 sub_083170B8(s32 a0, s32 a1, s32 a2, s32 limit);
+s32 sub_083170E8(s32 v, s32 step);
+
+extern u32 gUnk_0300581C[8];
+extern s32 gUnk_030059F4;
+struct ResBank;
+void sub_08316930(struct ResBank *b, s32 i);
+
+/* per-object-file static LCG (seed from VCOUNT, x 0x19660D + 0x3C6EF35F): each object TU has its own copy and seed */
+extern long long gRngSeed_030058AC;
+extern long long gRngSeed_030058B4;
+extern long long gRngSeed_030058BC;
+extern long long gRngSeed_030058C4;
+extern long long gRngSeed_030058CC;
+extern long long gRngSeed_030058D4;
+extern long long gRngSeed_030058DC;
+extern long long gRngSeed_030058E4;
+extern long long gRngSeed_03005938;
+
+struct Shot;
+
+struct Shot;
+void sub_082F4ED0(struct Shot *s);
+void sub_082F7054(struct Shot *s);
+void sub_082F75DC(struct Shot *s);
+void sub_082F894C(struct Shot *s);
+struct Actor;
+void sub_08309D50(struct Actor *a);   /* Actor_Free */
+struct Unk083D6708 { u8 unk0[5]; u8 unk5; u8 unk6[2]; void *unk8; u8 unkC[4]; };
+extern const struct Unk083D6708 gUnk_083D6708[];
+extern u32 gUnk_03005924;
+extern u32 gUnk_03005928;
+
+void sub_08307244(struct Actor *a);
+void sub_08307304(struct Actor *a);
+void sub_08307380(struct Actor *a);
+void sub_08309E78(struct Actor *a);
+void sub_08311C50(s32 level, s32 b);   /* level warp / load */
+
+u8 sub_08000990(s32 x, s32 y, s32 dx0, s32 dy0, s32 dy1, s32 w, s32 h);   /* Map_HitWall */
+
+void sub_083100D4(s32 a);
+void sub_08305E54(void);
+void sub_08304AAC(void);
+void sub_083043E4(void);
 
 #endif

@@ -54,3 +54,25 @@ void sub_08300990(void)
     sub_083164C8(8);
     sub_08316500(sub_083009F0);
 }
+
+void sub_083009F0(void)
+{
+    u8 *extra;
+    s32 zero;
+    sub_08316F10(1, 0xC0, 60);
+    while (sub_08316F50())
+        sub_0831A54C();
+    sub_083100D4(1);
+    sub_08304AAC();
+    if (gUnk_0200755C < 4) {
+        extra = sub_083152BC();
+        if (extra[1] == 0)
+            extra[1] = 1;
+    }
+    sub_08311C50(9, 0);
+    gUnk_03000D14 = zero = 0;
+    gUnk_03000D1C = zero;
+    gPlayer_0300250C.unk40 = zero;
+    gPlayer_0300250C.unk44 = zero;
+    sub_08316F10(0, 0xC0, 60);
+}

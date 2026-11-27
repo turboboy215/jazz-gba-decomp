@@ -113,8 +113,8 @@ void sub_080033CC(void);          /* VBlank_LinkError */
 #define LINK_RECV(n, k) (((struct LinkPacket *)gUnk_03000D38.bufs[(n) + 4])->data[k])
 extern u32 gUnk_03005894;      /* frames with a missing partner (Link_Exchange) */
 extern const char gUnk_083D31A0[], gUnk_083D31C0[], gUnk_083D31E0[]; /* LINK ERROR / PLEASE TURN OFF ALL SYSTEMS / AND TRY AGAIN */
-void sub_08316F10(int a, int b, int c);
-int sub_08316F50(void);
+void sub_08316F10(s32 dir, s32 mode, u32 frames); /* Fade_Start */
+u32 sub_08316F50(void); /* Fade_IsBusy */
 void sub_08004D70(void);  /* Glyph_InitCache */
 void sub_08001A6C(void);  /* ClearVram */
 void sub_08004A1C(void);  /* Text_ClearAll */

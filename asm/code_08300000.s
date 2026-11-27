@@ -4,82 +4,49 @@
 
 	.thumb
 	.align 1, 0
-	.global sub_083000F4
+	.global sub_08300864
 	.thumb_func
-sub_083000F4:
-	push {r4, lr}
-	movs r0, #49
-	bl sub_083189D0
-	movs r0, #1
-	movs r1, #192
-	movs r2, #60
-	bl Fade_Start
-	b .L0830010C
-.L08300108:
-	bl VBlankIntrWait
-.L0830010C:
-	bl Fade_IsBusy
-	adds r4, r0, #0
-	cmp r4, #0
-	bne .L08300108
-	movs r0, #7
+sub_08300864:
+	push {lr}
+	sub sp, #4
+	bl sub_0831650C
+	bl sub_0831654C
+	movs r0, #240
 	movs r1, #0
-	bl sub_08311C50
-	ldr r0, [pc, #28]
-	strh r4, [r0, #0]
-	ldr r0, [pc, #28]
-	strh r4, [r0, #0]
-	ldr r0, [pc, #28]
-	str r4, [r0, #64]
-	str r4, [r0, #68]
-	movs r0, #0
-	movs r1, #192
 	movs r2, #60
-	bl Fade_Start
-	pop {r4}
+	movs r3, #0
+	bl sub_08316308
+	movs r0, #60
+	mov r1, sp
+	bl sub_082EA468
+	lsls r0, r0, #24
+	cmp r0, #0
+	beq .L08300890
+	ldr r1, [sp, #0]
+	movs r0, #0
+	strb r0, [r1, #1]
+.L08300890:
+	movs r0, #61
+	mov r1, sp
+	bl sub_082EA468
+	lsls r0, r0, #24
+	cmp r0, #0
+	beq .L083008A4
+	ldr r1, [sp, #0]
+	movs r0, #0
+	strb r0, [r1, #1]
+.L083008A4:
+	movs r0, #62
+	mov r1, sp
+	bl sub_082EA468
+	lsls r0, r0, #24
+	cmp r0, #0
+	beq .L083008BA
+	ldr r0, [sp, #0]
+	adds r0, #90
+	movs r1, #20
+	strh r1, [r0, #0]
+.L083008BA:
+	add sp, #4
 	pop {r0}
 	bx r0
-	.4byte 0x03000D14
-	.4byte 0x03000D1C
-	.4byte 0x0300250C
-
-	.thumb
-	.align 1, 0
-	.global sub_08300148
-	.thumb_func
-sub_08300148:
-	push {r4, lr}
-	movs r0, #49
-	bl sub_083189D0
-	movs r0, #1
-	movs r1, #192
-	movs r2, #60
-	bl Fade_Start
-	b .L08300160
-.L0830015C:
-	bl VBlankIntrWait
-.L08300160:
-	bl Fade_IsBusy
-	adds r4, r0, #0
-	cmp r4, #0
-	bne .L0830015C
-	movs r0, #8
-	movs r1, #0
-	bl sub_08311C50
-	ldr r0, [pc, #28]
-	strh r4, [r0, #0]
-	ldr r0, [pc, #28]
-	strh r4, [r0, #0]
-	ldr r0, [pc, #28]
-	str r4, [r0, #64]
-	str r4, [r0, #68]
-	movs r0, #0
-	movs r1, #192
-	movs r2, #60
-	bl Fade_Start
-	pop {r4}
-	pop {r0}
-	bx r0
-	.4byte 0x03000D14
-	.4byte 0x03000D1C
-	.4byte 0x0300250C

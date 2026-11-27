@@ -403,3 +403,26 @@
 08314AC4 Pickup_FindById                  # [likely] the active pickup with this id
 083142F8 Pickup_ClearAll                  # [likely] marks the 8 pickup slots (0300407C) free
 08314338 Pickup_Create                    # [likely] allocates and fills a pickup; scored ones get 50-250 points by type
+0831715C EepromConfigure                  # [sure] Nintendo AgbEEPROM: 4 -> 512 B, 0x40 -> 8 KB
+083171A0 EepromTimerIntr                  # [sure] AgbEEPROM timer IRQ: count down, set the timeout flag at 0
+083171C4 SetEepromTimerIntr               # [sure] AgbEEPROM: timer number (0-3), store the IRQ handler
+083171FC EepromStartTimer                 # [sure] AgbEEPROM: enable the timer IRQ, start the countdown
+08317260 EepromStopTimer                  # [sure] AgbEEPROM: stop the timer, restore IE/IME
+083172A4 EepromDma3                       # [sure] AgbEEPROM DMA3Transfer with WAITCNT wait state 2 from the config
+08317324 EepromRead                       # [sure] AgbEEPROM ReadEepromDword
+083173DC EepromProgram                    # [sure] AgbEEPROM ProgramEepromDword (timer timeout)
+083174C0 EepromVerify                     # [sure] AgbEEPROM VerifyEepromDword
+08316FA8 Fade_Run                         # [likely] blocking fade: Fade_Start + wait loop in one
+08317074 Fade_SetBlack                    # [likely] BLDCNT=0xFF, BLDY=16, wait VBlank
+083170B8 Math_AddClamped                  # [likely] sub_083170A0 then clamp |v| to |limit| (a3)
+0831683C Sfx_IsPlaying                    # [likely] TRUE if any of the 4 GAX fx channels has status a0
+08316874 Sfx_FindChannel                  # [likely] first fx channel (0-3) with status a0, else -1
+083168BC Level_ResetFlags                 # [likely] gUnk_0300571C[i] = i < bank count, clear gUnk_0300581C[0..7]
+082F4B78 Shot_Free                        # [likely] clears active, frees the sprite OBJs if hasSprite
+082F4B98 Shot_FreeAll                     # [likely]
+082F4BBC Shot_UpdateAll                   # [likely] calls each active shot's callback
+083026AC LevelScreen_Setup1               # [likely] generic one-layer screen: tiles a0, resource bank a1
+082EA424 Actor_ClearD8                    # [likely]
+082EA43C Actor_SetD8ByFlag                # [likely] the actor with flagId id gets unkD8 = v; 1 if found
+08309DA0 Actor2_ClearD8                   # [likely]
+08309DB8 Actor2_SetD8ByFlag               # [likely] the actor with flagId id gets unkD8 = v; 1 if found

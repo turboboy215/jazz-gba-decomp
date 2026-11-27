@@ -206,7 +206,7 @@ sub_0830AF0C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #30
-	bl Fade_Start
+	bl sub_08316F10
 	b .L0830B0CC
 	movs r0, r0
 	subs r3, #196
@@ -228,7 +228,7 @@ sub_0830AF0C:
 .L0830B0C8:
 	bl VBlankIntrWait
 .L0830B0CC:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L0830B0C8
 	mov r1, r9
@@ -329,7 +329,7 @@ sub_0830AF0C:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #3
-	bl Fade_Start
+	bl sub_08316F10
 	b .L0830B1C4
 	push {r2, r4, r7}
 	lsrs r5, r7, #32
@@ -346,7 +346,7 @@ sub_0830AF0C:
 .L0830B1C0:
 	bl VBlankIntrWait
 .L0830B1C4:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	adds r5, r0, #0
 	cmp r5, #0
 	bne .L0830B1C0

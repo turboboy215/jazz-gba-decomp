@@ -44,8 +44,17 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
 * **Save.** A 0x200-byte image (`030044DC`) of the 4 Kbit EEPROM, read/written as 64 blocks of 8 bytes
   with a 1000-iteration busy wait between blocks: "turtles" magic (8 bytes), then 4 `struct SaveSlot`
   (0x20 bytes: brightness, fx/music volume, ... ; see `include/main.h`). Blocks 62-63 also get the 16
-  bytes at `030046CC` (`Save_WriteExtra`). EEPROM driver: `0831715C`, `083171C4`, `08317324` (read),
-  `083173DC` (write).
+  bytes at `030046CC` (`Save_WriteExtra`). EEPROM driver: Nintendo's AgbEEPROM, the timer-interrupt
+  revision, `0831715C-08317518`, now all in C (`src/code_0831715C.c`, `include/eeprom.h`, flavour `o1`:
+  old_agbcc -O1). Close to zeldaret/tmc `src/eeprom.c` (V124), but the write timeout uses a timer IRQ
+  (`EepromTimerIntr` 083171A0, only reached through a pointer) instead of VCOUNT.
+* (2026-11-26) **Code families.** Much of region B is the same function repeated per object file or per
+  level: `tools/cluster.py` lists the groups. Solved so far: the per-TU static LCG (seed from VCOUNT,
+  `x * 0x19660D + 0x3C6EF35F` on a `long long`, one seed per TU at `030058AC + 8n`: each copy starts an
+  object TU), "free the shot when its animation ends" (18), Actor `unk5A == 0` (9), level-warp fades (12+3),
+  actor inits (5), and the level screen setups (`tools/lvlgen.py`, all 18). `struct Shot` (0x98 bytes,
+  pool of 20 at `030028FC`) is now filled in (`actor.h`), with `Shot_Alloc/Free/FreeAll/UpdateAll`.
+  `gUnk_02004C80` is a second actor pool of 16.
 * `0300398C` is used as a `struct ResBank` by the boot/title code (`gBgBank_0300398C`) and as a
   `struct Map` by map.h (`gUnk_0300398C`): same object, two views; unify when the struct is known.
 * `functions.csv` has a bogus start at `0830BF60` (inside `0830BE44`): skip it.
@@ -103,6 +112,13 @@ globals are in `include/main.h`. Near misses: `src/nonmatching/region_b.c`.
   `gFrags_03005A0C[4]` holds the frags.
 
 ## Matching notes (region B so far)
+
+* (2026-11-26) Separate counters per loop (`i`, `j`, `k`) when one function has several loops: one shared
+  `i` lives across the later calls and moves to a callee-saved register (Level_ResetFlags 083168BC).
+* `a1 = f(a0, a1, a2); ... return a1;` (reuse the parameter) when the ROM keeps the call result in r1 and
+  copies it around (Math_AddClamped 083170B8).
+* A search loop with an entry test written as `for (...; i < n; ...) { if (stop) return; ... }`, not
+  `break` or `&& !stop` in the condition (08316E18).
 
 * Most of these matched on the first or second try with plain C: the region A flags carry over.
 * `s16` loop counters counting down (`for (n = 25; n > 0; n--)`) give the ROM's `lsls/asrs` + `lsls/lsrs`.

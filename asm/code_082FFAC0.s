@@ -11,12 +11,12 @@ sub_082FFAC0:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl Fade_Start
+	bl sub_08316F10
 	b .L082FFAD2
 .L082FFACE:
 	bl VBlankIntrWait
 .L082FFAD2:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L082FFACE
 	movs r0, #1
@@ -51,7 +51,7 @@ sub_082FFAC0:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl Fade_Start
+	bl sub_08316F10
 	pop {r0}
 	bx r0
 	.4byte 0x0200755C
@@ -70,12 +70,12 @@ sub_082FFB38:
 	movs r0, #1
 	movs r1, #192
 	movs r2, #60
-	bl Fade_Start
+	bl sub_08316F10
 	b .L082FFB50
 .L082FFB4C:
 	bl VBlankIntrWait
 .L082FFB50:
-	bl Fade_IsBusy
+	bl sub_08316F50
 	cmp r0, #0
 	bne .L082FFB4C
 	ldr r0, [pc, #16]
@@ -105,7 +105,7 @@ sub_082FFB38:
 	movs r0, #0
 	movs r1, #192
 	movs r2, #60
-	bl Fade_Start
+	bl sub_08316F10
 	pop {r0}
 	bx r0
 	.2byte 0x0000

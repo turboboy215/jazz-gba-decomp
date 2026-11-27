@@ -290,3 +290,17 @@ void sub_082FD2C0(void)
     sub_083164C8(8);
     sub_083164A4(3, 1);
 }
+
+void sub_082FD314(void)
+{
+    GAX_fx(49);
+    sub_08316F10(1, 0xC0, 60);
+    while (sub_08316F50())
+        sub_0831A54C();
+    sub_08311C50(1, 0);
+    gUnk_03000D14 = 0;
+    gUnk_03000D1C = 0;
+    gPlayer_0300250C.unk40 = 0;
+    gPlayer_0300250C.unk44 = 0;
+    sub_08316F10(0, 0xC0, 60);
+}
